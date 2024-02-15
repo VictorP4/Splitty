@@ -1,3 +1,8 @@
-# OOPP Template Project
+# Splitty by Team 58
 
-This repository contains the template for the OOPP project. Please extend this README.md with instructions on how to run your project.
+This guide will help the user to have a better understanding of the project and how to use it.
+
+## How to Run the Application
+
+## How to Use the Application
+
