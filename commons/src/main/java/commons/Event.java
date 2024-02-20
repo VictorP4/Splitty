@@ -1,7 +1,10 @@
+import commons.Participant;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+
 
 public class Event {
     private Long id;
@@ -81,7 +84,6 @@ public class Event {
         this.expenses = expenses;
     }
 
-    // Other methods to add/remove participants and expenses
     public void addParticipant(Participant participant) {
         this.participants.add(participant);
     }
