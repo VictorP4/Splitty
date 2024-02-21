@@ -49,6 +49,6 @@ I liked that you've discussed ways to approach the application from a technical 
 
 #### Work Contribution/Distribution in the Team
 
-Mark: Insufficient/Sufficient/Good/Very Good/Excellent
+Mark: Very Good
 
 Feedback: There were very few instances in which the work distribution seemed to be off. You do put effort into making sure that the available tasks are distributed fairly among team members. The discussion about making sure that everyone takes a look at merge requests in a roughly equal manner was a great point for your meeting.
