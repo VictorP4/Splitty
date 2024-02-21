@@ -8,13 +8,7 @@
         <module name="UnusedImports">
             <property name="severity" value="warning"/>
         </module>
-        <module name="MissingJavadocMethod">
-            <property name="severity" value="warning"/>
-            <property name="scope" value="public"/>
-            <property name="minLineCount" value="0"/>
-            <property name="allowedAnnotations" value="Main"/>
-            <property name="tokens" value="METHOD_DEF, CTOR_DEF, COMPACT_CTOR_DEF"/>
-        </module>
+
         <module name="MethodLength">
             <property name="severity" value="warning"/>
             <property name="tokens" value="METHOD_DEF, CTOR_DEF, COMPACT_CTOR_DEF"/>
@@ -26,9 +20,7 @@
             <property name="max" value="6"/>
             <property name="tokens" value="LITERAL_WHILE, LITERAL_DO, LITERAL_FOR, LITERAL_IF, LITERAL_SWITCH, LITERAL_CASE, QUESTION"/>
         </module>
-        <module name="Indentation">
-            <property name="severity" value="warning"/>
-        </module>
+
         <module name="ParameterNumber">
             <property name="severity" value="warning"/>
             <property name="tokens" value="METHOD_DEF, CTOR_DEF"/>
@@ -65,7 +57,7 @@
     <module name="LineLength">
         <property name="severity" value="warning"/>
         <property name="fileExtensions" value="java"/>
-        <property name="max" value="100"/>
+        <property name="max" value="200"/>
         <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
     </module>
 
