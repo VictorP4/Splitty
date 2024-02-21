@@ -38,58 +38,127 @@ public class Expense {
         this.date = date;
     }
 
+    /**
+     * Default constructor for the Expense class for object mapper.
+     */
     public Expense() {
         // for object mapper
     }
 
+    /**
+     * Retrieves the ID of the expense.
+     *
+     * @return the ID of the expense
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * Sets the ID of the expense.
+     *
+     * @param id the ID of the expense to set
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
+    /**
+     * Retrieves the title of the expense.
+     *
+     * @return the title of the expense
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Sets the title of the expense.
+     *
+     * @param title the title of the expense to set
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * Retrieves the amount of the expense.
+     *
+     * @return the amount of the expense
+     */
     public double getAmount() {
         return amount;
     }
 
+    /**
+     * Sets the amount of the expense.
+     *
+     * @param amount the amount of the expense to set
+     */
     public void setAmount(double amount) {
         this.amount = amount;
     }
 
+    /**
+     * Retrieves the participant who paid for the expense.
+     *
+     * @return the participant who paid for the expense
+     */
     public Participant getPaidBy() {
         return paidBy;
     }
 
+    /**
+     * Sets the participant who paid for the expense.
+     *
+     * @param paidBy the participant who paid for the expense to set
+     */
     public void setPaidBy(Participant paidBy) {
         this.paidBy = paidBy;
     }
 
+    /**
+     * Retrieves the list of participants involved in the expense.
+     *
+     * @return the list of participants involved in the expense
+     */
     public List<Participant> getInvolvedParticipants() {
         return involvedParticipants;
     }
 
+    /**
+     * Sets the list of participants involved in the expense.
+     *
+     * @param involvedParticipants the list of participants involved in the expense to set
+     */
     public void setInvolvedParticipants(List<Participant> involvedParticipants) {
         this.involvedParticipants = involvedParticipants;
     }
 
+    /**
+     * Retrieves the date of the expense.
+     *
+     * @return the date of the expense
+     */
     public Date getDate() {
         return date;
     }
 
+    /**
+     * Sets the date of the expense.
+     *
+     * @param date the date of the expense to set
+     */
     public void setDate(Date date) {
         this.date = date;
     }
 
+    /**
+     * Checks if this expense is equal to another object.
+     *
+     * @param o the object to compare
+     * @return true if this expense is equal to the other object, false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -103,6 +172,11 @@ public class Expense {
                 Objects.equals(date, expense.date);
     }
 
+    /**
+     * Generates a hash code for this expense.
+     *
+     * @return the hash code for this expense
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id, title, amount, paidBy, involvedParticipants, date);

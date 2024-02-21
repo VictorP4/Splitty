@@ -1,6 +1,5 @@
 package commons;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,7 +18,7 @@ public class Participant {
     private String bankAccount;
 
     /**
-     * Constructor for the Participant class.
+     * Constructs a Participant with the specified name and email.
      *
      * @param name  the name of the participant
      * @param email the email address of the participant
@@ -29,42 +28,91 @@ public class Participant {
         this.email = email;
     }
 
+    /**
+     * Default constructor for the Participant class for object mapper.
+     */
     public Participant() {
         // for object mapper
     }
 
+    /**
+     * Retrieves the ID of the participant.
+     *
+     * @return the ID of the participant
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * Sets the ID of the participant.
+     *
+     * @param id the ID to be set
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
+    /**
+     * Retrieves the name of the participant.
+     *
+     * @return the name of the participant
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the name of the participant.
+     *
+     * @param name the name to be set
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Retrieves the email address of the participant.
+     *
+     * @return the email address of the participant
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Sets the email address of the participant.
+     *
+     * @param email the email address to be set
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * Retrieves the bank account information of the participant.
+     *
+     * @return the bank account information of the participant
+     */
     public String getBankAccount() {
         return bankAccount;
     }
 
+    /**
+     * Sets the bank account information of the participant.
+     *
+     * @param bankAccount the bank account information to be set
+     */
     public void setBankAccount(String bankAccount) {
         this.bankAccount = bankAccount;
     }
 
+    /**
+     * Indicates whether some other object is "equal to" this one.
+     *
+     * @param o the reference object with which to compare
+     * @return true if this object is the same as the obj argument; false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -76,11 +124,21 @@ public class Participant {
                 Objects.equals(bankAccount, that.bankAccount);
     }
 
+    /**
+     * Returns a hash code value for the object.
+     *
+     * @return a hash code value for this object
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id, name, email, bankAccount);
     }
 
+    /**
+     * Returns a string representation of the object.
+     *
+     * @return a string representation of the object
+     */
     @Override
     public String toString() {
         return "Participant{" +
