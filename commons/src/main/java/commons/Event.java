@@ -1,18 +1,25 @@
 package commons;
 
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-
+@Entity
 public class Event {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
     private Date creationDate;
     private Date lastActivityDate;
     private String inviteCode;
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Participant> participants;
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Expense> expenses;
 
 

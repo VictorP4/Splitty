@@ -1,14 +1,23 @@
 package commons;
 
+import jakarta.persistence.*;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
 public class Expense {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
     private double amount;
+
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Participant paidBy;
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Participant> involvedParticipants;
     private Date date;
 
@@ -27,6 +36,10 @@ public class Expense {
         this.paidBy = paidBy;
         this.involvedParticipants = involvedParticipants;
         this.date = date;
+    }
+
+    public Expense() {
+        // for object mapper
     }
 
     public Long getId() {
