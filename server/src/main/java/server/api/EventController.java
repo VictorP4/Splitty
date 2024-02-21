@@ -2,8 +2,7 @@ package server.api;
 
 
 import java.util.List;
-
-
+import java.util.stream.Collectors;
 
 
 import org.springframework.http.ResponseEntity;
@@ -31,6 +30,7 @@ public class EventController {
      */
     @GetMapping(path = { "", "/" })
     public List<Event> getAll() {
+
         return repo.findAll();
     }
 
@@ -75,7 +75,7 @@ public class EventController {
             return ResponseEntity.badRequest().build();
         }
 
-        repo.modifyEvent(event.getParticipants(), event.getId(), event.getTitle(), event.getLastActivityDate(), event.getExpenses());
+        repo.modifyEvent(event.getParticipants(), event.getId(), event.getTitle(), event.getLastActivityDate(), event.getExpenses(), event.getInviteCode());
         Event update = repo.findById(id).get();
         return ResponseEntity.ok(update);
     }
@@ -85,7 +85,7 @@ public class EventController {
      * @param id
      * @return the deleted event
      */
-    @DeleteMapping(path = {"/id"})
+    @DeleteMapping(path = {"/{id}"})
     public ResponseEntity<Event> delete(@PathVariable("id") long id){
         if (id < 0 || !repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
@@ -94,6 +94,12 @@ public class EventController {
         repo.deleteById(id);
         return ResponseEntity.ok(event);
 
+    }
+    @GetMapping(path = {"","/"})
+    public ResponseEntity<Event> getByInviteCode(@RequestParam("inviteCode") String inviteCode){
+        if(inviteCode==null) return ResponseEntity.badRequest().build();
+        Event event = repo.getByInviteCode(inviteCode).stream().collect(Collectors.toList()).get(0);
+        return ResponseEntity.ok(event);
     }
 
 
