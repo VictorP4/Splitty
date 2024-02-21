@@ -4,16 +4,10 @@ package server.api;
 import java.util.List;
 
 
-import commons.Participant;
+
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import commons.Event;
 import server.database.EventRepository;
@@ -30,10 +24,21 @@ public class EventController {
     public EventController(EventRepository repo) {
         this.repo = repo;
     }
+
+    /**
+     *
+     * @return all events
+     */
     @GetMapping(path = { "", "/" })
     public List<Event> getAll() {
         return repo.findAll();
     }
+
+    /**
+     * Finds the event by id
+     * @param id
+     * @return the event requested
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Event> getById(@PathVariable("id") long id) {
         if (id < 0 || !repo.existsById(id)) {
@@ -41,6 +46,12 @@ public class EventController {
         }
         return ResponseEntity.ok(repo.findById(id).get());
     }
+
+    /**
+     * Creates a new event
+     * @param event
+     * @return
+     */
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Event> add(@RequestBody Event event) {
 
@@ -51,18 +62,40 @@ public class EventController {
         Event saved = repo.save(event);
         return ResponseEntity.ok(saved);
     }
+
+    /**
+     * Updates an event
+     * @param id
+     * @param event
+     * @return the updated event
+     */
     @PutMapping(path = {"/{id}"})
-    public ResponseEntity<Event> addParticipant(@PathVariable("id") long id, @RequestBody Participant participant){
+    public ResponseEntity<Event> put(@PathVariable("id") long id, @RequestBody Event event){
         if (id < 0 || !repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
+
+        repo.modifyEvent(event.getParticipants(), event.getId(), event.getTitle(), event.getLastActivityDate(), event.getExpenses());
         Event update = repo.findById(id).get();
-        List<Participant> participantList = update.getParticipants();
-        participantList.add(participant);
-        repo.addParticipant(participantList,id);
-        update = repo.findById(id).get();
         return ResponseEntity.ok(update);
     }
+
+    /**
+     * Deletes a specified event
+     * @param id
+     * @return the deleted event
+     */
+    @DeleteMapping(path = {"/id"})
+    public ResponseEntity<Event> delete(@PathVariable("id") long id){
+        if (id < 0 || !repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        Event event = repo.findById(id).get();
+        repo.deleteById(id);
+        return ResponseEntity.ok(event);
+
+    }
+
 
 
 }
