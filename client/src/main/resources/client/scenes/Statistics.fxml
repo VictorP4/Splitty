@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.Statistics">
+   <children>
+      <Text layoutX="51.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Statistics">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Text>
+      <Text layoutX="51.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Cost of Event:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="184.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="X">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="192.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="€">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <PieChart layoutX="51.0" layoutY="116.0" prefHeight="260.0" prefWidth="426.0" />
+   </children>
+</AnchorPane>
