@@ -264,22 +264,22 @@ public class TestEventRepository implements EventRepository {
 
     /**
      * Modifies the specified event
-     * @param participantList
+
      * @param id
      * @param title
      * @param lastActivityDate
-     * @param expenses
+
      * @param inviteCode
      *
      */
     @Override
-    public void modifyEvent(List<Participant> participantList, long id, String title, Date lastActivityDate, List<Expense> expenses, String inviteCode) {
+    public void modifyEvent( long id, String title, Date lastActivityDate, String inviteCode) {
         Event event = findById(id).get();
         event.setTitle(title);
-        event.setParticipants(participantList);
+
         event.setLastActivityDate(lastActivityDate);
         event.setInviteCode(inviteCode);
-        event.setExpenses(expenses);
+
     }
 
     /**

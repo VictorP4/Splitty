@@ -2,6 +2,7 @@ package server.database;
 
 import commons.Expense;
 import commons.Participant;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import commons.Event;
 import org.springframework.data.jpa.repository.Modifying;
@@ -21,12 +22,12 @@ public interface EventRepository extends JpaRepository<Event, Long>{
      * @param lastActivityDate
      * @param expenses
      */
+    @Transactional
     @Modifying
-    @Query("UPDATE Event SET participants = :participantList, title = :title, " +
-            "lastActivityDate = :lastActivityDate, expenses= :expenses, inviteCode = :inviteCode  " +
+    @Query("UPDATE Event SET title = :title, " +
+            "lastActivityDate = :lastActivityDate, inviteCode = :inviteCode  " +
             "WHERE id = :id")
-    void modifyEvent(@Param("participantList") List<Participant> participantList, @Param("id") long id, @Param("title") String title,
-                     @Param("lastActivityDate") Date lastActivityDate, @Param("expenses") List<Expense> expenses, @Param("inviteCode") String inviteCode);
+    void modifyEvent(@Param("id") long id, @Param("title") String title, @Param("lastActivityDate") Date lastActivityDate, @Param("inviteCode") String inviteCode);
 
     /**
      * Returns the requested event using the invite code
