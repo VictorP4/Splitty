@@ -136,10 +136,7 @@ public class Participant {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Participant that = (Participant) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(email, that.email) &&
-                Objects.equals(bankAccount, that.bankAccount);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(email, that.email) && Objects.equals(bankAccount, that.bankAccount) && Objects.equals(eventsFollowed, that.eventsFollowed);
     }
 
     /**
@@ -149,7 +146,7 @@ public class Participant {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, bankAccount);
+        return Objects.hash(id, name, email, bankAccount, eventsFollowed);
     }
 
     /**
@@ -164,6 +161,7 @@ public class Participant {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", bankAccount='" + bankAccount + '\'' +
+                ", eventsFollowed=" + eventsFollowed +
                 '}';
     }
 }

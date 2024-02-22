@@ -14,7 +14,6 @@ public class Expense {
     private Long id;
     private String title;
     private double amount;
-
     @OneToOne(cascade = CascadeType.PERSIST)
     private Participant paidBy;
     @OneToMany(cascade = CascadeType.PERSIST)
