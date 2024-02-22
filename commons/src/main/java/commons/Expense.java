@@ -16,7 +16,7 @@ public class Expense {
     private double amount;
     @OneToOne(cascade = CascadeType.PERSIST)
     private Participant paidBy;
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Participant> involvedParticipants;
     private Date date;
 
