@@ -33,7 +33,7 @@ public interface EventRepository extends JpaRepository<Event, Long>{
      * @param inviteCode
      * @return
      */
-    @Query("SELECT Event WHERE inviteCode = :inviteCode")
+    @Query("SELECT Event FROM Event WHERE inviteCode = :inviteCode")
     Collection<Event> getByInviteCode(@Param("inviteCode") String inviteCode);
 
 }

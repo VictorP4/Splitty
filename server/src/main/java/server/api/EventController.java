@@ -1,7 +1,7 @@
 package server.api;
 
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -95,12 +95,7 @@ public class EventController {
         return ResponseEntity.ok(event);
 
     }
-    @GetMapping(path = {"","/"})
-    public ResponseEntity<Event> getByInviteCode(@RequestParam("inviteCode") String inviteCode){
-        if(inviteCode==null) return ResponseEntity.badRequest().build();
-        Event event = repo.getByInviteCode(inviteCode).stream().collect(Collectors.toList()).get(0);
-        return ResponseEntity.ok(event);
-    }
+
 
 
 
