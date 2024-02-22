@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane prefHeight="246.0" prefWidth="413.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ContactDetails">
+<AnchorPane prefHeight="246.0" prefWidth="413.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ContactDetailsCtrl">
    <children>
       <Text layoutX="43.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Edit Participant">
          <font>
