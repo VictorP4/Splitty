@@ -17,7 +17,7 @@ public class Event {
     private Date creationDate;
     private Date lastActivityDate;
     private String inviteCode;
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Participant> participants;
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Expense> expenses;

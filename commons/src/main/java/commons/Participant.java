@@ -1,10 +1,8 @@
 package commons;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -16,6 +14,8 @@ public class Participant {
     private String name;
     private String email;
     private String bankAccount;
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    private List<Event> eventsFollowed;
 
     /**
      * Constructs a Participant with the specified name and email.
@@ -105,6 +105,24 @@ public class Participant {
      */
     public void setBankAccount(String bankAccount) {
         this.bankAccount = bankAccount;
+    }
+
+    /**
+     * Retrieves the events followed by the participant.
+     *
+     * @return the events followed by the participant
+     */
+    public List<Event> getEventsFollowed() {
+        return eventsFollowed;
+    }
+
+    /**
+     * Sets the events followed by the participant.
+     *
+     * @param eventsFollowed the events followed by the participant
+     */
+    public void setEventsFollowed(List<Event> eventsFollowed) {
+        this.eventsFollowed = eventsFollowed;
     }
 
     /**
