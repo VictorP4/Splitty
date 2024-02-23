@@ -22,11 +22,17 @@ import java.net.URISyntaxException;
 
 import com.google.inject.Injector;
 
+import client.scenes.AddExpenseCtrl;
+import client.scenes.ContactDetailsCtrl;
+import client.scenes.InvitationCtrl;
+import client.scenes.OpenDebtsCtrl;
+import client.scenes.StatisticsCtrl;
 import client.scenes.OverviewCtrl;
 import client.scenes.StartScreenCtrl;
 import client.scenes.AddQuoteCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.QuoteOverviewCtrl;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -50,13 +56,20 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
-        var quoteOverview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
 
+        // loading all the FXML documents
+        var quoteOverview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
         var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
+        var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
+        var contactDetails = FXML.load(ContactDetailsCtrl.class, "client", "scenes", "ContactDetails.fxml");
+        var invitation = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
+        var openDebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
+        var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
         var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");;
         var eventOverview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");;
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, quoteOverview, add, startScreen, eventOverview);
+        mainCtrl.initialize(primaryStage, quoteOverview, add, addExpense, contactDetails,
+                invitation, openDebts, statistics, startScreen, eventOverview);
     }
 }

@@ -23,7 +23,10 @@ public class Event {
         inverseJoinColumns = @JoinColumn(name = "Participant_id"))
     private List<Participant> participants;
     @OneToMany(cascade = CascadeType.PERSIST)
+    @Transient
     private List<Expense> expenses;
+
+
 
 
     /**

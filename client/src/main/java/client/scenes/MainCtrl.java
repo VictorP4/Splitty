@@ -23,19 +23,24 @@ import javafx.util.Pair;
 public class MainCtrl {
 
     private Stage primaryStage;
-
     private QuoteOverviewCtrl overviewCtrl;
     private Scene overview;
-
+    private AddExpenseCtrl addExpenseCtrl;
+    private Scene addExpense;
+    private ContactDetailsCtrl contactDetailsCtrl;
+    private Scene contactDetails;
+    private InvitationCtrl invitationCtrl;
+    private Scene invitation;
+    private OpenDebtsCtrl openDebtsCtrl;
+    private Scene openDebts;
+    private StatisticsCtrl statisticsCtrl;
+    private Scene statistics;
     private AddQuoteCtrl addCtrl;
     private Scene add;
-
     private StartScreenCtrl startScreenCtrl;
     private Scene startScreen;
-
     private OverviewCtrl eventOverviewCtrl;
     private Scene eventOverview;
-
 
     /**
      * Initializes the main controller with the provided dependencies and sets up the primary stage.
@@ -43,15 +48,23 @@ public class MainCtrl {
      * It also associates each scene with its corresponding controller.
      * Finally, it shows the overview scene and displays the primary stage.
      *
-     * @param primaryStage    The primary stage of the JavaFX application.
-     * @param overview        A Pair containing the OverviewCtrl instance and its corresponding parent Node.
-     * @param add             A Pair containing the AddQuoteCtrl instance and its corresponding parent Node.
-     * @param startScreen     A Pair containing the StartScreenCtrl instance and its corresponding parent Node.
-     * @param eventOverview   A Pair containing the OverviewCtrl instance and its corresponding parent Node.
+     * @param primaryStage   The primary stage of the JavaFX application.
+     * @param overview       A Pair containing the OverviewCtrl instance and its corresponding parent Node.
+     * @param add            A Pair containing the AddQuoteCtrl instance and its corresponding parent Node.
+     * @param addExpense     A Pair containing the addExpense instance and its corresponding parent Node.
+     * @param contactDetails A Pair containing the contactDetails instance and its corresponding parent Node.
+     * @param invitation     A Pair containing the invitation instance and its corresponding parent Node.
+     * @param openDebts      A Pair containing the openDebts instance and its corresponding parent Node.
+     * @param statistics     A Pair containing the statistics instance and its corresponding parent Node.
+     * @param startScreen    A Pair containing the StartScreenCtrl instance and its corresponding parent Node.
+     * @param eventOverview  A Pair containing the OverviewCtrl instance and its corresponding parent Node.
      */
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add, Pair<StartScreenCtrl, Parent> startScreen,
-            Pair<OverviewCtrl, Parent> eventOverview) {
+                           Pair<AddQuoteCtrl, Parent> add, Pair<AddExpenseCtrl, Parent> addExpense,
+                           Pair<ContactDetailsCtrl, Parent> contactDetails, Pair<InvitationCtrl, Parent> invitation,
+                           Pair<OpenDebtsCtrl, Parent> openDebts, Pair<StatisticsCtrl, Parent> statistics,
+                           Pair<StartScreenCtrl, Parent> startScreen, Pair<OverviewCtrl, Parent> eventOverview) {
+
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -64,6 +77,21 @@ public class MainCtrl {
 
         this.eventOverviewCtrl = eventOverview.getKey();
         this.eventOverview = new Scene(eventOverview.getValue());
+
+        this.addExpenseCtrl = addExpense.getKey();
+        this.addExpense = new Scene(addExpense.getValue());
+
+        this.contactDetailsCtrl = contactDetails.getKey();
+        this.contactDetails = new Scene(contactDetails.getValue());
+
+        this.invitationCtrl = invitation.getKey();
+        this.invitation = new Scene(invitation.getValue());
+
+        this.openDebtsCtrl = openDebts.getKey();
+        this.openDebts = new Scene(openDebts.getValue());
+
+        this.statisticsCtrl = statistics.getKey();
+        this.statistics = new Scene(statistics.getValue());
 
         showOverview();
         primaryStage.show();
@@ -102,5 +130,30 @@ public class MainCtrl {
     public void showEventOverview() {
         primaryStage.setTitle("Overview");
         primaryStage.setScene(eventOverview);
+    }
+
+    public void showAddExpense() {
+        primaryStage.setTitle("AddExpense");
+        primaryStage.setScene(addExpense);
+    }
+
+    public void showContactDetails() {
+        primaryStage.setTitle("ContactDetails");
+        primaryStage.setScene(contactDetails);
+    }
+
+    public void showInvitation() {
+        primaryStage.setTitle("Invitation");
+        primaryStage.setScene(invitation);
+    }
+
+    public void showOpenDebts() {
+        primaryStage.setTitle("OpenDebts");
+        primaryStage.setScene(openDebts);
+    }
+
+    public void showStatistics() {
+        primaryStage.setTitle("Statistics");
+        primaryStage.setScene(statistics);
     }
 }
