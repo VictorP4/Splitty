@@ -30,24 +30,30 @@ public class MainCtrl {
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
+    private StartScreenCtrl startScreenCtrl;
+    private Scene startScreen;
 
+    private OverviewCtrl eventOverviewCtrl;
+    private Scene eventOverview;
 
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-                           Pair<AddQuoteCtrl, Parent> add) {
-
+            Pair<AddQuoteCtrl, Parent> add, Pair<StartScreenCtrl, Parent> startScreen,
+            Pair<OverviewCtrl, Parent> eventOverview) {
         this.primaryStage = primaryStage;
-
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
 
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
+        this.startScreenCtrl = startScreen.getKey();
+        this.startScreen = new Scene(startScreen.getValue());
+
+        this.eventOverviewCtrl = eventOverview.getKey();
+        this.eventOverview = new Scene(eventOverview.getValue());
+
         showOverview();
-
-
-
         primaryStage.show();
     }
 
@@ -55,7 +61,6 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Overview");
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
-
     }
 
     public void showAdd() {
@@ -64,5 +69,13 @@ public class MainCtrl {
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 
+    public void showStartScreen() {
+        primaryStage.setTitle("Start Screen");
+        primaryStage.setScene(startScreen);
+    }
 
+    public void showEventOverview() {
+        primaryStage.setTitle("Overview");
+        primaryStage.setScene(eventOverview);
+    }
 }

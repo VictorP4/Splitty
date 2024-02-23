@@ -22,6 +22,8 @@ import java.net.URISyntaxException;
 
 import com.google.inject.Injector;
 
+import client.scenes.OverviewCtrl;
+import client.scenes.StartScreenCtrl;
 import client.scenes.AddQuoteCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.QuoteOverviewCtrl;
@@ -39,12 +41,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
+        var quoteOverview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
 
         var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
-
+        var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");;
+        var eventOverview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");;
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add);
+        mainCtrl.initialize(primaryStage, quoteOverview, add, startScreen, eventOverview);
     }
 }
