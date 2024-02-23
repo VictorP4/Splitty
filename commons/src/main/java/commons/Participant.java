@@ -138,7 +138,9 @@ public class Participant {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Participant that = (Participant) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(email, that.email) && Objects.equals(bankAccount, that.bankAccount) && Objects.equals(eventsFollowed, that.eventsFollowed);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) &&
+                Objects.equals(email, that.email) && Objects.equals(bankAccount, that.bankAccount) &&
+                Objects.equals(eventsFollowed, that.eventsFollowed);
     }
 
     /**

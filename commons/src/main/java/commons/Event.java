@@ -211,7 +211,9 @@ public class Event {
         if (this == o) return true;
         if (!(o instanceof Event)) return false;
         Event event = (Event) o;
-        return Objects.equals(id, event.id) && Objects.equals(title, event.title) && Objects.equals(creationDate, event.creationDate) && Objects.equals(lastActivityDate, event.lastActivityDate) && Objects.equals(inviteCode, event.inviteCode) && Objects.equals(participants, event.participants) && Objects.equals(expenses, event.expenses);
+        return Objects.equals(id, event.id) && Objects.equals(title, event.title) &&
+                Objects.equals(creationDate, event.creationDate) && Objects.equals(lastActivityDate, event.lastActivityDate) &&
+                Objects.equals(inviteCode, event.inviteCode) && Objects.equals(participants, event.participants) && Objects.equals(expenses, event.expenses);
     }
 
     /**
