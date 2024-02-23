@@ -29,7 +29,7 @@ public class Debt {
      * @param dateCreation date when the debt was created
      * @param debtFor which expense is the debt for
      */
-    public Debt(int amount, Participant personOwed, Participant personInDebt,
+    public Debt(int amount, List<Participant> personOwed, List<Participant> personInDebt,
                 boolean paidOff, Date dateCreation, Expense debtFor) {
         this.amount = amount;
         this.personOwed = personOwed;
@@ -66,7 +66,7 @@ public class Debt {
      * retrieves the participant that is owed the money
      * @return the participant
      */
-    public Participant getPersonOwed() {
+    public List<Participant> getPersonOwed() {
         return personOwed;
     }
 
@@ -74,7 +74,7 @@ public class Debt {
      * retrieves the participant in debt
      * @return participant in debt
      */
-    public Participant getPersonInDebt() {
+    public List<Participant> getPersonInDebt() {
         return personInDebt;
     }
 
@@ -122,7 +122,7 @@ public class Debt {
      * setes the person owed the debt
      * @param personOwed person owed to set
      */
-    public void setPersonOwed(Participant personOwed) {
+    public void setPersonOwed(List<Participant> personOwed) {
         this.personOwed = personOwed;
     }
 
@@ -130,7 +130,7 @@ public class Debt {
      * sets the person that is in debt
      * @param personInDebt person in debt to set
      */
-    public void setPersonInDebt(Participant personInDebt) {
+    public void setPersonInDebt(List<Participant> personInDebt) {
         this.personInDebt = personInDebt;
     }
 
