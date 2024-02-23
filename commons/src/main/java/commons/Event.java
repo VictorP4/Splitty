@@ -17,8 +17,10 @@ public class Event {
     private Date creationDate;
     private Date lastActivityDate;
     private String inviteCode;
-    private Long eventExpId;
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "EVENT_PARTICIPANT",
+        joinColumns = @JoinColumn(name="Event_id"),
+        inverseJoinColumns = @JoinColumn(name = "Participant_id"))
     private List<Participant> participants;
     @OneToMany(cascade = CascadeType.PERSIST)
     @Transient
@@ -210,9 +212,11 @@ public class Event {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Event)) return false;
         Event event = (Event) o;
-        return Objects.equals(id, event.id) && Objects.equals(title, event.title) && Objects.equals(creationDate, event.creationDate) && Objects.equals(lastActivityDate, event.lastActivityDate) && Objects.equals(inviteCode, event.inviteCode) && Objects.equals(participants, event.participants) && Objects.equals(expenses, event.expenses);
+        return Objects.equals(id, event.id) && Objects.equals(title, event.title) &&
+                Objects.equals(creationDate, event.creationDate) && Objects.equals(lastActivityDate, event.lastActivityDate) &&
+                Objects.equals(inviteCode, event.inviteCode) && Objects.equals(participants, event.participants) && Objects.equals(expenses, event.expenses);
     }
 
     /**
