@@ -41,6 +41,12 @@ public class AddQuoteCtrl {
     @FXML
     private TextField quote;
 
+    /**
+     * Constructs a new instance of a AddQuoteCtrl.
+     *
+     * @param server The utility class for server-related operations.
+     * @param mainCtrl The main controller of the application.
+     */
     @Inject
     public AddQuoteCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;

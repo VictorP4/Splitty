@@ -39,6 +39,15 @@ public class Main extends Application {
         launch();
     }
 
+    /**
+     * Entry point for the JavaFX application. Initializes the application and sets up the primary stage.
+     *
+     * @param primaryStage the primary stage for this application, onto which
+     * the application scene can be set.
+     * Applications may create other stages, if needed, but they will not be
+     * primary stages.
+     * @throws IOException If an error occurs while loading the FXML files.
+     */
     @Override
     public void start(Stage primaryStage) throws IOException {
         var quoteOverview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");

@@ -37,6 +37,18 @@ public class MainCtrl {
     private Scene eventOverview;
 
 
+    /**
+     * Initializes the main controller with the provided dependencies and sets up the primary stage.
+     * This method sets the primary stage and initializes scenes for different scenes.
+     * It also associates each scene with its corresponding controller.
+     * Finally, it shows the overview scene and displays the primary stage.
+     *
+     * @param primaryStage    The primary stage of the JavaFX application.
+     * @param overview        A Pair containing the OverviewCtrl instance and its corresponding parent Node.
+     * @param add             A Pair containing the AddQuoteCtrl instance and its corresponding parent Node.
+     * @param startScreen     A Pair containing the StartScreenCtrl instance and its corresponding parent Node.
+     * @param eventOverview   A Pair containing the OverviewCtrl instance and its corresponding parent Node.
+     */
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<StartScreenCtrl, Parent> startScreen,
             Pair<OverviewCtrl, Parent> eventOverview) {
@@ -57,23 +69,36 @@ public class MainCtrl {
         primaryStage.show();
     }
 
+    /**
+     * Displays the quote scene in the primary stage and refreshes its contents.
+     */
     public void showOverview() {
         primaryStage.setTitle("Quotes: Overview");
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
     }
 
+    /**
+     * Displays the add quote scene in the primary stage.
+     * Associates the key pressed event with the AddQuoteCtrl.
+     */
     public void showAdd() {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 
+    /**
+     * Displays the start screen scene in the primary stage.
+     */
     public void showStartScreen() {
         primaryStage.setTitle("Start Screen");
         primaryStage.setScene(startScreen);
     }
 
+    /**
+     * Displays the event overview scene in the primary stage.
+     */
     public void showEventOverview() {
         primaryStage.setTitle("Overview");
         primaryStage.setScene(eventOverview);
