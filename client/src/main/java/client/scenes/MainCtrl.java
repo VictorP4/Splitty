@@ -39,10 +39,14 @@ public class MainCtrl {
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
+
+
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<ContactDetailsCtrl, Parent> contactDetails, Pair<InvitationCtrl, Parent> invitation,
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<StatisticsCtrl, Parent> statistics) {
+
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -67,6 +71,9 @@ public class MainCtrl {
         this.statistics = new Scene(statistics.getValue());
 
         showOverview();
+
+
+
         primaryStage.show();
     }
 
@@ -74,6 +81,7 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Overview");
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
+
     }
 
     public void showAdd() {
@@ -81,6 +89,7 @@ public class MainCtrl {
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
+
 
     public void showAddExpense() {
         primaryStage.setTitle("AddExpense");
@@ -102,4 +111,5 @@ public class MainCtrl {
         primaryStage.setTitle("Statistics");
         primaryStage.setScene(statistics);
     }
+
 }
