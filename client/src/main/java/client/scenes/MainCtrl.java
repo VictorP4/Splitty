@@ -90,23 +90,41 @@ public class MainCtrl {
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 
-
+    /**
+     * Displays the Add Expense scene in the primary stage.
+     */
     public void showAddExpense() {
         primaryStage.setTitle("AddExpense");
         primaryStage.setScene(addExpense);
     }
+
+    /**
+     * Displays the Contact Details scene in the primary stage.
+     */
     public void showContactDetails() {
         primaryStage.setTitle("ContactDetails");
         primaryStage.setScene(contactDetails);
     }
+
+    /**
+     * Displays the Invitation scene in the primary stage.
+     */
     public void showInvitation() {
         primaryStage.setTitle("Invitation");
         primaryStage.setScene(invitation);
     }
+
+    /**
+     * Displays the Open Debts scene in the primary stage.
+     */
     public void showOpenDebts() {
         primaryStage.setTitle("OpenDebts");
         primaryStage.setScene(openDebts);
     }
+
+    /**
+     * Displays the Statistics scene in the primary stage.
+     */
     public void showStatistics() {
         primaryStage.setTitle("Statistics");
         primaryStage.setScene(statistics);

@@ -47,11 +47,17 @@ public class AddQuoteCtrl {
         this.server = server;
     }
 
+    /**
+     * Cancels the process of adding a new quote by clearing input fields and returning to the overview screen.
+     */
     public void cancel() {
         clearFields();
         mainCtrl.showOverview();
     }
 
+    /**
+     * Accepts a inputted Quote, adds it to the server and returns to the overview screen
+     */
     public void ok() {
         try {
             server.addQuote(getQuote());
@@ -68,18 +74,29 @@ public class AddQuoteCtrl {
         mainCtrl.showOverview();
     }
 
+    /**
+     * Creates a Quote field by extracting information from the text fields.
+     * @return A Quote object containing the information in the text field.
+     */
     private Quote getQuote() {
         var p = new Person(firstName.getText(), lastName.getText());
         var q = quote.getText();
         return new Quote(p, q);
     }
 
+    /**
+     * Clears all input fields related to adding a new quote.
+     */
     private void clearFields() {
         firstName.clear();
         lastName.clear();
         quote.clear();
     }
 
+    /**
+     * Handles events for adding a Quote.
+     * @param e The key pressed by the user.
+     */
     public void keyPressed(KeyEvent e) {
         switch (e.getCode()) {
         case ENTER:
