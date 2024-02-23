@@ -3,7 +3,8 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 
-public class StartScreenCtrl {
+public class :wq
+:::::::::::::StartScreenCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
