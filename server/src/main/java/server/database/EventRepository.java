@@ -1,7 +1,5 @@
 package server.database;
 
-
-import commons.Expense;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import commons.Event;
@@ -11,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 
 public interface EventRepository extends JpaRepository<Event, Long>{

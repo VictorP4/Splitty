@@ -1,16 +1,11 @@
 package server.api;
 import commons.Event;
 import commons.Expense;
-import commons.Participant;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
 import server.database.ExpensesRepository;
-
-import java.util.AbstractMap;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
