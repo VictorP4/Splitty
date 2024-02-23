@@ -4,7 +4,6 @@ package server.api;
 import java.util.*;
 
 
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,7 +74,7 @@ public class EventController {
             return ResponseEntity.badRequest().build();
         }
 
-        repo.modifyEvent( event.getId(), event.getTitle(), event.getLastActivityDate(), event.getInviteCode());
+        repo.modifyEvent(event.getId(), event.getTitle(), event.getLastActivityDate(), event.getInviteCode());
         Event update = repo.findById(id).get();
         return ResponseEntity.ok(update);
     }

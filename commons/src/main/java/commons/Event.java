@@ -17,10 +17,14 @@ public class Event {
     private Date creationDate;
     private Date lastActivityDate;
     private String inviteCode;
+    private Long eventExpId;
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Participant> participants;
     @OneToMany(cascade = CascadeType.PERSIST)
+    @Transient
     private List<Expense> expenses;
+
+
 
 
     /**

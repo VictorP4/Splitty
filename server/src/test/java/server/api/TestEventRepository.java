@@ -4,7 +4,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
-
+import commons.Expense;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -272,10 +272,10 @@ public class TestEventRepository implements EventRepository {
      *
      */
     @Override
-    public void modifyEvent( long id, String title, Date lastActivityDate, String inviteCode) {
+    public void modifyEvent(long id, String title, Date lastActivityDate, String inviteCode, List<Expense> expenses) {
         Event event = findById(id).get();
         event.setTitle(title);
-
+        event.setExpenses(expenses);
         event.setLastActivityDate(lastActivityDate);
         event.setInviteCode(inviteCode);
 
