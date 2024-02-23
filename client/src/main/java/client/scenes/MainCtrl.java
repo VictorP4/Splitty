@@ -24,43 +24,38 @@ public class MainCtrl {
 
     private Stage primaryStage;
 
-    private QuoteOverviewCtrl quoteOverviewCtrl;
-    private Scene quoteOverview;
+    private QuoteOverviewCtrl overviewCtrl;
+    private Scene overview;
 
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
-    private StartScreenCtrl startScreenCtrl;
-    private Scene startScreen;
-
-    private OverviewCtrl overviewCtrl;
-    private Scene overview;
 
 
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> quoteOverview,
-            Pair<AddQuoteCtrl, Parent> add, Pair<StartScreenCtrl, Parent> startScreen,
-            Pair<OverviewCtrl, Parent> overview) {
+
+    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
+                           Pair<AddQuoteCtrl, Parent> add) {
+
         this.primaryStage = primaryStage;
-        this.quoteOverviewCtrl = quoteOverview.getKey();
-        this.quoteOverview = new Scene(quoteOverview.getValue());
-
-        this.addCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
-
-        this.startScreenCtrl = startScreen.getKey();
-        this.startScreen = new Scene(startScreen.getValue());
 
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
 
-        showQuoteOverview();
+        this.addCtrl = add.getKey();
+        this.add = new Scene(add.getValue());
+
+        showOverview();
+
+
+
         primaryStage.show();
     }
 
-    public void showQuoteOverview() {
+    public void showOverview() {
         primaryStage.setTitle("Quotes: Overview");
-        primaryStage.setScene(quoteOverview);
-        quoteOverviewCtrl.refresh();
+        primaryStage.setScene(overview);
+        overviewCtrl.refresh();
+
     }
 
     public void showAdd() {
@@ -69,13 +64,5 @@ public class MainCtrl {
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 
-    public void showStartScreen() {
-        primaryStage.setTitle("Start Screen");
-        primaryStage.setScene(startScreen);
-    }
 
-    public void showOverview() {
-        primaryStage.setTitle("Overview");
-        primaryStage.setScene(overview);
-    }
 }
