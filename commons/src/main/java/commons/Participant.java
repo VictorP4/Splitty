@@ -14,7 +14,9 @@ public class Participant {
     private String name;
     private String email;
     private String bankAccount;
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST,
+        mappedBy = "participants")
+
     private List<Event> eventsFollowed;
 
     /**
