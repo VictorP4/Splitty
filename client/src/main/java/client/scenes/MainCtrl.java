@@ -24,34 +24,58 @@ public class MainCtrl {
 
     private Stage primaryStage;
 
-    private QuoteOverviewCtrl overviewCtrl;
-    private Scene overview;
+    private QuoteOverviewCtrl quoteOverviewCtrl;
+    private Scene quoteOverview;
 
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add) {
+    private StartScreenCtrl startScreenCtrl;
+    private Scene startScreen;
+
+    private OverviewCtrl overviewCtrl;
+    private Scene overview;
+
+
+    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> quoteOverview,
+            Pair<AddQuoteCtrl, Parent> add, Pair<StartScreenCtrl, Parent> startScreen,
+            Pair<OverviewCtrl, Parent> overview) {
         this.primaryStage = primaryStage;
-        this.overviewCtrl = overview.getKey();
-        this.overview = new Scene(overview.getValue());
+        this.quoteOverviewCtrl = quoteOverview.getKey();
+        this.quoteOverview = new Scene(quoteOverview.getValue());
 
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
-        showOverview();
+        this.startScreenCtrl = startScreen.getKey();
+        this.startScreen = new Scene(startScreen.getValue());
+
+        this.overviewCtrl = overview.getKey();
+        this.overview = new Scene(overview.getValue());
+
+        showQuoteOverview();
         primaryStage.show();
     }
 
-    public void showOverview() {
+    public void showQuoteOverview() {
         primaryStage.setTitle("Quotes: Overview");
-        primaryStage.setScene(overview);
-        overviewCtrl.refresh();
+        primaryStage.setScene(quoteOverview);
+        quoteOverviewCtrl.refresh();
     }
 
     public void showAdd() {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+    public void showStartScreen() {
+        primaryStage.setTitle("Start Screen");
+        primaryStage.setScene(startScreen);
+    }
+
+    public void showOverview() {
+        primaryStage.setTitle("Overview");
+        primaryStage.setScene(overview);
     }
 }
