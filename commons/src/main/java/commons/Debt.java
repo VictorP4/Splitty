@@ -1,9 +1,9 @@
 package commons;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 public class Debt {
@@ -11,10 +11,13 @@ public class Debt {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private int amount;
-    private Participant personOwed;
-    private Participant personInDebt;
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    private List<Participant> personOwed;
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    private List<Participant> personInDebt;
     private boolean paidOff;
     private Date dateCreation;
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Expense debtFor;
 
     /**
