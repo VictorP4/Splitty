@@ -94,17 +94,29 @@ public class ParticipantTest {
         assertEquals(participant1, participant2);
     }
 
-//    /**
-//     * Tests the hashCode method of the Participant class.
-//     * It should generate a hash code for the participant.
-//     */
-//    @Test
-//    public void testHashCode() {
-//        Participant participant = new Participant();
-//        participant.setId(1L);
-//        participant.setName("John Doe");
-//        assertEquals(Objects.hash(1L, "John Doe"), participant.hashCode());
-//    }
+    @Test
+    public void testHashCodeEquals() {
+        Participant participant1 = new Participant();
+        participant1.setId(1L);
+        participant1.setName("participat 1");
+        Participant participant2 = new Participant();
+        participant2.setId(1L);
+        participant2.setName("participat 1");
+
+        assertEquals(participant1.hashCode(), participant2.hashCode());
+    }
+
+    @Test
+    public void testHashCodeNotEquals() {
+        Participant participant1 = new Participant();
+        participant1.setId(1L);
+        participant1.setName("participat 1");
+        Participant participant2 = new Participant();
+        participant2.setId(1L);
+        participant2.setName("Participant 2");
+
+        assertNotEquals(participant1.hashCode(), participant2.hashCode());
+    }
 
     /**
      * Tests the toString method of the Participant class.

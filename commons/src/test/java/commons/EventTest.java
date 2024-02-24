@@ -174,15 +174,33 @@ public class EventTest {
         assertEquals(event1, event2);
     }
 
-//    /**
-//     * Tests the hashCode method of the Event class.
-//     * It should generate a hash code for the event.
-//     */
-//    @Test
-//    public void testHashCode() {
-//        Event event = new Event();
-//        event.setId(1L);
-//        event.setTitle("Event 1");
-//        assertEquals(Objects.hash(1L, "Event 1"), event.hashCode());
-//    }
+    /**
+     * Tests the hashCode method of the Event class.
+     * It should generate a hash code for the event.
+     */
+    @Test
+    public void testHashCodeEquals() {
+        Event event1 = new Event();
+        event1.setId(1L);
+        event1.setTitle("Event 1");
+        Event event2 = new Event();
+        event2.setId(1L);
+        event2.setTitle("Event 1");
+
+        assertEquals(event1, event2);
+        assertEquals(event1.hashCode(), event2.hashCode());
+    }
+
+    @Test
+    public void testHashCodeNotEquals() {
+        Event event1 = new Event();
+        event1.setId(1L);
+        event1.setTitle("Event 1");
+        Event event2 = new Event();
+        event2.setId(1L);
+        event2.setTitle("Event 2");
+
+        assertNotEquals(event1, event2);
+        assertNotEquals(event1.hashCode(), event2.hashCode());
+    }
 }
