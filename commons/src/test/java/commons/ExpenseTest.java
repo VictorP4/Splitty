@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class ExpenseTest {
 
@@ -117,17 +118,29 @@ public class ExpenseTest {
         assertEquals(expense1, expense2);
     }
 
-//    /**
-//     * Tests the hashCode method of the Expense class.
-//     * It should generate a hash code for the expense.
-//     */
-//    @Test
-//    public void testHashCode() {
-//        Participant paidBy = new Participant("John Doe", "john.doe@example.com");
-//        List<Participant> involvedParticipants = new ArrayList<>();
-//        involvedParticipants.add(new Participant("Jane Doe", "jane.doe@example.com"));
-//
-//        Expense expense = new Expense("Groceries", 50.0, paidBy, involvedParticipants, new Date());
-//        assertEquals(Objects.hash("Groceries", 50.0, paidBy, involvedParticipants, expense.getDate()), expense.hashCode());
-//    }
+    @Test
+    public void testHashCodeEquals() {
+        Expense expense1 = new Expense();
+        expense1.setId(1L);
+        expense1.setTitle("Expense 1");
+        Expense expense2 = new Expense();
+        expense2.setId(1L);
+        expense2.setTitle("Expense 1");
+
+        assertEquals(expense1, expense2);
+        assertEquals(expense1.hashCode(), expense2.hashCode());
+    }
+
+    @Test
+    public void testHashCodeNotEquals() {
+        Expense expense1 = new Expense();
+        expense1.setId(1L);
+        expense1.setTitle("Expense 1");
+        Expense expense2 = new Expense();
+        expense2.setId(1L);
+        expense2.setTitle("Expense 2");
+
+        assertNotEquals(expense1, expense2);
+        assertNotEquals(expense1.hashCode(), expense2.hashCode());
+    }
 }
