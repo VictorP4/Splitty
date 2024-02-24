@@ -46,6 +46,12 @@ public class QuoteOverviewCtrl implements Initializable {
     @FXML
     private TableColumn<Quote, String> colQuote;
 
+    /**
+     * Constructs a new instance of a QuoteOverviewCtrl.
+     *
+     * @param server The utility class for server-related operations.
+     * @param mainCtrl The main controller of the application.
+     */
     @Inject
     public QuoteOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
