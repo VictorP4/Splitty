@@ -1,11 +1,15 @@
 package server.api;
 import commons.Event;
 import commons.Expense;
+import commons.Participant;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
 import server.database.ExpensesRepository;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -120,15 +124,48 @@ public class ExpensesController {
         return ResponseEntity.ok(sum);
     }
 
-/*    @GetMapping(path="{id}/expenses/split")
-    public ResponseEntity<Object> split(@PathVariable("id") long id){
-        if(id<0 || !eventRepo.existsById(id)){
+    /**
+     * See how much you owe for the event, notably also can tell you you owe a debt to yourself,
+     * would need access to the user's profile to add a check which would exclude yourself from
+     * what you owe, it's also why I can't currently make the thing to see how much you're owed.
+     * @param id
+     * @return
+     */
+    @GetMapping(path = "{id}/expenses/debts")
+    public ResponseEntity<Map<String,Double>> debt(@PathVariable("id") long id){
+        if (id < 0 || !eventRepo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        Map<Participant, Double> debts = new HashMap<>();
         Event event = eventRepo.getReferenceById(id);
-        for(Expense expense : event.getExpenses()){
-
+        List<Expense> expenses = event.getExpenses();
+        Map<String, Double> debts = new HashMap<String, Double>();
+        for(Expense expense : expenses){
+            String buyer = expense.getPaidBy().getName();
+            double owed = expense.getAmount()/(long) expense.getInvolvedParticipants().size();
+            debts.put(buyer,owed);
         }
-    } */
+        return ResponseEntity.ok(debts);
+    }
+
+    /**
+     * More or less the same thing as above, lists each person and their respective share.
+     * @param id
+     * @return
+     */
+    @GetMapping(path = "{id}/expenses/debts")
+    public ResponseEntity<Map<String,Double>> share(@PathVariable("id") long id){
+        if (id < 0 || !eventRepo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        Event event = eventRepo.getReferenceById(id);
+        List<Expense> expenses = event.getExpenses();
+        Map<String, Double> share = new HashMap<String, Double>();
+        for(Expense expense : expenses){
+            double part = expense.getAmount()/(long) expense.getInvolvedParticipants().size();
+            for(Participant person : expense.getInvolvedParticipants()){
+                share.put(person.getName(),part);
+            }
+        }
+        return ResponseEntity.ok(share);
+    }
 }
