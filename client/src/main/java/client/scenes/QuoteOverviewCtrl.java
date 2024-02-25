@@ -58,6 +58,18 @@ public class QuoteOverviewCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
     }
 
+    /**
+     * Initializes the columns of the table view when the controller is loaded.
+     *
+     *
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resources
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         colFirstName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().person.firstName));
@@ -65,10 +77,16 @@ public class QuoteOverviewCtrl implements Initializable {
         colQuote.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().quote));
     }
 
+    /**
+     * Navigates to view for adding a new quote.
+     */
     public void addQuote() {
         mainCtrl.showAdd();
     }
 
+    /**
+     * Updates the table view with the latest quotes from the server.
+     */
     public void refresh() {
         var quotes = server.getQuotes();
         data = FXCollections.observableList(quotes);
