@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
 import server.database.ExpensesRepository;
-
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -132,7 +132,7 @@ public class ExpensesController {
      * @return
      */
     @GetMapping(path = "/{id}/expenses/debts")
-    public ResponseEntity<Map<String,Double>> debt(@PathVariable("id") long id){
+    public ResponseEntity<Map<String,List<Double>>> debt(@PathVariable("id") long id){
         if (id < 0 || !eventRepo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
@@ -156,7 +156,7 @@ public class ExpensesController {
      * @return
      */
     @GetMapping(path = "/{id}/expenses/shares")
-    public ResponseEntity<Map<String,Double>> share(@PathVariable("id") long id){
+    public ResponseEntity<Map<String,List<Double>>> share(@PathVariable("id") long id){
         if (id < 0 || !eventRepo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
