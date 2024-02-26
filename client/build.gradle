@@ -13,7 +13,7 @@ javafx {
 }
 
 java {
-	sourceCompatibility = '21'
+	sourceCompatibility = '17'
 }
 
 

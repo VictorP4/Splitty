@@ -120,7 +120,7 @@ public class MainCtrl {
      * Displays the start screen scene in the primary stage.
      */
     public void showStartScreen() {
-        primaryStage.setTitle("Start Screen");
+        primaryStage.setTitle("StartScreen");
         primaryStage.setScene(startScreen);
     }
 

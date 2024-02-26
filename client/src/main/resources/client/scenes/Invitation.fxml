@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.InvitationCtrl">
    <children>
-      <Button layoutX="430.0" layoutY="328.0" mnemonicParsing="false" text="Send Invites">
+      <Button layoutX="430.0" layoutY="328.0" mnemonicParsing="false" text="Send Invites" onAction="#sendInvites">
          <font>
             <Font size="18.0" />
          </font>
@@ -30,7 +30,7 @@
          </font>
       </Text>
       <TextArea layoutX="55.0" layoutY="183.0" prefHeight="122.0" prefWidth="495.0" />
-      <Text layoutX="368.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CODE">
+      <Text layoutX="368.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CODE" id="inviteCode">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
