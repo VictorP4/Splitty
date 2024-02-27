@@ -4,6 +4,7 @@ package server.api;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import commons.Event;
+import server.api.controllers.EventController;
 
 import java.util.ArrayList;
 import java.util.List;
