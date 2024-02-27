@@ -11,7 +11,7 @@ public class Debt {
     private double amount;
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Participant personOwed;
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Participant personInDebt;
     private boolean settled;
     @ManyToOne(cascade = CascadeType.PERSIST)
