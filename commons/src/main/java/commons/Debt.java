@@ -2,8 +2,6 @@ package commons;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 public class Debt {
@@ -75,7 +73,7 @@ public class Debt {
     }
 
     /**
-     * retirieves the boolean value is the debt paid of
+     * retrieves the boolean value is the debt paid of
      * @return boolean isPaidOf
      */
     public boolean isSettled() {
@@ -107,7 +105,7 @@ public class Debt {
     }
 
     /**
-     * setes the person owed the debt
+     * sets the person owed the debt
      * @param personOwed person owed to set
      */
     public void setPersonOwed(Participant personOwed) {
