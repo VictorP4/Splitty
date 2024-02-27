@@ -7,17 +7,14 @@ import java.util.Objects;
 
 @Entity
 public class Participant {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private String email;
     private String bankAccount;
-    @ManyToMany(cascade = CascadeType.PERSIST,
-        mappedBy = "participants")
-
-    private List<Event> eventsFollowed;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Event eventFollowed;
 
     /**
      * Constructs a Participant with the specified name and email.
@@ -114,17 +111,17 @@ public class Participant {
      *
      * @return the events followed by the participant
      */
-    public List<Event> getEventsFollowed() {
-        return eventsFollowed;
+    public Event getEventFollowed() {
+        return eventFollowed;
     }
 
     /**
      * Sets the events followed by the participant.
      *
-     * @param eventsFollowed the events followed by the participant
+     * @param eventFollowed the events followed by the participant
      */
-    public void setEventsFollowed(List<Event> eventsFollowed) {
-        this.eventsFollowed = eventsFollowed;
+    public void setEventFollowed(Event eventFollowed) {
+        this.eventFollowed = eventFollowed;
     }
 
     /**
@@ -140,7 +137,7 @@ public class Participant {
         Participant that = (Participant) o;
         return Objects.equals(id, that.id) && Objects.equals(name, that.name) &&
                 Objects.equals(email, that.email) && Objects.equals(bankAccount, that.bankAccount) &&
-                Objects.equals(eventsFollowed, that.eventsFollowed);
+                Objects.equals(eventFollowed, that.eventFollowed);
     }
 
     /**
@@ -150,7 +147,7 @@ public class Participant {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, bankAccount, eventsFollowed);
+        return Objects.hash(id, name, email, bankAccount, eventFollowed);
     }
 
     /**
@@ -165,7 +162,7 @@ public class Participant {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", bankAccount='" + bankAccount + '\'' +
-                ", eventsFollowed=" + eventsFollowed +
+                ", eventFollowed=" + eventFollowed +
                 '}';
     }
 }

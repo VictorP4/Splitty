@@ -65,16 +65,15 @@ public class ParticipantTest {
     }
 
     /**
-     * Tests the getEventsFollowed method of the Participant class.
+     * Tests the getEventFollowed method of the Participant class.
      * It should return the events followed by the participant.
      */
     @Test
-    public void testGetEventsFollowed() {
+    public void testGetEventFollowed() {
         Participant participant = new Participant();
-        List<Event> eventsFollowed = new ArrayList<>();
-        eventsFollowed.add(new Event());
-        participant.setEventsFollowed(eventsFollowed);
-        assertEquals(eventsFollowed, participant.getEventsFollowed());
+        Event eventFollowed = new Event();
+        participant.setEventFollowed(eventFollowed);
+        assertEquals(eventFollowed, participant.getEventFollowed());
     }
 
     /**
@@ -130,7 +129,7 @@ public class ParticipantTest {
         participant.setEmail("john.doe@example.com");
         participant.setBankAccount("1234567890");
 
-        String expected = "Participant{id=1, name='John Doe', email='john.doe@example.com', bankAccount='1234567890', eventsFollowed=null}";
+        String expected = "Participant{id=1, name='John Doe', email='john.doe@example.com', bankAccount='1234567890', eventFollowed=null}";
         assertEquals(expected, participant.toString());
     }
 }
