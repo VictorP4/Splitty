@@ -12,9 +12,9 @@ public class Debt {
     private Long id;
     private double amount;
     @ManyToOne(cascade = CascadeType.PERSIST)
-    private List<Participant> personOwed;
+    private Participant personOwed;
     @ManyToMany(cascade = CascadeType.PERSIST)
-    private List<Participant> personInDebt;
+    private Participant personInDebt;
     private boolean settled;
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Event debtFor;
@@ -26,7 +26,7 @@ public class Debt {
      * @param personInDebt person who needs to pay the debt
      * @param debtFor which expense is the debt for
      */
-    public Debt(double amount, List<Participant> personOwed, List<Participant> personInDebt,
+    public Debt(double amount, Participant personOwed, Participant personInDebt,
                 Event debtFor) {
         this.amount = amount;
         this.personOwed = personOwed;
@@ -62,7 +62,7 @@ public class Debt {
      * retrieves the participant that is owed the money
      * @return the participant
      */
-    public List<Participant> getPersonOwed() {
+    public Participant getPersonOwed() {
         return personOwed;
     }
 
@@ -70,7 +70,7 @@ public class Debt {
      * retrieves the participant in debt
      * @return participant in debt
      */
-    public List<Participant> getPersonInDebt() {
+    public Participant getPersonInDebt() {
         return personInDebt;
     }
 
@@ -110,7 +110,7 @@ public class Debt {
      * setes the person owed the debt
      * @param personOwed person owed to set
      */
-    public void setPersonOwed(List<Participant> personOwed) {
+    public void setPersonOwed(Participant personOwed) {
         this.personOwed = personOwed;
     }
 
@@ -118,7 +118,7 @@ public class Debt {
      * sets the person that is in debt
      * @param personInDebt person in debt to set
      */
-    public void setPersonInDebt(List<Participant> personInDebt) {
+    public void setPersonInDebt(Participant personInDebt) {
         this.personInDebt = personInDebt;
     }
 
