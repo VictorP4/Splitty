@@ -17,7 +17,7 @@ public class Event {
     private Date creationDate;
     private Date lastActivityDate;
     private String inviteCode;
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "EVENT_PARTICIPANT",
         joinColumns = @JoinColumn(name="Event_id"),
         inverseJoinColumns = @JoinColumn(name = "Participant_id"))
@@ -25,9 +25,6 @@ public class Event {
     @OneToMany(cascade = CascadeType.PERSIST)
     @Transient
     private List<Expense> expenses;
-
-
-
 
     /**
      * Default constructor for the Event class.
