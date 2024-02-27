@@ -18,7 +18,7 @@ class DebtTest {
         assertEquals(0, debt.getAmount());
         assertNull(debt.getPersonOwed());
         assertNull(debt.getPersonInDebt());
-        assertFalse(debt.isPaidOff());
+        assertFalse(debt.isSettled());
         assertNull(debt.getDateCreation());
         assertNull(debt.getDebtFor());
     }
@@ -59,8 +59,8 @@ class DebtTest {
     @Test
     void isPaidOff() {
         Debt debt = new Debt();
-        debt.setPaidOff(true);
-        assertTrue(debt.isPaidOff());
+        debt.setSettled(true);
+        assertTrue(debt.isSettled());
     }
 
     @Test
