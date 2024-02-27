@@ -1,9 +1,10 @@
-package server.api;
+package server.api.controller.tests;
 
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import commons.Event;
+import server.api.repository.tests.TestEventRepository;
 import server.api.controllers.EventController;
 
 import java.util.ArrayList;
