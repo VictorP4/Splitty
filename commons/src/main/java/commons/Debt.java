@@ -2,45 +2,39 @@ package commons;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 public class Debt {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private int amount;
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    private List<Participant> personOwed;
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    private List<Participant> personInDebt;
-    private boolean paidOff;
-    private Date dateCreation;
+    private double amount;
     @ManyToOne(cascade = CascadeType.PERSIST)
-    private Expense debtFor;
+    private Participant personOwed;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Participant personInDebt;
+    private boolean settled;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Event debtFor;
 
     /**
      * constructs a participants debt related to a specific expense
      * @param amount amount owed in debt
      * @param personOwed the person who needs to be paid to
      * @param personInDebt person who needs to pay the debt
-     * @param paidOff states if the debts been paid
-     * @param dateCreation date when the debt was created
      * @param debtFor which expense is the debt for
      */
-    public Debt(int amount, List<Participant> personOwed, List<Participant> personInDebt,
-                boolean paidOff, Date dateCreation, Expense debtFor) {
+    public Debt(double amount, Participant personOwed, Participant personInDebt,
+                Event debtFor) {
         this.amount = amount;
         this.personOwed = personOwed;
         this.personInDebt = personInDebt;
-        this.paidOff = paidOff;
-        this.dateCreation = dateCreation;
+        this.settled = false;
         this.debtFor = debtFor;
     }
 
     /**
-     * Default constructor for the Expense class for object mapper.
+     * Default constructor for the Event class for object mapper.
      */
     public Debt() {
         //for Object Mapper
@@ -58,7 +52,7 @@ public class Debt {
      * retrieves the amount of debt
      * @return amount of debt
      */
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
@@ -66,7 +60,7 @@ public class Debt {
      * retrieves the participant that is owed the money
      * @return the participant
      */
-    public List<Participant> getPersonOwed() {
+    public Participant getPersonOwed() {
         return personOwed;
     }
 
@@ -74,31 +68,23 @@ public class Debt {
      * retrieves the participant in debt
      * @return participant in debt
      */
-    public List<Participant> getPersonInDebt() {
+    public Participant getPersonInDebt() {
         return personInDebt;
     }
 
     /**
-     * retirieves the boolean value is the debt paid of
+     * retrieves the boolean value is the debt paid of
      * @return boolean isPaidOf
      */
-    public boolean isPaidOff() {
-        return paidOff;
-    }
-
-    /**
-     * retrieves the fate the debt was created
-     * @return date of creation
-     */
-    public Date getDateCreation() {
-        return dateCreation;
+    public boolean isSettled() {
+        return settled;
     }
 
     /**
      * retrieves the expense the debt is related to
      * @return the expense
      */
-    public Expense getDebtFor() {
+    public Event getDebtFor() {
         return debtFor;
     }
 
@@ -114,15 +100,15 @@ public class Debt {
      * sets the amount of the debt
      * @param amount the amount of the debt to set
      */
-    public void setAmount(int amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
     /**
-     * setes the person owed the debt
+     * sets the person owed the debt
      * @param personOwed person owed to set
      */
-    public void setPersonOwed(List<Participant> personOwed) {
+    public void setPersonOwed(Participant personOwed) {
         this.personOwed = personOwed;
     }
 
@@ -130,31 +116,23 @@ public class Debt {
      * sets the person that is in debt
      * @param personInDebt person in debt to set
      */
-    public void setPersonInDebt(List<Participant> personInDebt) {
+    public void setPersonInDebt(Participant personInDebt) {
         this.personInDebt = personInDebt;
     }
 
     /**
      * sets boolean was the debt paid off
-     * @param paidOff boolean value to set
+     * @param settled boolean value to set
      */
-    public void setPaidOff(boolean paidOff) {
-        this.paidOff = paidOff;
-    }
-
-    /**
-     * sets the date when the debt was created
-     * @param dateCreation date to set
-     */
-    public void setDateCreation(Date dateCreation) {
-        this.dateCreation = dateCreation;
+    public void setSettled(boolean settled) {
+        this.settled = settled;
     }
 
     /**
      * sets the expanse that the debt is for
      * @param debtFor expense to set
      */
-    public void setDebtFor(Expense debtFor) {
+    public void setDebtFor(Event debtFor) {
         this.debtFor = debtFor;
     }
 
@@ -168,9 +146,9 @@ public class Debt {
         if (this == other) return true;
         if (other == null || getClass() != other.getClass()) return false;
         Debt debt = (Debt) other;
-        return amount == debt.amount && paidOff == debt.paidOff && Objects.equals(id, debt.id)
+        return amount == debt.amount && settled == debt.settled && Objects.equals(id, debt.id)
                 && Objects.equals(personOwed, debt.personOwed) && Objects.equals(personInDebt, debt.personInDebt)
-                && Objects.equals(dateCreation, debt.dateCreation) && Objects.equals(debtFor, debt.debtFor);
+                && Objects.equals(debtFor, debt.debtFor);
     }
 
     /**
@@ -179,7 +157,7 @@ public class Debt {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(id, amount, personOwed, personInDebt, paidOff, dateCreation, debtFor);
+        return Objects.hash(id, amount, personOwed, personInDebt, settled, debtFor);
     }
 
     /**
@@ -193,8 +171,7 @@ public class Debt {
                 ", amount owned:" + amount +
                 ", to " + personOwed +
                 ", by" + personInDebt +
-                ", payedOf: " + paidOff +
-                ", debt created on: " + dateCreation +
+                ", payedOf: " + settled +
                 ", debt for=" + debtFor +
                 '}';
     }
