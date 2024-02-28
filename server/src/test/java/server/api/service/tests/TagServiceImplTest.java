@@ -38,7 +38,7 @@ public class TagServiceImplTest {
      * Verifies that a tag is successfully created with the provided name and color.
      */
     @Test
-    public void createTag_ValidInput() {
+    public void createTagValidInput() {
         Tag tag = new Tag("Test", 100, 150, 200);
         when(tagRepository.save(any(Tag.class))).thenReturn(tag);
 
@@ -56,7 +56,7 @@ public class TagServiceImplTest {
      * Verifies that a list of all tags is returned from the repository.
      */
     @Test
-    public void getAllTags_RepositoryReturnsTags() {
+    public void getAllTagsRepositoryReturnsTags() {
         Tag tag1 = new Tag("Tag1", 100, 150, 200);
         Tag tag2 = new Tag("Tag2", 50, 75, 100);
         List<Tag> tags = Arrays.asList(tag1, tag2);
@@ -75,7 +75,7 @@ public class TagServiceImplTest {
      * Verifies that a tag is retrieved by its ID if it exists.
      */
     @Test
-    public void getTagById_TagExists() {
+    public void getTagByIdTagExists() {
         Tag tag = new Tag("Test", 100, 150, 200);
         when(tagRepository.findById(1L)).thenReturn(Optional.of(tag));
 
@@ -93,7 +93,7 @@ public class TagServiceImplTest {
      * Verifies that an empty optional is returned when no tag is found with the given ID.
      */
     @Test
-    public void getTagById_TagDoesNotExist() {
+    public void getTagByIdTagDoesNotExist() {
         when(tagRepository.findById(1L)).thenReturn(Optional.empty());
 
         Optional<Tag> result = tagService.getTagById(1L);
