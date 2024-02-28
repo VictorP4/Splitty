@@ -26,6 +26,6 @@ public class StartScreenCtrl {
      * Shows the overview scene.
      */
     public void showOverview() {
-        mainCtrl.showOverview();
+        mainCtrl.showEventOverview();
     }
 }

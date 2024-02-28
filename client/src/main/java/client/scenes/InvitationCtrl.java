@@ -84,6 +84,6 @@ public class InvitationCtrl {
         } else {
             System.out.println("Failed to send invites. Status code: " + response.getStatus());
         }
-        mainCtrl.showOverview();
+        mainCtrl.showEventOverview();
     }
 }
