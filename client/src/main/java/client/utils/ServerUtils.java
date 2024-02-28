@@ -24,6 +24,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import commons.Debt;
+import commons.Event;
+import javafx.collections.ObservableList;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -60,4 +63,12 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON) //
 				.post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
 	}
+
+    public List<Debt> getDebts(Event event) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events/"+event.getId()+"/debts")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get(new GenericType<List<Debt>>() {});
+    }
 }
