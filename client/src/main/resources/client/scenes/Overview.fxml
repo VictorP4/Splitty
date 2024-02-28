@@ -27,7 +27,6 @@
             <Font size="15.0" />
          </font>
       </Text>
-      <Spinner layoutX="119.0" layoutY="141.0" prefHeight="25.0" prefWidth="181.0" />
       <Button layoutX="325.0" layoutY="140.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="100.0" text="Add Expense">
          <font>
             <Font size="13.0" />
@@ -81,6 +80,7 @@
         </tabs>
       </TabPane>
        <Button layoutX="27.0" layoutY="23.0" mnemonicParsing="false" text="Home" />
+      <ChoiceBox layoutX="119.0" layoutY="141.0" prefHeight="25.0" prefWidth="181.0" />
    </children>
    <cursor>
       <Cursor fx:constant="DEFAULT" />
