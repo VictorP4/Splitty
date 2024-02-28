@@ -67,12 +67,12 @@ public class OpenDebtsCtrl {
         for(Debt debt : debts){
             //setting the graphic of pane
             HBox tempBox = new HBox();
-            settingGraphicPane(debt, tempBox);
+            settingGraphicOfPane(debt, tempBox);
             TitledPane tempPane = new TitledPane();
             tempPane.setGraphic(tempBox);
             //setting the content of pane
             AnchorPane tempAP = new AnchorPane();
-            setContentPane(debt, tempAP);
+            setContentOfPane(debt, tempAP);
             tempPane.setContent(tempAP);
             debtsOverview.getPanes().add(tempPane);
         }
@@ -80,7 +80,7 @@ public class OpenDebtsCtrl {
 
     }
 
-    private void setContentPane(Debt debt, AnchorPane tempAP) {
+    private void setContentOfPane(Debt debt, AnchorPane tempAP) {
 
         tempAP.setMinHeight(0.0);
         tempAP.setMinWidth(0.0);
@@ -131,7 +131,7 @@ public class OpenDebtsCtrl {
 
     }
 
-    private void settingGraphicPane(Debt debt, HBox tempBox) {
+    private void settingGraphicOfPane(Debt debt, HBox tempBox) {
         tempBox.setAlignment(Pos.CENTER_RIGHT);
         tempBox.setPrefHeight(26.0);
         tempBox.setPrefWidth(422.0);
