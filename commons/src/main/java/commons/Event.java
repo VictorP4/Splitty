@@ -18,9 +18,6 @@ public class Event {
     private Date lastActivityDate;
     private String inviteCode;
     @OneToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(name = "EVENT_PARTICIPANT",
-        joinColumns = @JoinColumn(name="Event_id"),
-        inverseJoinColumns = @JoinColumn(name = "Participant_id"))
     private List<Participant> participants;
     @OneToMany(cascade = CascadeType.PERSIST)
     @Transient
