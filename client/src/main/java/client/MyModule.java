@@ -15,13 +15,7 @@
  */
 package client;
 
-import client.scenes.AddExpenseCtrl;
-import client.scenes.ContactDetailsCtrl;
-import client.scenes.InvitationCtrl;
-import client.scenes.OpenDebtsCtrl;
-import client.scenes.OverviewCtrl;
-import client.scenes.StartScreenCtrl;
-import client.scenes.StatisticsCtrl;
+import client.scenes.*;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;

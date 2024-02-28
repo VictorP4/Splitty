@@ -2,7 +2,6 @@ package commons;
 
 import jakarta.persistence.*;
 
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,10 +17,7 @@ public class Event {
     private Date creationDate;
     private Date lastActivityDate;
     private String inviteCode;
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(name = "EVENT_PARTICIPANT",
-        joinColumns = @JoinColumn(name="Event_id"),
-        inverseJoinColumns = @JoinColumn(name = "Participant_id"))
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Participant> participants;
     @OneToMany(cascade = CascadeType.PERSIST)
     @Transient
