@@ -64,7 +64,7 @@ public class ServerUtils {
 	}
 	public Response sendInvites(EmailRequestBody requestBody) {
 		return ClientBuilder.newClient()
-				.target(SERVER).path("api/sendInvites")
+				.target(SERVER).path("/sendInvites")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(requestBody, APPLICATION_JSON));

@@ -1,4 +1,4 @@
-package server.api;
+package server.api.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import commons.EmailRequestBody;
-import server.services.EmailService;
+import server.api.services.EmailService;
 
 /**
  * Controller class for handling email-related API endpoints.

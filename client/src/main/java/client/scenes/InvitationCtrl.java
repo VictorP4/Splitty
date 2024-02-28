@@ -50,7 +50,7 @@ public class InvitationCtrl {
      * Sets the invite code in the UI.
      */
     public void setInviteCode() {
-        String inviteCode = event.getInviteCode();
+        inviteCode = event.getInviteCode();
         inviteCodeText.setText(inviteCode);
     }
 
@@ -84,6 +84,7 @@ public class InvitationCtrl {
         } else {
             System.out.println("Failed to send invites. Status code: " + response.getStatus());
         }
+        emailTextArea.clear();
         mainCtrl.showEventOverview();
     }
 }
