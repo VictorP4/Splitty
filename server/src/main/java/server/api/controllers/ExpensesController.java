@@ -1,4 +1,4 @@
-package server.api;
+package server.api.controllers;
 import commons.Event;
 import commons.Expense;
 import org.springframework.http.ResponseEntity;
