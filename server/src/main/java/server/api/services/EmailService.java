@@ -72,6 +72,12 @@ public class EmailService {
         }
     }
 
+    /**
+     * Send reminder to the respective person
+     *
+     * @param emailRequest info for reminder
+     * @return http status
+     */
     public HttpStatus sendReminder(EmailRequestBody emailRequest) {
         try{
             sendEmail(emailRequest.getEmailAddresses().get(1),"Debt Reminder","Hello "+
