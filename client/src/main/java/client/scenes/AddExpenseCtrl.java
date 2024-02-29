@@ -18,4 +18,19 @@ public class AddExpenseCtrl {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
+
+    /**
+     * Directs a used back to the event overview scene
+     */
+    public void backToOverview() {
+        clearFields();
+        mainCtrl.showEventOverview();
+    }
+
+    /**
+     * Clears the fields on the expense page
+     */
+    private void clearFields() {
+        // clear all fields that the user filled in (text fields, checked boxes ect.)
+    }
 }

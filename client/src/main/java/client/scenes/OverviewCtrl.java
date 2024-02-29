@@ -48,6 +48,13 @@ public class OverviewCtrl {
     // when initializing new event -> participants is empty (participants.clear())
 
     /**
+     * Directs user back to the startScreen. Here they can join other events if they want to
+     */
+    public void backToStartScreen() {
+        mainCtrl.showStartScreen();
+    }
+
+    /**
      * Directs user towards the invite scene
      */
     public void sendInvite() {

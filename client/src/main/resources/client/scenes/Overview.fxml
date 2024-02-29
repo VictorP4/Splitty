@@ -29,7 +29,7 @@
             <Font size="15.0" />
          </font>
       </Text>
-      <Button fx:id="addExpense" layoutX="325.0" layoutY="140.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="100.0" onAction="#addExpense" text="Add Expense">
+      <Button fx:id="addExpense" layoutX="325.0" layoutY="140.0" mnemonicParsing="false" onAction="#addExpense" prefHeight="27.0" prefWidth="100.0" text="Add Expense">
          <font>
             <Font size="13.0" />
          </font>
@@ -81,7 +81,10 @@
             </Tab>
         </tabs>
       </TabPane>
-       <Button layoutX="27.0" layoutY="23.0" mnemonicParsing="false" text="Home" />
+       <Button fx:id="startSceenButton" layoutX="27.0" layoutY="23.0" mnemonicParsing="false" onAction="#backToStartScreen" text="Home">
+         <font>
+            <Font size="13.0" />
+         </font></Button>
       <ChoiceBox fx:id="participantBox" layoutX="119.0" layoutY="141.0" prefHeight="25.0" prefWidth="181.0" />
    </children>
    <cursor>
