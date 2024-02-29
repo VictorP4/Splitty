@@ -23,6 +23,11 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+
+
+import commons.EmailRequestBody;
+import jakarta.ws.rs.core.Response;
+
 import org.glassfish.jersey.client.ClientConfig;
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -57,5 +62,12 @@ public class ServerUtils {
 				.request(APPLICATION_JSON) //
 				.accept(APPLICATION_JSON) //
 				.post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
+	}
+	public Response sendInvites(EmailRequestBody requestBody) {
+		return ClientBuilder.newClient()
+				.target(SERVER).path("/sendInvites")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.post(Entity.entity(requestBody, APPLICATION_JSON));
 	}
 }

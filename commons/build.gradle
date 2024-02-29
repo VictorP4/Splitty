@@ -1,6 +1,7 @@
 
 java {
 	sourceCompatibility = '21'
+	targetCompatibility = '21'
 }
 
 
