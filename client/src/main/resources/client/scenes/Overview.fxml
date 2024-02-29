@@ -5,14 +5,16 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+<!--remember to remove content in tab if it does not work!!-->
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
    <children>
       <Text layoutX="119.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Text>
-      <Button layoutX="201.0" layoutY="23.0" mnemonicParsing="false" text="Send Invites">
+      <Button fx:id="sendInvite" layoutX="201.0" layoutY="23.0" mnemonicParsing="false" onAction="#sendInvite" text="Send Invites">
          <font>
             <Font size="13.0" />
          </font>
@@ -22,12 +24,12 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Text>
-      <Text layoutX="119.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participant 1, Participant 2, Participant 3">
+      <Text fx:id="participants" layoutX="119.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participant 1, Participant 2, Participant 3">
          <font>
             <Font size="15.0" />
          </font>
       </Text>
-      <Button layoutX="325.0" layoutY="140.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="100.0" text="Add Expense">
+      <Button fx:id="addExpense" layoutX="325.0" layoutY="140.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="100.0" onAction="#addExpense" text="Add Expense">
          <font>
             <Font size="13.0" />
          </font>
@@ -80,7 +82,7 @@
         </tabs>
       </TabPane>
        <Button layoutX="27.0" layoutY="23.0" mnemonicParsing="false" text="Home" />
-      <ChoiceBox layoutX="119.0" layoutY="141.0" prefHeight="25.0" prefWidth="181.0" />
+      <ChoiceBox fx:id="participantBox" layoutX="119.0" layoutY="141.0" prefHeight="25.0" prefWidth="181.0" />
    </children>
    <cursor>
       <Cursor fx:constant="DEFAULT" />

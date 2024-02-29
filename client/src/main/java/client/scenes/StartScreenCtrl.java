@@ -48,7 +48,7 @@ public class StartScreenCtrl {
         }
 
         clearField();
-        mainCtrl.showOverview(); // the right one
+        mainCtrl.showEventOverview(); // the right one
     }
 
     /**
@@ -66,7 +66,7 @@ public class StartScreenCtrl {
         }
 
         clearField();
-        mainCtrl.showOverview(); // of the right one
+        mainCtrl.showEventOverview(); // of the right one
     }
 
     private void clearField() {

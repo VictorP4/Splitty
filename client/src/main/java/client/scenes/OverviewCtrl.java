@@ -9,6 +9,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.Tab;
+import javafx.scene.text.Text;
 
 import java.awt.*;
 
@@ -17,17 +19,19 @@ public class OverviewCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     @FXML
-    private Label participants;
+    private Text participants;
     @FXML
     private ChoiceBox<Participant> participantBox;
     @FXML
     private ListView<Expense> expenseList;
     @FXML
     private ObservableList<Expense> original;
-    @FXML
-    private MenuButton fromSelected;
-    @FXML
-    private MenuButton includingSelected;
+//    @FXML
+//    private Tab fromSelected;
+//    @FXML
+//    private Tab includingSelected;
+//    @FXML
+//    private Tab allExpenses;
 
     /**
      * Constructs a new instance of a OverviewCtrl

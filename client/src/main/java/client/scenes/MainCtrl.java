@@ -93,7 +93,8 @@ public class MainCtrl {
         this.statisticsCtrl = statistics.getKey();
         this.statistics = new Scene(statistics.getValue());
 
-        showOverview();
+//        showOverview();
+        showStartScreen();
         primaryStage.show();
     }
 
