@@ -11,8 +11,9 @@ public class Participant {
     private Long id;
     private String name;
     private String email;
-    private String bankAccount;
     private double debt;
+    private String iban;
+    private String bic;
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Event eventFollowed;
 
@@ -88,25 +89,6 @@ public class Participant {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    /**
-     * Retrieves the bank account information of the participant.
-     *
-     * @return the bank account information of the participant
-     */
-    public String getBankAccount() {
-        return bankAccount;
-    }
-
-    /**
-     * Sets the bank account information of the participant.
-     *
-     * @param bankAccount the bank account information to be set
-     */
-    public void setBankAccount(String bankAccount) {
-        this.bankAccount = bankAccount;
-    }
-
     /**
      * Retrieves the events followed by the participant.
      *
@@ -144,30 +126,55 @@ public class Participant {
     }
 
     /**
-     * Indicates whether some other object is "equal to" this one.
+     * Retrieves the IBAN
      *
-     * @param o the reference object with which to compare
-     * @return true if this object is the same as the obj argument; false otherwise
+     * @return the IBAN
      */
+    public String getIban() {
+        return iban;
+    }
+
+    /**
+     * Sets the IBAN
+     *
+     * @param iban the new IBAN
+     */
+    public void setIBAN(String iban) {
+        this.iban = iban;
+    }
+
+    /**
+     * Retrieves the BIC
+     *
+     * @return BIC
+     */
+    public String getBic() {
+        return bic;
+    }
+
+    /**
+     * Sets the BIC
+     *
+     * @param bic the new BIC
+     */
+    public void setBIC(String bic) {
+        this.bic = bic;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Participant that = (Participant) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) &&
-                Objects.equals(email, that.email) && Objects.equals(bankAccount, that.bankAccount) &&
-                Objects.equals(eventFollowed, that.eventFollowed) && this.getDebt()==that.getDebt();
+        return Double.compare(that.debt, debt) == 0 && Objects.equals(id, that.id) &&
+                Objects.equals(name, that.name) && Objects.equals(email, that.email) &&
+                Objects.equals(iban, that.iban) && Objects.equals(bic, that.bic) &&
+                Objects.equals(eventFollowed, that.eventFollowed);
     }
 
-    /**
-     * Returns a hash code value for the object.
-     *
-     * @return a hash code value for this object
-     */
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, bankAccount, eventFollowed, debt);
+        return Objects.hash(id, name, email, debt, iban, bic, eventFollowed);
     }
 
     /**
@@ -181,8 +188,9 @@ public class Participant {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", bankAccount='" + bankAccount + '\'' +
                 ", debt=" + debt +
+                ", IBAN='" + iban + '\'' +
+                ", BIC='" + bic + '\'' +
                 ", eventFollowed=" + eventFollowed +
                 '}';
     }

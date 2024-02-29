@@ -3,8 +3,10 @@ package client.scenes;
 import client.models.Debt;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.EmailRequestBody;
 import commons.Event;
 import commons.Participant;
+import jakarta.ws.rs.core.Response;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -60,7 +62,9 @@ public class OpenDebtsCtrl {
         var tempDebts = getDebts(event);
         debts = FXCollections.observableList(tempDebts);
         List<TilePane> titlePanes= new ArrayList<>();
-        debtsOverview = new Accordion();
+        while(debtsOverview.getPanes().size()>0){
+            debtsOverview.getPanes().remove(0);
+        }
         for(Debt debt : debts){
             //setting the graphic of pane
             HBox tempBox = new HBox();
@@ -141,50 +145,77 @@ public class OpenDebtsCtrl {
         tempAP.setMinHeight(0.0);
         tempAP.setMinWidth(0.0);
         tempAP.setPrefSize(367,205);
-        Text text1 = new Text("Bank information available, transfer the money to:");
-        text1.setLayoutX(14.0);
-        text1.setLayoutY(27.0);
-        text1.setStrokeType(StrokeType.OUTSIDE);
-        text1.setStrokeWidth(0.0);
-        Text text2 = new Text("Account Holder: "+ debt.getPersonOwed().getName());
-        text2.setLayoutX(14.0);
-        text2.setLayoutY(44.0);
-        text2.setStrokeType(StrokeType.OUTSIDE);
-        text2.setStrokeWidth(0.0);
-        //TODO after IBAN is added to participant
-        Text text3 = new Text("IBAN: "+ debt.getPersonOwed());
-        text3.setLayoutX(14.0);
-        text3.setLayoutY(60.0);
-        text3.setStrokeType(StrokeType.OUTSIDE);
-        text3.setStrokeWidth(0.0);
-        //TODO after BIC is added to participant
-        Text text4 = new Text("BIC: "+ debt.getPersonOwed());
-        text4.setLayoutX(14.0);
-        text4.setLayoutY(77.0);
-        text4.setStrokeType(StrokeType.OUTSIDE);
-        text4.setStrokeWidth(0.0);
-        Text text5 = new Text("Email configured:");
-        text5.setLayoutX(14.0);
-        text5.setLayoutY(108.0);
-        text5.setStrokeType(StrokeType.OUTSIDE);
-        text5.setStrokeWidth(0.0);
-        Button emailB = new Button("Send reminder");
-        emailB.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Node source = (Node) event.getSource();
-                HBox parent = (HBox) source.getParent();
-                ObservableList<Node> list = parent.getChildren();
-                list.remove(1);
-                //TODO send email
-                list.add(1,new ImageView(new Image("../resources/client/misc/MailActive.png")));
+        Text text1 = null;
+        if(debt.getPersonOwed().getIban()!=null&&debt.getPersonOwed().getBic()!=null) {
+            text1 = new Text("Bank information available, transfer the money to:");
+            text1.setLayoutX(14.0);
+            text1.setLayoutY(27.0);
+            text1.setStrokeType(StrokeType.OUTSIDE);
+            text1.setStrokeWidth(0.0);
 
-            }
-        });
-        emailB.setLayoutX(124);
-        emailB.setLayoutY(91);
-        emailB.setMnemonicParsing(false);
-        tempAP.getChildren().addAll(text1,text2,text3,text4,text5,emailB);
+            Text text2 = new Text("Account Holder: " + debt.getPersonOwed().getName());
+            text2.setLayoutX(14.0);
+            text2.setLayoutY(44.0);
+            text2.setStrokeType(StrokeType.OUTSIDE);
+            text2.setStrokeWidth(0.0);
+
+            Text text3 = new Text("IBAN: " + debt.getPersonOwed().getIban());
+            text3.setLayoutX(14.0);
+            text3.setLayoutY(60.0);
+            text3.setStrokeType(StrokeType.OUTSIDE);
+            text3.setStrokeWidth(0.0);
+
+            Text text4 = new Text("BIC: " + debt.getPersonOwed().getBic());
+            text4.setLayoutX(14.0);
+            text4.setLayoutY(77.0);
+            text4.setStrokeType(StrokeType.OUTSIDE);
+            text4.setStrokeWidth(0.0);
+
+            Text text5 = new Text("Email configured:");
+            text5.setLayoutX(14.0);
+            text5.setLayoutY(108.0);
+            text5.setStrokeType(StrokeType.OUTSIDE);
+            text5.setStrokeWidth(0.0);
+
+            Button emailB = new Button("Send reminder");
+            emailB.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    Node source = (Node) event.getSource();
+                    HBox parent = (HBox) source.getParent();
+                    ObservableList<Node> list = parent.getChildren();
+                    list.remove(1);
+                    List<String> message = new ArrayList<>();
+                    message.add(debt.getPersonInDebt().getName());
+                    message.add(debt.getPersonInDebt().getEmail());
+                    message.add(debt.getPersonOwed().getName());
+                    message.add(debt.getPersonOwed().getIban());
+                    message.add(debt.getPersonOwed().getBic());
+                    Response response = server.sendReminder(new EmailRequestBody(message, String.valueOf(debt.getAmount())));
+                    if (response.getStatus() == 200) {
+                        System.out.println("Reminder sent successfully.");
+                    } else {
+                        System.out.println("Failed to send reminder. Status code: " + response.getStatus());
+                    }
+                    list.add(1, new ImageView(new Image("../resources/client/misc/MailActive.png")));
+
+                }
+            });
+
+            emailB.setLayoutX(124);
+            emailB.setLayoutY(91);
+            emailB.setMnemonicParsing(false);
+            tempAP.getChildren().addAll(text1, text2, text3, text4, text5, emailB);
+        }
+        else{
+            text1 = new Text("Bank information not available");
+            text1.setLayoutX(14.0);
+            text1.setLayoutY(27.0);
+            text1.setStrokeType(StrokeType.OUTSIDE);
+            text1.setStrokeWidth(0.0);
+            tempAP.getChildren().addAll(text1);
+
+        }
     }
 
     /**

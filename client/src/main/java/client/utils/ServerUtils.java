@@ -65,9 +65,17 @@ public class ServerUtils {
 	}
 	public Response sendInvites(EmailRequestBody requestBody) {
 		return ClientBuilder.newClient()
-				.target(SERVER).path("/sendInvites")
+				.target(SERVER).path("api/email/invites")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(requestBody, APPLICATION_JSON));
+	}
+
+	public Response sendReminder(EmailRequestBody emailRequestBody) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/email/reminders")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.post(Entity.entity(emailRequestBody, APPLICATION_JSON));
 	}
 }
