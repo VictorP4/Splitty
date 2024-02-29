@@ -2,6 +2,7 @@ package commons;
 
 import jakarta.persistence.*;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,16 +18,14 @@ public class Event {
     private Date creationDate;
     private Date lastActivityDate;
     private String inviteCode;
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(name = "EVENT_PARTICIPANT",
-        joinColumns = @JoinColumn(name="Event_id"),
-        inverseJoinColumns = @JoinColumn(name = "Participant_id"))
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Participant> participants;
     @OneToMany(cascade = CascadeType.PERSIST)
     @Transient
     private List<Expense> expenses;
 
-
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final SecureRandom RANDOM = new SecureRandom();
 
 
     /**
@@ -39,6 +38,16 @@ public class Event {
         this.expenses = new ArrayList<>();
         this.creationDate = new Date();
         this.lastActivityDate = this.creationDate;
+        this.inviteCode=generateRandomString(6);
+    }
+
+    public static String generateRandomString(int length) {
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            int randomIndex = RANDOM.nextInt(CHARACTERS.length());
+            sb.append(CHARACTERS.charAt(randomIndex));
+        }
+        return sb.toString();
     }
 
     /**

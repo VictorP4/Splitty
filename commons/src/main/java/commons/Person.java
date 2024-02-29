@@ -35,9 +35,10 @@ public class Person {
 
 	public String firstName;
 	public String lastName;
+	public String email;
 
 	@SuppressWarnings("unused")
-	private Person() {
+	public Person() {
 		// for object mapper
 	}
 

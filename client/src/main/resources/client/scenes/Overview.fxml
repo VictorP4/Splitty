@@ -5,16 +5,16 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<!--remember to remove content in tab if it does not work!!-->
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="client.scenes.OverviewCtrl">
    <children>
       <Text layoutX="119.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Text>
-      <Button fx:id="sendInvite" layoutX="201.0" layoutY="23.0" mnemonicParsing="false" onAction="#sendInvite" text="Send Invites">
+      <Button layoutX="441.0" layoutY="23.0" mnemonicParsing="false" onAction="#showInvites" text="Send Invites">
          <font>
             <Font size="13.0" />
          </font>

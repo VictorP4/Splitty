@@ -1,7 +1,6 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import com.google.inject.Inject;
 import commons.Event;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
@@ -9,6 +8,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 
+import com.google.inject.Inject;
+
+/**
+ * Controller class for the start screen scene.
+ */
 public class StartScreenCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -19,9 +23,9 @@ public class StartScreenCtrl {
     private TextField eventCode;
 
     /**
-     * Constructs a new instance of a StartScreenCtrl
+     * Constructs a new instance of StartScreenCtrl.
      *
-     * @param server The utility class for server-related operations.
+     * @param server   The utility class for server-related operations.
      * @param mainCtrl The main controller of the application.
      */
     @Inject
@@ -72,5 +76,12 @@ public class StartScreenCtrl {
     private void clearField() {
         eventTitle.clear();
         eventCode.clear();
+    }
+
+    /**
+     * Shows the overview scene.
+     */
+    public void showOverview() {
+        mainCtrl.showEventOverview();
     }
 }

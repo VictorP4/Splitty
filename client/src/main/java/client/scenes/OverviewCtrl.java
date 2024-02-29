@@ -9,7 +9,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
-
+/**
+ * Controller class for the overview scene.
+ */
 public class OverviewCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
@@ -29,15 +31,22 @@ public class OverviewCtrl {
 //    private Tab allExpenses;
 
     /**
-     * Constructs a new instance of a OverviewCtrl
+     * Constructs a new instance of OverviewCtrl.
      *
      * @param serverUtils The utility class for server-related operations.
-     * @param mainCtrl The main controller of the application.
+     * @param mainCtrl    The main controller of the application.
      */
     @Inject
     public OverviewCtrl(ServerUtils serverUtils, MainCtrl mainCtrl) {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
+    }
+
+    /**
+     * Shows the invitation scene.
+     */
+    public void showInvites() {
+        mainCtrl.showInvitation();
     }
 
     // when initializing new event -> participants is empty (participants.clear())
@@ -47,13 +56,6 @@ public class OverviewCtrl {
      */
     public void backToStartScreen() {
         mainCtrl.showStartScreen();
-    }
-
-    /**
-     * Directs user towards the invite scene
-     */
-    public void sendInvite() {
-        mainCtrl.showInvitation();
     }
 
     /**

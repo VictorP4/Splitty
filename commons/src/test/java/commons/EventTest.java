@@ -162,7 +162,7 @@ public class EventTest {
      * It should check if two events are equal.
      */
     @Test
-    public void testEquals() {
+    public void testDiffEquals() {
         Event event1 = new Event();
         event1.setId(1L);
         event1.setTitle("Event 1");
@@ -170,8 +170,7 @@ public class EventTest {
         Event event2 = new Event();
         event2.setId(1L);
         event2.setTitle("Event 1");
-
-        assertEquals(event1, event2);
+        assertNotEquals(event1, event2);
     }
 
     /**
@@ -179,7 +178,7 @@ public class EventTest {
      * It should generate a hash code for the event.
      */
     @Test
-    public void testHashCodeEquals() {
+    public void testDiffHashCodeEquals() {
         Event event1 = new Event();
         event1.setId(1L);
         event1.setTitle("Event 1");
@@ -187,8 +186,8 @@ public class EventTest {
         event2.setId(1L);
         event2.setTitle("Event 1");
 
-        assertEquals(event1, event2);
-        assertEquals(event1.hashCode(), event2.hashCode());
+        assertNotEquals(event1, event2);
+        assertNotEquals(event1.hashCode(), event2.hashCode());
     }
 
     @Test
