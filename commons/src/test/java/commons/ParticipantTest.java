@@ -126,7 +126,7 @@ public class ParticipantTest {
         participant.setEmail("john.doe@example.com");
         participant.setBankAccount("1234567890");
 
-        String expected = "Participant{id=1, name='John Doe', email='john.doe@example.com', bankAccount='1234567890', eventFollowed=null}";
+        String expected = "Participant{id=1, name='John Doe', email='john.doe@example.com', bankAccount='1234567890', debt=0.0, eventFollowed=null}";
         assertEquals(expected, participant.toString());
     }
 }

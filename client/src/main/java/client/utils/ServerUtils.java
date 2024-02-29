@@ -23,12 +23,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-
-import commons.Debt;
-import commons.Event;
-import javafx.collections.ObservableList;
 import org.glassfish.jersey.client.ClientConfig;
-
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;

@@ -2,22 +2,17 @@ package client.scenes;
 
 import client.models.Debt;
 import client.utils.ServerUtils;
-import com.fasterxml.jackson.databind.introspect.TypeResolutionContext;
 import com.google.inject.Inject;
-
 import commons.Event;
 import commons.Participant;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableListBase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
-
 import javafx.scene.control.Button;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
@@ -143,7 +138,6 @@ public class OpenDebtsCtrl {
      * @param tempAP the anchor pane with the content
      */
     private void setContentOfPane(Debt debt, AnchorPane tempAP) {
-
         tempAP.setMinHeight(0.0);
         tempAP.setMinWidth(0.0);
         tempAP.setPrefSize(367,205);
@@ -191,7 +185,6 @@ public class OpenDebtsCtrl {
         emailB.setLayoutY(91);
         emailB.setMnemonicParsing(false);
         tempAP.getChildren().addAll(text1,text2,text3,text4,text5,emailB);
-
     }
 
     /**
