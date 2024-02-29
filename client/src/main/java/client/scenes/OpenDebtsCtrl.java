@@ -104,11 +104,11 @@ public class OpenDebtsCtrl {
         int i=0;
         int j=list.size()-1;
         while(i<j){
-            if(list.get(i).getDebt()<0.01){
+            if(Math.abs(list.get(i).getDebt())<0.01){
                 i++;
 
             }
-            else if(list.get(j).getDebt()<0.01){
+            else if(Math.abs(list.get(j).getDebt())<0.01){
                 j--;
 
             }
