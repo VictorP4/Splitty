@@ -25,6 +25,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import commons.EmailRequestBody;
+import commons.Event;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
@@ -68,5 +69,12 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(requestBody, APPLICATION_JSON));
+	}
+	public Event updateEvent(Event event) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("/" + event.getId())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.put(Entity.entity(event, APPLICATION_JSON), Event.class);
 	}
 }

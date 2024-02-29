@@ -92,10 +92,5 @@ public class EventController {
         Event event = repo.findById(id).get();
         repo.deleteById(id);
         return ResponseEntity.ok(event);
-
     }
-
-
-
-
 }
