@@ -23,8 +23,6 @@ import javafx.util.Pair;
 public class MainCtrl {
 
     private Stage primaryStage;
-    private QuoteOverviewCtrl overviewCtrl;
-    private Scene overview;
     private AddExpenseCtrl addExpenseCtrl;
     private Scene addExpense;
     private ContactDetailsCtrl contactDetailsCtrl;
@@ -35,8 +33,6 @@ public class MainCtrl {
     private Scene openDebts;
     private StatisticsCtrl statisticsCtrl;
     private Scene statistics;
-    private AddQuoteCtrl addCtrl;
-    private Scene add;
     private StartScreenCtrl startScreenCtrl;
     private Scene startScreen;
     private OverviewCtrl eventOverviewCtrl;
@@ -49,8 +45,6 @@ public class MainCtrl {
      * Finally, it shows the overview scene and displays the primary stage.
      *
      * @param primaryStage   The primary stage of the JavaFX application.
-     * @param overview       A Pair containing the OverviewCtrl instance and its corresponding parent Node.
-     * @param add            A Pair containing the AddQuoteCtrl instance and its corresponding parent Node.
      * @param addExpense     A Pair containing the addExpense instance and its corresponding parent Node.
      * @param contactDetails A Pair containing the contactDetails instance and its corresponding parent Node.
      * @param invitation     A Pair containing the invitation instance and its corresponding parent Node.
@@ -59,18 +53,12 @@ public class MainCtrl {
      * @param startScreen    A Pair containing the StartScreenCtrl instance and its corresponding parent Node.
      * @param eventOverview  A Pair containing the OverviewCtrl instance and its corresponding parent Node.
      */
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-                           Pair<AddQuoteCtrl, Parent> add, Pair<AddExpenseCtrl, Parent> addExpense,
+    public void initialize(Stage primaryStage, Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<ContactDetailsCtrl, Parent> contactDetails, Pair<InvitationCtrl, Parent> invitation,
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<StatisticsCtrl, Parent> statistics,
                            Pair<StartScreenCtrl, Parent> startScreen, Pair<OverviewCtrl, Parent> eventOverview) {
 
         this.primaryStage = primaryStage;
-        this.overviewCtrl = overview.getKey();
-        this.overview = new Scene(overview.getValue());
-
-        this.addCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
 
         this.startScreenCtrl = startScreen.getKey();
         this.startScreen = new Scene(startScreen.getValue());
@@ -93,34 +81,15 @@ public class MainCtrl {
         this.statisticsCtrl = statistics.getKey();
         this.statistics = new Scene(statistics.getValue());
 
-        showOverview();
+        showStartScreen();
         primaryStage.show();
-    }
-
-    /**
-     * Displays the quote scene in the primary stage and refreshes its contents.
-     */
-    public void showOverview() {
-        primaryStage.setTitle("Quotes: Overview");
-        primaryStage.setScene(overview);
-        overviewCtrl.refresh();
-    }
-
-    /**
-     * Displays the add quote scene in the primary stage.
-     * Associates the key pressed event with the AddQuoteCtrl.
-     */
-    public void showAdd() {
-        primaryStage.setTitle("Quotes: Adding Quote");
-        primaryStage.setScene(add);
-        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 
     /**
      * Displays the start screen scene in the primary stage.
      */
     public void showStartScreen() {
-        primaryStage.setTitle("Start Screen");
+        primaryStage.setTitle("StartScreen");
         primaryStage.setScene(startScreen);
     }
 
