@@ -1,10 +1,12 @@
 package client.scenes;
 
+import client.models.Debt;
 import client.utils.ServerUtils;
 import com.fasterxml.jackson.databind.introspect.TypeResolutionContext;
 import com.google.inject.Inject;
-import commons.Debt;
+
 import commons.Event;
+import commons.Participant;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableListBase;
@@ -60,7 +62,7 @@ public class OpenDebtsCtrl {
      * refreshes the debts
      */
     public void refresh(Event event){
-        var tempDebts = server.getDebts(event);
+        var tempDebts = getDebts(event);
         debts = FXCollections.observableList(tempDebts);
         List<TilePane> titlePanes= new ArrayList<>();
         debtsOverview = new Accordion();
@@ -80,6 +82,66 @@ public class OpenDebtsCtrl {
 
     }
 
+    /**
+     * Creates a list of transactions to settle the open debt within the group
+     *
+     * @param event
+     * @return list of maximum n-1 transactions to settle debt
+     */
+    public List<Debt> getDebts(Event event){
+        List<Participant> list = new ArrayList<>(event.getParticipants());
+        double[] debts = new double[list.size()];
+
+        List<Debt> result = new ArrayList<>();
+        list.sort((x,y)->{
+            if(x.getDebt()<y.getDebt()) return -1;
+            else if(x.getDebt()>y.getDebt()) return 1;
+            else return 0;
+        });
+        for(int k=0;k<debts.length;k++){
+            debts[k]=list.get(k).getDebt();
+        }
+        int i=0;
+        int j=list.size()-1;
+        while(i<j){
+            if(list.get(i).getDebt()<0.01){
+                i++;
+
+            }
+            else if(list.get(j).getDebt()<0.01){
+                j--;
+
+            }
+            else if(Math.abs(debts[i]+debts[j])<0.01){
+                result.add(new Debt(debts[j],list.get(j),list.get(i)));
+                debts[i]=0;
+                debts[j]=0;
+                i--;
+                j++;
+            }
+            else if(Math.abs(debts[i])<debts[j]){
+                result.add(new Debt(Math.abs(debts[i]),list.get(j),list.get(i)));
+                debts[j]+=debts[i];
+                debts[i]=0;
+                i++;
+
+            }
+            else{
+                result.add(new Debt(debts[j],list.get(j),list.get(i)));
+                debts[i]+=debts[j];
+                debts[j]=0;
+                j--;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Gives the content of the respective pane for the accordion
+     *
+     * @param debt the debt which will be in the content
+     * @param tempAP the anchor pane with the content
+     */
     private void setContentOfPane(Debt debt, AnchorPane tempAP) {
 
         tempAP.setMinHeight(0.0);
@@ -120,6 +182,7 @@ public class OpenDebtsCtrl {
                 HBox parent = (HBox) source.getParent();
                 ObservableList<Node> list = parent.getChildren();
                 list.remove(1);
+                //TODO send email
                 list.add(1,new ImageView(new Image("../resources/client/misc/MailActive.png")));
 
             }
@@ -131,6 +194,11 @@ public class OpenDebtsCtrl {
 
     }
 
+    /**
+     *
+     * @param debt
+     * @param tempBox
+     */
     private void settingGraphicOfPane(Debt debt, HBox tempBox) {
         tempBox.setAlignment(Pos.CENTER_RIGHT);
         tempBox.setPrefHeight(26.0);
@@ -152,6 +220,7 @@ public class OpenDebtsCtrl {
                 Node source = (Node) event.getSource();
                 HBox parent = (HBox) source.getParent();
                 ObservableList<Node> list = parent.getChildren();
+                //TODO create expense to settle debt
                 list.remove(2);
                 list.add(2,new ImageView(new Image("../resources/client/misc/HomeActive.png")));
             }

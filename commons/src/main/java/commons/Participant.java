@@ -12,6 +12,7 @@ public class Participant {
     private String name;
     private String email;
     private String bankAccount;
+    private double debt;
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Event eventFollowed;
 
@@ -24,6 +25,7 @@ public class Participant {
     public Participant(String name, String email) {
         this.name = name;
         this.email = email;
+        this.debt=0.00;
     }
 
     /**
@@ -124,11 +126,30 @@ public class Participant {
     }
 
     /**
+     * Returns the open debt
+     *
+     * @return debt of person
+     */
+    public double getDebt() {
+        return debt;
+    }
+
+    /**
+     * Sets the debt
+     *
+     * @param debt the new debt
+     */
+    public void setDebt(double debt) {
+        this.debt = debt;
+    }
+
+    /**
      * Indicates whether some other object is "equal to" this one.
      *
      * @param o the reference object with which to compare
      * @return true if this object is the same as the obj argument; false otherwise
      */
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -136,7 +157,7 @@ public class Participant {
         Participant that = (Participant) o;
         return Objects.equals(id, that.id) && Objects.equals(name, that.name) &&
                 Objects.equals(email, that.email) && Objects.equals(bankAccount, that.bankAccount) &&
-                Objects.equals(eventFollowed, that.eventFollowed);
+                Objects.equals(eventFollowed, that.eventFollowed) && this.getDebt()==that.getDebt();
     }
 
     /**
@@ -146,7 +167,7 @@ public class Participant {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, bankAccount, eventFollowed);
+        return Objects.hash(id, name, email, bankAccount, eventFollowed, debt);
     }
 
     /**
@@ -161,6 +182,7 @@ public class Participant {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", bankAccount='" + bankAccount + '\'' +
+                ", debt=" + debt +
                 ", eventFollowed=" + eventFollowed +
                 '}';
     }
