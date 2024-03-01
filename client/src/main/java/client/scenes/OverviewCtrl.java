@@ -1,4 +1,5 @@
 package client.scenes;
+
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -13,6 +14,9 @@ import javafx.scene.text.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller class for the overview scene.
+ */
 public class OverviewCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
@@ -24,6 +28,13 @@ public class OverviewCtrl {
     @FXML
     private TextArea participantsField;
 
+    /**
+     * Constructs an OverviewCtrl object.
+     *
+     * @param serverUtils The utility class for server interaction.
+     * @param mainCtrl    The main controller of the application.
+     * @param e           The event being overviewed.
+     */
     @Inject
     public OverviewCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, Event e) {
         this.serverUtils = serverUtils;
@@ -31,17 +42,23 @@ public class OverviewCtrl {
         this.event = e;
     }
 
+    /**
+     * Initializes the controller.
+     */
     public void initialize() {
         titlePrepare();
         participantsPrepare();
     }
 
+    /**
+     * Prepares the display of participants.
+     */
     public void participantsPrepare(){
         participantsField.setText(participantsDisplay(event.getParticipants()));
 
         // Set up event handling for switching between view and edit modes
         participantsField.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal) { // Focus lost
+            if (!newVal) {
                 updateParticipants();
             }
         });
@@ -54,6 +71,9 @@ public class OverviewCtrl {
         });
     }
 
+    /**
+     * Prepares the display of the title.
+     */
     public void titlePrepare(){
         if(event.getTitle()!=null) title.setText(event.getTitle());
         else title.setText("Title");
@@ -71,7 +91,7 @@ public class OverviewCtrl {
 
         // Double-click event handler to switch to edit mode
         title.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) { // Double-click detected
+            if (event.getClickCount() == 2) {
                 startEditingTitle();
             }
         });
@@ -84,27 +104,39 @@ public class OverviewCtrl {
         });
     }
 
+    /**
+     * Switches to edit mode for the title.
+     */
     private void startEditingTitle() {
-        titleField.setText(title.getText()); // Set initial text of TextField
-        title.setVisible(false); // Hide the Text node
-        titleField.setVisible(true); // Show the TextField
-        titleField.requestFocus(); // Set focus to TextField
+        titleField.setText(title.getText());
+        title.setVisible(false);
+        titleField.setVisible(true);
+        titleField.requestFocus();
     }
 
+    /**
+     * Updates the title.
+     */
     private void updateTitle() {
-        title.setText(titleField.getText()); // Update text of Text node
-        title.setVisible(true); // Show the Text node
-        titleField.setVisible(false); // Hide the TextField
+        title.setText(titleField.getText());
+        title.setVisible(true);
+        titleField.setVisible(false);
         event.setTitle(title.getText());
         serverUtils.updateEvent(event);
     }
 
+    /**
+     * Updates the participants.
+     */
     private void updateParticipants() {
         event.setParticipants(getParticipants(participantsField.getText()));
         participantsField.setText(participantsDisplay(event.getParticipants()));
         serverUtils.updateEvent(event);
     }
 
+    /**
+     * Generates a display string for participants.
+     */
     private String participantsDisplay(List<Participant>a){
         StringBuilder b= new StringBuilder();
         for(Participant p:a)
@@ -120,6 +152,10 @@ public class OverviewCtrl {
         }
         return b.toString();
     }
+
+    /**
+     * Parses email addresses from a string.
+     */
     private List<Participant> getParticipants(String a){
         List<String> l = parseEmails(a);
         List<String> contained = new ArrayList<>();
@@ -144,6 +180,10 @@ public class OverviewCtrl {
         }
         return participants1;
     }
+
+    /**
+     * Parses email addresses from a string.
+     */
     public static List<String> parseEmails(String emailsString) {
         List<String> validEmails = new ArrayList<>();
 
@@ -161,6 +201,9 @@ public class OverviewCtrl {
         return validEmails;
     }
 
+    /**
+     * Checks if an email address is valid.
+     */
     public static boolean isValidEmail(String email) {
         // Basic email validation: ensure it contains one '@' character
         if (!email.contains("@")) {
@@ -170,7 +213,7 @@ public class OverviewCtrl {
         // Split the email by '@' to separate the local part and domain part
         String[] parts = email.split("@");
         if (parts.length != 2) {
-            return false; // Email should contain only one '@'
+            return false;
         }
 
         String localPart = parts[0];
@@ -179,7 +222,7 @@ public class OverviewCtrl {
         // Check if localPart contains any invalid characters
         for (char c : localPart.toCharArray()) {
             if (!Character.isLetter(c) && !Character.isDigit(c) && c != '.' && c != '_') {
-                return false; // Invalid character found in local part
+                return false;
             }
         }
 
@@ -191,20 +234,24 @@ public class OverviewCtrl {
         // Split the domain part by '.' to get the segments
         String[] segments = domainPart.split("\\.");
         if (segments.length < 2) {
-            return false; // At least one segment before and after the dot is required
+            return false;
         }
 
         // Check if each segment contains only letters or digits
         for (String segment : segments) {
             for (char c : segment.toCharArray()) {
                 if (!Character.isLetter(c) && !Character.isDigit(c)) {
-                    return false; // Invalid character found in domain part segment
+                    return false;
                 }
             }
         }
 
-        return true; // Email passes all validations
+        return true;
     }
+
+    /**
+     * Shows invitations.
+     */
     @FXML
     public void showInvites() {
         mainCtrl.showInvitation();
