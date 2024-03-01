@@ -2,12 +2,14 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 /**
  * Controller class for the overview scene.
@@ -23,6 +25,12 @@ public class OverviewCtrl {
     private ListView<Expense> expenseList;
     @FXML
     private ObservableList<Expense> original;
+    @FXML
+    private Event event;
+    @FXML
+    private TextField eventTitle;
+    @FXML
+    private TextField eventCode;
 
     /**
      * Constructs a new instance of OverviewCtrl.
@@ -86,5 +94,15 @@ public class OverviewCtrl {
                 .filter(expense -> (expense.getInvolvedParticipants().contains(participantBox.getValue())
                     || expense.getPaidBy().equals(participantBox.getValue())))
                 .toList());
+    }
+
+    public void refresh(Event event) {
+        this.event.setId(event.getId());
+        if (eventTitle.getText() != null) {
+            this.event.setTitle(eventTitle.getText());
+        }
+        else if (eventCode.getText() != null) {
+            this.event.setInviteCode(eventCode.getText());
+        }
     }
 }

@@ -16,7 +16,8 @@ import com.google.inject.Inject;
 public class StartScreenCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-
+    @FXML
+    private Event event;
     @FXML
     private TextField eventTitle;
     @FXML
@@ -37,30 +38,28 @@ public class StartScreenCtrl {
     /**
      * Creates a new event
      */
-    public void create() {
-        Event event = new Event();
-        event.setTitle(eventTitle.getText());
-
+    public void createEvent() { // :)
+        this.event = new Event();
+        this.event.setTitle("new Event");
         try {
-            server.addEvent(event);
+            this.event = server.addEvent(event);
+            mainCtrl.showEventOverview(event);
         } catch(WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());
             alert.showAndWait();
-            return;
         }
-
         clearField();
-        mainCtrl.showEventOverview(); // the right one
     }
 
     /**
      * Has a participant join an existing event
      */
-    public void join() {
+    public void joinEvent() {
         try {
-            server.getEvent(Long.decode(eventCode.getText()));
+            Event fetchedEvent = server.getEvent(Long.decode(eventCode.getText()));
+            mainCtrl.showEventOverview(fetchedEvent);
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -68,9 +67,7 @@ public class StartScreenCtrl {
             alert.showAndWait();
             return;
         }
-
         clearField();
-        mainCtrl.showEventOverview(); // of the right one
     }
 
     private void clearField() {
@@ -82,6 +79,6 @@ public class StartScreenCtrl {
      * Shows the overview scene.
      */
     public void showOverview() {
-        mainCtrl.showEventOverview();
+        mainCtrl.showEventOverview(event);
     }
 }

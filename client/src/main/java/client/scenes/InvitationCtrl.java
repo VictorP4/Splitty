@@ -87,7 +87,7 @@ public class InvitationCtrl {
             System.out.println("Failed to send invites. Status code: " + response.getStatus());
         }
         emailTextArea.clear();
-        mainCtrl.showEventOverview();
+        mainCtrl.showEventOverview(event);
     }
 
     /**
@@ -95,7 +95,7 @@ public class InvitationCtrl {
      */
     public void backToOverview() {
         clearFields();
-        mainCtrl.showEventOverview();
+        mainCtrl.showEventOverview(event);
     }
 
     /**

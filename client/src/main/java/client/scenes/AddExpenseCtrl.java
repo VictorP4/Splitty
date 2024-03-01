@@ -2,10 +2,12 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Event;
 
 public class AddExpenseCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private Event event;
 
     /**
      * Constructs a new instance of a AddExpenseCtrl.
@@ -24,7 +26,7 @@ public class AddExpenseCtrl {
      */
     public void backToOverview() {
         clearFields();
-        mainCtrl.showEventOverview();
+        mainCtrl.showEventOverview(event);
     }
 
     /**
