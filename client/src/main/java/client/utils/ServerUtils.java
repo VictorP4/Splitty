@@ -82,7 +82,7 @@ public class ServerUtils {
 
 	public Event getEvent(long id) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events/{id}")
+				.target(SERVER).path("api/events/" + id)
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get().readEntity(Event.class);

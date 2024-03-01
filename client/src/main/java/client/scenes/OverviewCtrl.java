@@ -27,10 +27,6 @@ public class OverviewCtrl {
     private ObservableList<Expense> original;
     @FXML
     private Event event;
-    @FXML
-    private TextField eventTitle;
-    @FXML
-    private TextField eventCode;
 
     /**
      * Constructs a new instance of OverviewCtrl.
@@ -98,11 +94,7 @@ public class OverviewCtrl {
 
     public void refresh(Event event) {
         this.event.setId(event.getId());
-        if (eventTitle.getText() != null) {
-            this.event.setTitle(eventTitle.getText());
-        }
-        else if (eventCode.getText() != null) {
-            this.event.setInviteCode(eventCode.getText());
-        }
+        this.event.setTitle(event.getTitle());
+        this.event.setInviteCode(event.getInviteCode());
     }
 }

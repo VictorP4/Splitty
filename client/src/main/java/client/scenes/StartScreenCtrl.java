@@ -40,7 +40,7 @@ public class StartScreenCtrl {
      */
     public void createEvent() { // :)
         this.event = new Event();
-        this.event.setTitle("new Event");
+        this.event.setTitle(eventTitle.getText());
         try {
             this.event = server.addEvent(event);
             mainCtrl.showEventOverview(event);
