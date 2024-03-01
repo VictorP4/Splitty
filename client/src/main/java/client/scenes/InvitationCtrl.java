@@ -27,13 +27,6 @@ public class InvitationCtrl {
     private Text inviteCodeText;
     private String inviteCode;
 
-    private final Event event;
-    @FXML
-    private TextArea emailTextArea;
-    @FXML
-    private Text inviteCodeText;
-    private String inviteCode;
-
     /**
      * Constructs a new instance of InvitationCtrl.
      *
@@ -95,23 +88,6 @@ public class InvitationCtrl {
         }
         emailTextArea.clear();
         mainCtrl.showEventOverview();
-    }
-
-    /**
-     * Directs a used back to the event overview scene
-     */
-    public void backToOverview() {
-        clearFields();
-        mainCtrl.showEventOverview();
-    }
-
-    /**
-     * Clears the fields on the expense page
-     */
-    private void clearFields() {
-        if (inviteEmails != null) {
-            inviteEmails.setText(""); // couldnt use .clear()
-        }
     }
 
     /**

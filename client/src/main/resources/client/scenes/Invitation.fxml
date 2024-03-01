@@ -11,7 +11,7 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Text layoutX="262.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
+      <Text layoutX="262.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
          <font>
             <Font name="System Bold" size="36.0" />
          </font>
@@ -21,13 +21,13 @@
             <Font size="18.0" />
          </font>
       </Text>
-      <Text layoutX="111.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Give people the following invite Code:">
+      <Text layoutX="148.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Give people the following invite Code:">
          <font>
             <Font size="18.0" />
          </font>
       </Text>
       <TextArea fx:id="emailTextArea" layoutX="55.0" layoutY="183.0" prefHeight="122.0" prefWidth="495.0" />
-      <Text id="inviteCode" fx:id="inviteCodeText" layoutX="368.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CODE">
+      <Text id="inviteCode" fx:id="inviteCodeText" layoutX="276.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CODE">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>

@@ -23,12 +23,6 @@ public class OverviewCtrl {
     private ListView<Expense> expenseList;
     @FXML
     private ObservableList<Expense> original;
-//    @FXML
-//    private Tab fromSelected;
-//    @FXML
-//    private Tab includingSelected;
-//    @FXML
-//    private Tab allExpenses;
 
     /**
      * Constructs a new instance of OverviewCtrl.
