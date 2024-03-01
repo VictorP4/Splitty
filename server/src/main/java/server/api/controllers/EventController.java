@@ -74,7 +74,7 @@ public class EventController {
             return ResponseEntity.badRequest().build();
         }
 
-        repo.modifyEvent(event.getId(), event.getTitle(), event.getLastActivityDate(), event.getInviteCode());
+        repo.modifyEvent(event.getId(), event.getTitle(), event.getLastActivityDate(), event.getInviteCode(), event.getParticipants());
         Event update = repo.findById(id).get();
         return ResponseEntity.ok(update);
     }

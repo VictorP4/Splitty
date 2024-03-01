@@ -26,6 +26,7 @@ import java.util.List;
 
 import commons.EmailRequestBody;
 import commons.Event;
+import commons.Participant;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
@@ -37,32 +38,6 @@ import jakarta.ws.rs.core.GenericType;
 public class ServerUtils {
 
 	private static final String SERVER = "http://localhost:8080/";
-
-	public void getQuotesTheHardWay() throws IOException, URISyntaxException {
-		var url = new URI("http://localhost:8080/api/quotes").toURL();
-		var is = url.openConnection().getInputStream();
-		var br = new BufferedReader(new InputStreamReader(is));
-		String line;
-		while ((line = br.readLine()) != null) {
-			System.out.println(line);
-		}
-	}
-
-	public List<Quote> getQuotes() {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(SERVER).path("api/quotes") //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Quote>>() {});
-	}
-
-	public Quote addQuote(Quote quote) {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(SERVER).path("api/quotes") //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
-				.post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
-	}
 	public Response sendInvites(EmailRequestBody requestBody) {
 		return ClientBuilder.newClient()
 				.target(SERVER).path("/sendInvites")
@@ -72,7 +47,7 @@ public class ServerUtils {
 	}
 	public Event updateEvent(Event event) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("/" + event.getId())
+				.target(SERVER).path("/api/events/" + event.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.put(Entity.entity(event, APPLICATION_JSON), Event.class);

@@ -59,7 +59,7 @@ public class ExpensesController {
         oldExpenses.add((newExp));
         event.setExpenses(oldExpenses);
 
-        eventRepo.modifyEvent(event.getId(),event.getTitle(),event.getLastActivityDate(),event.getInviteCode());
+        eventRepo.modifyEvent(event.getId(),event.getTitle(),event.getLastActivityDate(),event.getInviteCode(), event.getParticipants());
         return ResponseEntity.ok(newExp);
     }
 
@@ -102,7 +102,7 @@ public class ExpensesController {
         event.setExpenses(expenses);
 
         eventRepo.modifyEvent(event.getId(),event.getTitle(),event.getLastActivityDate(),
-            event.getInviteCode());
+            event.getInviteCode(),event.getParticipants());
         return ResponseEntity.ok(expense);
     }
 
