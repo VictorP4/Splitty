@@ -54,12 +54,7 @@ public class ParticipantTest {
      * Tests the getBankAccount method of the Participant class.
      * It should return the bank account of the participant.
      */
-    @Test
-    public void testGetBankAccount() {
-        Participant participant = new Participant();
-        participant.setBankAccount("1234567890");
-        assertEquals("1234567890", participant.getBankAccount());
-    }
+
 
     /**
      * Tests the getEventFollowed method of the Participant class.
@@ -124,9 +119,10 @@ public class ParticipantTest {
         participant.setId(1L);
         participant.setName("John Doe");
         participant.setEmail("john.doe@example.com");
-        participant.setBankAccount("1234567890");
+        participant.setIBAN("1234567890");
+        participant.setBIC("123456");
 
-        String expected = "Participant{id=1, name='John Doe', email='john.doe@example.com', bankAccount='1234567890', eventFollowed=null}";
+        String expected = "Participant{id=1, name='John Doe', email='john.doe@example.com', debt=0.0, IBAN='1234567890', BIC='123456', eventFollowed=null}";
         assertEquals(expected, participant.toString());
     }
 }

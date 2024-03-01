@@ -6,6 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
 import server.database.ExpensesRepository;
+import server.database.ParticipantRepository;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,15 +20,19 @@ import java.util.Map;
 public class ExpensesController {
     private final ExpensesRepository expRepo;
     private final EventRepository eventRepo;
+    private final ParticipantRepository participantRepo;
 
     /**
      * Constructor with both repositories
-     * @param expRepo expenses
-     * @param eventRepo events
+     *
+     * @param expRepo         expenses
+     * @param eventRepo       events
+     * @param participantRepo
      */
-    public ExpensesController(ExpensesRepository expRepo, EventRepository eventRepo) {
+    public ExpensesController(ExpensesRepository expRepo, EventRepository eventRepo, ParticipantRepository participantRepo) {
         this.expRepo = expRepo;
         this.eventRepo = eventRepo;
+        this.participantRepo = participantRepo;
     }
 
     /**
@@ -53,13 +60,24 @@ public class ExpensesController {
         if (event == null || event.getTitle() == null || expense == null || expense.getTitle() == null) {
             return ResponseEntity.badRequest().build();
         }
+        DecimalFormat df = new DecimalFormat("##.00");
         Expense newExp = expRepo.save(expense);
-
+        //updating debts
+        Participant p = newExp.getPaidBy();
+        double newDebt = p.getDebt()+Double.parseDouble(df.format(newExp.getAmount()));
+        p.setDebt(newDebt);
+        participantRepo.save(p);
+        for(Participant people : newExp.getInvolvedParticipants()){
+            newDebt = people.getDebt()-Double.parseDouble(df.format(((double)newExp.getAmount())/newExp.getInvolvedParticipants().size()));
+            people.setDebt(newDebt);
+            participantRepo.save(people);
+        }
+        //updating the list of expenses in the event
         List<Expense> oldExpenses = event.getExpenses();
         oldExpenses.add((newExp));
         event.setExpenses(oldExpenses);
 
-        eventRepo.modifyEvent(event.getId(),event.getTitle(),event.getLastActivityDate(),event.getInviteCode());
+        eventRepo.save(event);
         return ResponseEntity.ok(newExp);
     }
 
@@ -76,9 +94,36 @@ public class ExpensesController {
         if (id < 0 || !eventRepo.existsById(id) || expId < 0 || !expRepo.existsById(expId)) {
             return ResponseEntity.badRequest().build();
         }
-        expRepo.modifyExpense(expense.getId(), expense.getTitle(), expense.getAmount());
+        DecimalFormat df = new DecimalFormat("##.00");
+        Expense oldExp = expRepo.findById(expId).get();
+        //resetting debts
+        Participant p1 = oldExp.getPaidBy();
+        double oldDebt = p1.getDebt()-Double.parseDouble(df.format(oldExp.getAmount()));
+        p1.setDebt(oldDebt);
+        participantRepo.save(p1);
+        for(Participant people : oldExp.getInvolvedParticipants()){
+            oldDebt = people.getDebt()+Double.parseDouble(df.format(((double)oldExp.getAmount())/oldExp.getInvolvedParticipants().size()));
+            people.setDebt(oldDebt);
+            participantRepo.save(people);
+        }
+        //updating expense
+        oldExp.setAmount(expense.getAmount());
+        oldExp.setInvolvedParticipants(expense.getInvolvedParticipants());
+        oldExp.setPaidBy(expense.getPaidBy());
+        oldExp.setTitle(expense.getTitle());
+        oldExp.setDate(expense.getDate());
+        //updating debts
+        Participant p = oldExp.getPaidBy();
+        double newDebt = p.getDebt()+Double.parseDouble(df.format(oldExp.getAmount()));
+        p.setDebt(newDebt);
+        participantRepo.save(p);
+        for(Participant people : oldExp.getInvolvedParticipants()){
+            newDebt = people.getDebt()-Double.parseDouble(df.format(((double)oldExp.getAmount())/oldExp.getInvolvedParticipants().size()));
+            people.setDebt(newDebt);
+            participantRepo.save(people);
+        }
 
-        Expense newExp = expRepo.findById(expId).get();
+        Expense newExp = expRepo.save(oldExp);
         return ResponseEntity.ok(newExp);
     }
 
@@ -93,16 +138,27 @@ public class ExpensesController {
         if (id < 0 || !eventRepo.existsById(id) || expId < 0 || !expRepo.existsById(expId)) {
             return ResponseEntity.badRequest().build();
         }
+        DecimalFormat df = new DecimalFormat("##.00");
         Expense expense = expRepo.findById(expId).get();
+        //resetting debts
+        Participant p1 = expense.getPaidBy();
+        double oldDebt = p1.getDebt()-Double.parseDouble(df.format(expense.getAmount()));
+        p1.setDebt(oldDebt);
+        participantRepo.save(p1);
+        for(Participant people : expense.getInvolvedParticipants()){
+            oldDebt = people.getDebt()+Double.parseDouble(df.format(((double)expense.getAmount())/expense.getInvolvedParticipants().size()));
+            people.setDebt(oldDebt);
+            participantRepo.save(people);
+        }
+        //deleting expense
         expRepo.deleteById(id);
-
+        //deleting expense in event
         Event event = eventRepo.findById(id).get();
         List<Expense> expenses = event.getExpenses();
         expenses.remove(expense);
         event.setExpenses(expenses);
 
-        eventRepo.modifyEvent(event.getId(),event.getTitle(),event.getLastActivityDate(),
-            event.getInviteCode());
+        eventRepo.save(event);
         return ResponseEntity.ok(expense);
     }
 
