@@ -24,10 +24,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+
 import commons.EmailRequestBody;
 import commons.Event;
 import commons.Participant;
 import jakarta.ws.rs.core.Response;
+
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -40,7 +42,7 @@ public class ServerUtils {
 	private static final String SERVER = "http://localhost:8080/";
 	public Response sendInvites(EmailRequestBody requestBody) {
 		return ClientBuilder.newClient()
-				.target(SERVER).path("/sendInvites")
+				.target(SERVER).path("api/email/invites")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(requestBody, APPLICATION_JSON));
@@ -51,5 +53,13 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.put(Entity.entity(event, APPLICATION_JSON), Event.class);
+	}
+
+	public Response sendReminder(EmailRequestBody emailRequestBody) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/email/reminders")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.post(Entity.entity(emailRequestBody, APPLICATION_JSON));
 	}
 }

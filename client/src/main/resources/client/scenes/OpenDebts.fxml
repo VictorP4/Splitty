@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OpenDebtsCtrl">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OpenDebtsCtrl">
    <children>
       <Text layoutX="58.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Open Debts">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Text>
-      <Accordion layoutX="58.0" layoutY="90.0" prefHeight="287.0" prefWidth="484.0">
+      <Accordion fx:id="debtsOverview" layoutX="58.0" layoutY="90.0" prefHeight="287.0" prefWidth="484.0">
         <panes>
           <TitledPane animated="false" prefWidth="454.0">
             <content>
@@ -125,5 +130,6 @@
             </TitledPane>
         </panes>
       </Accordion>
+      <Button layoutX="490.0" layoutY="35.0" mnemonicParsing="false" text="Back" onAction="#back" />
    </children>
 </AnchorPane>

@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import commons.Event;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -125,9 +126,10 @@ public class MainCtrl {
     /**
      * Displays the Open Debts scene in the primary stage.
      */
-    public void showOpenDebts() {
+    public void showOpenDebts(Event event) {
         primaryStage.setTitle("OpenDebts");
         primaryStage.setScene(openDebts);
+        openDebtsCtrl.refresh(event);
     }
 
     /**
