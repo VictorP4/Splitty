@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.EmailRequestBody;
@@ -14,7 +15,7 @@ import javafx.scene.text.Text;
 /**
  * Controller class for the invitation scene.
  */
-public class InvitationCtrl {
+public class InvitationCtrl implements Main.UpdatableUI {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -86,5 +87,10 @@ public class InvitationCtrl {
         }
         emailTextArea.clear();
         mainCtrl.showEventOverview();
+    }
+
+    @Override
+    public void updateUI() {
+
     }
 }

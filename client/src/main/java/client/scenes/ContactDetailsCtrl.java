@@ -1,9 +1,10 @@
 package client.scenes;
 
+import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 
-public class ContactDetailsCtrl {
+public class ContactDetailsCtrl implements Main.UpdatableUI {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -17,5 +18,10 @@ public class ContactDetailsCtrl {
     public ContactDetailsCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+    }
+
+    @Override
+    public void updateUI() {
+
     }
 }

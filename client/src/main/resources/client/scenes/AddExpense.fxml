@@ -12,12 +12,12 @@
 
 <AnchorPane prefHeight="421.0" prefWidth="484.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
    <children>
-      <Text layoutX="50.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Edit Expense">
+      <Text fx:id="addEditText" layoutX="50.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Edit Expense">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Text>
-      <Text layoutX="53.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Who paid?">
+      <Text fx:id="whoPaid" layoutX="53.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Who paid?">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>

@@ -1,12 +1,13 @@
 package client.scenes;
 
+import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 
 /**
  * Controller class for the overview scene.
  */
-public class OverviewCtrl {
+public class OverviewCtrl implements Main.UpdatableUI {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
 
@@ -27,5 +28,10 @@ public class OverviewCtrl {
      */
     public void showInvites() {
         mainCtrl.showInvitation();
+    }
+
+    @Override
+    public void updateUI() {
+
     }
 }

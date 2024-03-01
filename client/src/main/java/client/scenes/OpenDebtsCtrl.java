@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.Main;
 import client.models.Debt;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -29,7 +30,7 @@ import javafx.scene.text.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OpenDebtsCtrl {
+public class OpenDebtsCtrl implements Main.UpdatableUI {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private ObservableList<Debt> debts;
@@ -255,4 +256,8 @@ public class OpenDebtsCtrl {
     }
 
 
+    @Override
+    public void updateUI() {
+
+    }
 }

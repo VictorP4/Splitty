@@ -1,14 +1,22 @@
 package client.scenes;
 
+import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.text.Text;
+
+import static client.Main.switchLocale;
 
 /**
  * Controller class for the start screen scene.
  */
-public class StartScreenCtrl {
+public class StartScreenCtrl implements Main.UpdatableUI {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    @FXML
+    public Text createNewEvent;
 
     /**
      * Constructs a new instance of StartScreenCtrl.
@@ -27,5 +35,20 @@ public class StartScreenCtrl {
      */
     public void showOverview() {
         mainCtrl.showEventOverview();
+    }
+
+    @FXML
+
+    @Override
+    public void updateUI() {
+        createNewEvent.setText(Main.getLocalizedString("NewEvent"));
+    }
+
+    public void switchToDutch(ActionEvent actionEvent) {
+        switchLocale("nl");
+    }
+
+    public void switchToEnglish(ActionEvent actionEvent) {
+        switchLocale("en");
     }
 }

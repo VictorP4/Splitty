@@ -7,7 +7,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StartScreenCtrl">
    <children>
-      <Text layoutX="88.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create New event">
+      <Text fx:id="createNewEvent" layoutX="88.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create New event">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -43,8 +43,8 @@
       </Hyperlink>
       <MenuButton layoutX="45.0" layoutY="349.0" mnemonicParsing="false" text="Language">
          <items>
-            <MenuItem mnemonicParsing="false" text="English" />
-            <MenuItem mnemonicParsing="false" text="Dutch" />
+            <MenuItem mnemonicParsing="false" text="English" onAction="#switchToEnglish" />
+            <MenuItem mnemonicParsing="false" text="Dutch" onAction="#switchToDutch" />
          </items>
       </MenuButton>
       <Hyperlink layoutX="87.0" layoutY="291.0" text="Event 4">
