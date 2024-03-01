@@ -132,7 +132,7 @@ public class OpenDebtsCtrl {
                 j--;
             }
         }
-        return null;
+        return result;
     }
 
     /**
