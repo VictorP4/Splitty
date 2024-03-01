@@ -41,6 +41,7 @@ public class OverviewCtrl {
         this.event = e;
     }
 
+
     /**
      * Initializes the controller.
      */
