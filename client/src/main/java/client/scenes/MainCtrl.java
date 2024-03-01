@@ -132,6 +132,9 @@ public class MainCtrl {
         primaryStage.setScene(eventOverview);
     }
 
+    /**
+     * Displays the add expense scene in the primary stage
+     */
     public void showAddExpense() {
         primaryStage.setTitle("AddExpense");
         primaryStage.setScene(addExpense);

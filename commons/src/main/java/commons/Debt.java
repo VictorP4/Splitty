@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.Objects;
 
+@Entity
 public class Debt {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
