@@ -93,8 +93,9 @@ public class OverviewCtrl {
     }
 
     public void refresh(Event event) {
-        this.event.setId(event.getId());
-        this.event.setTitle(event.getTitle());
-        this.event.setInviteCode(event.getInviteCode());
+        this.event = event;
+
+        original = (ObservableList<Expense>) event.getExpenses();
+        expenseList.setItems(original);
     }
 }
