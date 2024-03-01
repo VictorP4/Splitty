@@ -73,9 +73,12 @@ public class EventController {
         if (id < 0 || !repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-
-        repo.modifyEvent(event.getId(), event.getTitle(), event.getLastActivityDate(), event.getInviteCode());
         Event update = repo.findById(id).get();
+        update.setParticipants(event.getParticipants());
+        update.setTitle(event.getTitle());
+        update.setLastActivityDate(event.getLastActivityDate());
+        update.setInviteCode(event.getInviteCode());
+        repo.save(update);
         return ResponseEntity.ok(update);
     }
 
@@ -92,10 +95,5 @@ public class EventController {
         Event event = repo.findById(id).get();
         repo.deleteById(id);
         return ResponseEntity.ok(event);
-
     }
-
-
-
-
 }

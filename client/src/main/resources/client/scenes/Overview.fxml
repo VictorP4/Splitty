@@ -5,53 +5,50 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="client.scenes.OverviewCtrl">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="534.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
    <children>
-      <Text layoutX="88.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
+      <TextField fx:id="titleField" layoutX="88.0" layoutY="13.0" prefHeight="51.0" prefWidth="182.0">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font></TextField>
+      <TextArea fx:id="participantsField" layoutX="88.0" layoutY="91.0" prefHeight="58.0" prefWidth="354.0">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextArea>
+      <Text fx:id="title" layoutX="88.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Text>
-      <Button layoutX="441.0" layoutY="23.0" mnemonicParsing="false" onAction="#showInvites" text="Send Invites">
+      <Button layoutX="353.0" layoutY="23.0" mnemonicParsing="false" onAction="#showInvites" text="Send Invites">
          <font>
             <Font size="13.0" />
          </font>
       </Button>
-      <Text layoutX="88.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
+      <Text layoutX="88.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
       </Text>
-      <Text layoutX="88.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participant 1, Participant 2, Participant 3">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Text>
-      <Spinner layoutX="87.0" layoutY="141.0" prefHeight="25.0" prefWidth="181.0" />
-      <Button layoutX="325.0" layoutY="140.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="100.0" text="Add Expense">
-         <font>
-            <Font size="13.0" />
-         </font>
-      </Button>
-      <Button layoutX="425.0" layoutY="386.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="119.0" text="Settle Debts">
+      <Spinner layoutX="86.0" layoutY="171.0" prefHeight="25.0" prefWidth="181.0" />
+      <Button layoutX="320.0" layoutY="397.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="119.0" text="Settle Debts">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Text layoutX="88.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense">
+      <Text layoutX="88.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
       </Text>
-      <MenuButton layoutX="35.0" layoutY="388.0" mnemonicParsing="false" text="Language">
+      <MenuButton layoutX="87.0" layoutY="402.0" mnemonicParsing="false" text="Language">
         <items>
           <MenuItem mnemonicParsing="false" text="Action 1" />
           <MenuItem mnemonicParsing="false" text="Action 2" />
         </items>
       </MenuButton>
-      <TabPane layoutX="87.0" layoutY="184.0" prefHeight="179.0" prefWidth="354.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutX="87.0" layoutY="206.0" prefHeight="179.0" prefWidth="354.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="All">
             <content>
