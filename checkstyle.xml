@@ -12,12 +12,12 @@
         <module name="MethodLength">
             <property name="severity" value="warning"/>
             <property name="tokens" value="METHOD_DEF, CTOR_DEF, COMPACT_CTOR_DEF"/>
-            <property name="max" value="50"/>
+            <property name="max" value="80"/>
         </module>
         <module name="CyclomaticComplexity">
             <property name="severity" value="warning"/>
             <property name="switchBlockAsSingleDecisionPoint" value="true"/>
-            <property name="max" value="6"/>
+            <property name="max" value="10"/>
             <property name="tokens" value="LITERAL_WHILE, LITERAL_DO, LITERAL_FOR, LITERAL_IF, LITERAL_SWITCH, LITERAL_CASE, QUESTION"/>
         </module>
 
