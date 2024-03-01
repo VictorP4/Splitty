@@ -1,5 +1,6 @@
 package server.api.services;
 
+import commons.EmailRequestBody;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.slf4j.Logger;
@@ -68,6 +69,26 @@ public class EmailService {
         } catch (MailException | MessagingException e) {
             logger.error("Error occurred while sending email to {}: {}", to, e.getMessage());
             throw e;
+        }
+    }
+
+    /**
+     * Send reminder to the respective person
+     *
+     * @param emailRequest info for reminder
+     * @return http status
+     */
+    public HttpStatus sendReminder(EmailRequestBody emailRequest) {
+        try{
+            sendEmail(emailRequest.getEmailAddresses().get(1),"Debt Reminder","Hello "+
+                    emailRequest.getEmailAddresses().get(0)+"\n The debt you owe to "+
+                    emailRequest.getEmailAddresses().get(2)+" is "+emailRequest.getCode()+" euros\nBank details:\n"+
+                    "IBAN: "+emailRequest.getEmailAddresses().get(3)+", BIC: "+emailRequest.getEmailAddresses().get(4));
+            return HttpStatus.OK;
+        }
+        catch (MailException | MessagingException e){
+            logger.error("Error occurred while sending reminder:", e);
+            return HttpStatus.INTERNAL_SERVER_ERROR;
         }
     }
 }
