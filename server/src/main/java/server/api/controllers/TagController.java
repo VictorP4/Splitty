@@ -34,11 +34,11 @@ public class TagController {
      * @param blue  the blue component of the tag's color (0-255)
      * @return a ResponseEntity containing the created tag and HTTP status code 201 (Created)
      */
-    @PostMapping
-    public ResponseEntity<Tag> createTag(@RequestParam String name,
-                                         @RequestParam int red,
-                                         @RequestParam int green,
-                                         @RequestParam int blue) {
+    @PostMapping(path={"/",""})
+    public ResponseEntity<Tag> createTag(@RequestBody String name,
+                                         @RequestBody int red,
+                                         @RequestBody int green,
+                                         @RequestBody int blue) {
         Tag tag = tagServiceImpl.createTag(name, red, green, blue);
         return new ResponseEntity<>(tag, HttpStatus.CREATED);
     }
@@ -48,7 +48,7 @@ public class TagController {
      *
      * @return a ResponseEntity containing a list of all tags and HTTP status code 200 (OK)
      */
-    @GetMapping
+    @GetMapping(path={"/",""})
     public ResponseEntity<List<Tag>> getAllTags() {
         List<Tag> tags = tagServiceImpl.getAllTags();
         return ResponseEntity.ok(tags);
@@ -81,10 +81,10 @@ public class TagController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateTag(@PathVariable Long id,
-                                          @RequestParam String name,
-                                          @RequestParam int red,
-                                          @RequestParam int green,
-                                          @RequestParam int blue) {
+                                          @RequestBody String name,
+                                          @RequestBody int red,
+                                          @RequestBody int green,
+                                          @RequestBody int blue) {
         boolean updated = tagServiceImpl.updateTag(id, name, red, green, blue);
         return updated ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
