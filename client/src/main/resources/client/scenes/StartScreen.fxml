@@ -13,15 +13,15 @@
          </font>
       </Text>
       <TextField layoutX="87.0" layoutY="84.0" prefHeight="25.0" prefWidth="301.0" />
-      <Text layoutX="88.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Join Event">
+      <Text fx:id="joinEvent" layoutX="88.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Join Event">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
       <TextField layoutX="87.0" layoutY="147.0" prefHeight="25.0" prefWidth="301.0" />
-      <Button layoutX="402.0" layoutY="84.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="63.0" text="Create" />
-      <Button layoutX="402.0" layoutY="147.0" mnemonicParsing="false" onAction="#showOverview" prefHeight="12.0" prefWidth="63.0" text="Join" />
-      <Text layoutX="88.0" layoutY="206.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Recently Viewed Events:">
+      <Button fx:id="createButton"  layoutX="402.0" layoutY="84.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="63.0" text="Create" />
+      <Button fx:id="joinButton"  layoutX="402.0" layoutY="147.0" mnemonicParsing="false" onAction="#showOverview" prefHeight="12.0" prefWidth="63.0" text="Join" />
+      <Text fx:id="recentViewedEvents" layoutX="88.0" layoutY="206.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Recently Viewed Events:">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
@@ -41,7 +41,7 @@
             <Font size="14.0" />
          </font>
       </Hyperlink>
-      <MenuButton layoutX="45.0" layoutY="349.0" mnemonicParsing="false" text="Language">
+      <MenuButton fx:id="langButton"  layoutX="45.0" layoutY="349.0" mnemonicParsing="false" text="Language">
          <items>
             <MenuItem mnemonicParsing="false" text="English" onAction="#switchToEnglish" />
             <MenuItem mnemonicParsing="false" text="Dutch" onAction="#switchToDutch" />

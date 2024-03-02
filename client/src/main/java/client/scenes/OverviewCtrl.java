@@ -5,9 +5,9 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Participant;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 
@@ -21,6 +21,20 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Event event;
+    @FXML
+    public Button sendInvites;
+    @FXML
+    public Text participants;
+    @FXML
+    public Button settleDebts;
+    @FXML
+    public Text expense;
+    @FXML
+    public MenuButton langButton;
+    @FXML
+    public Tab fromSelected;
+    @FXML
+    public Tab inclSelected;
     @FXML
     private Text title;
     @FXML
@@ -51,6 +65,17 @@ public class OverviewCtrl implements Main.UpdatableUI {
         participantsPrepare();
     }
 
+    @Override
+    public void updateUI() {
+        sendInvites.setText(Main.getLocalizedString("ovSendInvites"));
+        settleDebts.setText(Main.getLocalizedString("ovSettleDebt"));
+        expense.setText(Main.getLocalizedString("ovExpense"));
+        langButton.setText(Main.getLocalizedString("langButton"));
+        fromSelected.setText(Main.getLocalizedString("ovFromSelected"));
+        inclSelected.setText(Main.getLocalizedString("ovInclSelected"));
+        title.setText(Main.getLocalizedString("OverviewTitle"));
+        participants.setText(Main.getLocalizedString("ovParticipants"));
+    }
     /**
      * Prepares the display of participants.
      */
@@ -146,7 +171,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         b= new StringBuilder();
         int l=c.size();
         if (l > 0) {
-            b.append(c.getFirst());
+            b.append(c.get(0));
             for (int i = 1; i < l; i++) {
                 b.append(", ").append(c.get(i));
             }
@@ -258,8 +283,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
         mainCtrl.showInvitation();
     }
 
-    @Override
-    public void updateUI() {
+    public void switchToEnglish(ActionEvent actionEvent) {
+        Main.switchLocale("en");
+    }
 
+    public void switchToDutch(ActionEvent actionEvent) {
+        Main.switchLocale("nl");
     }
 }

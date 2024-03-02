@@ -22,22 +22,22 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text layoutX="53.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What for?">
+      <Text fx:id="whatFor"  layoutX="53.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What for?">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text layoutX="53.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How much?">
+      <Text fx:id="howMuch"  layoutX="53.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How much?">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text layoutX="53.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="When?">
+      <Text fx:id="when"  layoutX="53.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="When?">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text layoutX="53.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How to Split?">
+      <Text fx:id="howToSplit"  layoutX="53.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How to Split?">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -47,12 +47,12 @@
       <Spinner layoutX="210.0" layoutY="65.0" prefHeight="26.0" prefWidth="166.0" />
       <Spinner layoutX="370.0" layoutY="119.0" prefHeight="26.0" prefWidth="69.0" />
       <DatePicker layoutX="209.0" layoutY="145.0" prefHeight="26.0" prefWidth="230.0" />
-      <CheckBox layoutX="59.0" layoutY="208.0" mnemonicParsing="false" text="Equally Between Everybody">
+      <CheckBox fx:id="equally"  layoutX="59.0" layoutY="208.0" mnemonicParsing="false" text="Equally Between Everybody">
          <font>
             <Font name="Arial Bold" size="12.0" />
          </font>
       </CheckBox>
-      <CheckBox layoutX="59.0" layoutY="225.0" mnemonicParsing="false" text="Only Some People">
+      <CheckBox fx:id="onlySome"  layoutX="59.0" layoutY="225.0" mnemonicParsing="false" text="Only Some People">
          <font>
             <Font name="Arial Bold" size="12.0" />
          </font>
@@ -71,18 +71,18 @@
             </CheckBox>
          </children>
       </VBox>
-      <Text layoutX="53.0" layoutY="337.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense Type">
+      <Text fx:id="expenseType"  layoutX="53.0" layoutY="337.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense Type">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
       <Spinner layoutX="210.0" layoutY="317.0" prefHeight="26.0" prefWidth="230.0" />
-      <Button layoutX="331.0" layoutY="361.0" mnemonicParsing="false" text="Abort">
+      <Button  fx:id="abort" layoutX="331.0" layoutY="361.0" mnemonicParsing="false" text="Abort">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button layoutX="394.0" layoutY="361.0" mnemonicParsing="false" text="Add">
+      <Button fx:id="add"  layoutX="394.0" layoutY="361.0" mnemonicParsing="false" text="Add">
          <font>
             <Font size="14.0" />
          </font>

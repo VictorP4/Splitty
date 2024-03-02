@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 
@@ -20,6 +21,14 @@ public class InvitationCtrl implements Main.UpdatableUI {
     private final MainCtrl mainCtrl;
 
     private final Event event;
+    @FXML
+    public Button sendInv;
+    @FXML
+    public Text title;
+    @FXML
+    public Text invEmail;
+    @FXML
+    public Text invCode;
     @FXML
     private TextArea emailTextArea;
     @FXML
@@ -91,6 +100,9 @@ public class InvitationCtrl implements Main.UpdatableUI {
 
     @Override
     public void updateUI() {
-
+        title.setText(Main.getLocalizedString("OverviewTitle"));
+        sendInv.setText(Main.getLocalizedString("sendInv"));
+        invEmail.setText(Main.getLocalizedString("invEmail"));
+        invCode.setText(Main.getLocalizedString("invCode"));
     }
 }

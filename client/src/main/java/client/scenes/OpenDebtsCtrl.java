@@ -33,6 +33,36 @@ import java.util.List;
 public class OpenDebtsCtrl implements Main.UpdatableUI {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    @FXML
+    public Text transferTo;
+    @FXML
+    public Text accHolder;
+    @FXML
+    public Text odEmail;
+    @FXML
+    public Button reminderButton;
+    @FXML
+    public Button markReceived;
+    @FXML
+    public Text transferTo1;
+    @FXML
+    public Text accHolder1;
+    @FXML
+    public Text odEmail1;
+    @FXML
+    public Button reminderButton1;
+    @FXML
+    public Button markReceived1;
+    @FXML
+    public Text transferTo2;
+    @FXML
+    public Text accHolder2;
+    @FXML
+    public Text odEmail2;
+    @FXML
+    public Button reminderButton2;
+    @FXML
+    public Button markReceived2;
     private ObservableList<Debt> debts;
     @FXML
     private Accordion debtsOverview;
@@ -47,6 +77,25 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
     public OpenDebtsCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+    }
+
+    @Override
+    public void updateUI() {
+        transferTo.setText(Main.getLocalizedString("transferTo"));
+        accHolder.setText(Main.getLocalizedString("accHolder"));
+        odEmail.setText(Main.getLocalizedString("emailHolder"));
+        reminderButton.setText(Main.getLocalizedString("reminder"));
+        markReceived.setText(Main.getLocalizedString("markReceived"));
+        transferTo1.setText(Main.getLocalizedString("transferTo"));
+        accHolder1.setText(Main.getLocalizedString("accHolder"));
+        odEmail1.setText(Main.getLocalizedString("emailHolder"));
+        reminderButton1.setText(Main.getLocalizedString("reminder"));
+        markReceived1.setText(Main.getLocalizedString("markReceived"));
+        transferTo2.setText(Main.getLocalizedString("transferTo"));
+        accHolder2.setText(Main.getLocalizedString("accHolder"));
+        odEmail2.setText(Main.getLocalizedString("emailHolder"));
+        reminderButton2.setText(Main.getLocalizedString("reminder"));
+        markReceived2.setText(Main.getLocalizedString("markReceived"));
     }
 
     /**
@@ -253,11 +302,5 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         markReceived.setAlignment(Pos.CENTER_RIGHT);
         //TODO see if insets are necessary for markReceived
         tempBox.getChildren().addAll(text,imgMail,imgBank,markReceived);
-    }
-
-
-    @Override
-    public void updateUI() {
-
     }
 }

@@ -3,10 +3,16 @@ package client.scenes;
 import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import javafx.fxml.FXML;
+import javafx.scene.text.Text;
 
 public class StatisticsCtrl implements Main.UpdatableUI {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    @FXML
+    public Text stats;
+    @FXML
+    public Text eventCost;
 
     /**
      * Constructs a new instance of a StatisticsCtrl
@@ -22,6 +28,7 @@ public class StatisticsCtrl implements Main.UpdatableUI {
 
     @Override
     public void updateUI() {
-
+        stats.setText(Main.getLocalizedString("statistics"));
+        eventCost.setText(Main.getLocalizedString("statEventCost"));
     }
 }

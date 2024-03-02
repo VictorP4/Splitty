@@ -5,6 +5,8 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuButton;
 import javafx.scene.text.Text;
 
 import static client.Main.switchLocale;
@@ -17,6 +19,16 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     private final MainCtrl mainCtrl;
     @FXML
     public Text createNewEvent;
+    @FXML
+    public Text joinEvent;
+    @FXML
+    public Button createButton;
+    @FXML
+    public Button joinButton;
+    @FXML
+    public Text recentViewedEvents;
+    @FXML
+    public MenuButton langButton;
 
     /**
      * Constructs a new instance of StartScreenCtrl.
@@ -42,6 +54,11 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     @Override
     public void updateUI() {
         createNewEvent.setText(Main.getLocalizedString("NewEvent"));
+        joinEvent.setText(Main.getLocalizedString("joinEvent"));
+        createButton.setText(Main.getLocalizedString("createEventButton"));
+        joinButton.setText(Main.getLocalizedString("joinEventButton"));
+        recentViewedEvents.setText(Main.getLocalizedString("recentEvents"));
+        langButton.setText(Main.getLocalizedString("langButton"));
     }
 
     public void switchToDutch(ActionEvent actionEvent) {
