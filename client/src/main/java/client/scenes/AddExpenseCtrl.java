@@ -71,7 +71,7 @@ public class AddExpenseCtrl {
         LocalDate localdate = this.date.getValue();
         Date date = Date.from(localdate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         Participant paidBy = this.paidBy.getValue();
-        List<Participant> partIn = new ArrayList<>();
+        List<Participant> partIn = new ArrayList<>(); //temp., figuring out how to get info from a checkbox
         //List<Participant> partIn  = this.partIn.getSkin();
         return new Expense(title, amount, paidBy, partIn, date);
     }
