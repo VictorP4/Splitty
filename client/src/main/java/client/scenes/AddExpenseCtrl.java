@@ -2,12 +2,15 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 
 import java.time.LocalDate;
@@ -15,13 +18,19 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class AddExpenseCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private Event event;
 
     @FXML
-    public CheckBox partIn;
+    private CheckBox everybodyIn;
+    @FXML
+    private CheckBox someIn;
+    @FXML
+    public VBox box;
     @FXML
     private TextField amount;
     @FXML
@@ -32,6 +41,8 @@ public class AddExpenseCtrl {
     private Spinner<String> currency;
     @FXML
     private TextField title;
+
+
 
     /**
      * Constructs a new instance of a AddExpenseCtrl.
@@ -50,7 +61,7 @@ public class AddExpenseCtrl {
      */
     public void cancel() {
         clearFields();
-        mainCtrl.showAddExpense();
+        mainCtrl.showEventOverview();
     }
 
     /**
@@ -61,7 +72,8 @@ public class AddExpenseCtrl {
         title.clear();
         date.cancelEdit();
         paidBy.getValueFactory().setValue(null);
-        partIn.setSelected(false);
+        everybodyIn.setSelected(false);
+        someIn.setSelected(false);
         currency.getValueFactory().setValue(" ");
     }
 
@@ -71,8 +83,7 @@ public class AddExpenseCtrl {
         LocalDate localdate = this.date.getValue();
         Date date = Date.from(localdate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         Participant paidBy = this.paidBy.getValue();
-        List<Participant> partIn = new ArrayList<>(); //temp., figuring out how to get info from a checkbox
-        //List<Participant> partIn  = this.partIn.getSkin();
+        List<Participant> partIn = add();
         return new Expense(title, amount, paidBy, partIn, date);
     }
 
@@ -110,5 +121,48 @@ public class AddExpenseCtrl {
             default:
                 break;
         }
+    }
+
+    /**
+     *
+     */
+    public void refresh(){
+        //this.event = event;
+        for(Participant p : this.event.getParticipants()){
+            box.getChildren().add(new CheckBox(p.getName()));
+        }
+    }
+
+    /**
+     * adds the participants involved in an expense to a list
+     * @return list of participants in debt in an expense
+     */
+    public List<Participant> add(){
+        List<Participant> in = new ArrayList<>();
+        if(everybodyIn.isSelected()){
+            in.addAll(event.getParticipants());
+        }
+        else if (someIn.isSelected()){
+            List<CheckBox> checkBoxes = new ArrayList<>();
+
+            for(Node node : box.getChildren()){
+                if (node instanceof CheckBox){
+                    CheckBox checkBox = (CheckBox) node;
+                    checkBoxes.add(checkBox);
+                }
+            }
+            for (CheckBox c : checkBoxes){
+                if(c.isSelected()){
+                    String name = c.getText();
+                    for(Participant p : event.getParticipants()){
+                        if (Objects.equals(p.getName(), name)){
+                            in.add(p);
+                        }
+                    }
+                }
+            }
+        }
+
+        return in;
     }
 }
