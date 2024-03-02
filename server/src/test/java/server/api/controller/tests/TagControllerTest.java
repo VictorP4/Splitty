@@ -92,7 +92,7 @@ public class TagControllerTest {
 
         when(tagService.updateTag(eq(1L), anyString(), anyInt(), anyInt(), anyInt())).thenReturn(true);
 
-        ResponseEntity<Void> response = tagController.updateTag(tagToUpdate);
+        ResponseEntity<Void> response = tagController.updateTag(tagToUpdate.getId(), tagToUpdate);
 
         verify(tagService, times(1)).updateTag(eq(1L), eq("Updated Tag"), eq(100), eq(150), eq(200));
         assertEquals(HttpStatus.OK, response.getStatusCode());
