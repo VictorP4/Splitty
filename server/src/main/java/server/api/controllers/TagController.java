@@ -70,7 +70,8 @@ public class TagController {
      * or HTTP status code 404 (Not Found) if the tag was not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateTag(@RequestBody Tag tag) {
+    public ResponseEntity<Void> updateTag(@PathVariable Long id
+                                          @RequestBody Tag tag) {
         boolean updated = tagServiceImpl.updateTag(tag.getId(), tag.getName(), tag.getRed(), tag.getGreen(), tag.getBlue());
         return updated ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
