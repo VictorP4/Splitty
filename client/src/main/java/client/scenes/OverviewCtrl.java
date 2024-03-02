@@ -32,7 +32,8 @@ public class OverviewCtrl {
     }
 
 
-    public void toAddExpense() {
+    public void toAddExpense(Event event) {
+        this.event = event;
         mainCtrl.showAddExpense(event);
     }
 }
