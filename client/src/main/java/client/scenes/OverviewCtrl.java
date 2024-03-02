@@ -3,7 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
@@ -32,8 +31,9 @@ public class OverviewCtrl {
     }
 
 
-    public void toAddExpense(Event event) {
-        this.event = event;
-        mainCtrl.showAddExpense(event);
+    public void toAddExpense(Event e) {
+        this.event = e;
+        mainCtrl.showAddExpense(e);
     }
 }
+
