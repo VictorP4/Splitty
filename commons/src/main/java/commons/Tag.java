@@ -1,5 +1,9 @@
 package commons;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.util.Objects;
 
 /**
@@ -7,6 +11,8 @@ import java.util.Objects;
  */
 public class Tag {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private int red;
@@ -82,6 +88,60 @@ public class Tag {
         this.red = Math.min(Math.max(0, red), 255);
         this.green = Math.min(Math.max(0, green), 255);
         this.blue = Math.min(Math.max(0, blue), 255);
+    }
+
+    /**
+     * Gets the red component of the tag's color.
+     *
+     * @return the red component of the tag's color
+     */
+    public int getRed() {
+        return red;
+    }
+
+    /**
+     * Sets the red component of the tag's color.
+     *
+     * @param red the new red component of the tag's color
+     */
+    public void setRed(int red) {
+        this.red = red;
+    }
+
+    /**
+     * Gets the blue component of the tag's color.
+     *
+     * @return the blue component of the tag's color
+     */
+    public int getBlue() {
+        return blue;
+    }
+
+    /**
+     * Sets the blue component of the tag's color.
+     *
+     * @param blue the new blue component of the tag's color
+     */
+    public void setBlue(int blue) {
+        this.blue = blue;
+    }
+
+    /**
+     * Gets the green component of the tag's color.
+     *
+     * @return the green component of the tag's color
+     */
+    public int getGreen() {
+        return green;
+    }
+
+    /**
+     * Sets the green component of the tag's color.
+     *
+     * @param green the new green component of the tag's color
+     */
+    public void setGreen(int green) {
+        this.green = green;
     }
 
     /**

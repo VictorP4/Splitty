@@ -39,7 +39,7 @@ public class TagControllerTest {
         Tag tag = new Tag("Test Tag", 100, 150, 200);
         when(tagService.createTag("Test Tag", 100, 150, 200)).thenReturn(tag);
 
-        ResponseEntity<Tag> response = tagController.createTag("Test Tag", 100, 150, 200);
+        ResponseEntity<Tag> response = tagController.createTag(tag);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(tag, response.getBody());
@@ -83,13 +83,19 @@ public class TagControllerTest {
      */
     @Test
     public void testUpdateTag() {
-        Tag tag = new Tag("Test Tag", 100, 150, 200);
-        when(tagService.updateTag(1L, "Updated Tag", 125, 175, 225)).thenReturn(true);
+        Tag tagToUpdate = new Tag(null,0,0,0);
+        tagToUpdate.setId(1L);
+        tagToUpdate.setName("Updated Tag");
+        tagToUpdate.setRed(100);
+        tagToUpdate.setGreen(150);
+        tagToUpdate.setBlue(200);
 
-        ResponseEntity<Void> response = tagController.updateTag(1L, "Updated Tag", 125, 175, 225);
+        when(tagService.updateTag(eq(1L), anyString(), anyInt(), anyInt(), anyInt())).thenReturn(true);
 
+        ResponseEntity<Void> response = tagController.updateTag(tagToUpdate);
+
+        verify(tagService, times(1)).updateTag(eq(1L), eq("Updated Tag"), eq(100), eq(150), eq(200));
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        verify(tagService, times(1)).updateTag(1L, "Updated Tag", 125, 175, 225);
     }
 
     /**

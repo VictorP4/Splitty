@@ -27,20 +27,14 @@ public class TagController {
 
     /**
      * Creates a new tag with the specified name and color.
-     *
-     * @param name  the name of the tag
-     * @param red   the red component of the tag's color (0-255)
-     * @param green the green component of the tag's color (0-255)
-     * @param blue  the blue component of the tag's color (0-255)
-     * @return a ResponseEntity containing the created tag and HTTP status code 201 (Created)
-     */
+        *
+        * @param tag the tag to create
+        * @return a ResponseEntity containing the created tag and HTTP status code 201 (Created)
+        */
     @PostMapping(path={"/",""})
-    public ResponseEntity<Tag> createTag(@RequestBody String name,
-                                         @RequestBody int red,
-                                         @RequestBody int green,
-                                         @RequestBody int blue) {
-        Tag tag = tagServiceImpl.createTag(name, red, green, blue);
-        return new ResponseEntity<>(tag, HttpStatus.CREATED);
+    public ResponseEntity<Tag> createTag(@RequestBody Tag tag) {
+        Tag createdTag = tagServiceImpl.createTag(tag.getName(), tag.getRed(), tag.getGreen(), tag.getBlue());
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdTag);
     }
 
     /**
@@ -69,23 +63,15 @@ public class TagController {
     }
 
     /**
-     * Updates the name and color of a tag.
+     * Updates a tag with the specified ID, name, and color.
      *
-     * @param id    the ID of the tag to update
-     * @param name  the new name of the tag
-     * @param red   the new red component of the tag's color (0-255)
-     * @param green the new green component of the tag's color (0-255)
-     * @param blue  the new blue component of the tag's color (0-255)
+     * @param tag the tag to update
      * @return a ResponseEntity with HTTP status code 200 (OK) if the tag was updated successfully,
      * or HTTP status code 404 (Not Found) if the tag was not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateTag(@PathVariable Long id,
-                                          @RequestBody String name,
-                                          @RequestBody int red,
-                                          @RequestBody int green,
-                                          @RequestBody int blue) {
-        boolean updated = tagServiceImpl.updateTag(id, name, red, green, blue);
+    public ResponseEntity<Void> updateTag(@RequestBody Tag tag) {
+        boolean updated = tagServiceImpl.updateTag(tag.getId(), tag.getName(), tag.getRed(), tag.getGreen(), tag.getBlue());
         return updated ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 
