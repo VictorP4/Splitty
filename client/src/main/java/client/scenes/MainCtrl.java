@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import commons.Event;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -136,11 +137,11 @@ public class MainCtrl {
      * Displays the add expense scene in the primary stage
      * Associates the key pressed event with the AddExpenseCtrl
      */
-    public void showAddExpense() {
+    public void showAddExpense(Event event) {
         primaryStage.setTitle("AddExpense");
         primaryStage.setScene(addExpense);
         addExpense.setOnKeyPressed(e -> addExpenseCtrl.keyPressed(e));
-        addExpenseCtrl.refresh();
+        addExpenseCtrl.refresh(event);
     }
 
     /**

@@ -126,8 +126,8 @@ public class AddExpenseCtrl {
     /**
      *
      */
-    public void refresh(){
-        //this.event = event;
+    public void refresh(Event event){
+        this.event = event;
         for(Participant p : this.event.getParticipants()){
             box.getChildren().add(new CheckBox(p.getName()));
         }
