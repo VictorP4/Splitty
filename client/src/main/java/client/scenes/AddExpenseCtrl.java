@@ -143,26 +143,42 @@ public class AddExpenseCtrl {
             in.addAll(event.getParticipants());
         }
         else if (someIn.isSelected()){
-            List<CheckBox> checkBoxes = new ArrayList<>();
+            ticked(in);
+        }
 
-            for(Node node : box.getChildren()){
-                if (node instanceof CheckBox){
-                    CheckBox checkBox = (CheckBox) node;
-                    checkBoxes.add(checkBox);
-                }
-            }
-            for (CheckBox c : checkBoxes){
-                if(c.isSelected()){
-                    String name = c.getText();
-                    for(Participant p : event.getParticipants()){
-                        if (Objects.equals(p.getName(), name)){
-                            in.add(p);
-                        }
+        return in;
+    }
+
+    /**
+     * adds all the participants of an expense to teh list in
+     * @param in list with all the participants of the expense
+     */
+    private void ticked(List<Participant> in) {
+        List<CheckBox> checkBoxes = new ArrayList<>();
+
+        listOf(checkBoxes);
+        for (CheckBox c : checkBoxes){
+            if(c.isSelected()){
+                String name = c.getText();
+                for(Participant p : event.getParticipants()){
+                    if (Objects.equals(p.getName(), name)){
+                        in.add(p);
                     }
                 }
             }
         }
+    }
 
-        return in;
+    /**
+     * creates a list of all checkboxes, all possible participants to be picked for an expense   
+     * @param checkBoxes list of all checkboxes
+     */
+    private void listOf(List<CheckBox> checkBoxes) {
+        for(Node node : box.getChildren()){
+            if (node instanceof CheckBox){
+                CheckBox checkBox = (CheckBox) node;
+                checkBoxes.add(checkBox);
+            }
+        }
     }
 }
