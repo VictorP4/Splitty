@@ -30,17 +30,17 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Text>
-      <Hyperlink fx:id="event1" layoutX="87.0" layoutY="213.0" onAction="#fetchEvent" text="Event 1">
+      <Hyperlink fx:id="link1" layoutX="87.0" layoutY="213.0" onAction="#joinEvent" text="Event 1">
          <font>
             <Font size="14.0" />
          </font>
       </Hyperlink>
-      <Hyperlink fx:id="event2" layoutX="87.0" layoutY="239.0" onAction="#fetchEvent" text="Event 2">
+      <Hyperlink fx:id="link2" layoutX="87.0" layoutY="239.0" onAction="#joinEvent" text="Event 2">
          <font>
             <Font size="14.0" />
          </font>
       </Hyperlink>
-      <Hyperlink fx:id="event3" layoutX="87.0" layoutY="265.0" onAction="#fetchEvent" text="Event 3">
+      <Hyperlink fx:id="link3" layoutX="87.0" layoutY="265.0" onAction="#joinEvent" text="Event 3">
          <font>
             <Font size="14.0" />
          </font>
@@ -51,7 +51,7 @@
             <MenuItem mnemonicParsing="false" text="Dutch" />
          </items>
       </MenuButton>
-      <Hyperlink fx:id="event4" layoutX="87.0" layoutY="291.0" onAction="#fetchEvent" text="Event 4">
+      <Hyperlink fx:id="link4" layoutX="87.0" layoutY="291.0" onAction="#joinEvent"  text="Event 4">
          <font>
             <Font size="14.0" />
          </font>

@@ -28,13 +28,13 @@ public class StartScreenCtrl {
     @FXML
     private TextField eventCode;
     @FXML
-    private Hyperlink event1;
+    private Hyperlink link1;
     @FXML
-    private Hyperlink event2;
+    private Hyperlink link2;
     @FXML
-    private Hyperlink event3;
+    private Hyperlink link3;
     @FXML
-    private Hyperlink event4;
+    private Hyperlink link4;
 
 
     /**
@@ -47,7 +47,7 @@ public class StartScreenCtrl {
     public StartScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        initialize();
+        initialize(); // -> is this supposed to be here?
     }
 
     public void initialize() {
@@ -56,10 +56,10 @@ public class StartScreenCtrl {
         recentlyViewed = new ArrayList<>();
 
         // adding the hyperlinks. This makes it easier to update them later
-        recentlyViewed.add(event4);
-        recentlyViewed.add(event3);
-        recentlyViewed.add(event2);
-        recentlyViewed.add(event1);
+        recentlyViewed.add(link4);
+        recentlyViewed.add(link3);
+        recentlyViewed.add(link2);
+        recentlyViewed.add(link1);
     }
 
     /**
@@ -73,34 +73,43 @@ public class StartScreenCtrl {
             createdEvent = server.addEvent(createdEvent);
             mainCtrl.showEventOverview(createdEvent);
         } catch(WebApplicationException e) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+            noValidEventError(e.getMessage());
         }
         clearField();
-    }
-
-    public void fetchEvent() {
-        // TODO: method that returns & initializes an event from a given link
     }
 
     /**
-     * Has a participant join an existing event
+     * Has a participant join an existing event either through an invite code or a link
      */
     public void joinEvent() {
+        // checks if one of the hyperlinks was clicked, if not, will take the text from the eventCode
+        long eventId;
+        if (link1.isPressed()) eventId = recentlyAccessed.get(0).getId();
+        else if (link2.isPressed()) eventId = recentlyAccessed.get(1).getId();
+        else if (link3.isPressed()) eventId = recentlyAccessed.get(2).getId();
+        else if (link4.isPressed()) eventId = recentlyAccessed.get(3).getId();
+        else eventId = Long.decode(eventCode.getText());
+
         try {
-            Event fetchedEvent = server.getEvent(Long.decode(eventCode.getText()));
+            Event fetchedEvent = server.getEvent(eventId);
             mainCtrl.showEventOverview(fetchedEvent);
             updateMostRecent(fetchedEvent);
         } catch (WebApplicationException e) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-            return;
+            noValidEventError(e.getMessage());
         }
         clearField();
+    }
+
+    /**
+     * Creates an error if the user tries to access an event that isn't valid.
+     *
+     * @param message the message displayed to the user
+     */
+    public void noValidEventError(String message) {
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     /**
@@ -116,7 +125,6 @@ public class StartScreenCtrl {
         // updates the text shown in the most recently viewed list
         for (int i = recentlyAccessed.size(); i > 0; i--) {
             recentlyViewed.get(i).setText(recentlyAccessed.get(i).getTitle());
-            // TODO: actually set this to retrieve the event if pressed
         }
 
         // if there were no 4 recently viewed events, it will
@@ -143,6 +151,9 @@ public class StartScreenCtrl {
         mainCtrl.showEventOverview(event);
     }
 
+    /**
+     * Refreshes the start scene
+     */
     public void refresh() {
         // refreshes the most recent event's depending on user -> need to know how user is stored
     }
