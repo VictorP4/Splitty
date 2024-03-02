@@ -11,6 +11,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,18 +25,18 @@ public class AddExpenseCtrl {
     @FXML
     private TextField amount;
     @FXML
-    private Spinner paidBy;
+    private Spinner<Participant> paidBy;
     @FXML
     private DatePicker date;
     @FXML
-    private Spinner currency;
+    private Spinner<String> currency;
     @FXML
     private TextField title;
 
     /**
      * Constructs a new instance of a AddExpenseCtrl.
      *
-     * @param server The utility class for server-related operations.
+     * @param server   The utility class for server-related operations.
      * @param mainCtrl The main controller of the application.
      */
     @Inject
@@ -46,7 +48,7 @@ public class AddExpenseCtrl {
     /**
      * cancels the process of adding a new expense by clearing inout fields and returning to the overview screen
      */
-    public void cancel(){
+    public void cancel() {
         clearFields();
         mainCtrl.showAddExpense();
     }
@@ -58,33 +60,30 @@ public class AddExpenseCtrl {
         amount.clear();
         title.clear();
         date.cancelEdit();
-        paidBy.cancelEdit();
+        paidBy.getValueFactory().setValue(null);
         partIn.setSelected(false);
-        currency.cancelEdit();
-//how do i reset a spinner
-        //all fields of the expense set to clear
+        currency.getValueFactory().setValue(" ");
     }
 
-    private Expense getExpense(){
-        var title = this.title.getText();
+    private Expense getExpense() {
+        String title = this.title.getText();
         double amount = Double.parseDouble(this.amount.getText());
-        LocalDate date = this.date.getValue(); //THe FUCK
-        //Participant paidBy = this.paidBy.getValue();
+        LocalDate localdate = this.date.getValue();
+        Date date = Date.from(localdate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Participant paidBy = this.paidBy.getValue();
+        List<Participant> partIn = new ArrayList<>();
         //List<Participant> partIn  = this.partIn.getSkin();
-        //return new Expense(title, amount, paidBy, partIn, date);
-        return null;
-        //TO DO
-        //what to do with localdate / date
+        return new Expense(title, amount, paidBy, partIn, date);
     }
 
     /**
      * accepts inputted expense, adds it to the server, returns to the event overview scene
      */
-    private void ok(){
-        try{
+    private void ok() {
+        try {
             server.addExpense(getExpense());
         }
-        catch (WebApplicationException e){
+        catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());
@@ -96,11 +95,12 @@ public class AddExpenseCtrl {
     }
 
     /**
-     *  handles events for adding an expense
+     * handles events for adding an expense
+     *
      * @param e the key the user pressed
      */
-    public void keyPressed(KeyEvent e){
-        switch(e.getCode()) {
+    public void keyPressed(KeyEvent e) {
+        switch (e.getCode()) {
             case ENTER:
                 ok();
                 break;
@@ -111,3 +111,4 @@ public class AddExpenseCtrl {
                 break;
         }
     }
+}

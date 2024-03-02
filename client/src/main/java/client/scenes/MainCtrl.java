@@ -138,6 +138,8 @@ public class MainCtrl {
     public void showAddExpense() {
         primaryStage.setTitle("AddExpense");
         primaryStage.setScene(addExpense);
+        addExpense.setOnKeyPressed(e -> addExpenseCtrl.keyPressed(e));
+        //button pressed?
     }
 
     /**
