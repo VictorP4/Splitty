@@ -16,7 +16,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
-import org.checkerframework.checker.units.qual.C;
 
 /**
  * Controller class for the overview scene.
