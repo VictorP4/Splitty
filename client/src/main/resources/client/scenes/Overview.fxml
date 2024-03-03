@@ -16,33 +16,39 @@
                 <Font size="15.0" />
             </font>
         </TextArea>
+        <Text fx:id="title" layoutX="88.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Text>
         <Button layoutX="353.0" layoutY="23.0" mnemonicParsing="false" onAction="#showInvites" text="Send Invites">
             <font>
                 <Font size="13.0" />
             </font>
         </Button>
-        <Button fx:id="addExpense" layoutX="325.0" layoutY="140.0" mnemonicParsing="false" onAction="#addExpense" prefHeight="27.0" prefWidth="100.0" text="Add Expense">
-            <font>
-                <Font size="13.0" />
-            </font>
-        </Button>
-        <Button layoutX="480.0" layoutY="387.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="89.0" text="Settle Debts">
-            <font>
-                <Font size="13.0" />
-            </font>
-        </Button>
-        <Text layoutX="119.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense">
+        <Text layoutX="88.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
             <font>
                 <Font name="System Bold" size="16.0" />
             </font>
         </Text>
-        <MenuButton layoutX="35.0" layoutY="388.0" mnemonicParsing="false" text="Language">
+        <ChoiceBox layoutX="86.0" layoutY="171.0" prefHeight="25.0" prefWidth="181.0" />
+        <Button layoutX="320.0" layoutY="397.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="119.0" text="Settle Debts">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Text layoutX="88.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </Text>
+        <MenuButton layoutX="87.0" layoutY="402.0" mnemonicParsing="false" text="Language">
             <items>
                 <MenuItem mnemonicParsing="false" text="Action 1" />
                 <MenuItem mnemonicParsing="false" text="Action 2" />
             </items>
         </MenuButton>
-        <TabPane layoutX="119.0" layoutY="206.0" prefHeight="179.0" prefWidth="354.0" tabClosingPolicy="UNAVAILABLE">
+        <TabPane layoutX="87.0" layoutY="206.0" prefHeight="179.0" prefWidth="354.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
                 <Tab text="All">
                     <content>
@@ -73,11 +79,7 @@
                 </Tab>
             </tabs>
         </TabPane>
-        <Button fx:id="startSceenButton" layoutX="27.0" layoutY="23.0" mnemonicParsing="false" onAction="#backToStartScreen" text="Home">
-            <font>
-                <Font size="13.0" />
-            </font></Button>
-        <ChoiceBox fx:id="participantBox" layoutX="119.0" layoutY="141.0" prefHeight="25.0" prefWidth="181.0" />
+      <Button layoutX="14.0" layoutY="26.0" mnemonicParsing="false" onAction="#backToStartScreen" text="Home" />
     </children>
     <cursor>
         <Cursor fx:constant="DEFAULT" />
