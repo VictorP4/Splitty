@@ -2,17 +2,22 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.Event;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.text.Text;
-import commons.Participant;
+
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 
 import java.util.ArrayList;
 import java.util.List;
+import commons.Event;
+import commons.Expense;
+import commons.Participant;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ListView;
+import javafx.scene.text.Text;
+import javafx.scene.control.Button;
 
 /**
  * Controller class for the overview scene.
@@ -29,6 +34,14 @@ public class OverviewCtrl {
     private TextField titleField;
     @FXML
     private TextArea participantsField;
+    @FXML
+    private ChoiceBox<Participant> participantBox;
+    @FXML
+    private ListView<Expense> expenseList;
+    @FXML
+    private ObservableList<Expense> original;
+    private Event notFinalEvent;
+
 
     /**
      * Constructs an OverviewCtrl object.
@@ -51,6 +64,9 @@ public class OverviewCtrl {
     public void initialize() {
         titlePrepare();
         participantsPrepare();
+        notFinalEvent = new Event();
+        expenseList = new ListView<>();
+        participantBox = new ChoiceBox<>();
     }
 
     /**
@@ -260,9 +276,59 @@ public class OverviewCtrl {
         mainCtrl.showInvitation();
     }
 
+    // when initializing new event -> participants is empty (participants.clear())
 
+    /**
+     * Directs user back to the startScreen. Here they can join other events if they want to
+     */
+    public void backToStartScreen() {
+        mainCtrl.showStartScreen();
+    }
+
+    /**
+     * Directs user towards the addExpense scene
+     */
     public void toAddExpense() {
         mainCtrl.showAddExpense(event);
     }
+
+    /**
+     * Shows all expenses of the event
+     */
+    public void showAllExpenses() {
+        expenseList.setItems(original);
+    }
+
+    /**
+     * Resets the expenses list and then filters it for all expenses paid by the selected
+     * participant in the box
+     */
+    public void showFromSelected() {
+        showAllExpenses();
+        expenseList.setItems((ObservableList<Expense>) expenseList.getItems().stream()
+                .filter(expense -> expense.getPaidBy().equals(participantBox.getValue())).toList());
+    }
+
+    /**
+     * Resets the expenses list and then filters it for all expenses that involve then selected
+     * participant in the box
+     */
+    public void showIncludingSelected() {
+        showAllExpenses();
+        expenseList.setItems((ObservableList<Expense>) expenseList.getItems().stream()
+                .filter(expense -> (expense.getInvolvedParticipants().contains(participantBox.getValue())
+                    || expense.getPaidBy().equals(participantBox.getValue())))
+                .toList());
+    }
+
+    public void refresh(Event event) {
+        this.notFinalEvent = event;
+
+        original = (ObservableList<Expense>) event.getExpenses();
+        expenseList.setItems(original);
+    }
+
+
+
 }
 

@@ -60,7 +60,7 @@ public class AddExpenseCtrl {
      */
     public void cancel() {
         clearFields();
-        mainCtrl.showEventOverview();
+        mainCtrl.showEventOverview(event);
     }
 
     /**
@@ -101,7 +101,7 @@ public class AddExpenseCtrl {
             return;
         }
         clearFields();
-        mainCtrl.showEventOverview();
+        mainCtrl.showEventOverview(event);
     }
 
     /**
@@ -161,5 +161,13 @@ public class AddExpenseCtrl {
                 checkBoxes.add(checkBox);
             }
         }
+    }
+
+    /**
+     * Directs a used back to the event overview scene
+     */
+    public void backToOverview() {
+        clearFields();
+        mainCtrl.showEventOverview(event);
     }
 }

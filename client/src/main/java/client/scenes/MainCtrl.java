@@ -97,9 +97,10 @@ public class MainCtrl {
     /**
      * Displays the event overview scene in the primary stage.
      */
-    public void showEventOverview() {
-        primaryStage.setTitle("Overview");
+    public void showEventOverview(Event event) {
+        primaryStage.setTitle("EventOverview");
         primaryStage.setScene(eventOverview);
+        eventOverviewCtrl.refresh(event);
     }
 
     /**
