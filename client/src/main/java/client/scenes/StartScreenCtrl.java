@@ -47,7 +47,6 @@ public class StartScreenCtrl {
     public StartScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        initialize(); // -> is this supposed to be here?
     }
 
     public void initialize() {
@@ -98,6 +97,7 @@ public class StartScreenCtrl {
             noValidEventError(e.getMessage());
         }
         clearField();
+        // --> did I initialize a database?
     }
 
     /**
