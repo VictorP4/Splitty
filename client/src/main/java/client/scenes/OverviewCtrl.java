@@ -27,8 +27,6 @@ public class OverviewCtrl {
     private final MainCtrl mainCtrl;
     private final Event event;
     @FXML
-    public Button addExpenseButton;
-    @FXML
     private Text title;
     @FXML
     private TextField titleField;
