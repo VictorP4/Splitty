@@ -17,6 +17,8 @@ import javafx.scene.text.Text;
 public class InvitationCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    @FXML
+    private TextArea inviteEmails;
 
     private final Event event;
     @FXML
@@ -85,6 +87,23 @@ public class InvitationCtrl {
             System.out.println("Failed to send invites. Status code: " + response.getStatus());
         }
         emailTextArea.clear();
-        mainCtrl.showEventOverview();
+        mainCtrl.showEventOverview(event);
+    }
+
+    /**
+     * Directs a used back to the event overview scene
+     */
+    public void backToOverview() {
+        clearFields();
+        mainCtrl.showEventOverview(event);
+    }
+
+    /**
+     * Clears the fields on the expense page
+     */
+    private void clearFields() {
+        if (inviteEmails != null) {
+            inviteEmails.setText(""); // couldnt use .clear()
+        }
     }
 }
