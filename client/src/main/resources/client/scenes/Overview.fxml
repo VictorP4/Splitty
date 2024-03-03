@@ -21,12 +21,12 @@
                 <Font size="13.0" />
             </font>
         </Button>
-        <Button fx:id="addExpense" layoutX="325.0" layoutY="140.0" mnemonicParsing="false" onAction="#addExpense" prefHeight="27.0" prefWidth="100.0" text="Add Expense">
+        <Button fx:id="addExpense" layoutX="325.0" layoutY="140.0" mnemonicParsing="false" onAction="#toAddExpense" prefHeight="27.0" prefWidth="100.0" text="Add Expense">
             <font>
                 <Font size="13.0" />
             </font>
         </Button>
-        <Button layoutX="480.0" layoutY="387.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="89.0" text="Settle Debts">
+        <Button fx:id="settleDebts" layoutX="480.0" layoutY="387.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="89.0" text="Settle Debts">
             <font>
                 <Font size="13.0" />
             </font>

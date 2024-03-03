@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+
 import java.util.ArrayList;
 import java.util.List;
 import commons.Event;
@@ -16,7 +17,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
-
 /**
  * Controller class for the overview scene.
  */
@@ -284,8 +284,8 @@ public class OverviewCtrl {
     /**
      * Directs user towards the addExpense scene
      */
-    public void addExpense() {
-        mainCtrl.showAddExpense();
+    public void toAddExpense() {
+        mainCtrl.showAddExpense(event);
     }
 
     /**
@@ -323,4 +323,8 @@ public class OverviewCtrl {
         original = (ObservableList<Expense>) event.getExpenses();
         expenseList.setItems(original);
     }
+
+
+
 }
+
