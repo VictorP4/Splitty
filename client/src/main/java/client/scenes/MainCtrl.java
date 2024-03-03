@@ -97,14 +97,20 @@ public class MainCtrl {
     /**
      * Displays the event overview scene in the primary stage.
      */
-    public void showEventOverview() {
-        primaryStage.setTitle("Overview");
+    public void showEventOverview(Event event) {
+        primaryStage.setTitle("EventOverview");
         primaryStage.setScene(eventOverview);
+        eventOverviewCtrl.refresh(event);
     }
 
-    public void showAddExpense() {
+    /**
+     * Displays the add expense scene in the primary stage
+     * Associates the key pressed event with the AddExpenseCtrl
+     */
+    public void showAddExpense(Event event) {
         primaryStage.setTitle("AddExpense");
         primaryStage.setScene(addExpense);
+        addExpenseCtrl.refresh(event);
     }
 
     /**
@@ -118,9 +124,10 @@ public class MainCtrl {
     /**
      * Displays the Invitation scene in the primary stage.
      */
-    public void showInvitation() {
+    public void showInvitation(Event event) {
         primaryStage.setTitle("Invitation");
         primaryStage.setScene(invitation);
+        invitationCtrl.refresh(event);
     }
 
     /**

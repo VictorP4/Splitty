@@ -6,81 +6,91 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="534.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
-   <children>
-      <TextField fx:id="titleField" layoutX="88.0" layoutY="13.0" prefHeight="51.0" prefWidth="182.0">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font></TextField>
-      <TextArea fx:id="participantsField" layoutX="88.0" layoutY="91.0" prefHeight="58.0" prefWidth="354.0">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </TextArea>
-      <Text fx:id="title" layoutX="88.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font>
-      </Text>
-      <Button fx:id="sendInvites" layoutX="353.0" layoutY="23.0" mnemonicParsing="false" onAction="#showInvites" text="Send Invites">
-         <font>
-            <Font size="13.0" />
-         </font>
-      </Button>
-      <Text fx:id="participants" layoutX="88.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
-         <font>
-            <Font name="System Bold" size="16.0" />
-         </font>
-      </Text>
-      <Spinner layoutX="86.0" layoutY="171.0" prefHeight="25.0" prefWidth="181.0" />
-      <Button fx:id="settleDebts"  layoutX="320.0" layoutY="397.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="119.0" text="Settle Debts">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Text fx:id="expense"  layoutX="88.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense">
-         <font>
-            <Font name="System Bold" size="16.0" />
-         </font>
-      </Text>
-      <MenuButton fx:id="langButton"  layoutX="87.0" layoutY="402.0" mnemonicParsing="false" text="Language">
-        <items>
-          <MenuItem mnemonicParsing="false" text="English" onAction="#switchToEnglish" />
-          <MenuItem mnemonicParsing="false" text="Dutch" onAction="#switchToDutch" />
-        </items>
-      </MenuButton>
-      <TabPane layoutX="87.0" layoutY="206.0" prefHeight="179.0" prefWidth="354.0" tabClosingPolicy="UNAVAILABLE">
-        <tabs>
-          <Tab text="All">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <ListView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
-            <Tab fx:id="fromSelected"  text="From Selected">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <ListView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                  </AnchorPane>
-               </content>
-            </Tab>
-            <Tab fx:id="inclSelected"  text="Including Selected">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <ListView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                  </AnchorPane>
-               </content>
-            </Tab>
-        </tabs>
-      </TabPane>
-   </children>
-   <cursor>
-      <Cursor fx:constant="DEFAULT" />
-   </cursor>
+    <children>
+        <TextField fx:id="titleField" layoutX="88.0" layoutY="13.0" prefHeight="51.0" prefWidth="182.0">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font></TextField>
+        <TextArea fx:id="participantsField" layoutX="88.0" layoutY="91.0" prefHeight="58.0" prefWidth="354.0">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </TextArea>
+        <Text fx:id="title" layoutX="88.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Text>
+        <Button fx:id="sendInvites" layoutX="353.0" layoutY="23.0" mnemonicParsing="false" onAction="#showInvites" text="Send Invites">
+            <font>
+                <Font size="13.0" />
+            </font>
+        </Button>
+
+        <Button fx:id="addExpense" layoutX="325.0" layoutY="140.0" mnemonicParsing="false" onAction="#toAddExpense" prefHeight="27.0" prefWidth="100.0" text="Add Expense">
+            <font>
+                <Font size="13.0" />
+            </font>
+        </Button>
+
+
+        <Text fx:id="participants" layoutX="88.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
+
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </Text>
+        <ChoiceBox fx:id="participantBox"  layoutX="86.0" layoutY="171.0" prefHeight="25.0" prefWidth="181.0" />
+        <Button fx:id="settleDebts" layoutX="320.0" layoutY="397.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="119.0" text="Settle Debts">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Text fx:id="expense" layoutX="88.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </Text>
+        <MenuButton fx:id="langButton"  layoutX="87.0" layoutY="402.0" mnemonicParsing="false" text="Language">
+            <items>
+                <MenuItem mnemonicParsing="false" text="English" onAction="#switchToEnglish" />
+                <MenuItem mnemonicParsing="false" text="Dutch" onAction="#switchToDutch" />
+            </items>
+        </MenuButton>
+        <TabPane layoutX="87.0" layoutY="206.0" prefHeight="179.0" prefWidth="354.0" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab text="All">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <ListView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab fx:id ="fromSelected" text="From Selected">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <ListView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab fx:id="inclSelected" text="Including Selected">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <ListView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+      <Button fx:id="home" layoutX="14.0" layoutY="26.0" mnemonicParsing="false" onAction="#backToStartScreen" text="Home" />
+    </children>
+    <cursor>
+        <Cursor fx:constant="DEFAULT" />
+    </cursor>
 </AnchorPane>

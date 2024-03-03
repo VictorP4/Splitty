@@ -66,6 +66,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
     private ObservableList<Debt> debts;
     @FXML
     private Accordion debtsOverview;
+    private Event event;
 
     /**
      * Constructs a new instance of an OpenDebtCtrl
@@ -102,7 +103,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
      * goes back go event overview
      */
     public void back(){
-        mainCtrl.showEventOverview();
+        mainCtrl.showEventOverview(event);
     }
 
     /**

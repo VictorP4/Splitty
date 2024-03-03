@@ -19,8 +19,10 @@ import javafx.scene.text.Text;
 public class InvitationCtrl implements Main.UpdatableUI {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    @FXML
+    private TextArea inviteEmails;
 
-    private final Event event;
+    private Event event;
     @FXML
     public Button sendInv;
     @FXML
@@ -60,7 +62,8 @@ public class InvitationCtrl implements Main.UpdatableUI {
      * Sets the invite code in the UI.
      */
     public void setInviteCode() {
-        inviteCode = event.getInviteCode();
+        //TODO change to getInviteCode after proper backend is available
+        inviteCode = String.valueOf(event.getId());
         inviteCodeText.setText(inviteCode);
     }
 
@@ -95,7 +98,31 @@ public class InvitationCtrl implements Main.UpdatableUI {
             System.out.println("Failed to send invites. Status code: " + response.getStatus());
         }
         emailTextArea.clear();
-        mainCtrl.showEventOverview();
+        mainCtrl.showEventOverview(event);
+    }
+
+    /**
+     * Directs a used back to the event overview scene
+     */
+    public void backToOverview() {
+        clearFields();
+        mainCtrl.showEventOverview(event);
+    }
+
+    /**
+     * Clears the fields on the expense page
+     */
+    private void clearFields() {
+        if (inviteEmails != null) {
+            inviteEmails.setText(""); // couldnt use .clear()
+        }
+    }
+
+
+
+    public void refresh(Event event) {
+        this.event=event;
+        setInviteCode();
     }
 
     @Override

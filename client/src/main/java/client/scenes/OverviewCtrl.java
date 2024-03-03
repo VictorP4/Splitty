@@ -8,19 +8,33 @@ import commons.Participant;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+
+import javafx.collections.FXCollections;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import commons.Event;
+import commons.Expense;
+import commons.Participant;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ListView;
+import javafx.scene.text.Text;
 /**
  * Controller class for the overview scene.
  */
 public class OverviewCtrl implements Main.UpdatableUI {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
-    private final Event event;
+    @FXML
+    public Button addExpense;
+    @FXML
+    public Button home;
+    private Event event;
     @FXML
     public Button sendInvites;
     @FXML
@@ -41,6 +55,14 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private TextField titleField;
     @FXML
     private TextArea participantsField;
+    @FXML
+    private ChoiceBox<Participant> participantBox;
+    @FXML
+    private ListView<Expense> expenseList;
+    @FXML
+    private ObservableList<Expense> original;
+    private Event notFinalEvent;
+
 
     /**
      * Constructs an OverviewCtrl object.
@@ -63,10 +85,15 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public void initialize() {
         titlePrepare();
         participantsPrepare();
+        notFinalEvent = new Event();
+        expenseList = new ListView<>();
+        participantBox = new ChoiceBox<>();
     }
 
     @Override
     public void updateUI() {
+        home.setText(Main.getLocalizedString("home"));
+        addExpense.setText(Main.getLocalizedString("addExpense"));
         sendInvites.setText(Main.getLocalizedString("ovSendInvites"));
         settleDebts.setText(Main.getLocalizedString("ovSettleDebt"));
         expense.setText(Main.getLocalizedString("ovExpense"));
@@ -280,7 +307,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     @FXML
     public void showInvites() {
-        mainCtrl.showInvitation();
+        mainCtrl.showInvitation(this.event);
     }
 
     public void switchToEnglish(ActionEvent actionEvent) {
@@ -290,4 +317,56 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public void switchToDutch(ActionEvent actionEvent) {
         Main.switchLocale("nl");
     }
+    // when initializing new event -> participants is empty (participants.clear())
+
+    /**
+     * Directs user back to the startScreen. Here they can join other events if they want to
+     */
+    public void backToStartScreen() {
+        mainCtrl.showStartScreen();
+    }
+
+    /**
+     * Directs user towards the addExpense scene
+     */
+    public void toAddExpense() {
+        mainCtrl.showAddExpense(event);
+    }
+
+    /**
+     * Shows all expenses of the event
+     */
+    public void showAllExpenses() {
+        expenseList.setItems(original);
+    }
+
+    /**
+     * Resets the expenses list and then filters it for all expenses paid by the selected
+     * participant in the box
+     */
+    public void showFromSelected() {
+        showAllExpenses();
+        expenseList.setItems((ObservableList<Expense>) expenseList.getItems().stream()
+                .filter(expense -> expense.getPaidBy().equals(participantBox.getValue())).toList());
+    }
+
+    /**
+     * Resets the expenses list and then filters it for all expenses that involve then selected
+     * participant in the box
+     */
+    public void showIncludingSelected() {
+        showAllExpenses();
+        expenseList.setItems((ObservableList<Expense>) expenseList.getItems().stream()
+                .filter(expense -> (expense.getInvolvedParticipants().contains(participantBox.getValue())
+                    || expense.getPaidBy().equals(participantBox.getValue())))
+                .toList());
+    }
+
+    public void refresh(Event event) {
+        this.event = event;
+        this.title.setText(event.getTitle());
+        original = FXCollections.observableArrayList(event.getExpenses());
+        expenseList.setItems(original);
+    }
 }
+
