@@ -6,17 +6,17 @@
 
 <AnchorPane prefHeight="246.0" prefWidth="413.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ContactDetailsCtrl">
    <children>
-      <Text layoutX="43.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Edit Participant">
+      <Text fx:id="aeParticipant" layoutX="43.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Edit Participant">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Text>
-      <Text layoutX="43.0" layoutY="98.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
+      <Text fx:id="name" layoutX="43.0" layoutY="98.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text layoutX="43.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
+      <Text fx:id="email" layoutX="43.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -35,12 +35,12 @@
       <TextField fx:id="emailField" layoutX="125.0" layoutY="101.0" prefHeight="26.0" prefWidth="246.0" />
       <TextField fx:id="ibanField" layoutX="125.0" layoutY="128.0" prefHeight="26.0" prefWidth="246.0" />
       <TextField fx:id="bicField" layoutX="125.0" layoutY="155.0" prefHeight="26.0" prefWidth="246.0" />
-      <Button layoutX="274.0" layoutY="192.0" mnemonicParsing="false" onAction="#back" text="Abort">
+      <Button fx:id="abort" layoutX="274.0" layoutY="192.0" mnemonicParsing="false" onAction="#back" text="Abort">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button layoutX="334.0" layoutY="192.0" mnemonicParsing="false" onAction="#save" text="Ok">
+      <Button fx:id="okButton" layoutX="334.0" layoutY="192.0" mnemonicParsing="false" onAction="#save" text="Ok">
          <font>
             <Font size="14.0" />
          </font>

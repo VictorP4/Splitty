@@ -8,12 +8,12 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StatisticsCtrl">
    <children>
-      <Text layoutX="51.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Statistics">
+      <Text fx:id="stats" layoutX="51.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Statistics">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Text>
-      <Text layoutX="51.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Cost of Event:">
+      <Text fx:id="eventCost" layoutX="51.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Cost of Event:">
          <font>
             <Font size="14.0" />
          </font>

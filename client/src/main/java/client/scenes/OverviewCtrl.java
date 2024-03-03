@@ -1,7 +1,13 @@
 package client.scenes;
 
+import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Event;
+import commons.Participant;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
 
 import javafx.collections.FXCollections;
 import javafx.scene.control.TextArea;
@@ -25,16 +31,33 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
+import java.util.Objects;
 /**
  * Controller class for the overview scene.
  */
-import java.util.Objects;
-
-public class OverviewCtrl {
+public class OverviewCtrl implements Main.UpdatableUI {
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
+    @FXML
+    public Button addExpense;
+    @FXML
+    public Button home;
     private Event event;
+    @FXML
+    public Button sendInvites;
+    @FXML
+    public Text participants;
+    @FXML
+    public Button settleDebts;
+    @FXML
+    public Text expense;
+    @FXML
+    public MenuButton langButton;
+    @FXML
+    public Tab fromSelected;
+    @FXML
+    public Tab inclSelected;
     @FXML
     private Text title;
     @FXML
@@ -61,7 +84,19 @@ public class OverviewCtrl {
         this.mainCtrl = mainCtrl;
         this.event = serverUtils.updateEvent(e);
     }
-
+    @Override
+    public void updateUI() {
+        home.setText(Main.getLocalizedString("home"));
+        addExpense.setText(Main.getLocalizedString("addExpense"));
+        sendInvites.setText(Main.getLocalizedString("ovSendInvites"));
+        settleDebts.setText(Main.getLocalizedString("ovSettleDebt"));
+        expense.setText(Main.getLocalizedString("ovExpense"));
+        langButton.setText(Main.getLocalizedString("langButton"));
+        fromSelected.setText(Main.getLocalizedString("ovFromSelected"));
+        inclSelected.setText(Main.getLocalizedString("ovInclSelected"));
+        title.setText(Main.getLocalizedString("OverviewTitle"));
+        participants.setText(Main.getLocalizedString("ovParticipants"));
+    }
 
     /**
      * Prepares the display of the title.
@@ -175,7 +210,13 @@ public class OverviewCtrl {
         mainCtrl.showInvitation(this.event);
     }
 
-    // when initializing new event -> participants is empty (participants.clear())
+    public void switchToEnglish(ActionEvent actionEvent) {
+        Main.switchLocale("en");
+    }
+
+    public void switchToDutch(ActionEvent actionEvent) {
+        Main.switchLocale("nl");
+    }
 
     /**
      * Directs user back to the startScreen. Here they can join other events if they want to

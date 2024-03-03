@@ -1,21 +1,35 @@
 package client.scenes;
 
+import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.text.Text;
 import commons.Event;
 import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
+public class ContactDetailsCtrl implements Main.UpdatableUI {
 /**
  * Controller class for the contact details scene.
  * This class controls the behavior of the contact details scene, allowing users to view and edit
  * the details of a participant.
  */
-public class ContactDetailsCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    @FXML
+    public Text aeParticipant;
+    @FXML
+    public Text name;
+    @FXML
+    public Text email;
+    @FXML
+    public Button abort;
+    @FXML
+    public Button okButton;
     private Participant participant;
     private Event event;
 
@@ -42,6 +56,16 @@ public class ContactDetailsCtrl {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
+
+    @Override
+    public void updateUI() {
+        aeParticipant.setText(Main.getLocalizedString("AEParticipant"));
+        name.setText(Main.getLocalizedString("cdName"));
+        email.setText(Main.getLocalizedString("email"));
+        abort.setText(Main.getLocalizedString("abort"));
+        okButton.setText(Main.getLocalizedString("ok"));
+    }
+}
 
     /**
      * Initializes the contact details scene with participant information.
