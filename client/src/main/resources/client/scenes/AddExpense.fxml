@@ -6,32 +6,32 @@
 
 <AnchorPane id="overviewButton" prefHeight="421.0" prefWidth="484.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
    <children>
-      <Text layoutX="110.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Edit Expense">
+      <Text fx:id="addEditText" layoutX="110.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Edit Expense">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Text>
-      <Text layoutX="53.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Who paid?">
+      <Text fx:id="whoPaid" layoutX="53.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Who paid?">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text layoutX="53.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What for?">
+      <Text fx:id="whatFor"  layoutX="53.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What for?">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text layoutX="53.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How much?">
+      <Text fx:id="howMuch"  layoutX="53.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How much?">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text layoutX="53.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="When?">
+      <Text fx:id="when"  layoutX="53.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="When?">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text layoutX="53.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How to Split?">
+      <Text fx:id="howToSplit"  layoutX="53.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How to Split?">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -65,18 +65,18 @@
             </CheckBox>
          </children>
       </VBox>
-      <Text layoutX="53.0" layoutY="337.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense Type">
+      <Text fx:id="expenseType"  layoutX="53.0" layoutY="337.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense Type">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
       <Spinner fx:id="type" layoutX="210.0" layoutY="317.0" prefHeight="26.0" prefWidth="230.0" />
-      <Button layoutX="331.0" layoutY="361.0" mnemonicParsing="false" text="Abort" onAction="#cancel">
+      <Button fx:id="abort" layoutX="331.0" layoutY="361.0" mnemonicParsing="false" text="Abort" onAction="#cancel">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button layoutX="394.0" layoutY="361.0" mnemonicParsing="false" text="Add" onAction="#ok">
+      <Button fx:id="add" layoutX="394.0" layoutY="361.0" mnemonicParsing="false" text="Add" onAction="#ok">
          <font>
             <Font size="14.0" />
          </font>

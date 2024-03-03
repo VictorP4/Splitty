@@ -1,7 +1,13 @@
 package client.scenes;
 
+import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
@@ -18,10 +24,34 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.awt.*;
 
-public class AddExpenseCtrl {
+public class AddExpenseCtrl implements Main.UpdatableUI {
+    @FXML
+    public Text addEditText;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    @FXML
+    public Text whoPaid;
+    @FXML
+    public Text whatFor;
+    @FXML
+    public Text howMuch;
+    @FXML
+    public Text when;
+    @FXML
+    public Text howToSplit;
+    @FXML
+    public CheckBox equally;
+    @FXML
+    public Text expenseType;
+    @FXML
+    public Button abort;
+
+    @FXML
+    public Button add;
+    @FXML
+    public Button overviewButton;
     private Event event;
 
     @FXML
@@ -53,6 +83,23 @@ public class AddExpenseCtrl {
     public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+    }
+
+    @Override
+    public void updateUI() {
+        overviewButton.setText(Main.getLocalizedString("overviewButton"));
+        addEditText.setText(Main.getLocalizedString("AEExpense"));
+        whoPaid.setText(Main.getLocalizedString("whoPaid"));
+        whatFor.setText(Main.getLocalizedString("whatFor"));
+        howMuch.setText(Main.getLocalizedString("howMuch"));
+        when.setText(Main.getLocalizedString("when"));
+        howToSplit.setText(Main.getLocalizedString("howToSplit"));
+        everybodyIn.setText(Main.getLocalizedString("equally"));
+        someIn.setText(Main.getLocalizedString("onlySome"));
+        expenseType.setText(Main.getLocalizedString("expType"));
+        abort.setText(Main.getLocalizedString("abort"));
+        add.setText(Main.getLocalizedString("add"));
+
     }
 
     /**

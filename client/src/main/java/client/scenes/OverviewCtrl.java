@@ -1,7 +1,13 @@
 package client.scenes;
 
+import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Event;
+import commons.Participant;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
 
 import javafx.collections.FXCollections;
 import javafx.scene.control.TextArea;
@@ -21,10 +27,28 @@ import javafx.scene.text.Text;
 /**
  * Controller class for the overview scene.
  */
-public class OverviewCtrl {
+public class OverviewCtrl implements Main.UpdatableUI {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
+    @FXML
+    public Button addExpense;
+    @FXML
+    public Button home;
     private Event event;
+    @FXML
+    public Button sendInvites;
+    @FXML
+    public Text participants;
+    @FXML
+    public Button settleDebts;
+    @FXML
+    public Text expense;
+    @FXML
+    public MenuButton langButton;
+    @FXML
+    public Tab fromSelected;
+    @FXML
+    public Tab inclSelected;
     @FXML
     private Text title;
     @FXML
@@ -66,6 +90,19 @@ public class OverviewCtrl {
         participantBox = new ChoiceBox<>();
     }
 
+    @Override
+    public void updateUI() {
+        home.setText(Main.getLocalizedString("home"));
+        addExpense.setText(Main.getLocalizedString("addExpense"));
+        sendInvites.setText(Main.getLocalizedString("ovSendInvites"));
+        settleDebts.setText(Main.getLocalizedString("ovSettleDebt"));
+        expense.setText(Main.getLocalizedString("ovExpense"));
+        langButton.setText(Main.getLocalizedString("langButton"));
+        fromSelected.setText(Main.getLocalizedString("ovFromSelected"));
+        inclSelected.setText(Main.getLocalizedString("ovInclSelected"));
+        title.setText(Main.getLocalizedString("OverviewTitle"));
+        participants.setText(Main.getLocalizedString("ovParticipants"));
+    }
     /**
      * Prepares the display of participants.
      */
@@ -161,7 +198,7 @@ public class OverviewCtrl {
         b= new StringBuilder();
         int l=c.size();
         if (l > 0) {
-            b.append(c.getFirst());
+            b.append(c.get(0));
             for (int i = 1; i < l; i++) {
                 b.append(", ").append(c.get(i));
             }
@@ -273,6 +310,13 @@ public class OverviewCtrl {
         mainCtrl.showInvitation(this.event);
     }
 
+    public void switchToEnglish(ActionEvent actionEvent) {
+        Main.switchLocale("en");
+    }
+
+    public void switchToDutch(ActionEvent actionEvent) {
+        Main.switchLocale("nl");
+    }
     // when initializing new event -> participants is empty (participants.clear())
 
     /**
@@ -324,8 +368,5 @@ public class OverviewCtrl {
         original = FXCollections.observableArrayList(event.getExpenses());
         expenseList.setItems(original);
     }
-
-
-
 }
 
