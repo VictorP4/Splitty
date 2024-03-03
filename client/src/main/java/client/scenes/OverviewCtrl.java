@@ -3,12 +3,13 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
-import commons.Participant;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.text.Text;
+import commons.Participant;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,8 @@ public class OverviewCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final Event event;
+    @FXML
+    public Button addExpenseButton;
     @FXML
     private Text title;
     @FXML
@@ -256,4 +259,10 @@ public class OverviewCtrl {
     public void showInvites() {
         mainCtrl.showInvitation();
     }
+
+
+    public void toAddExpense() {
+        mainCtrl.showAddExpense(event);
+    }
 }
+

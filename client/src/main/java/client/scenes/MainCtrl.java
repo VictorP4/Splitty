@@ -102,9 +102,14 @@ public class MainCtrl {
         primaryStage.setScene(eventOverview);
     }
 
-    public void showAddExpense() {
+    /**
+     * Displays the add expense scene in the primary stage
+     * Associates the key pressed event with the AddExpenseCtrl
+     */
+    public void showAddExpense(Event event) {
         primaryStage.setTitle("AddExpense");
         primaryStage.setScene(addExpense);
+        addExpenseCtrl.refresh(event);
     }
 
     /**

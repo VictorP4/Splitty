@@ -19,6 +19,7 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import commons.EmailRequestBody;
 import commons.Event;
+import commons.Expense;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.Response;
@@ -59,7 +60,8 @@ public class ServerUtils {
 				.put(Entity.entity(event, APPLICATION_JSON), Event.class);
 	}
 
-	/**
+
+    /**
 	 * Sends reminders via email.
 	 *
 	 * @param emailRequestBody The request body containing email information for reminders.
@@ -71,5 +73,18 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(emailRequestBody, APPLICATION_JSON));
+	}
+
+	/**
+	 *
+	 * @param expense expense to be added
+	 * @return html response of the successful post request
+	 */
+	public Expense addExpense(Expense expense){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
 	}
 }
