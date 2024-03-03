@@ -50,6 +50,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
     @FXML
     public Button add;
+    @FXML
+    public Button overviewButton;
     private Event event;
 
     @FXML
@@ -85,13 +87,14 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
     @Override
     public void updateUI() {
+        overviewButton.setText(Main.getLocalizedString("overviewButton"));
         addEditText.setText(Main.getLocalizedString("AEExpense"));
         whoPaid.setText(Main.getLocalizedString("whoPaid"));
         whatFor.setText(Main.getLocalizedString("whatFor"));
         howMuch.setText(Main.getLocalizedString("howMuch"));
         when.setText(Main.getLocalizedString("when"));
         howToSplit.setText(Main.getLocalizedString("howToSplit"));
-        equally.setText(Main.getLocalizedString("equally"));
+        everybodyIn.setText(Main.getLocalizedString("equally"));
         someIn.setText(Main.getLocalizedString("onlySome"));
         expenseType.setText(Main.getLocalizedString("expType"));
         abort.setText(Main.getLocalizedString("abort"));
