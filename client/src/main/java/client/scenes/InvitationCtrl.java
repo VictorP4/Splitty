@@ -20,7 +20,7 @@ public class InvitationCtrl {
     @FXML
     private TextArea inviteEmails;
 
-    private final Event event;
+    private Event event;
     @FXML
     private TextArea emailTextArea;
     @FXML
@@ -52,7 +52,8 @@ public class InvitationCtrl {
      * Sets the invite code in the UI.
      */
     public void setInviteCode() {
-        inviteCode = event.getInviteCode();
+        //TODO change to getInviteCode after proper backend is available
+        inviteCode = String.valueOf(event.getId());
         inviteCodeText.setText(inviteCode);
     }
 
@@ -105,5 +106,12 @@ public class InvitationCtrl {
         if (inviteEmails != null) {
             inviteEmails.setText(""); // couldnt use .clear()
         }
+    }
+
+
+
+    public void refresh(Event event) {
+        this.event=event;
+        setInviteCode();
     }
 }

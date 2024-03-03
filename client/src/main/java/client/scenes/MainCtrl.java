@@ -124,9 +124,10 @@ public class MainCtrl {
     /**
      * Displays the Invitation scene in the primary stage.
      */
-    public void showInvitation() {
+    public void showInvitation(Event event) {
         primaryStage.setTitle("Invitation");
         primaryStage.setScene(invitation);
+        invitationCtrl.refresh(event);
     }
 
     /**
