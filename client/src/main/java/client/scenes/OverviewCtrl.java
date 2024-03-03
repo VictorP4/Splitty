@@ -17,8 +17,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
-import javafx.scene.control.Button;
-
 /**
  * Controller class for the overview scene.
  */
