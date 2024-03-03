@@ -270,7 +270,7 @@ public class OverviewCtrl {
      */
     @FXML
     public void showInvites() {
-        mainCtrl.showInvitation();
+        mainCtrl.showInvitation(this.event);
     }
 
     // when initializing new event -> participants is empty (participants.clear())
@@ -320,7 +320,7 @@ public class OverviewCtrl {
 
     public void refresh(Event event) {
         this.event = event;
-
+        this.title.setText(event.getTitle());
         original = FXCollections.observableArrayList(event.getExpenses());
         expenseList.setItems(original);
     }
