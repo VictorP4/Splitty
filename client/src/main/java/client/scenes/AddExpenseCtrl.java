@@ -70,10 +70,10 @@ public class AddExpenseCtrl {
         amount.clear();
         title.clear();
         date.cancelEdit();
-        paidBy.getValueFactory().setValue(null);
+        if(paidBy.getValueFactory()!=null) paidBy.getValueFactory().setValue(null);
         everybodyIn.setSelected(false);
         someIn.setSelected(false);
-        currency.getValueFactory().setValue(" ");
+        if(currency.getValueFactory()!=null) currency.getValueFactory().setValue(" ");
     }
 
     public Expense getExpense() {

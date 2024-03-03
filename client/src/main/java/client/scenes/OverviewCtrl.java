@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 
+import javafx.collections.FXCollections;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -23,7 +24,7 @@ import javafx.scene.text.Text;
 public class OverviewCtrl {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
-    private final Event event;
+    private Event event;
     @FXML
     private Text title;
     @FXML
@@ -318,9 +319,9 @@ public class OverviewCtrl {
     }
 
     public void refresh(Event event) {
-        this.notFinalEvent = event;
+        this.event = event;
 
-        original = (ObservableList<Expense>) event.getExpenses();
+        original = FXCollections.observableArrayList(event.getExpenses());
         expenseList.setItems(original);
     }
 
