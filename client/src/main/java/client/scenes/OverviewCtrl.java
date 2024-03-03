@@ -34,9 +34,7 @@ public class OverviewCtrl {
     private ChoiceBox<Participant> participantBox;
     @FXML
     private ListView<Expense> expenseList;
-    @FXML
     private ObservableList<Expense> original;
-    private Event notFinalEvent;
 
 
     /**
@@ -60,7 +58,6 @@ public class OverviewCtrl {
     public void initialize() {
         titlePrepare();
         participantsPrepare();
-        notFinalEvent = new Event();
         expenseList = new ListView<>();
         participantBox = new ChoiceBox<>();
     }
@@ -318,9 +315,8 @@ public class OverviewCtrl {
     }
 
     public void refresh(Event event) {
-        this.notFinalEvent = event;
-
-        original = (ObservableList<Expense>) event.getExpenses();
+        original.removeAll(original);
+        original.addAll(expenseList.getItems());
         expenseList.setItems(original);
     }
 }
