@@ -109,15 +109,16 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     public void joinEvent(ActionEvent event) {
         // checks if one of the hyperlinks was clicked, if not, will take the text from the eventCode
         Long eventId = null;
+
+        if (eventCode.getText().isEmpty() && !(event.getSource().toString().isEmpty())) {
+            noValidEventError("Event does not exist");
+            return;
+        }
         if (event.getSource() instanceof Hyperlink) {
             Hyperlink clicked = (Hyperlink) event.getSource();
             eventId = recentlyAccessed.get(recentlyViewed.indexOf(clicked)).getId();
         }
         else {
-            if (eventCode.getText().isEmpty()) {
-                noValidEventError("Why no invite code? (0_0) <-- this is supposed to be mad");
-                return;
-            }
             eventId = Long.decode(eventCode.getText());
         }
 
