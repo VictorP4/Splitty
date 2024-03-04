@@ -92,8 +92,8 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
         participant.setEmail(emailField.getText());
         participant.setBIC(bicField.getText());
         participant.setIBAN(ibanField.getText());
-        //mainCtrl.updateParticipant(participant);
-        back1(mainCtrl.updateParticipant(participant));
+        mainCtrl.updateParticipant(participant);
+        back();
     }
 
     /**
@@ -103,9 +103,7 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
     public void back() {
         mainCtrl.showEventOverview(event);
     }
-    public void back1(Event event){
-        mainCtrl.showEventOverview(event);
-    }
+
 }
 
 /**
