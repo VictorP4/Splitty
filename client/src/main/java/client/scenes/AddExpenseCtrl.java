@@ -159,7 +159,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             CheckBox cb = new CheckBox(p.getName());
             cb.setDisable(true);
             box.getChildren().add(cb);
-            //TODO: make sure this works - lara
         }
     }
 
