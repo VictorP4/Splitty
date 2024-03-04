@@ -11,9 +11,7 @@ import javafx.stage.Modality;
 
 import com.google.inject.Inject;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Controller class for the start screen scene.
@@ -51,14 +49,14 @@ public class StartScreenCtrl {
 
     public void initialize() {
         // initializing the recent event list and the hyperlink list
-        recentlyAccessed = new ArrayList<>();
+        recentlyAccessed = new LinkedList<>();
         recentlyViewed = new ArrayList<>();
 
         // adding the hyperlinks. This makes it easier to update them later
-        recentlyViewed.add(link4);
-        recentlyViewed.add(link3);
-        recentlyViewed.add(link2);
         recentlyViewed.add(link1);
+        recentlyViewed.add(link2);
+        recentlyViewed.add(link3);
+        recentlyViewed.add(link4);
     }
 
     /**
@@ -117,22 +115,20 @@ public class StartScreenCtrl {
      * @param event The current event that has either been created or joined by the user
      */
     private void updateMostRecent(Event event) {
-        recentlyAccessed.add(event);
+        recentlyAccessed.addFirst(event);
         if (recentlyAccessed.size() > 4) {
-            recentlyAccessed.removeFirst();
+            recentlyAccessed.removeLast();
         }
 
         // updates the text shown in the most recently viewed list
-        for (int i = recentlyAccessed.size(); i > 0; i--) {
+        for (int i = 0; i < recentlyAccessed.size(); i++) {
             recentlyViewed.get(i).setText(recentlyAccessed.get(i).getTitle());
         }
 
-        // if there were no 4 recently viewed events, it will
-        if (recentlyAccessed.size() < 4) {
-            int linksLeft = recentlyViewed.size() - recentlyAccessed.size();
-            for (int i = linksLeft; i > 0 ; i--) {
-                recentlyViewed.get(i).setText("");
-            }
+        if (recentlyAccessed.size() >= 4) return;
+        // if there were no 4 recently viewed events, it will show nothing
+        for (int i = recentlyAccessed.size(); i < recentlyViewed.size() ; i++) {
+            recentlyViewed.get(i).setText("");
         }
     }
 

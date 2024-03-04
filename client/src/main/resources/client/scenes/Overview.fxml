@@ -79,7 +79,15 @@
                 </Tab>
             </tabs>
         </TabPane>
+<<<<<<< Updated upstream
         <Button layoutX="14.0" layoutY="26.0" mnemonicParsing="false" onAction="#backToStartScreen" text="Home" />
+=======
+        <Button layoutX="27.0" layoutY="23.0" mnemonicParsing="false" onAction="#backToStartScreen" text="Home">
+            <font>
+                <Font size="13.0" />
+            </font></Button>
+        <ChoiceBox fx:id="participantBox" layoutX="119.0" layoutY="141.0" prefHeight="25.0" prefWidth="181.0" />
+>>>>>>> Stashed changes
     </children>
     <cursor>
         <Cursor fx:constant="DEFAULT" />
