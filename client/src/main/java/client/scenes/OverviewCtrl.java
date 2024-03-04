@@ -64,13 +64,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
      *
      * @param serverUtils The utility class for server interaction.
      * @param mainCtrl    The main controller of the application.
-     * @param e           The event being overviewed.
      */
     @Inject
-    public OverviewCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, Event e) {
+    public OverviewCtrl(ServerUtils serverUtils, MainCtrl mainCtrl) {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
-        this.event = serverUtils.updateEvent(e);
     }
     @Override
     public void updateUI() {
@@ -260,7 +258,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     public void refresh(Event event) {
-        this.event = event;
+        this.event = serverUtils.updateEvent(event);
         titlePrepare();
         participantsDisplay();
         original = FXCollections.observableArrayList(event.getExpenses());
