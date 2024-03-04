@@ -156,7 +156,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
             label.setOnMouseClicked(mouseEvent -> {
                 if (mouseEvent.getClickCount() == 2) {
                     if (mouseEvent.getButton() == MouseButton.SECONDARY) {
+                        serverUtils.deleteParticipant(contact);
                         event.removeParticipant(contact);
+                        this.event = serverUtils.updateEvent(this.event);
                         participantsDisplay();
                     } else
                         addParticipant1(contact);
@@ -176,20 +178,23 @@ public class OverviewCtrl implements Main.UpdatableUI {
         boolean participantExists = false;
         for (Participant p : event.getParticipants()) {
             if (Objects.equals(p.getId(), participant.getId())) {
-                p.setName(participant.getName());
-                p.setEmail(participant.getEmail());
-                p.setBIC(participant.getBic());
-                p.setIBAN(participant.getIban());
+
                 participantExists = true;
                 break;
             }
         }
         if (!participantExists) {
-            event.addParticipant(participant);
+            Participant newPart = serverUtils.addParticipant(participant);
+            this.event.getParticipants().add(newPart);
+
+        }
+        else{
+            serverUtils.updateParticipant(participant);
         }
         System.out.println(event.getParticipants());
-        serverUtils.updateEvent(event);
+        this.event = serverUtils.updateEvent(event);
         participantsDisplay();
+
     }
 
     /**
