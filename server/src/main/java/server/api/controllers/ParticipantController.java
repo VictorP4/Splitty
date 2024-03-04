@@ -30,12 +30,25 @@ public class ParticipantController {
         Participant saved = repo.save(participant);
         return ResponseEntity.ok(saved);
     }
+
+    /**
+     *
+     * @param id id of participant to modify
+     * @param participant participant to change
+     * @return updated participant
+     */
     @PutMapping(path = {"/{id}"})
     public ResponseEntity<Participant> put(@PathVariable("id") long id, @RequestBody Participant participant){
         if(id<0|| !repo.existsById(id)) return ResponseEntity.badRequest().build();
         Participant update = repo.save(participant);
         return ResponseEntity.ok(update);
     }
+
+    /**
+     *
+     * @param id participant to delete
+     * @return the deleted participant
+     */
     @DeleteMapping(path = {"/{id}"})
     public ResponseEntity<Participant> delete(@PathVariable("id") long id){
         if(id<0|| !repo.existsById(id)) return ResponseEntity.badRequest().build();

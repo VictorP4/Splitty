@@ -18,7 +18,7 @@ public class EventControllerTest {
     @BeforeEach
     public void setup(){
        repo = new TestEventRepository();
-       sut = new EventController(repo, null);
+       sut = new EventController(repo);
 
     }
     @Test

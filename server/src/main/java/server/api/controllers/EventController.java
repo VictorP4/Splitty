@@ -16,15 +16,14 @@ import server.database.ParticipantRepository;
 @RequestMapping("/api/events")
 public class EventController {
     private final EventRepository repo;
-    private final ParticipantRepository participantRepo;
+
 
     /**
      * @param repo            the event repository
-     * @param participantRepo
      */
-    public EventController(EventRepository repo, ParticipantRepository participantRepo) {
+    public EventController(EventRepository repo) {
         this.repo = repo;
-        this.participantRepo = participantRepo;
+
     }
 
     /**
@@ -78,15 +77,6 @@ public class EventController {
             return ResponseEntity.badRequest().build();
         }
         Event update = repo.findById(id).get();
-        List<Participant> participantList = event.getParticipants();
-        for(int i=0;i<participantList.size();i++){
-            if(participantList.get(i).getId()==null){
-                Participant newPar = participantRepo.save(participantList.get(i));
-                participantList.remove(i);
-                participantList.add(i,newPar);
-            }
-            participantRepo.save(participantList.get(i));
-        }
         update.setParticipants(event.getParticipants());
         update.setTitle(event.getTitle());
         update.setLastActivityDate(event.getLastActivityDate());
