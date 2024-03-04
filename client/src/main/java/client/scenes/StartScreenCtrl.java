@@ -78,7 +78,8 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     public void joinEvent() {
         try {
             Event fetchedEvent = server.getEvent(Long.decode(eventCode.getText()));
-            mainCtrl.showEventOverview(fetchedEvent);
+            if(fetchedEvent!=null) mainCtrl.showEventOverview(fetchedEvent);
+            else clearField();
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);

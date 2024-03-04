@@ -4,23 +4,27 @@ package server.api.controllers;
 import java.util.*;
 
 
+import commons.Participant;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import commons.Event;
 import server.database.EventRepository;
+import server.database.ParticipantRepository;
 
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
     private final EventRepository repo;
+    private final ParticipantRepository participantRepo;
 
     /**
-     *
-     * @param repo the event repository
+     * @param repo            the event repository
+     * @param participantRepo
      */
-    public EventController(EventRepository repo) {
+    public EventController(EventRepository repo, ParticipantRepository participantRepo) {
         this.repo = repo;
+        this.participantRepo = participantRepo;
     }
 
     /**
@@ -74,12 +78,22 @@ public class EventController {
             return ResponseEntity.badRequest().build();
         }
         Event update = repo.findById(id).get();
+        List<Participant> participantList = event.getParticipants();
+        for(int i=0;i<participantList.size();i++){
+            if(participantList.get(i).getId()==null){
+                Participant newPar = participantRepo.save(participantList.get(i));
+                participantList.remove(i);
+                participantList.add(i,newPar);
+            }
+            participantRepo.save(participantList.get(i));
+        }
         update.setParticipants(event.getParticipants());
         update.setTitle(event.getTitle());
         update.setLastActivityDate(event.getLastActivityDate());
         update.setInviteCode(event.getInviteCode());
-        repo.save(update);
-        return ResponseEntity.ok(update);
+
+        Event finalUpdate = repo.save(update);
+        return ResponseEntity.ok(finalUpdate);
     }
 
     /**

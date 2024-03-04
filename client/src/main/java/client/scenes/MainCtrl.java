@@ -131,8 +131,8 @@ public class MainCtrl {
      *
      * @param participant The updated participant details.
      */
-    public void updateParticipant(Participant participant) {
-        eventOverviewCtrl.updateParticipant(participant);
+    public Event updateParticipant(Participant participant) {
+        return eventOverviewCtrl.updateParticipant(participant);
     }
 
     /**

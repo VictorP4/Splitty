@@ -159,7 +159,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      *
      * @param participant The participant to be updated.
      */
-    public void updateParticipant(Participant participant) {
+    public Event updateParticipant(Participant participant) {
         boolean participantExists = false;
         for (Participant p : event.getParticipants()) {
             if (Objects.equals(p.getId(), participant.getId())) {
@@ -175,8 +175,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
             event.addParticipant(participant);
         }
         System.out.println(event.getParticipants());
-        serverUtils.updateEvent(event);
+        this.event = serverUtils.updateEvent(event);
         participantsDisplay();
+        return this.event;
     }
 
     /**
