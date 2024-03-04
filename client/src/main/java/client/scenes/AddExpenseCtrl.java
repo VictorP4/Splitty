@@ -12,7 +12,6 @@ import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
-import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -198,7 +197,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * creates a list of all checkboxes, all possible participants to be picked for an expense   
+     * adds all checkboxes, all possible participants to be picked for an expense to a list
      * @param checkBoxes list of all checkboxes
      */
     private void listOf(List<CheckBox> checkBoxes) {
@@ -216,5 +215,31 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void backToOverview() {
         clearFields();
         mainCtrl.showEventOverview(event);
+    }
+
+    /**
+     * deselects only some in when everybody in is selected
+     */
+    public  void deselSome(){
+        someIn.setSelected(false);
+        List<CheckBox> checks =new ArrayList<>();
+        listOf(checks);
+        for(CheckBox c : checks){
+            c.setSelected(false);
+            c.setDisable(true);
+        }
+    }
+
+    /**
+     * deselects "equally between everybody" checkbox if "only some people" is picked
+     */
+    public void deselAll(){
+        everybodyIn.setSelected(false);
+        List<CheckBox> checks =new ArrayList<>();
+        listOf(checks);
+        for(CheckBox c : checks){
+            c.setDisable(false);
+        }
+
     }
 }
