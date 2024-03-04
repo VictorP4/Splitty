@@ -113,7 +113,13 @@ public class StartScreenCtrl implements Main.UpdatableUI {
             Hyperlink clicked = (Hyperlink) event.getSource();
             eventId = recentlyAccessed.get(recentlyViewed.indexOf(clicked)).getId();
         }
-        else eventId = Long.decode(eventCode.getText());
+        else {
+            if (eventCode.getText().isEmpty()) {
+                noValidEventError("Why no invite code? (0_0) <-- this is supposed to be mad");
+                return;
+            }
+            eventId = Long.decode(eventCode.getText());
+        }
 
         try {
             Event fetchedEvent = server.getEvent(eventId);
