@@ -1,8 +1,10 @@
 package client.scenes;
 
+import client.Main;
 import client.utils.ServerUtils;
 import commons.Event;
 import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Link;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Hyperlink;
@@ -10,16 +12,33 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 
 import com.google.inject.Inject;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuButton;
+import javafx.scene.text.Text;
+
+import static client.Main.switchLocale;
 
 import java.util.*;
 
 /**
  * Controller class for the start screen scene.
  */
-public class StartScreenCtrl {
+public class StartScreenCtrl implements Main.UpdatableUI {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private List<Event> recentlyAccessed;
+    public Text createNewEvent;
+    @FXML
+    public Text joinEvent;
+    @FXML
+    public Button createButton;
+    @FXML
+    public Button joinButton;
+    @FXML
+    public Text recentViewedEvents;
+    @FXML
+    public MenuButton langButton;
     private List<Hyperlink> recentlyViewed;
     @FXML
     private TextField eventTitle;
@@ -33,7 +52,6 @@ public class StartScreenCtrl {
     private Hyperlink link3;
     @FXML
     private Hyperlink link4;
-
 
     /**
      * Constructs a new instance of StartScreenCtrl.
@@ -69,23 +87,26 @@ public class StartScreenCtrl {
         try {
             createdEvent = server.addEvent(createdEvent);
             mainCtrl.showEventOverview(createdEvent);
-        } catch(WebApplicationException e) {
+        } catch (WebApplicationException e) {
             noValidEventError(e.getMessage());
         }
         clearField();
     }
 
     /**
-     * Has a participant join an existing event either through an invite code or a link
+     * Has a participant join an existing event either through an invite code or a
+     * link
      */
     public void joinEvent() {
         // checks if one of the hyperlinks was clicked, if not, will take the text from the eventCode
-        long eventId;
-        if (link1.isPressed()) eventId = recentlyAccessed.get(0).getId();
-        else if (link2.isPressed()) eventId = recentlyAccessed.get(1).getId();
-        else if (link3.isPressed()) eventId = recentlyAccessed.get(2).getId();
-        else if (link4.isPressed()) eventId = recentlyAccessed.get(3).getId();
-        else eventId = Long.decode(eventCode.getText());
+        Long eventId = Long.decode(eventCode.getText());
+
+        for (int i = 0; i< recentlyViewed.size(); i++) {
+            if (recentlyViewed.get(i).isPressed()) {
+                eventId = recentlyAccessed.get(i).getId();
+                break;
+            }
+        }
 
         try {
             Event fetchedEvent = server.getEvent(eventId);
@@ -112,7 +133,9 @@ public class StartScreenCtrl {
 
     /**
      * updates the list with most recent events and updates the hyperlinks
-     * @param event The current event that has either been created or joined by the user
+     * 
+     * @param event The current event that has either been created or joined by the
+     *              user
      */
     private void updateMostRecent(Event event) {
         recentlyAccessed.addFirst(event);
@@ -125,9 +148,10 @@ public class StartScreenCtrl {
             recentlyViewed.get(i).setText(recentlyAccessed.get(i).getTitle());
         }
 
-        if (recentlyAccessed.size() >= 4) return;
+        if (recentlyAccessed.size() >= 4)
+            return;
         // if there were no 4 recently viewed events, it will show nothing
-        for (int i = recentlyAccessed.size(); i < recentlyViewed.size() ; i++) {
+        for (int i = recentlyAccessed.size(); i < recentlyViewed.size(); i++) {
             recentlyViewed.get(i).setText("");
         }
     }
@@ -147,10 +171,29 @@ public class StartScreenCtrl {
         mainCtrl.showEventOverview(event);
     }
 
+    @Override
+    public void updateUI() {
+        createNewEvent.setText(Main.getLocalizedString("NewEvent"));
+        joinEvent.setText(Main.getLocalizedString("joinEvent"));
+        createButton.setText(Main.getLocalizedString("createEventButton"));
+        joinButton.setText(Main.getLocalizedString("joinEventButton"));
+        recentViewedEvents.setText(Main.getLocalizedString("recentEvents"));
+        langButton.setText(Main.getLocalizedString("langButton"));
+    }
+
+    public void switchToDutch(ActionEvent actionEvent) {
+        switchLocale("nl");
+    }
+
+    public void switchToEnglish(ActionEvent actionEvent) {
+        switchLocale("en");
+    }
+
     /**
      * Refreshes the start scene
      */
     public void refresh() {
-        // refreshes the most recent event's depending on user -> need to know how user is stored
+        // refreshes the most recent event's depending on user -> need to know how user
+        // is stored
     }
 }

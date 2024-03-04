@@ -1,11 +1,19 @@
 package client.scenes;
 
+import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Event;
+import commons.Participant;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
 
+import javafx.collections.FXCollections;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+
 import java.util.ArrayList;
 import java.util.List;
 import commons.Event;
@@ -20,10 +28,28 @@ import javafx.scene.text.Text;
 /**
  * Controller class for the overview scene.
  */
-public class OverviewCtrl {
+public class OverviewCtrl implements Main.UpdatableUI {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
-    private final Event event;
+    @FXML
+    public Button addExpense;
+    @FXML
+    public Button home;
+    private Event event;
+    @FXML
+    public Button sendInvites;
+    @FXML
+    public Text participants;
+    @FXML
+    public Button settleDebts;
+    @FXML
+    public Text expense;
+    @FXML
+    public MenuButton langButton;
+    @FXML
+    public Tab fromSelected;
+    @FXML
+    public Tab inclSelected;
     @FXML
     private Text title;
     @FXML
@@ -35,7 +61,6 @@ public class OverviewCtrl {
     @FXML
     private ListView<Expense> expenseList;
     private ObservableList<Expense> original;
-
 
     /**
      * Constructs an OverviewCtrl object.
@@ -51,7 +76,6 @@ public class OverviewCtrl {
         this.event = e;
     }
 
-
     /**
      * Initializes the controller.
      */
@@ -62,10 +86,24 @@ public class OverviewCtrl {
         participantBox = new ChoiceBox<>();
     }
 
+    @Override
+    public void updateUI() {
+        home.setText(Main.getLocalizedString("home"));
+        addExpense.setText(Main.getLocalizedString("addExpense"));
+        sendInvites.setText(Main.getLocalizedString("ovSendInvites"));
+        settleDebts.setText(Main.getLocalizedString("ovSettleDebt"));
+        expense.setText(Main.getLocalizedString("ovExpense"));
+        langButton.setText(Main.getLocalizedString("langButton"));
+        fromSelected.setText(Main.getLocalizedString("ovFromSelected"));
+        inclSelected.setText(Main.getLocalizedString("ovInclSelected"));
+        title.setText(Main.getLocalizedString("OverviewTitle"));
+        participants.setText(Main.getLocalizedString("ovParticipants"));
+    }
+
     /**
      * Prepares the display of participants.
      */
-    public void participantsPrepare(){
+    public void participantsPrepare() {
         participantsField.setText(participantsDisplay(event.getParticipants()));
 
         // Set up event handling for switching between view and edit modes
@@ -86,9 +124,11 @@ public class OverviewCtrl {
     /**
      * Prepares the display of the title.
      */
-    public void titlePrepare(){
-        if(event.getTitle()!=null) title.setText(event.getTitle());
-        else title.setText("Title");
+    public void titlePrepare() {
+        if (event.getTitle() != null)
+            title.setText(event.getTitle());
+        else
+            title.setText("Title");
         titleField.setText(title.getText());
 
         // Initially hide the TextField
@@ -149,15 +189,15 @@ public class OverviewCtrl {
     /**
      * Generates a display string for participants.
      */
-    private String participantsDisplay(List<Participant>a){
-        StringBuilder b= new StringBuilder();
-        for(Participant p:a)
+    private String participantsDisplay(List<Participant> a) {
+        StringBuilder b = new StringBuilder();
+        for (Participant p : a)
             b.append(p.getEmail()).append(", ");
-        List<String> c=parseEmails(b.toString());
-        b= new StringBuilder();
-        int l=c.size();
+        List<String> c = parseEmails(b.toString());
+        b = new StringBuilder();
+        int l = c.size();
         if (l > 0) {
-            b.append(c.getFirst());
+            b.append(c.get(0));
             for (int i = 1; i < l; i++) {
                 b.append(", ").append(c.get(i));
             }
@@ -168,18 +208,20 @@ public class OverviewCtrl {
     /**
      * Parses email addresses from a string.
      */
-    private List<Participant> getParticipants(String a){
+    private List<Participant> getParticipants(String a) {
         List<String> l = parseEmails(a);
         List<String> contained = new ArrayList<>();
-        List<String> newStr=new ArrayList<>();
-        List<String> evPar=new ArrayList<>();
-        List<Participant> participants1=event.getParticipants();
-        for(Participant p: participants1){
+        List<String> newStr = new ArrayList<>();
+        List<String> evPar = new ArrayList<>();
+        List<Participant> participants1 = event.getParticipants();
+        for (Participant p : participants1) {
             evPar.add(p.getEmail());
         }
-        for(String str: l){
-            if(evPar.contains(str))contained.add(str);
-            else newStr.add(str);
+        for (String str : l) {
+            if (evPar.contains(str))
+                contained.add(str);
+            else
+                newStr.add(str);
         }
         for (Participant participant : participants1) {
             // Check if participant email is not contained in the list
@@ -187,8 +229,8 @@ public class OverviewCtrl {
                 participants1.remove(participant);
             }
         }
-        for(String papi: newStr){
-            participants1.add(new Participant("",papi));
+        for (String papi : newStr) {
+            participants1.add(new Participant("", papi));
         }
         return participants1;
     }
@@ -266,13 +308,21 @@ public class OverviewCtrl {
      */
     @FXML
     public void showInvites() {
-        mainCtrl.showInvitation();
+        mainCtrl.showInvitation(this.event);
     }
 
+    public void switchToEnglish(ActionEvent actionEvent) {
+        Main.switchLocale("en");
+    }
+
+    public void switchToDutch(ActionEvent actionEvent) {
+        Main.switchLocale("nl");
+    }
     // when initializing new event -> participants is empty (participants.clear())
 
     /**
-     * Directs user back to the startScreen. Here they can join other events if they want to
+     * Directs user back to the startScreen. Here they can join other events if they
+     * want to
      */
     public void backToStartScreen() {
         mainCtrl.showStartScreen();
@@ -281,8 +331,8 @@ public class OverviewCtrl {
     /**
      * Directs user towards the addExpense scene
      */
-    public void addExpense() {
-        mainCtrl.showAddExpense();
+    public void toAddExpense() {
+        mainCtrl.showAddExpense(event);
     }
 
     /**
@@ -293,7 +343,8 @@ public class OverviewCtrl {
     }
 
     /**
-     * Resets the expenses list and then filters it for all expenses paid by the selected
+     * Resets the expenses list and then filters it for all expenses paid by the
+     * selected
      * participant in the box
      */
     public void showFromSelected() {
@@ -303,20 +354,22 @@ public class OverviewCtrl {
     }
 
     /**
-     * Resets the expenses list and then filters it for all expenses that involve then selected
+     * Resets the expenses list and then filters it for all expenses that involve
+     * then selected
      * participant in the box
      */
     public void showIncludingSelected() {
         showAllExpenses();
         expenseList.setItems((ObservableList<Expense>) expenseList.getItems().stream()
                 .filter(expense -> (expense.getInvolvedParticipants().contains(participantBox.getValue())
-                    || expense.getPaidBy().equals(participantBox.getValue())))
+                        || expense.getPaidBy().equals(participantBox.getValue())))
                 .toList());
     }
 
     public void refresh(Event event) {
-        original.removeAll(original);
-        original.addAll(expenseList.getItems());
+        this.event = event;
+        this.title.setText(event.getTitle());
+        original = FXCollections.observableArrayList(event.getExpenses());
         expenseList.setItems(original);
     }
 }
