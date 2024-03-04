@@ -74,6 +74,10 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         recentlyViewed.add(link2);
         recentlyViewed.add(link3);
         recentlyViewed.add(link4);
+        // initializing all the recently events to contain no links
+        for (Hyperlink l: recentlyViewed) {
+            l.setText("");
+        }
     }
 
     /**
@@ -113,7 +117,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
 
         try {
             Event fetchedEvent = server.getEvent(eventId);
-            System.out.println(fetchedEvent);
             mainCtrl.showEventOverview(fetchedEvent);
             updateMostRecent(fetchedEvent);
         } catch (WebApplicationException e) {
