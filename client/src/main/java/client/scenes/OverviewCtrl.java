@@ -261,6 +261,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         this.event = serverUtils.updateEvent(event);
         titlePrepare();
         participantsDisplay();
+        expenseList = new ListView<>();
         original = FXCollections.observableArrayList(event.getExpenses());
         expenseList.setItems(original);
     }
