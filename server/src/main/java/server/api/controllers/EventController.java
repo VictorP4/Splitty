@@ -4,13 +4,13 @@ package server.api.controllers;
 import java.util.*;
 
 
-import commons.Participant;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import commons.Event;
 import server.database.EventRepository;
-import server.database.ParticipantRepository;
+
 
 @RestController
 @RequestMapping("/api/events")
