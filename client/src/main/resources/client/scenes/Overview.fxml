@@ -9,7 +9,7 @@
     <children>
         <TextField fx:id="titleField" layoutX="88.0" layoutY="13.0" prefHeight="51.0" prefWidth="182.0">
             <font>
-                <Font name="System Bold" size="24.0"/>
+                <Font name="System Bold" size="24.0" />
             </font></TextField>
         <TextArea fx:id="participantsField" layoutX="88.0" layoutY="91.0" prefHeight="58.0" prefWidth="354.0">
             <font>
@@ -21,39 +21,26 @@
                 <Font name="System Bold" size="24.0" />
             </font>
         </Text>
-        <Button fx:id="sendInvites" layoutX="353.0" layoutY="23.0" mnemonicParsing="false" onAction="#showInvites" text="Send Invites">
-            <font>
-                <Font size="13.0" />
-            </font>
-        </Button>
-        <Button fx:id="addExpense" layoutX="325.0" layoutY="140.0" mnemonicParsing="false" onAction="#toAddExpense" prefHeight="27.0" prefWidth="100.0" text="Add Expense">
-            <font>
-                <Font name="System Bold" size="16.0" />
-            </font>
-        </Button>
+        <Button fx:id="sendInvites" layoutX="190.0" layoutY="65.0" mnemonicParsing="false" onAction="#showInvites" text="Send Invites" />
+        <Button fx:id="addExpense" layoutX="340.0" layoutY="170.0" mnemonicParsing="false" onAction="#toAddExpense" prefHeight="27.0" prefWidth="100.0" text="Add Expense" />
         <Text fx:id="participants" layoutX="88.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
             <font>
                 <Font name="System Bold" size="16.0" />
             </font>
         </Text>
-        <ChoiceBox fx:id="participantBox"  layoutX="86.0" layoutY="171.0" prefHeight="25.0" prefWidth="181.0" />
-        <Button fx:id="settleDebts" layoutX="320.0" layoutY="397.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="119.0" text="Settle Debts">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </Button>
+        <ChoiceBox fx:id="participantBox" layoutX="86.0" layoutY="171.0" prefHeight="25.0" prefWidth="181.0" />
+        <Button fx:id="settleDebts" layoutX="361.0" layoutY="402.0" mnemonicParsing="false" text="Settle Debts" />
         <Text fx:id="expense" layoutX="88.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense">
             <font>
                 <Font name="System Bold" size="16.0" />
             </font>
         </Text>
-        <MenuButton fx:id="langButton"  layoutX="87.0" layoutY="402.0" mnemonicParsing="false" text="Language">
+        <MenuButton fx:id="langButton" layoutX="87.0" layoutY="402.0" mnemonicParsing="false" text="Language">
             <items>
-                <MenuItem mnemonicParsing="false" text="English" onAction="#switchToEnglish" />
-                <MenuItem mnemonicParsing="false" text="Dutch" onAction="#switchToDutch" />
+                <MenuItem mnemonicParsing="false" onAction="#switchToEnglish" text="English" />
+                <MenuItem mnemonicParsing="false" onAction="#switchToDutch" text="Dutch" />
             </items>
         </MenuButton>
-        <TabPane layoutX="87.0" layoutY="206.0" prefHeight="179.0" prefWidth="354.0" tabClosingPolicy="UNAVAILABLE">
         <TabPane layoutX="87.0" layoutY="206.0" prefHeight="179.0" prefWidth="354.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
                 <Tab text="All">
@@ -65,7 +52,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab fx:id ="fromSelected" text="From Selected">
+                <Tab fx:id="fromSelected" text="From Selected">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>

@@ -16,22 +16,22 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text fx:id="whatFor"  layoutX="53.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What for?">
+      <Text fx:id="whatFor" layoutX="53.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What for?">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text fx:id="howMuch"  layoutX="53.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How much?">
+      <Text fx:id="howMuch" layoutX="53.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How much?">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text fx:id="when"  layoutX="53.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="When?">
+      <Text fx:id="when" layoutX="53.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="When?">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text fx:id="howToSplit"  layoutX="53.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How to Split?">
+      <Text fx:id="howToSplit" layoutX="53.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How to Split?">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -65,18 +65,18 @@
             </CheckBox>
          </children>
       </VBox>
-      <Text fx:id="expenseType"  layoutX="53.0" layoutY="337.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense Type">
+      <Text fx:id="expenseType" layoutX="53.0" layoutY="337.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense Type">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
       <Spinner fx:id="type" layoutX="210.0" layoutY="317.0" prefHeight="26.0" prefWidth="230.0" />
-      <Button fx:id="abort" layoutX="331.0" layoutY="361.0" mnemonicParsing="false" text="Abort" onAction="#cancel">
+      <Button fx:id="abort" layoutX="50.0" layoutY="361.0" mnemonicParsing="false" onAction="#cancel" text="Abort">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="add" layoutX="394.0" layoutY="361.0" mnemonicParsing="false" text="Add" onAction="#ok">
+      <Button fx:id="add" layoutX="394.0" layoutY="361.0" mnemonicParsing="false" onAction="#ok" text="Add">
          <font>
             <Font size="14.0" />
          </font>
