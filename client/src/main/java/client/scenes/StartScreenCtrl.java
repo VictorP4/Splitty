@@ -110,7 +110,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         // checks if one of the hyperlinks was clicked, if not, will take the text from the eventCode
         Long eventId = null;
 
-        if (eventCode.getText().isEmpty() && !(event.getSource().toString().isEmpty())) {
+        if (eventCode.getText().isEmpty() && event.getSource().toString().isEmpty()) {
             noValidEventError("Event does not exist");
             return;
         }

@@ -120,7 +120,7 @@ public class Main extends Application {
      */
     public static void updateUILanguage() {
         List<UpdatableUI> controllers = Arrays.asList(
-            INJECTOR.getInstance(AddExpenseCtrl.class   ),
+            INJECTOR.getInstance(AddExpenseCtrl.class),
             INJECTOR.getInstance(ContactDetailsCtrl.class),
             INJECTOR.getInstance(InvitationCtrl.class),
             INJECTOR.getInstance(OpenDebtsCtrl.class),

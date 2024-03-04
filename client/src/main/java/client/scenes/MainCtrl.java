@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package client.scenes;
 
 import commons.Event;
+import commons.Participant;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -114,15 +116,27 @@ public class MainCtrl {
     }
 
     /**
-     * Displays the Contact Details scene in the primary stage.
+     * Displays the contact details scene for the given participant in the primary stage.
+     *
+     * @param participant The participant whose details are to be displayed.
      */
-    public void showContactDetails() {
+    public void showContactDetails(Participant participant, Event event) {
         primaryStage.setTitle("ContactDetails");
         primaryStage.setScene(contactDetails);
+        contactDetailsCtrl.refresh(participant, event);
     }
 
     /**
-     * Displays the Invitation scene in the primary stage.
+     * Updates the participant details in the event overview scene.
+     *
+     * @param participant The updated participant details.
+     */
+    public void updateParticipant(Participant participant) {
+        eventOverviewCtrl.updateParticipant(participant);
+    }
+
+    /**
+     * Displays the invitation scene in the primary stage.
      */
     public void showInvitation(Event event) {
         primaryStage.setTitle("Invitation");
@@ -131,7 +145,9 @@ public class MainCtrl {
     }
 
     /**
-     * Displays the Open Debts scene in the primary stage.
+     * Displays the open debts scene for the given event in the primary stage.
+     *
+     * @param event The event for which open debts are to be displayed.
      */
     public void showOpenDebts(Event event) {
         primaryStage.setTitle("OpenDebts");
@@ -140,7 +156,7 @@ public class MainCtrl {
     }
 
     /**
-     * Displays the Statistics scene in the primary stage.
+     * Displays the statistics scene in the primary stage.
      */
     public void showStatistics() {
         primaryStage.setTitle("Statistics");
