@@ -21,9 +21,9 @@
                 <Font name="System Bold" size="24.0" />
             </font>
         </Text>
-        <Button fx:id="sendInvites" layoutX="190.0" layoutY="65.0" mnemonicParsing="false" onAction="#showInvites" text="Send Invites" />
+        <Button fx:id="sendInvites" layoutX="190.0" layoutY="60.0" mnemonicParsing="false" onAction="#showInvites" text="Send Invites" />
         <Button fx:id="addExpense" layoutX="340.0" layoutY="170.0" mnemonicParsing="false" onAction="#toAddExpense" prefHeight="27.0" prefWidth="100.0" text="Add Expense" />
-        <Text fx:id="participants" layoutX="88.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
+        <Text fx:id="participants" layoutX="88.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
             <font>
                 <Font name="System Bold" size="16.0" />
             </font>

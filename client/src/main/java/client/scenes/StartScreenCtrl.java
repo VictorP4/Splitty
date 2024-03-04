@@ -4,7 +4,6 @@ import client.Main;
 import client.utils.ServerUtils;
 import commons.Event;
 import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Link;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Hyperlink;
@@ -82,11 +81,17 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      */
     public void createEvent() { // :)
         Event createdEvent = new Event();
+
+        if (eventTitle.getText().isEmpty()) {
+            noValidEventError("Why no title? (0_0) <-- this is supposed to be mad");
+            return;
+        }
+
         createdEvent.setTitle(eventTitle.getText());
-        updateMostRecent(createdEvent);
         try {
             createdEvent = server.addEvent(createdEvent);
             mainCtrl.showEventOverview(createdEvent);
+            updateMostRecent(createdEvent);
         } catch (WebApplicationException e) {
             noValidEventError(e.getMessage());
         }
@@ -97,19 +102,18 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      * Has a participant join an existing event either through an invite code or a
      * link
      */
-    public void joinEvent() {
+    public void joinEvent(ActionEvent event) {
         // checks if one of the hyperlinks was clicked, if not, will take the text from the eventCode
-        Long eventId = Long.decode(eventCode.getText());
-
-        for (int i = 0; i< recentlyViewed.size(); i++) {
-            if (recentlyViewed.get(i).isPressed()) {
-                eventId = recentlyAccessed.get(i).getId();
-                break;
-            }
+        Long eventId = null;
+        if (event.getSource() instanceof Hyperlink) {
+            Hyperlink clicked = (Hyperlink) event.getSource();
+            eventId = recentlyAccessed.get(recentlyViewed.indexOf(clicked)).getId();
         }
+        else eventId = Long.decode(eventCode.getText());
 
         try {
             Event fetchedEvent = server.getEvent(eventId);
+            System.out.println(fetchedEvent);
             mainCtrl.showEventOverview(fetchedEvent);
             updateMostRecent(fetchedEvent);
         } catch (WebApplicationException e) {
@@ -138,7 +142,12 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      *              user
      */
     private void updateMostRecent(Event event) {
+        if (recentlyAccessed.contains(event)) {
+            recentlyAccessed.remove(event);
+        }
+
         recentlyAccessed.addFirst(event);
+
         if (recentlyAccessed.size() > 4) {
             recentlyAccessed.removeLast();
         }
