@@ -9,7 +9,7 @@
     <children>
         <TextField fx:id="titleField" layoutX="88.0" layoutY="13.0" prefHeight="51.0" prefWidth="182.0">
             <font>
-                <Font name="System Bold" size="24.0" />
+                <Font name="System Bold" size="24.0"/>
             </font></TextField>
         <TextArea fx:id="participantsField" layoutX="88.0" layoutY="91.0" prefHeight="58.0" prefWidth="354.0">
             <font>
@@ -26,16 +26,12 @@
                 <Font size="13.0" />
             </font>
         </Button>
-
         <Button fx:id="addExpense" layoutX="325.0" layoutY="140.0" mnemonicParsing="false" onAction="#toAddExpense" prefHeight="27.0" prefWidth="100.0" text="Add Expense">
             <font>
                 <Font name="System Bold" size="16.0" />
             </font>
         </Button>
-
-
         <Text fx:id="participants" layoutX="88.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
-
             <font>
                 <Font name="System Bold" size="16.0" />
             </font>
