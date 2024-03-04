@@ -35,7 +35,7 @@
       <TextField fx:id="emailField" layoutX="125.0" layoutY="101.0" prefHeight="26.0" prefWidth="246.0" />
       <TextField fx:id="ibanField" layoutX="125.0" layoutY="128.0" prefHeight="26.0" prefWidth="246.0" />
       <TextField fx:id="bicField" layoutX="125.0" layoutY="155.0" prefHeight="26.0" prefWidth="246.0" />
-      <Button fx:id="abort" layoutX="274.0" layoutY="192.0" mnemonicParsing="false" onAction="#back" text="Abort">
+      <Button fx:id="abort" layoutX="44.0" layoutY="192.0" mnemonicParsing="false" onAction="#back" text="Abort">
          <font>
             <Font size="14.0" />
          </font>

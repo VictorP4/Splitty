@@ -56,7 +56,6 @@ public class EventController {
      */
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Event> add(@RequestBody Event event) {
-
         if (event.getTitle() == null) {
             return ResponseEntity.badRequest().build();
         }
