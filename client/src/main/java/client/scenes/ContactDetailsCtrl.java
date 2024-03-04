@@ -8,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import commons.Event;
 import commons.Participant;
-import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
 public class ContactDetailsCtrl implements Main.UpdatableUI {
@@ -65,7 +64,6 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
         abort.setText(Main.getLocalizedString("abort"));
         okButton.setText(Main.getLocalizedString("ok"));
     }
-}
 
     /**
      * Initializes the contact details scene with participant information.

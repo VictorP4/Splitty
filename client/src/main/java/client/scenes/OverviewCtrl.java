@@ -8,29 +8,17 @@ import commons.Participant;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
 import javafx.collections.FXCollections;
-import javafx.scene.control.TextArea;
-import commons.Event;
-import commons.Participant;
-import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
-
-import java.util.ArrayList;
-import java.util.List;
-import commons.Event;
 import commons.Expense;
-import commons.Participant;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
-import javafx.scene.text.Text;
 import java.util.Objects;
 /**
  * Controller class for the overview scene.
