@@ -156,7 +156,10 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void refresh(Event event){
         this.event = event;
         for(Participant p : this.event.getParticipants()){
-            box.getChildren().add(new CheckBox(p.getName()));
+            CheckBox cb = new CheckBox(p.getName());
+            cb.setDisable(true);
+            box.getChildren().add(cb);
+            //TODO: make sure this works - lara
         }
     }
 
@@ -238,7 +241,12 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         List<CheckBox> checks =new ArrayList<>();
         listOf(checks);
         for(CheckBox c : checks){
-            c.setDisable(false);
+            if(c.isDisable()){
+                c.setDisable(false);
+            }
+            else{
+                c.setDisable(true);
+            }
         }
 
     }
