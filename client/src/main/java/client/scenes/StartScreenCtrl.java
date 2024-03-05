@@ -190,6 +190,10 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     public void showOverview(Event event) {
         mainCtrl.showEventOverview(event);
     }
+    @FXML
+    public void showAdminEventOverview(){
+        mainCtrl.showAdminEventOverview();
+    }
 
     @Override
     public void updateUI() {

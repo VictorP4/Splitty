@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import client.scenes.AdminEventOverviewCtrl;
 import com.google.inject.Injector;
 
 import client.scenes.AddExpenseCtrl;
@@ -70,10 +71,11 @@ public class Main extends Application {
         var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
         var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");;
         var eventOverview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");;
+        var adminEventOverview = FXML.load(AdminEventOverviewCtrl.class, "client", "scenes", "AdminEventOverview.fxml");;
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, addExpense, contactDetails,
-                invitation, openDebts, statistics, startScreen, eventOverview);
+                invitation, openDebts, statistics, startScreen, eventOverview, adminEventOverview);
     }
 
     public static void loadLanguageBundle(String languageCode) throws NotFoundException {

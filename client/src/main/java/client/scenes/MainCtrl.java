@@ -41,6 +41,9 @@ public class MainCtrl {
     private OverviewCtrl eventOverviewCtrl;
     private Scene eventOverview;
 
+    private AdminEventOverviewCtrl adminEventOverviewCtrl;
+    private Scene adminEventOverview;
+
     /**
      * Initializes the main controller with the provided dependencies and sets up the primary stage.
      * This method sets the primary stage and initializes scenes for different scenes.
@@ -59,7 +62,8 @@ public class MainCtrl {
     public void initialize(Stage primaryStage, Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<ContactDetailsCtrl, Parent> contactDetails, Pair<InvitationCtrl, Parent> invitation,
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<StatisticsCtrl, Parent> statistics,
-                           Pair<StartScreenCtrl, Parent> startScreen, Pair<OverviewCtrl, Parent> eventOverview) {
+                           Pair<StartScreenCtrl, Parent> startScreen, Pair<OverviewCtrl, Parent> eventOverview,
+                           Pair<AdminEventOverviewCtrl, Parent> adminEventOverviewCtrl) {
 
         this.primaryStage = primaryStage;
 
@@ -84,6 +88,9 @@ public class MainCtrl {
         this.statisticsCtrl = statistics.getKey();
         this.statistics = new Scene(statistics.getValue());
 
+        this.adminEventOverviewCtrl = adminEventOverviewCtrl.getKey();
+        this.adminEventOverview = new Scene(adminEventOverviewCtrl.getValue());
+
         showStartScreen();
         primaryStage.show();
     }
@@ -94,6 +101,15 @@ public class MainCtrl {
     public void showStartScreen() {
         primaryStage.setTitle("StartScreen");
         primaryStage.setScene(startScreen);
+    }
+
+    /**
+     * Displays the admin event overview scene in the primary stage.
+     */
+    public void showAdminEventOverview() {
+        primaryStage.setTitle("AdminEventOverview");
+        adminEventOverviewCtrl.refresh();
+        primaryStage.setScene(adminEventOverview);
     }
 
     /**

@@ -23,8 +23,12 @@ import commons.Expense;
 import commons.Participant;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utility class for interacting with the server.
@@ -61,6 +65,21 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get().readEntity(Event.class);
+	}
+
+	public Response deleteEvent(Long id){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events/"+id)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.delete();
+	}
+	public ArrayList<Event> getAllEvents(){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get().readEntity(new GenericType<ArrayList<Event>>() {});
 	}
 
 	/**
