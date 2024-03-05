@@ -156,10 +156,29 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void refresh(Event event){
         this.event = event;
         for(Participant p : this.event.getParticipants()){
-            CheckBox cb = new CheckBox(p.getName());
-            cb.setDisable(true);
-            box.getChildren().add(cb);
+            if(check(p)) {
+                CheckBox cb = new CheckBox(p.getName());
+                cb.setDisable(true);
+                box.getChildren().add(cb);
+            }
         }
+    }
+
+    /**
+     * checks to see if a participant checkbox already exists,
+     * if it does it won't be added again when refresh is called
+     * @param p participant we want to have as a checkbox option
+     * @return true/false is the participant already there
+     */
+    public boolean check(Participant p){
+        List<CheckBox> cb = new ArrayList<>();
+        listOf(cb);
+        for(CheckBox c : cb) {
+            if(c.getText().equals(p.getName())){
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -222,7 +241,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     /**
      * deselects only some in when everybody in is selected
      */
-    public  void deselSome(){
+    public  void deSelSome(){
         someIn.setSelected(false);
         List<CheckBox> checks =new ArrayList<>();
         listOf(checks);
@@ -235,7 +254,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     /**
      * deselects "equally between everybody" checkbox if "only some people" is picked
      */
-    public void deselAll(){
+    public void deSelAll(){
         everybodyIn.setSelected(false);
         List<CheckBox> checks =new ArrayList<>();
         listOf(checks);
