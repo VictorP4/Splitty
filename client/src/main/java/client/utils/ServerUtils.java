@@ -28,7 +28,6 @@ import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Utility class for interacting with the server.
