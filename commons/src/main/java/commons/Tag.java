@@ -31,7 +31,9 @@ public class Tag {
      */
     public Tag(String name, int red, int green, int blue) {
         this.name = name;
-        setColor(red, green, blue);
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
     }
 
     public Tag() {
@@ -72,28 +74,6 @@ public class Tag {
      */
     public void setName(String name) {
         this.name = name;
-    }
-
-    /**
-     * Retrieves the RGB color components of the tag.
-     *
-     * @return an array containing the red, green, and blue components in that order
-     */
-    public int[] getColor() {
-        return new int[]{red, green, blue};
-    }
-
-    /**
-     * Sets the RGB color components of the tag.
-     *
-     * @param red   the red component of the tag's color (0-255)
-     * @param green the green component of the tag's color (0-255)
-     * @param blue  the blue component of the tag's color (0-255)
-     */
-    public void setColor(int red, int green, int blue) {
-        this.red = Math.min(Math.max(0, red), 255);
-        this.green = Math.min(Math.max(0, green), 255);
-        this.blue = Math.min(Math.max(0, blue), 255);
     }
 
     /**
