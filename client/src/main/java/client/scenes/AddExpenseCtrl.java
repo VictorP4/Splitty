@@ -304,4 +304,11 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         }
     }
 
+    /**
+     * Initializes the scene for adding or editing tags.
+     */
+    public void goToAddTags() {
+        clearFields();
+        //mainCtrl.showAddTag(event);
+    }
 }

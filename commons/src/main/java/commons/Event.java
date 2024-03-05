@@ -199,6 +199,10 @@ public class Event {
         this.tags = tags;
     }
 
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
+    }
+
     /**
      * Adds a participant to the list of participants of the event.
      *
@@ -260,4 +264,5 @@ public class Event {
     public int hashCode() {
         return Objects.hash(id, title, creationDate, lastActivityDate, inviteCode, participants, expenses);
     }
+
 }

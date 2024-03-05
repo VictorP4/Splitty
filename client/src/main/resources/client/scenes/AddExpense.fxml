@@ -76,9 +76,11 @@
          </font>
       </Button>
       <HBox prefHeight="100.0" prefWidth="200.0" />
-      <HBox layoutX="283.0" layoutY="316.0" prefHeight="26.0" prefWidth="173.0">
+      <HBox layoutX="225.0" layoutY="316.0" prefHeight="27.0" prefWidth="214.0">
          <children>
-            <Spinner id="tagSpinner" fx:id="tagSpinner" onMouseClicked="#populateTagSpinner" prefHeight="26.0" prefWidth="152.0" />
+            <Spinner fx:id="tagSpinner" onMouseClicked="#populateTagSpinner" prefHeight="26.0" prefWidth="156.0" />
+            <Button fx:id="edit" mnemonicParsing="false" prefHeight="33.0" prefWidth="28.0" text="✎" />
+            <Button fx:id="addTag" mnemonicParsing="false" prefHeight="26.0" prefWidth="28.0" text="+" onAction="#goToAddTags" />
          </children>
       </HBox>
    </children>
