@@ -155,7 +155,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      */
     private void updateMostRecent(Event event) {
         for(Event recent : recentlyAccessed){
-            if(recent.getId().equals(event.getId())) recentlyAccessed.remove(event);
+            if(recent.getId().equals(event.getId())) recentlyAccessed.remove(recent);
         }
         recentlyAccessed.addFirst(event);
 
