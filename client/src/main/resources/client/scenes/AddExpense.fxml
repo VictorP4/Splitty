@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="overviewButton" prefHeight="421.0" prefWidth="484.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
+<AnchorPane id="overviewButton" prefHeight="421.0" prefWidth="484.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
    <children>
       <Text fx:id="addEditText" layoutX="110.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Edit Expense">
          <font>
@@ -41,12 +41,12 @@
       <Spinner fx:id="paidBy" layoutX="210.0" layoutY="65.0" prefHeight="26.0" prefWidth="166.0" />
       <Spinner fx:id="currency" layoutX="370.0" layoutY="119.0" prefHeight="26.0" prefWidth="69.0" />
       <DatePicker fx:id="date" layoutX="209.0" layoutY="145.0" prefHeight="26.0" prefWidth="230.0" />
-      <CheckBox fx:id="everybodyIn" layoutX="59.0" layoutY="208.0" mnemonicParsing="false" text="Equally Between Everybody" onAction="#deSelSome">
+      <CheckBox fx:id="everybodyIn" layoutX="59.0" layoutY="208.0" mnemonicParsing="false" onAction="#deSelSome" text="Equally Between Everybody">
          <font>
             <Font name="Arial Bold" size="12.0" />
          </font>
       </CheckBox>
-      <CheckBox fx:id="someIn" layoutX="59.0" layoutY="225.0" mnemonicParsing="false" text="Only Some People" onAction="#deSelAll">
+      <CheckBox fx:id="someIn" layoutX="59.0" layoutY="225.0" mnemonicParsing="false" onAction="#deSelAll" text="Only Some People">
          <font>
             <Font name="Arial Bold" size="12.0" />
          </font>
@@ -60,7 +60,6 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Spinner fx:id="tagSpinner" layoutX="210.0" layoutY="317.0" prefHeight="26.0" prefWidth="230.0" />
       <Button fx:id="abort" layoutX="50.0" layoutY="361.0" mnemonicParsing="false" onAction="#cancel" text="Abort">
          <font>
             <Font size="14.0" />
@@ -76,5 +75,11 @@
             <Font size="13.0" />
          </font>
       </Button>
+      <HBox prefHeight="100.0" prefWidth="200.0" />
+      <HBox layoutX="283.0" layoutY="316.0" prefHeight="26.0" prefWidth="173.0">
+         <children>
+            <Spinner id="tagSpinner" fx:id="tagSpinner" onMouseClicked="#populateTagSpinner" prefHeight="26.0" prefWidth="152.0" />
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

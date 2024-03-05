@@ -19,6 +19,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
+import javafx.util.StringConverter;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -276,11 +277,27 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     /**
      * Populates the tag spinner with the tags from the server.
      */
-    private void populateTagSpinner() {
+    public void populateTagSpinner() {
         try {
             List<Tag> tags = server.getTags(event.getId());
+
+            StringConverter<Tag> converter = new StringConverter<Tag>() {
+                @Override
+                public String toString(Tag tag) {
+                    return tag.getName();
+                }
+
+                @Override
+                public Tag fromString(String string) {
+                    return null;
+                }
+            };
+
             ObservableList<Tag> observableTags = FXCollections.observableArrayList(tags);
+
             SpinnerValueFactory<Tag> valueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(observableTags);
+            valueFactory.setConverter(converter);
+
             tagSpinner.setValueFactory(valueFactory);
         } catch (RuntimeException e) {
             e.printStackTrace();
