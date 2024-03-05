@@ -262,6 +262,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
 
                 }
             });
+            if(debt.getPersonOwed().getEmail().isEmpty()) emailB.setDisable(true);
 
             emailB.setLayoutX(124);
             emailB.setLayoutY(91);
