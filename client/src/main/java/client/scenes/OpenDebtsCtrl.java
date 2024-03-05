@@ -98,11 +98,17 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         odEmail2.setText(Main.getLocalizedString("emailHolder"));
         reminderButton2.setText(Main.getLocalizedString("reminder"));
         markReceived2.setText(Main.getLocalizedString("markReceived"));
+        if(this.strings==null) this.strings = new OpenDebtString();
+        this.strings.setBankAccount("Random stuff go");
     }
 
     /**
      * goes back go event overview
      */
+
+    public void initialize(){
+
+    }
     public void back(){
         mainCtrl.showEventOverview(event);
     }
@@ -112,6 +118,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
      */
     public void refresh(Event event){
         this.event=event;
+        if(this.strings==null) this.strings = new OpenDebtString();
         var tempDebts = getDebts(event);
         debts = FXCollections.observableList(tempDebts);
         List<TilePane> titlePanes= new ArrayList<>();
@@ -208,9 +215,9 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
             text1.setStrokeWidth(0.0);
 
             Text text2 = new Text("Account Holder: " + debt.getPersonOwed().getName());
-//            strings.setBankAccount("Bank Account:");
-//            text2.textProperty().bind(strings.bankAccountProperty());
 
+            text2.textProperty().bind(strings.bankAccountProperty());
+            //strings.setBankAccount("Random stuff:");
             text2.setLayoutX(14.0);
             text2.setLayoutY(44.0);
             text2.setStrokeType(StrokeType.OUTSIDE);
