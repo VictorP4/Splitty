@@ -21,10 +21,8 @@ public class Event {
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Participant> participants;
     @OneToMany(cascade = CascadeType.PERSIST)
-    @Transient
     private List<Expense> expenses;
     @OneToMany(cascade = CascadeType.PERSIST)
-    @Transient
     private List<Tag> tags;
 
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
