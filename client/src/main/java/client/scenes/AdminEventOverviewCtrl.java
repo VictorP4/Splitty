@@ -74,6 +74,15 @@ public class AdminEventOverviewCtrl {
 
         container.setFillWidth(true);
 
+        eventsTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getClickCount() == 2) {
+                    Event selectedEvent = eventsTable.getSelectionModel().getSelectedItem();
+                    mainCtrl.showEventOverview(selectedEvent);
+                }
+            }
+        });
 
     }
 
