@@ -60,7 +60,7 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Spinner fx:id="type" layoutX="210.0" layoutY="317.0" prefHeight="26.0" prefWidth="230.0" />
+      <Spinner fx:id="tagSpinner" layoutX="210.0" layoutY="317.0" prefHeight="26.0" prefWidth="230.0" />
       <Button fx:id="abort" layoutX="50.0" layoutY="361.0" mnemonicParsing="false" onAction="#cancel" text="Abort">
          <font>
             <Font size="14.0" />

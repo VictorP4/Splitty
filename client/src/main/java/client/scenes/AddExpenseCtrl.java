@@ -3,6 +3,11 @@ package client.scenes;
 import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Tag;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.core.GenericType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -24,6 +29,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.awt.*;
+
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class AddExpenseCtrl implements Main.UpdatableUI {
     @FXML
@@ -69,6 +76,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     private Spinner<String> currency;
     @FXML
     private TextField title;
+    @FXML
+    private Spinner<Tag> tagSpinner;
 
 
 
@@ -268,4 +277,24 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         }
 
     }
+
+    @FXML
+    public void initialize() {
+        populateTagSpinner();
+    }
+
+    /**
+     * Populates the tag spinner with the tags from the server.
+     */
+    private void populateTagSpinner() {
+        try {
+            List<Tag> tags = server.getTags();
+            ObservableList<Tag> observableTags = FXCollections.observableArrayList(tags);
+            SpinnerValueFactory<Tag> valueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(observableTags);
+            tagSpinner.setValueFactory(valueFactory);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
