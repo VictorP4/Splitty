@@ -53,7 +53,7 @@ public class AdminEventOverviewCtrl {
             Button deleteButton = new Button("Delete");
             deleteButton.setOnAction(event -> {
                 Event selectedEvent = param.getValue();
-                System.out.println(server.deleteEvent(selectedEvent.getId()));
+                server.deleteEvent(selectedEvent.getId());
                 events.remove(selectedEvent);
                 displayEvents();
             });
