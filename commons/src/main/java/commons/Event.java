@@ -42,6 +42,10 @@ public class Event {
         this.creationDate = new Date();
         this.lastActivityDate = this.creationDate;
         this.inviteCode=generateRandomString(6);
+        this.tags = new ArrayList<>();
+        tags.add(new Tag("food", 0, 255, 0));
+        tags.add(new Tag("entrance fees", 0, 0, 255));
+        tags.add(new Tag("travel", 255, 0, 0));
     }
 
     public static String generateRandomString(int length) {
@@ -188,11 +192,13 @@ public class Event {
         return tags;
     }
 
+    /**
+     * Sets the list of tags of the event.
+     *
+     * @param tags the list of tags to set
+     */
     public void setTags(List<Tag> tags) {
         this.tags = tags;
-        tags.add(new Tag("food", 0, 255, 0));
-        tags.add(new Tag("entrance fees", 0, 0, 255));
-        tags.add(new Tag("travel", 255, 0, 0));
     }
 
     /**
