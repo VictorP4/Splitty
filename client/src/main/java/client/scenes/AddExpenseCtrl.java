@@ -276,17 +276,9 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     /**
      * Populates the tag spinner with the tags from the server.
      */
-    @FXML
-    public void initialize() {
-        populateTagSpinner();
-    }
-
-    /**
-     * Populates the tag spinner with the tags from the server.
-     */
     private void populateTagSpinner() {
         try {
-            List<Tag> tags = server.getTags();
+            List<Tag> tags = server.getTags(event.getId());
             ObservableList<Tag> observableTags = FXCollections.observableArrayList(tags);
             SpinnerValueFactory<Tag> valueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(observableTags);
             tagSpinner.setValueFactory(valueFactory);

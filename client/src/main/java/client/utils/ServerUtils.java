@@ -131,16 +131,11 @@ public class ServerUtils {
 	 *
 	 * @return The list of tags.
 	 */
-	public List<Tag> getTags() {
-		try {
-			return ClientBuilder.newClient()
-					.target(SERVER).path("api/tags") //
-					.request(APPLICATION_JSON) //
-					.accept(APPLICATION_JSON) //
-					.get(new GenericType<>() {
-					});
-		} catch (Exception e) {
-			throw new RuntimeException("Error fetching tags from the server", e);
-		}
+	public List<Tag> getTags(Long eventId) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events/" + eventId)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get().readEntity(Event.class).getTags();
 	}
 }
