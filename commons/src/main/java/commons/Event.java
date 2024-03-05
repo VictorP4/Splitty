@@ -23,6 +23,9 @@ public class Event {
     @OneToMany(cascade = CascadeType.PERSIST)
     @Transient
     private List<Expense> expenses;
+    @OneToMany(cascade = CascadeType.PERSIST)
+    @Transient
+    private List<Tag> tags;
 
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final SecureRandom RANDOM = new SecureRandom();
@@ -174,6 +177,22 @@ public class Event {
      */
     public void setExpenses(List<Expense> expenses) {
         this.expenses = expenses;
+    }
+
+    /**
+     * Retrieves the list of tags of the event.
+        *
+        * @return the list of tags of the event
+     */
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+        tags.add(new Tag("food", 0, 255, 0));
+        tags.add(new Tag("entrance fees", 0, 0, 255));
+        tags.add(new Tag("travel", 255, 0, 0));
     }
 
     /**
