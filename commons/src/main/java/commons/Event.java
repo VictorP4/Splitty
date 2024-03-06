@@ -41,9 +41,9 @@ public class Event {
         this.lastActivityDate = this.creationDate;
         this.inviteCode=generateRandomString(6);
         this.tags = new ArrayList<>();
-        tags.add(new Tag("food", 0, 255, 0));
-        tags.add(new Tag("entrance fees", 0, 0, 255));
-        tags.add(new Tag("travel", 255, 0, 0));
+        tags.add(new Tag("Food", 0, 255, 0));
+        tags.add(new Tag("Entrance fees", 0, 0, 255));
+        tags.add(new Tag("Travel", 255, 0, 0));
     }
 
     public static String generateRandomString(int length) {

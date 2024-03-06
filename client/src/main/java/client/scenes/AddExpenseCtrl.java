@@ -74,6 +74,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     private TextField title;
     @FXML
     private Spinner<Tag> tagSpinner;
+    @FXML
+    private MenuButton tagMenu;
 
 
 
@@ -167,6 +169,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 box.getChildren().add(cb);
             }
         }
+        populateTagMenu();
     }
 
     /**
@@ -302,6 +305,31 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Populates the tag menu with the tags from the server.
+     */
+    private void populateTagMenu() {
+        List<Tag> tags = event.getTags();
+        tagMenu.getItems().clear();
+        for (Tag tag : tags) {
+            MenuItem menuItem = new MenuItem(tag.getName());
+            menuItem.setOnAction(e -> handleTagSelection(tag));
+            tagMenu.getItems().add(menuItem);
+        }
+    }
+
+    /**
+     * Handles the selection of a tag from the menu.
+     *
+     * @param selectedTag The tag that was selected.
+     */
+    private void handleTagSelection(Tag selectedTag) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("Tag Selected");
+        alert.setContentText("You selected tag: " + selectedTag.getName());
+        alert.showAndWait();
     }
 
     /**
