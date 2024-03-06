@@ -111,11 +111,14 @@ public class ExpenseTest {
         Participant paidBy = new Participant("John Doe", "john.doe@example.com");
         List<Participant> involvedParticipants = new ArrayList<>();
         involvedParticipants.add(new Participant("Jane Doe", "jane.doe@example.com"));
+        Tag tag = new Tag("Test Tag", 120, 180, 220);
 
         Expense expense1 = new Expense("Groceries", 50.0, paidBy, involvedParticipants, new Date(), new Tag());
         expense1.setId(1L);
+        expense1.setTag(tag);
         Expense expense2 = new Expense("Groceries", 50.0, paidBy, involvedParticipants, new Date(), new Tag());
         expense2.setId(1L);
+        expense2.setTag(tag);
 
         assertEquals(expense1, expense2);
     }
