@@ -191,6 +191,16 @@ public class EventTest {
     }
 
     @Test
+    public void testGetSetTags() {
+        Event event = new Event();
+        List<Tag> tags = new ArrayList<>();
+        tags.add(new Tag("a", 0, 255, 0));
+        tags.add(new Tag("b", 0, 0, 255));
+        event.setTags(tags);
+        assertEquals(tags, event.getTags());
+    }
+
+    @Test
     public void testHashCodeNotEquals() {
         Event event1 = new Event();
         event1.setId(1L);

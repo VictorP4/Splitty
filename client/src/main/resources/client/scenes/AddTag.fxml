@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="320.0" prefWidth="413.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddTagCtrl">
+
+    <children>
+        <Text fx:id="addEditText" layoutX="121.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Edit Tag">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Text>
+        <Text fx:id="nameText" layoutX="53.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Text>
+        <Text fx:id="colorText" layoutX="55.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Color">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Text>
+        <TextField fx:id="nameTextField" layoutX="121.0" layoutY="63.0" prefHeight="26.0" prefWidth="219.0" />
+        <ColorPicker fx:id="colorPicker" layoutX="121.0" layoutY="120.0" />
+        <Button fx:id="abortButton" layoutX="51.0" layoutY="268.0" mnemonicParsing="false" onAction="#abort" text="Abort">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Button fx:id="addButton" layoutX="312.0" layoutY="268.0" mnemonicParsing="false" onAction="#add" text="Add">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Button fx:id="removeButton" layoutX="231.0" layoutY="268.0" mnemonicParsing="false" onAction="#remove" text="Remove">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Button fx:id="backButton" layoutX="14.0" layoutY="25.0" mnemonicParsing="false" onAction="#back" text="Back">
+            <font>
+                <Font size="13.0" />
+            </font>
+        </Button>
+        <HBox prefHeight="12.0" prefWidth="7.0" />
+    </children>
+</AnchorPane>

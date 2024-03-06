@@ -38,7 +38,9 @@ public class TagServiceImpl implements TagService {
         if (optionalTag.isPresent()) {
             Tag tag = optionalTag.get();
             tag.setName(name);
-            tag.setColor(red, green, blue);
+            tag.setRed(red);
+            tag.setGreen(green);
+            tag.setBlue(blue);
             tagRepository.save(tag);
             return true;
         }
