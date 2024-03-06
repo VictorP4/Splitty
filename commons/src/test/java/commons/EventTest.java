@@ -102,7 +102,7 @@ public class EventTest {
     public void testGetExpenses() {
         Event event = new Event();
         List<Expense> expenses = new ArrayList<>();
-        expenses.add(new Expense("Food", 50.0, new Participant("John", "john@example.com"), new ArrayList<>(), new Date()));
+        expenses.add(new Expense("Food", 50.0, new Participant("John", "john@example.com"), new ArrayList<>(), new Date(), new Tag()));
         event.setExpenses(expenses);
         assertEquals(expenses, event.getExpenses());
     }
@@ -139,7 +139,7 @@ public class EventTest {
     @Test
     public void testAddExpense() {
         Event event = new Event();
-        Expense expense = new Expense("Food", 50.0, new Participant("John", "john@example.com"), new ArrayList<>(), new Date());
+        Expense expense = new Expense("Food", 50.0, new Participant("John", "john@example.com"), new ArrayList<>(), new Date(), new Tag());
         event.addExpense(expense);
         assertTrue(event.getExpenses().contains(expense));
     }
@@ -151,7 +151,7 @@ public class EventTest {
     @Test
     public void testRemoveExpense() {
         Event event = new Event();
-        Expense expense = new Expense("Food", 50.0, new Participant("John", "john@example.com"), new ArrayList<>(), new Date());
+        Expense expense = new Expense("Food", 50.0, new Participant("John", "john@example.com"), new ArrayList<>(), new Date(), new Tag());
         event.addExpense(expense);
         event.removeExpense(expense);
         assertFalse(event.getExpenses().contains(expense));

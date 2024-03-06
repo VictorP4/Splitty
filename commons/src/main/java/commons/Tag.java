@@ -34,6 +34,10 @@ public class Tag {
         setColor(red, green, blue);
     }
 
+    public Tag(){
+        //for object mapper
+    }
+
     /**
      * Retrieves the ID of the tag.
      *

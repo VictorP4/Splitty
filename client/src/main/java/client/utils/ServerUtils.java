@@ -97,9 +97,9 @@ public class ServerUtils {
 	 * @param expense expense to be added
 	 * @return html response of the successful post request
 	 */
-	public Expense addExpense(Expense expense){
+	public Expense addExpense(Expense expense, Long id){
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events")
+				.target(SERVER).path("api/events/"+id+"/expenses")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(expense, APPLICATION_JSON), Expense.class);

@@ -184,14 +184,6 @@ public class Participant {
      */
     @Override
     public String toString() {
-        return "Participant{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", debt=" + debt +
-                ", IBAN='" + iban + '\'' +
-                ", BIC='" + bic + '\'' +
-                ", eventFollowed=" + eventFollowed +
-                '}';
+        return  name ;
     }
 }
