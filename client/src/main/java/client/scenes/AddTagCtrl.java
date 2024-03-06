@@ -31,11 +31,15 @@ public class AddTagCtrl implements Main.UpdatableUI {
     @FXML
     private ColorPicker colorPicker;
     @FXML
+    private Button addButton;
+    @FXML
     private Button abort;
     @FXML
     private Button add;
     @FXML
     private Button back;
+    @FXML
+    private Button removeButton;
 
     /**
      * Constructs a new instance of AddTagCtrl.
@@ -56,6 +60,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
     public void initialize() {
         tagName = nameTextField.getText();
         nameTextField.textProperty().addListener((observable, oldValue, newValue) -> updateTagName(newValue));
+        removeButton.setVisible(false);
     }
 
     /**
@@ -66,6 +71,8 @@ public class AddTagCtrl implements Main.UpdatableUI {
     private void updateTagName(String newValue) {
         tagName = newValue;
         colorFiller();
+        updateRemoveButtonVisibility(newValue);
+        updateAddButtonName(newValue);
     }
 
     /**
@@ -75,9 +82,29 @@ public class AddTagCtrl implements Main.UpdatableUI {
         for (Tag tag : event.getTags()) {
             if (tag.getName().equals(tagName)) {
                 colorPicker.setValue(Color.rgb(tag.getRed(), tag.getGreen(), tag.getBlue()));
+                removeButton.setVisible(true);
                 break;
             }
         }
+    }
+
+    private boolean doesTagNameExist(String tagName) {
+        for (Tag tag : event.getTags()) {
+            if (tag.getName().equals(tagName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void updateRemoveButtonVisibility(String newTagName) {
+        boolean isValidTagName = doesTagNameExist(newTagName);
+        removeButton.setVisible(isValidTagName);
+    }
+
+    private void updateAddButtonName(String newTagName) {
+        boolean isValidTagName = doesTagNameExist(newTagName);
+        addButton.setText(isValidTagName ? Main.getLocalizedString("edit") : Main.getLocalizedString("add"));
     }
 
     /**
@@ -103,6 +130,12 @@ public class AddTagCtrl implements Main.UpdatableUI {
         } else {
             event.getTags().add(new Tag(name, red, green, blue));
         }
+    }
+
+    public void remove() {
+        String name = nameTextField.getText();
+        event.getTags().removeIf(tag -> tag.getName().equals(name));
+        clearFields();
     }
 
     /**

@@ -34,6 +34,11 @@
                 <Font size="14.0" />
             </font>
         </Button>
+        <Button fx:id="removeButton" layoutX="231.0" layoutY="268.0" mnemonicParsing="false" onAction="#remove" text="Remove">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
         <Button fx:id="backButton" layoutX="14.0" layoutY="25.0" mnemonicParsing="false" onAction="#back" text="Back">
             <font>
                 <Font size="13.0" />
