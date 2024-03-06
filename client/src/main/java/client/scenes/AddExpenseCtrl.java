@@ -281,9 +281,18 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         for (Tag tag : tags) {
             MenuItem menuItem = new MenuItem(tag.getName());
             menuItem.setOnAction(e -> handleTagSelection(tag));
+
+            String colorStyle = String.format("-fx-background-color: rgba(%d, %d, %d, 1);", tag.getRed(), tag.getGreen(), tag.getBlue());
+
+            double brightness = (tag.getRed() * 0.299 + tag.getGreen() * 0.587 + tag.getBlue() * 0.114) / 255;
+            String textColor = brightness < 0.5 ? "white" : "black";
+            colorStyle += String.format("-fx-text-fill: %s;", textColor);
+
+            menuItem.setStyle(colorStyle);
             tagMenu.getItems().add(menuItem);
         }
     }
+
 
     /**
      * Handles the selection of a tag from the tag menu.
