@@ -33,41 +33,12 @@ import java.util.List;
 public class OpenDebtsCtrl implements Main.UpdatableUI {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-    @FXML
-    public Text transferTo;
-    @FXML
-    public Text accHolder;
-    @FXML
-    public Text odEmail;
-    @FXML
-    public Button reminderButton;
-    @FXML
-    public Button markReceived;
-    @FXML
-    public Text transferTo1;
-    @FXML
-    public Text accHolder1;
-    @FXML
-    public Text odEmail1;
-    @FXML
-    public Button reminderButton1;
-    @FXML
-    public Button markReceived1;
-    @FXML
-    public Text transferTo2;
-    @FXML
-    public Text accHolder2;
-    @FXML
-    public Text odEmail2;
-    @FXML
-    public Button reminderButton2;
-    @FXML
-    public Button markReceived2;
     private ObservableList<Debt> debts;
     @FXML
     private Accordion debtsOverview;
     private Event event;
     private OpenDebtString strings;
+    private String lang;
 
     /**
      * Constructs a new instance of an OpenDebtCtrl
@@ -83,32 +54,27 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
 
     @Override
     public void updateUI() {
-        transferTo.setText(Main.getLocalizedString("transferTo"));
-        accHolder.setText(Main.getLocalizedString("accHolder"));
-        odEmail.setText(Main.getLocalizedString("emailHolder"));
-        reminderButton.setText(Main.getLocalizedString("reminder"));
-        markReceived.setText(Main.getLocalizedString("markReceived"));
-        transferTo1.setText(Main.getLocalizedString("transferTo"));
-        accHolder1.setText(Main.getLocalizedString("accHolder"));
-        odEmail1.setText(Main.getLocalizedString("emailHolder"));
-        reminderButton1.setText(Main.getLocalizedString("reminder"));
-        markReceived1.setText(Main.getLocalizedString("markReceived"));
-        transferTo2.setText(Main.getLocalizedString("transferTo"));
-        accHolder2.setText(Main.getLocalizedString("accHolder"));
-        odEmail2.setText(Main.getLocalizedString("emailHolder"));
-        reminderButton2.setText(Main.getLocalizedString("reminder"));
-        markReceived2.setText(Main.getLocalizedString("markReceived"));
         if(this.strings==null) this.strings = new OpenDebtString();
-        this.strings.setBankAccount("Random stuff go");
+
+        if(Main.getLocalizedString("accHolder").equals("Account Holder:")) lang="en";
+        else lang="nl";
+        strings.setBankInfo(Main.getLocalizedString("transferTo"));
+        strings.setBankAccount(Main.getLocalizedString("accHolder"));
+        strings.setEmail(Main.getLocalizedString("emailHolder"));
+        strings.setSendReminder(Main.getLocalizedString("reminder"));
+        strings.setMarkReceived(Main.getLocalizedString("markReceived"));
+
+
+
     }
 
     /**
      * goes back go event overview
      */
 
-    public void initialize(){
-
-    }
+    /**
+     * goes back to the event overview
+     */
     public void back(){
         mainCtrl.showEventOverview(event);
     }
@@ -117,6 +83,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
      * refreshes the debts
      */
     public void refresh(Event event){
+        if(this.lang==null) lang="en";
         this.event=event;
         if(this.strings==null) this.strings = new OpenDebtString();
         var tempDebts = getDebts(event);
@@ -213,11 +180,12 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
             text1.setLayoutY(27.0);
             text1.setStrokeType(StrokeType.OUTSIDE);
             text1.setStrokeWidth(0.0);
+            text1.textProperty().bind(strings.bankInfo());
+            if(strings.getBankInfo()==null) strings.setBankInfo("Bank information available, transfer the money to:");
 
             Text text2 = new Text("Account Holder: " + debt.getPersonOwed().getName());
-
             text2.textProperty().bind(strings.bankAccountProperty());
-            //strings.setBankAccount("Random stuff:");
+            if(strings.getBankAccount()==null) strings.setBankAccount("Account Holder: ");
             text2.setLayoutX(14.0);
             text2.setLayoutY(44.0);
             text2.setStrokeType(StrokeType.OUTSIDE);
@@ -236,12 +204,16 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
             text4.setStrokeWidth(0.0);
 
             Text text5 = new Text("Email configured:");
+            text5.textProperty().bind(strings.email());
+            if(strings.getEmail()==null) strings.setEmail("Email configured:");
             text5.setLayoutX(14.0);
             text5.setLayoutY(108.0);
             text5.setStrokeType(StrokeType.OUTSIDE);
             text5.setStrokeWidth(0.0);
 
             Button emailB = new Button("Send reminder");
+            emailB.textProperty().bind(strings.sendReminder());
+            if(strings.getSendReminder()==null) strings.setSendReminder("Send reminder");
             emailB.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -278,6 +250,8 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         }
         else{
             text1 = new Text("Bank information not available");
+            text1.textProperty().bind(strings.bankInfoNA());
+            if(strings.getBankInfoNA()==null) strings.setBankInfoNA("Bank information not available");
             text1.setLayoutX(14.0);
             text1.setLayoutY(27.0);
             text1.setStrokeType(StrokeType.OUTSIDE);
@@ -298,7 +272,9 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         tempBox.setPrefWidth(422.0);
         tempBox.setSpacing(5);
         Text text = new Text();
-        text.setText(debt.getPersonInDebt().getName()+" gives "+ debt.getAmount()+" euros to "+ debt.getPersonOwed().getName());
+
+        if(this.lang.equals("en")) text.setText(debt.getPersonInDebt().getName()+" gives "+ debt.getAmount()+" euro to "+ debt.getPersonOwed().getName());
+        else text.setText(debt.getPersonInDebt().getName()+" geeft "+ debt.getAmount()+" euro ann "+ debt.getPersonOwed().getName());
         text.setWrappingWidth(275);
         text.setStrokeType(StrokeType.OUTSIDE);
         text.setStrokeWidth(0.0);
@@ -311,6 +287,8 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         imgBank.setFitHeight(16);
         imgBank.setFitWidth(16);
         Button markReceived = new Button("Mark Received");
+        markReceived.textProperty().bind(strings.markReceived());
+        if(strings.getMarkReceived()==null) strings.setMarkReceived("Mark Received");
         markReceived.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
