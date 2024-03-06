@@ -6,6 +6,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.EmailRequestBody;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import jakarta.ws.rs.core.Response;
 import javafx.collections.FXCollections;
@@ -289,13 +290,20 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         Button markReceived = new Button("Mark Received");
         markReceived.textProperty().bind(strings.markReceived());
         if(strings.getMarkReceived()==null) strings.setMarkReceived("Mark Received");
+        Event event1 = this.event;
         markReceived.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Node source = (Node) event.getSource();
                 HBox parent = (HBox) source.getParent();
                 ObservableList<Node> list = parent.getChildren();
-                //TODO create expense to settle debt
+                Expense expense = new Expense();
+                expense.setPaidBy(debt.getPersonOwed());
+                expense.setInvolvedParticipants(new ArrayList<>(List.of(debt.getPersonInDebt())));
+                expense.setAmount(debt.getAmount());
+                expense.setTitle("Debt repayment");
+
+                server.addExpense(expense, event1.getId());
                 list.remove(2);
                 ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/client/misc/HomeActive.png")));
                 img.setFitHeight(16);
