@@ -59,8 +59,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI{
     @FXML
     private TextField title;
 
-//TODO: make it so that all participants get deleted everytime add expense is refreshed
-
     /**
      * Constructs a new instance of a AddExpenseCtrl.
      *
