@@ -20,6 +20,7 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import commons.EmailRequestBody;
 import commons.Event;
 import commons.Expense;
+import commons.Participant;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.Response;
@@ -102,5 +103,26 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
+	}
+	public Participant addParticipant(Participant participant){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/participants")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.post(Entity.entity(participant,APPLICATION_JSON), Participant.class);
+	}
+	public Participant updateParticipant(Participant participant){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/participants/"+participant.getId())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.put(Entity.entity(participant,APPLICATION_JSON), Participant.class);
+	}
+	public Response deleteParticipant(Participant participant){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/participants/"+participant.getId())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.delete();
 	}
 }

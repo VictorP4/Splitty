@@ -106,12 +106,14 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      * Has a participant join an existing event either through an invite code or a
      * link
      */
+
     public void joinEvent(ActionEvent event) {
         // checks if one of the hyperlinks was clicked, if not, will take the text from the eventCode
         Long eventId = null;
 
         if (eventCode.getText().isEmpty() && event.getSource().toString().isEmpty()) {
             noValidEventError("Event does not exist");
+
             return;
         }
         if (event.getSource() instanceof Hyperlink) {
@@ -152,10 +154,9 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      *              user
      */
     private void updateMostRecent(Event event) {
-        if (recentlyAccessed.contains(event)) {
-            recentlyAccessed.remove(event);
+        for(Event recent : recentlyAccessed){
+            if(recent.getId().equals(event.getId())) recentlyAccessed.remove(recent);
         }
-
         recentlyAccessed.addFirst(event);
 
         if (recentlyAccessed.size() > 4) {

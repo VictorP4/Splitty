@@ -103,6 +103,7 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
     public void back() {
         mainCtrl.showEventOverview(event);
     }
+
 }
 
 /**

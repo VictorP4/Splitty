@@ -4,23 +4,26 @@ package server.api.controllers;
 import java.util.*;
 
 
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import commons.Event;
 import server.database.EventRepository;
 
+
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
     private final EventRepository repo;
 
+
     /**
-     *
-     * @param repo the event repository
+     * @param repo            the event repository
      */
     public EventController(EventRepository repo) {
         this.repo = repo;
+
     }
 
     /**
@@ -77,8 +80,9 @@ public class EventController {
         update.setTitle(event.getTitle());
         update.setLastActivityDate(event.getLastActivityDate());
         update.setInviteCode(event.getInviteCode());
-        repo.save(update);
-        return ResponseEntity.ok(update);
+
+        Event finalUpdate = repo.save(update);
+        return ResponseEntity.ok(finalUpdate);
     }
 
     /**
