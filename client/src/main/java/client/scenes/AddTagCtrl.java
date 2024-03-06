@@ -155,6 +155,8 @@ public class AddTagCtrl implements Main.UpdatableUI {
             event.getTags().add(new Tag(name, red, green, blue));
 
         }
+        clearFields();
+        mainCtrl.showAddExpense(event);
     }
 
     /**
@@ -165,6 +167,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
         event.getTags().removeIf(tag -> tag.getName().equals(name));
 
         clearFields();
+        mainCtrl.showAddExpense(event);
     }
 
     /**
