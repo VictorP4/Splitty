@@ -6,8 +6,11 @@ import com.google.inject.Inject;
 import commons.Event;
 import commons.Tag;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 /**
  * Controller class for the Add Tag scene.
@@ -17,18 +20,22 @@ public class AddTagCtrl implements Main.UpdatableUI {
     private final ServerUtils server;
     private Event event;
     private String tagName;
-
+    @FXML
+    private Text colorText;
+    @FXML
+    private Text nameText;
+    @FXML
+    private Text addEditText;
     @FXML
     private TextField nameTextField;
-
     @FXML
-    private TextField redTextField;
-
+    private ColorPicker colorPicker;
     @FXML
-    private TextField greenTextField;
-
+    private Button abort;
     @FXML
-    private TextField blueTextField;
+    private Button add;
+    @FXML
+    private Button back;
 
     /**
      * Constructs a new instance of AddTagCtrl.
@@ -67,9 +74,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
     private void colorFiller() {
         for (Tag tag : event.getTags()) {
             if (tag.getName().equals(tagName)) {
-                redTextField.setText(String.valueOf(tag.getRed()));
-                greenTextField.setText(String.valueOf(tag.getGreen()));
-                blueTextField.setText(String.valueOf(tag.getBlue()));
+                colorPicker.setValue(Color.rgb(tag.getRed(), tag.getGreen(), tag.getBlue()));
                 break;
             }
         }
@@ -80,32 +85,23 @@ public class AddTagCtrl implements Main.UpdatableUI {
      */
     public void add() {
         String name = nameTextField.getText();
-        int red = Integer.parseInt(redTextField.getText());
-        int green = Integer.parseInt(greenTextField.getText());
-        int blue = Integer.parseInt(blueTextField.getText());
+        Color color = colorPicker.getValue();
+        int red = (int) (color.getRed() * 255);
+        int green = (int) (color.getGreen() * 255);
+        int blue = (int) (color.getBlue() * 255);
 
-        if (red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Color values must be between 0 and 255.");
-            alert.showAndWait();
-            return;
-        }
-
-        Tag newTag = new Tag(name, red, green, blue);
         if (event.getTags().stream()
                 .map(Tag::getName)
-                .toList().contains(newTag.getName())) {
+                .toList().contains(name)) {
             for (Tag tag : event.getTags()) {
-                if (tag.getName().equals(newTag.getName())) {
-                    tag.setRed(newTag.getRed());
-                    tag.setGreen(newTag.getGreen());
-                    tag.setBlue(newTag.getBlue());
+                if (tag.getName().equals(name)) {
+                    tag.setRed(red);
+                    tag.setGreen(green);
+                    tag.setBlue(blue);
                 }
             }
         } else {
-            event.getTags().add(newTag);
+            event.getTags().add(new Tag(name, red, green, blue));
         }
     }
 
@@ -146,9 +142,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
      */
     public void clearFields() {
         nameTextField.clear();
-        redTextField.clear();
-        greenTextField.clear();
-        blueTextField.clear();
+        colorPicker.setValue(Color.WHITE);
     }
 
     /**
@@ -156,6 +150,11 @@ public class AddTagCtrl implements Main.UpdatableUI {
      */
     @Override
     public void updateUI() {
-
+        addEditText.setText(Main.getLocalizedString("Add/EditTag"));
+        nameText.setText(Main.getLocalizedString("Name"));
+        colorText.setText(Main.getLocalizedString("Color"));
+        abort.setText(Main.getLocalizedString("abort"));
+        add.setText(Main.getLocalizedString("add"));
+        back.setText(Main.getLocalizedString("back"));
     }
 }

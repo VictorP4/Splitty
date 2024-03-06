@@ -4,10 +4,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="466.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddTagCtrl">
+<AnchorPane prefHeight="320.0" prefWidth="413.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddTagCtrl">
 
     <children>
-        <Text fx:id="addEditText" layoutX="170.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Edit Tag">
+        <Text fx:id="addEditText" layoutX="121.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Edit Tag">
             <font>
                 <Font name="System Bold" size="24.0" />
             </font>
@@ -17,32 +17,19 @@
                 <Font name="System Bold" size="18.0" />
             </font>
         </Text>
-        <Text fx:id="redText" layoutX="50.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Red">
+        <Text fx:id="colorText" layoutX="55.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Color">
             <font>
                 <Font name="System Bold" size="18.0" />
             </font>
         </Text>
-        <Text fx:id="greenText" layoutX="206.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Green">
-            <font>
-                <Font name="System Bold" size="18.0" />
-            </font>
-        </Text>
-        <Text fx:id="blueText" layoutX="357.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Blue">
-            <font>
-                <Font name="System Bold" size="18.0" />
-            </font>
-        </Text>
-        <TextField fx:id="nameTextField" layoutX="208.0" layoutY="63.0" prefHeight="26.0" prefWidth="219.0" />
-        <TextField fx:id="redTextField" layoutX="50.0" layoutY="157.0" prefHeight="26.0" prefWidth="73.0" />
-        <TextField fx:id="greenTextField" layoutX="205.0" layoutY="157.0" prefHeight="26.0" prefWidth="73.0" />
-        <TextField fx:id="blueTextField" layoutX="357.0" layoutY="157.0" prefHeight="26.0" prefWidth="73.0" />
-
-        <Button fx:id="abortButton" layoutX="50.0" layoutY="361.0" mnemonicParsing="false" onAction="#abort" text="Abort">
+        <TextField fx:id="nameTextField" layoutX="121.0" layoutY="63.0" prefHeight="26.0" prefWidth="219.0" />
+        <ColorPicker fx:id="colorPicker" layoutX="121.0" layoutY="120.0" />
+        <Button fx:id="abortButton" layoutX="51.0" layoutY="268.0" mnemonicParsing="false" onAction="#abort" text="Abort">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="addButton" layoutX="386.0" layoutY="361.0" mnemonicParsing="false" onAction="#add" text="Add">
+        <Button fx:id="addButton" layoutX="312.0" layoutY="268.0" mnemonicParsing="false" onAction="#add" text="Add">
             <font>
                 <Font size="14.0" />
             </font>

@@ -99,7 +99,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         expenseType.setText(Main.getLocalizedString("expType"));
         abort.setText(Main.getLocalizedString("abort"));
         add.setText(Main.getLocalizedString("add"));
-
     }
 
     /**
