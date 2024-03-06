@@ -91,7 +91,13 @@ public class Tag {
      * @param red the new red component of the tag's color
      */
     public void setRed(int red) {
-        this.red = red;
+        if (red < 0) {
+            this.red = 0;
+        } else if (red > 255) {
+            this.red = 255;
+        } else {
+            this.red = red;
+        }
     }
 
     /**
@@ -109,7 +115,13 @@ public class Tag {
      * @param blue the new blue component of the tag's color
      */
     public void setBlue(int blue) {
-        this.blue = blue;
+        if (blue < 0) {
+            this.blue = 0;
+        } else if (blue > 255) {
+            this.blue = 255;
+        } else {
+            this.blue = blue;
+        }
     }
 
     /**
@@ -127,7 +139,13 @@ public class Tag {
      * @param green the new green component of the tag's color
      */
     public void setGreen(int green) {
-        this.green = green;
+        if (green < 0) {
+            this.green = 0;
+        } else if (green > 255) {
+            this.green = 255;
+        } else {
+            this.green = green;
+        }
     }
 
     /**

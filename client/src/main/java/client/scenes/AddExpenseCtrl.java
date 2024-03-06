@@ -4,8 +4,6 @@ import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Tag;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -19,7 +17,6 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
-import javafx.util.StringConverter;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -29,10 +26,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class AddExpenseCtrl implements Main.UpdatableUI {
-    @FXML
-    public Text addEditText;
+
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private Event event;
+    private Tag selectedTag;
+    @FXML
+    public Text addEditText;
     @FXML
     public Text whoPaid;
     @FXML
@@ -54,8 +54,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public Button add;
     @FXML
     public Button overviewButton;
-    private Event event;
-
     @FXML
     private CheckBox everybodyIn;
     @FXML
@@ -73,11 +71,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     @FXML
     private TextField title;
     @FXML
-    private Spinner<Tag> tagSpinner;
-    @FXML
     private MenuButton tagMenu;
-
-
 
     /**
      * Constructs a new instance of a AddExpenseCtrl.
@@ -123,6 +117,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         amount.clear();
         title.clear();
         date.cancelEdit();
+        tagMenu.setText("Select Tag");
         if(paidBy.getValueFactory()!=null) paidBy.getValueFactory().setValue(null);
         everybodyIn.setSelected(false);
         someIn.setSelected(false);
@@ -136,7 +131,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         Date date = Date.from(localdate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         Participant paidBy = this.paidBy.getValue();
         List<Participant> partIn = add();
-        return new Expense(title, amount, paidBy, partIn, date);
+        //Tag tag = selectedTag;
+        return new Expense(title, amount, paidBy, partIn, date/*, selectedTag*/);
     }
 
     /**
@@ -278,36 +274,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Populates the tag spinner with the tags from the server.
-     */
-    public void populateTagSpinner() {
-        try {
-            List<Tag> tags = server.getTags(event.getId());
-
-            StringConverter<Tag> converter = new StringConverter<Tag>() {
-                @Override
-                public String toString(Tag tag) {
-                    return tag.getName();
-                }
-
-                @Override
-                public Tag fromString(String string) {
-                    return null;
-                }
-            };
-
-            ObservableList<Tag> observableTags = FXCollections.observableArrayList(tags);
-
-            SpinnerValueFactory<Tag> valueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(observableTags);
-            valueFactory.setConverter(converter);
-
-            tagSpinner.setValueFactory(valueFactory);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Populates the tag menu with the tags from the server.
      */
     private void populateTagMenu() {
@@ -321,15 +287,13 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Handles the selection of a tag from the menu.
+     * Handles the selection of a tag from the tag menu.
      *
-     * @param selectedTag The tag that was selected.
+     * @param selected The selected tag.
      */
-    private void handleTagSelection(Tag selectedTag) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText("Tag Selected");
-        alert.setContentText("You selected tag: " + selectedTag.getName());
-        alert.showAndWait();
+    private void handleTagSelection(Tag selected) {
+        tagMenu.setText(selected.getName());
+        this.selectedTag = selected;
     }
 
     /**
@@ -337,6 +301,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     public void goToAddTags() {
         clearFields();
-        //mainCtrl.showAddTag(event);
+        mainCtrl.showAddTag(event);
     }
 }

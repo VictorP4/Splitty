@@ -25,16 +25,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import client.scenes.*;
 import com.google.inject.Injector;
-
-import client.scenes.AddExpenseCtrl;
-import client.scenes.ContactDetailsCtrl;
-import client.scenes.InvitationCtrl;
-import client.scenes.OpenDebtsCtrl;
-import client.scenes.StatisticsCtrl;
-import client.scenes.OverviewCtrl;
-import client.scenes.StartScreenCtrl;
-import client.scenes.MainCtrl;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -64,6 +56,7 @@ public class Main extends Application {
         loadLanguageBundle("en");
 
         var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
+        var addTag = FXML.load(AddTagCtrl.class, "client", "scenes", "AddTag.fxml");
         var contactDetails = FXML.load(ContactDetailsCtrl.class, "client", "scenes", "ContactDetails.fxml");
         var invitation = FXML.load(InvitationCtrl.class, "client", "scenes", "Invitation.fxml");
         var openDebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
@@ -73,7 +66,7 @@ public class Main extends Application {
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, addExpense, contactDetails,
-                invitation, openDebts, statistics, startScreen, eventOverview);
+                invitation, openDebts, statistics, startScreen, eventOverview, addTag);
     }
 
     public static void loadLanguageBundle(String languageCode) throws NotFoundException {
