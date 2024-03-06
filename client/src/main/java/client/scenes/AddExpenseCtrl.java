@@ -135,7 +135,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI{
      */
     public void ok() {
         try {
-            server.addExpense(getExpense());
+            server.addExpense(getExpense(), event.getId());
         }
         catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
