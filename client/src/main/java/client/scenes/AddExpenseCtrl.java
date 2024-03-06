@@ -116,16 +116,11 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void clearFields() {
         amount.clear();
         title.clear();
-        date.cancelEdit();
-
-        paidBy.getSelectionModel().clearSelection();
-
+        date.getEditor().clear();
         tagMenu.setText("Select Tag");
-
 
         everybodyIn.setSelected(false);
         someIn.setSelected(false);
-        currency.getSelectionModel().clearSelection();
         paidBy.getItems().removeAll(paidBy.getItems());
         currency.getItems().removeAll(currency.getItems());
         box.getChildren().removeAll(box.getChildren());
