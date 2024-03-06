@@ -18,7 +18,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 
-public class AddExpenseCtrl implements Main.UpdatableUI {
+public class AddExpenseCtrl implements Main.UpdatableUI{
     @FXML
     public Text addEditText;
     private final ServerUtils server;
@@ -55,11 +55,11 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     @FXML
     private DatePicker date;
     @FXML
-    private Spinner<String> currency;
+    private ComboBox<String> currency;
     @FXML
     private TextField title;
 
-
+//TODO: make it so that all participants get deleted everytime add expense is refreshed
 
     /**
      * Constructs a new instance of a AddExpenseCtrl.
@@ -97,7 +97,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * cancels the process of adding a new expense by clearing inout fields and returning to the overview screen
      */
     public void cancel() {
-        clearFields();
         mainCtrl.showEventOverview(event);
     }
 
@@ -108,10 +107,13 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         amount.clear();
         title.clear();
         date.cancelEdit();
-        if(paidBy.getSelectionModel().isEmpty()) paidBy.getSelectionModel().clearSelection();
+        paidBy.getSelectionModel().clearSelection();
         everybodyIn.setSelected(false);
         someIn.setSelected(false);
-        if(currency.getValueFactory()!=null) currency.getValueFactory().setValue(" ");
+        currency.getSelectionModel().clearSelection();
+        paidBy.getItems().removeAll(paidBy.getItems());
+        currency.getItems().removeAll(currency.getItems());
+        box.getChildren().removeAll(box.getChildren());
     }
 
     /**
@@ -123,7 +125,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         double amount = Double.parseDouble(this.amount.getText());
         LocalDate localdate = this.date.getValue();
         Date date = Date.from(localdate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Participant paidBy = this.paidBy.getValue();
+        Participant paidBy = this.paidBy.getSelectionModel().getSelectedItem();
         List<Participant> partIn = add();
         return new Expense(title, amount, paidBy, partIn, date);
     }
@@ -151,12 +153,14 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     public void refresh(Event event){
         this.event = event;
+        clearFields();
+        currency.getItems().add("EUR");
         for(Participant p : this.event.getParticipants()){
             if(check(p)) {
                 CheckBox cb = new CheckBox(p.getName());
                 cb.setDisable(true);
                 box.getChildren().add(cb);
-                //paidBy.getItems().add(p.getName());
+                paidBy.getItems().add(p);
             }
         }
     }
@@ -265,12 +269,4 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         }
     }
 
-    /**
-     *
-     * @param paidBy
-     */
-    public void setPaidBy(ComboBox<Participant> paidBy) {
-        this.paidBy = paidBy;
-        paidBy.getItems().addAll(event.getParticipants());
-    }
 }
