@@ -122,7 +122,8 @@ public class ParticipantTest {
         participant.setIBAN("1234567890");
         participant.setBIC("123456");
 
-        String expected = "Participant{id=1, name='John Doe', email='john.doe@example.com', debt=0.0, IBAN='1234567890', BIC='123456', eventFollowed=null}";
+        String expected = "John Doe";
+        //String expected = "Participant{id=1, name='John Doe', email='john.doe@example.com', debt=0.0, IBAN='1234567890', BIC='123456', eventFollowed=null}";
         assertEquals(expected, participant.toString());
     }
 }

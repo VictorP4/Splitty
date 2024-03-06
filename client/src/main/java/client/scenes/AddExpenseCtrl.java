@@ -3,10 +3,8 @@ package client.scenes;
 import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Tag;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import commons.Event;
 import commons.Expense;
@@ -19,13 +17,9 @@ import javafx.stage.Modality;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.awt.*;
+import java.util.*;
 
-public class AddExpenseCtrl implements Main.UpdatableUI {
+public class AddExpenseCtrl implements Main.UpdatableUI{
     @FXML
     public Text addEditText;
     private final ServerUtils server;
@@ -41,18 +35,14 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     @FXML
     public Text howToSplit;
     @FXML
-    public CheckBox equally;
-    @FXML
     public Text expenseType;
     @FXML
     public Button abort;
-
     @FXML
     public Button add;
     @FXML
     public Button overviewButton;
     private Event event;
-
     @FXML
     private CheckBox everybodyIn;
     @FXML
@@ -62,15 +52,13 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     @FXML
     private TextField amount;
     @FXML
-    private Spinner<Participant> paidBy;
+    private ComboBox<Participant> paidBy;
     @FXML
     private DatePicker date;
     @FXML
-    private Spinner<String> currency;
+    private ComboBox<String> currency;
     @FXML
     private TextField title;
-
-
 
     /**
      * Constructs a new instance of a AddExpenseCtrl.
@@ -84,6 +72,9 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         this.server = server;
     }
 
+    /**
+     *
+     */
     @Override
     public void updateUI() {
         overviewButton.setText(Main.getLocalizedString("overviewButton"));
@@ -105,7 +96,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * cancels the process of adding a new expense by clearing inout fields and returning to the overview screen
      */
     public void cancel() {
-        clearFields();
         mainCtrl.showEventOverview(event);
     }
 
@@ -116,20 +106,28 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         amount.clear();
         title.clear();
         date.cancelEdit();
-        if(paidBy.getValueFactory()!=null) paidBy.getValueFactory().setValue(null);
+        paidBy.getSelectionModel().clearSelection();
         everybodyIn.setSelected(false);
         someIn.setSelected(false);
-        if(currency.getValueFactory()!=null) currency.getValueFactory().setValue(" ");
+        currency.getSelectionModel().clearSelection();
+        paidBy.getItems().removeAll(paidBy.getItems());
+        currency.getItems().removeAll(currency.getItems());
+        box.getChildren().removeAll(box.getChildren());
     }
 
+    /**
+     * creates an expense based on the input
+     * @return new expense
+     */
     public Expense getExpense() {
         String title = this.title.getText();
         double amount = Double.parseDouble(this.amount.getText());
         LocalDate localdate = this.date.getValue();
         Date date = Date.from(localdate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Participant paidBy = this.paidBy.getValue();
+        Participant paidBy = this.paidBy.getSelectionModel().getSelectedItem();
         List<Participant> partIn = add();
-        return new Expense(title, amount, paidBy, partIn, date);
+        Tag tag = new Tag(); //temp
+        return new Expense(title, amount, paidBy, partIn, date, tag);
     }
 
     /**
@@ -137,7 +135,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     public void ok() {
         try {
-            server.addExpense(getExpense());
+            server.addExpense(getExpense(), event.getId());
         }
         catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -155,11 +153,14 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     public void refresh(Event event){
         this.event = event;
+        clearFields();
+        currency.getItems().add("EUR");
         for(Participant p : this.event.getParticipants()){
             if(check(p)) {
                 CheckBox cb = new CheckBox(p.getName());
                 cb.setDisable(true);
                 box.getChildren().add(cb);
+                paidBy.getItems().add(p);
             }
         }
     }
@@ -266,6 +267,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 c.setDisable(true);
             }
         }
-
     }
+
 }
