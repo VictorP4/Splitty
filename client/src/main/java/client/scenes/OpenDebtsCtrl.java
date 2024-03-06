@@ -218,8 +218,6 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
             emailB.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-
-
                     HBox parent = (HBox) tempPane.getGraphic();
                     ObservableList<Node> list = parent.getChildren();
                     list.remove(1);
@@ -239,11 +237,9 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
                     img.setFitWidth(16);
                     img.setFitHeight(16);
                     list.add(1, img);
-
                 }
             });
             if(debt.getPersonOwed().getEmail().isEmpty()) emailB.setDisable(true);
-
             emailB.setLayoutX(124);
             emailB.setLayoutY(91);
             emailB.setMnemonicParsing(false);
@@ -258,7 +254,6 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
             text1.setStrokeType(StrokeType.OUTSIDE);
             text1.setStrokeWidth(0.0);
             tempAP.getChildren().addAll(text1);
-
         }
     }
 
@@ -298,11 +293,10 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
                 HBox parent = (HBox) source.getParent();
                 ObservableList<Node> list = parent.getChildren();
                 Expense expense = new Expense();
-                expense.setPaidBy(debt.getPersonOwed());
-                expense.setInvolvedParticipants(new ArrayList<>(List.of(debt.getPersonInDebt())));
+                expense.setPaidBy(debt.getPersonInDebt());
+                expense.setInvolvedParticipants(new ArrayList<>(List.of(debt.getPersonOwed())));
                 expense.setAmount(debt.getAmount());
                 expense.setTitle("Debt repayment");
-
                 server.addExpense(expense, event1.getId());
                 list.remove(2);
                 ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/client/misc/HomeActive.png")));
