@@ -3,6 +3,7 @@ package client.scenes;
 import client.Main;
 import client.utils.ServerUtils;
 import commons.Event;
+import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -19,6 +20,7 @@ import javafx.scene.text.Text;
 import static client.Main.switchLocale;
 
 import java.util.*;
+
 
 /**
  * Controller class for the start screen scene.
@@ -108,35 +110,44 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      */
     public void joinEvent(ActionEvent event) {
         // checks if one of the hyperlinks was clicked, if not, will take the text from the eventCode
-        Long eventId = null;
-
-        if (event.getSource() instanceof Hyperlink) {
-            Hyperlink clicked = (Hyperlink) event.getSource();
-
-            // the link has no event
-            if (clicked.getText().equals("")) {
-                noValidEventError("Event does not exist");
-                return;
-            }
-            eventId = recentlyAccessed.get(recentlyViewed.indexOf(clicked)).getId();
-        }
-        else {
-            // no inviteCode has been inserted
-            if (eventCode.getText().isBlank()) {
-                noValidEventError("Event does not exist");
-                return;
-            }
-            eventId = Long.decode(eventCode.getText());
-        }
+        boolean throughInvite = !(event.getSource() instanceof Hyperlink);
+        Long eventId = getEventSource(event.getSource());
 
         try {
             Event fetchedEvent = server.getEvent(eventId);
-            mainCtrl.showEventOverview(fetchedEvent);
+
+            mainCtrl.refreshEventOverview(fetchedEvent);
+            if (throughInvite) {
+                Participant joined = new Participant();
+                mainCtrl.showContactDetails(joined, fetchedEvent);
+            }
+
             updateMostRecent(fetchedEvent);
         } catch (WebApplicationException e) {
             noValidEventError(e.getMessage());
         }
         clearField();
+    }
+
+    private Long getEventSource(Object eventSource) {
+        if (eventSource instanceof Hyperlink) {
+            Hyperlink clicked = (Hyperlink) eventSource;
+
+            // the link has no event
+            if (clicked.getText().equals("")) {
+                noValidEventError("Event does not exist");
+                throw new IllegalArgumentException();
+            }
+            return recentlyAccessed.get(recentlyViewed.indexOf(clicked)).getId();
+        }
+        else {
+            // no inviteCode has been inserted
+            if (eventCode.getText().isBlank()) {
+                noValidEventError("Event does not exist");
+                throw new IllegalArgumentException();
+            }
+            return Long.decode(eventCode.getText());
+        }
     }
 
     /**
@@ -149,6 +160,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setContentText(message);
         alert.showAndWait();
+        return;
     }
 
     /**

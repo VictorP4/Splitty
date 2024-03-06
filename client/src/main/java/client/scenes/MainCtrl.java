@@ -105,6 +105,10 @@ public class MainCtrl {
         eventOverviewCtrl.refresh(event);
     }
 
+    public void refreshEventOverview(Event event) {
+        eventOverviewCtrl.refresh(event);
+    }
+
     /**
      * Displays the add expense scene in the primary stage
      * Associates the key pressed event with the AddExpenseCtrl
