@@ -33,11 +33,9 @@ public class AddTagCtrl implements Main.UpdatableUI {
     @FXML
     private Button addButton;
     @FXML
-    private Button abort;
+    private Button abortButton;
     @FXML
-    private Button add;
-    @FXML
-    private Button back;
+    private Button backButton;
     @FXML
     private Button removeButton;
 
@@ -88,6 +86,12 @@ public class AddTagCtrl implements Main.UpdatableUI {
         }
     }
 
+    /**
+     * Checks if the tag name exists.
+     *
+     * @param tagName The tag name to check.
+     * @return True if the tag name exists, false otherwise.
+     */
     private boolean doesTagNameExist(String tagName) {
         for (Tag tag : event.getTags()) {
             if (tag.getName().equals(tagName)) {
@@ -97,11 +101,21 @@ public class AddTagCtrl implements Main.UpdatableUI {
         return false;
     }
 
+    /**
+     * Updates the visibility of the remove button.
+     *
+     * @param newTagName The new tag name.
+     */
     private void updateRemoveButtonVisibility(String newTagName) {
         boolean isValidTagName = doesTagNameExist(newTagName);
         removeButton.setVisible(isValidTagName);
     }
 
+    /**
+     * Updates the name of the add button.
+     *
+     * @param newTagName The new tag name.
+     */
     private void updateAddButtonName(String newTagName) {
         boolean isValidTagName = doesTagNameExist(newTagName);
         addButton.setText(isValidTagName ? Main.getLocalizedString("edit") : Main.getLocalizedString("add"));
@@ -132,6 +146,9 @@ public class AddTagCtrl implements Main.UpdatableUI {
         }
     }
 
+    /**
+     * Removes the tag.
+     */
     public void remove() {
         String name = nameTextField.getText();
         event.getTags().removeIf(tag -> tag.getName().equals(name));
@@ -186,8 +203,8 @@ public class AddTagCtrl implements Main.UpdatableUI {
         addEditText.setText(Main.getLocalizedString("Add/EditTag"));
         nameText.setText(Main.getLocalizedString("Name"));
         colorText.setText(Main.getLocalizedString("Color"));
-        abort.setText(Main.getLocalizedString("abort"));
-        add.setText(Main.getLocalizedString("add"));
-        back.setText(Main.getLocalizedString("back"));
+        abortButton.setText(Main.getLocalizedString("abort"));
+        addButton.setText(Main.getLocalizedString("add"));
+        backButton.setText(Main.getLocalizedString("back"));
     }
 }
