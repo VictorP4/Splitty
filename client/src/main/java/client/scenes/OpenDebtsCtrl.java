@@ -221,6 +221,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
                     HBox parent = (HBox) tempPane.getGraphic();
                     ObservableList<Node> list = parent.getChildren();
                     list.remove(1);
+                    emailB.setDisable(true);
                     List<String> message = new ArrayList<>();
                     message.add(debt.getPersonInDebt().getName());
                     message.add(debt.getPersonInDebt().getEmail());
@@ -291,6 +292,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
             public void handle(ActionEvent event) {
                 Node source = (Node) event.getSource();
                 HBox parent = (HBox) source.getParent();
+                markReceived.setDisable(true);
                 ObservableList<Node> list = parent.getChildren();
                 Expense expense = new Expense();
                 expense.setPaidBy(debt.getPersonInDebt());
