@@ -21,13 +21,15 @@ public class ExpenseTest {
         List<Participant> involvedParticipants = new ArrayList<>();
         involvedParticipants.add(new Participant("Jane Doe", "jane.doe@example.com"));
         Date date = new Date();
+        Tag tag = new Tag();
 
-        Expense expense = new Expense("Groceries", 50.0, paidBy, involvedParticipants, date);
+        Expense expense = new Expense("Groceries", 50.0, paidBy, involvedParticipants, date, tag);
         assertEquals("Groceries", expense.getTitle());
         assertEquals(50.0, expense.getAmount());
         assertEquals(paidBy, expense.getPaidBy());
         assertEquals(involvedParticipants, expense.getInvolvedParticipants());
         assertEquals(date, expense.getDate());
+        assertEquals(tag, expense.getTag());
     }
 
     /**
@@ -110,9 +112,9 @@ public class ExpenseTest {
         List<Participant> involvedParticipants = new ArrayList<>();
         involvedParticipants.add(new Participant("Jane Doe", "jane.doe@example.com"));
 
-        Expense expense1 = new Expense("Groceries", 50.0, paidBy, involvedParticipants, new Date());
+        Expense expense1 = new Expense("Groceries", 50.0, paidBy, involvedParticipants, new Date(), new Tag());
         expense1.setId(1L);
-        Expense expense2 = new Expense("Groceries", 50.0, paidBy, involvedParticipants, new Date());
+        Expense expense2 = new Expense("Groceries", 50.0, paidBy, involvedParticipants, new Date(), new Tag());
         expense2.setId(1L);
 
         assertEquals(expense1, expense2);

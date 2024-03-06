@@ -3,6 +3,7 @@ package client.scenes;
 import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 import commons.Event;
@@ -125,7 +126,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI{
         Date date = Date.from(localdate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         Participant paidBy = this.paidBy.getSelectionModel().getSelectedItem();
         List<Participant> partIn = add();
-        return new Expense(title, amount, paidBy, partIn, date);
+        Tag tag = new Tag(); //temp
+        return new Expense(title, amount, paidBy, partIn, date, tag);
     }
 
     /**
