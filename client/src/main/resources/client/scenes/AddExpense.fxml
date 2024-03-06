@@ -82,7 +82,7 @@
                <items>
                </items>
             </MenuButton>
-            <Button fx:id="addTag" mnemonicParsing="false" onAction="#goToAddTags" prefHeight="26.0" prefWidth="36.0" text="+" />
+            <Button fx:id="addTag" mnemonicParsing="false" onAction="#goToAddTags" prefHeight="26.0" prefWidth="36.0" text="✎" />
          </children>
       </HBox>
    </children>
