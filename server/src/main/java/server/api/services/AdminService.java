@@ -5,14 +5,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
-
-import java.nio.charset.Charset;
-import java.util.Objects;
-import java.util.Random;
 
 @Component
 public class AdminService implements ApplicationListener<ApplicationStartedEvent> {
@@ -39,7 +34,7 @@ public class AdminService implements ApplicationListener<ApplicationStartedEvent
 
     public void generateSessionPass() {
         String characters =
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?";
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!";
         String generatedString = RandomStringUtils.random( 15, characters );
         sessionPass=generatedString;
     }
