@@ -173,7 +173,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void refresh(Event event){
         this.event = event;
         clearFields();
-        currency.getItems().add("EUR");
+        addToCurrency();
         for(Participant p : this.event.getParticipants()){
             if(check(p)) {
                 CheckBox cb = new CheckBox(p.getName());
@@ -183,6 +183,14 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             }
         }
         populateTagMenu();
+    }
+
+    /**
+     * adds values to the currency picker combobox, separate method for "future use" in case of multiple currencies
+     * being implemented, keeps refresh cleaner
+     */
+    private void addToCurrency() {
+        currency.getItems().add("EUR");
     }
 
     /**
