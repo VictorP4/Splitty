@@ -9,11 +9,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 
-public class AddTagCtrl implements Main.UpdatableUI{
+/**
+ * Controller class for the Add Tag scene.
+ */
+public class AddTagCtrl implements Main.UpdatableUI {
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
     private Event event;
     private String tagName;
+
     @FXML
     private TextField nameTextField;
 
@@ -26,24 +30,40 @@ public class AddTagCtrl implements Main.UpdatableUI{
     @FXML
     private TextField blueTextField;
 
-
+    /**
+     * Constructs a new instance of AddTagCtrl.
+     *
+     * @param server   The utility class for server-related operations.
+     * @param mainCtrl The main controller of the application.
+     */
     @Inject
     public AddTagCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
 
+    /**
+     * Initializes the controller.
+     */
     @FXML
     public void initialize() {
         tagName = nameTextField.getText();
         nameTextField.textProperty().addListener((observable, oldValue, newValue) -> updateTagName(newValue));
     }
 
+    /**
+     * Updates the tag name.
+     *
+     * @param newValue The new value of the tag name.
+     */
     private void updateTagName(String newValue) {
         tagName = newValue;
         colorFiller();
     }
 
+    /**
+     * Fills the RGB text fields with values based on the selected tag.
+     */
     private void colorFiller() {
         for (Tag tag : event.getTags()) {
             if (tag.getName().equals(tagName)) {
@@ -55,6 +75,9 @@ public class AddTagCtrl implements Main.UpdatableUI{
         }
     }
 
+    /**
+     * Adds or updates the tag.
+     */
     public void add() {
         String name = nameTextField.getText();
         int red = Integer.parseInt(redTextField.getText());
@@ -86,19 +109,41 @@ public class AddTagCtrl implements Main.UpdatableUI{
         }
     }
 
-    public void refresh(Event event){
+    /**
+     * Refreshes the event.
+     *
+     * @param event The event to refresh.
+     */
+    public void refresh(Event event) {
         this.event = event;
     }
 
+    /**
+     * Clears all input fields.
+     */
     public void abort() {
         clearFields();
     }
 
+    /**
+     * Returns to the Add Expense scene.
+     */
     public void back() {
         clearFields();
         mainCtrl.showAddExpense(event);
     }
 
+    /**
+     * Clears all input fields and returns to the Add Expense scene.
+     */
+    public void ok() {
+        clearFields();
+        mainCtrl.showAddExpense(event);
+    }
+
+    /**
+     * Clears all input fields.
+     */
     public void clearFields() {
         nameTextField.clear();
         redTextField.clear();
@@ -106,11 +151,9 @@ public class AddTagCtrl implements Main.UpdatableUI{
         blueTextField.clear();
     }
 
-    public void ok() {
-        clearFields();
-        mainCtrl.showAddExpense(event);
-    }
-
+    /**
+     * Updates the user interface.
+     */
     @Override
     public void updateUI() {
 
