@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
@@ -78,11 +79,19 @@
       <HBox layoutX="-150.0" layoutY="-167.0" prefHeight="100.0" prefWidth="200.0" />
       <HBox layoutX="256.0" layoutY="316.0" prefHeight="27.0" prefWidth="183.0">
          <children>
-            <MenuButton fx:id="tagMenu" layoutX="210.0" layoutY="317.0" prefHeight="26.0" prefWidth="158.0" text="Select Tag">
+            <MenuButton fx:id="tagMenu" layoutX="210.0" layoutY="317.0" prefHeight="34.0" prefWidth="145.0" text="Select Tag">
                <items>
                </items>
             </MenuButton>
-            <Button fx:id="addTag" mnemonicParsing="false" onAction="#goToAddTags" prefHeight="26.0" prefWidth="36.0" text="✎" />
+            <Button fx:id="addTag" mnemonicParsing="false" onAction="#goToAddTags" prefHeight="26.0" prefWidth="36.0">
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@/client/misc/Edit.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
       </HBox>
    </children>

@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import commons.Event;
 import commons.Tag;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
@@ -125,7 +126,16 @@ public class AddTagCtrl implements Main.UpdatableUI {
      * Adds or updates the tag.
      */
     public void add() {
-        String name = nameTextField.getText();
+        String name = nameTextField.getText().trim();
+        if (name.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(Main.getLocalizedString("Error"));
+            alert.setHeaderText(Main.getLocalizedString("Error"));
+            alert.setContentText(Main.getLocalizedString("NameCannotBeEmpty"));
+            alert.showAndWait();
+            return;
+        }
+
         Color color = colorPicker.getValue();
         int red = (int) (color.getRed() * 255);
         int green = (int) (color.getGreen() * 255);
