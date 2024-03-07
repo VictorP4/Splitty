@@ -105,7 +105,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         } catch (WebApplicationException e) {
             noValidEventError(e.getMessage());
         }
-        clearField();
+        refresh();
     }
 
     /**
@@ -132,7 +132,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         } catch (WebApplicationException e) {
             noValidEventError(e.getMessage());
         }
-        clearField();
+        refresh();
     }
 
     /**
@@ -143,7 +143,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      */
     private Long getEventSource(Object eventSource) {
         if (eventSource instanceof Hyperlink clicked) {
-
             // the link has no event
             if (clicked.getText().isEmpty()) {
                 noValidEventError("Event does not exist");
@@ -151,14 +150,20 @@ public class StartScreenCtrl implements Main.UpdatableUI {
             }
             return recentlyAccessed.get(recentlyViewed.indexOf(clicked)).getId();
         }
-        else {
-            // no inviteCode has been inserted
-            if (eventCode.getText().isBlank() || alreadyJoined.isDisable()) {
-                noValidEventError("Event does not exist");
-                throw new IllegalArgumentException();
-            }
 
-            return Long.decode(eventCode.getText());
+        String eventCodeText = eventCode.getText();
+        // check if there is a code at all
+        if (eventCodeText.isBlank() || alreadyJoined.isDisable()) {
+            noValidEventError("Event does not exist");
+            throw new IllegalArgumentException();
+        }
+
+        try {
+            // check if the code is a long and if so, return it
+            return Long.decode(eventCodeText);
+        } catch (NumberFormatException e) {
+            noValidEventError("Event does not exist");
+            throw new IllegalArgumentException();
         }
     }
 
@@ -213,14 +218,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Clears all the text fields.
-     */
-    private void clearField() {
-        eventTitle.clear();
-        eventCode.clear();
-    }
-
-    /**
      * Updates the UI based on the language chosen by the user.
      */
     @Override
@@ -255,6 +252,8 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      * Refreshes the startScreen
      */
     public void refresh() {
+        eventTitle.clear();
+        eventCode.clear();
         alreadyJoined.setDisable(true);
     }
 }
