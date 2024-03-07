@@ -3,12 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StartScreenCtrl">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StartScreenCtrl">
    <children>
       <Text fx:id="createNewEvent" layoutX="88.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create New event">
          <font>
@@ -26,36 +22,37 @@
       <Button fx:id="joinButton" layoutX="402.0" layoutY="147.0" mnemonicParsing="false" onAction="#joinEvent" prefHeight="12.0" prefWidth="63.0" text="Join" />
 
 
-      <Text fx:id="recentViewedEvents" layoutX="88.0" layoutY="206.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Recently Viewed Events:">
+      <Text fx:id="recentViewedEvents" layoutX="88.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Recently Viewed Events:">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
       </Text>
-      <Hyperlink fx:id="link1" layoutX="87.0" layoutY="213.0" onAction="#joinEvent" text="Event 1">
+      <Hyperlink fx:id="link1" layoutX="87.0" layoutY="223.0" onAction="#joinEvent" text="Event 1">
          <font>
             <Font size="14.0" />
          </font>
       </Hyperlink>
-      <Hyperlink fx:id="link2" layoutX="87.0" layoutY="239.0" onAction="#joinEvent" text="Event 2">
+      <Hyperlink fx:id="link2" layoutX="87.0" layoutY="249.0" onAction="#joinEvent" text="Event 2">
          <font>
             <Font size="14.0" />
          </font>
       </Hyperlink>
-      <Hyperlink fx:id="link3" layoutX="87.0" layoutY="265.0" onAction="#joinEvent" text="Event 3">
+      <Hyperlink fx:id="link3" layoutX="87.0" layoutY="275.0" onAction="#joinEvent" text="Event 3">
          <font>
             <Font size="14.0" />
          </font>
       </Hyperlink>
-      <MenuButton fx:id="langButton"  layoutX="45.0" layoutY="349.0" mnemonicParsing="false" text="Language">
+      <MenuButton fx:id="langButton" layoutX="45.0" layoutY="349.0" mnemonicParsing="false" text="Language">
          <items>
-            <MenuItem mnemonicParsing="false" text="English" onAction="#switchToEnglish" />
-            <MenuItem mnemonicParsing="false" text="Dutch" onAction="#switchToDutch" />
+            <MenuItem mnemonicParsing="false" onAction="#switchToEnglish" text="English" />
+            <MenuItem mnemonicParsing="false" onAction="#switchToDutch" text="Dutch" />
          </items>
       </MenuButton>
-      <Hyperlink fx:id="link4" layoutX="87.0" layoutY="291.0" onAction="#joinEvent"  text="Event 4">
+      <Hyperlink fx:id="link4" layoutX="87.0" layoutY="301.0" onAction="#joinEvent" text="Event 4">
          <font>
             <Font size="14.0" />
          </font>
       </Hyperlink>
+      <CheckBox fx:id="alreadyJoined" layoutX="87.0" layoutY="175.0" mnemonicParsing="false" text="Already joined" />
    </children>
 </AnchorPane>

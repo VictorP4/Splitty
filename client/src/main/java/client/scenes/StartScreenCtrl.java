@@ -6,15 +6,11 @@ import commons.Event;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Modality;
 
 import com.google.inject.Inject;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuButton;
 import javafx.scene.text.Text;
 
 import static client.Main.switchLocale;
@@ -53,6 +49,8 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     private Hyperlink link3;
     @FXML
     private Hyperlink link4;
+    @FXML
+    private CheckBox alreadyJoined;
 
     /**
      * Constructs a new instance of StartScreenCtrl.
@@ -80,6 +78,10 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         for (Hyperlink l: recentlyViewed) {
             l.setText("");
         }
+
+        alreadyJoined.setDisable(true);
+        eventCode.textProperty().addListener((observable, oldValue, newValue) -> handleTextChange(newValue));
+
     }
 
     /**
@@ -110,16 +112,18 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      */
     public void joinEvent(ActionEvent event) {
         // checks if one of the hyperlinks was clicked, if not, will take the text from the eventCode
-        boolean throughInvite = !(event.getSource() instanceof Hyperlink);
+        boolean newMember = !(event.getSource() instanceof Hyperlink) && !alreadyJoined.isSelected();
         Long eventId = getEventSource(event.getSource());
 
         try {
             Event fetchedEvent = server.getEvent(eventId);
 
             mainCtrl.refreshEventOverview(fetchedEvent);
-            if (throughInvite) {
+            if (newMember) {
                 Participant joined = new Participant();
                 mainCtrl.showContactDetails(joined, fetchedEvent);
+            } else {
+                mainCtrl.showEventOverview();
             }
 
             updateMostRecent(fetchedEvent);
@@ -130,11 +134,10 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     }
 
     private Long getEventSource(Object eventSource) {
-        if (eventSource instanceof Hyperlink) {
-            Hyperlink clicked = (Hyperlink) eventSource;
+        if (eventSource instanceof Hyperlink clicked) {
 
             // the link has no event
-            if (clicked.getText().equals("")) {
+            if (clicked.getText().isEmpty()) {
                 noValidEventError("Event does not exist");
                 throw new IllegalArgumentException();
             }
@@ -142,10 +145,11 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         }
         else {
             // no inviteCode has been inserted
-            if (eventCode.getText().isBlank()) {
+            if (eventCode.getText().isBlank() || alreadyJoined.isDisable()) {
                 noValidEventError("Event does not exist");
                 throw new IllegalArgumentException();
             }
+
             return Long.decode(eventCode.getText());
         }
     }
@@ -160,7 +164,11 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setContentText(message);
         alert.showAndWait();
-        return;
+    }
+
+    private void handleTextChange(String inputtedCode) {
+        // Disable CheckBox when text is empty
+        alreadyJoined.setDisable(inputtedCode == null || inputtedCode.isEmpty()); // Enable CheckBox when text is entered
     }
 
     /**
@@ -170,9 +178,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      *              user
      */
     private void updateMostRecent(Event event) {
-        for(Event recent : recentlyAccessed){
-            if(recent.getId().equals(event.getId())) recentlyAccessed.remove(recent);
-        }
+        recentlyAccessed.removeIf(recent -> recent.getId().equals(event.getId()));
         recentlyAccessed.addFirst(event);
 
         if (recentlyAccessed.size() > 4) {
@@ -198,13 +204,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     private void clearField() {
         eventTitle.clear();
         eventCode.clear();
-    }
-
-    /**
-     * Shows the overview scene.
-     */
-    public void showOverview(Event event) {
-        mainCtrl.showEventOverview(event);
     }
 
     @Override
