@@ -90,7 +90,13 @@ public class TagControllerTest {
         tagToUpdate.setGreen(150);
         tagToUpdate.setBlue(200);
 
-        when(tagService.updateTag(eq(1L), anyString(), anyInt(), anyInt(), anyInt())).thenReturn(any(Tag.class));
+        try {
+            when(tagService.updateTag(eq(1L), anyString(), anyInt(), anyInt(), anyInt())).thenReturn(Tag.class.newInstance());
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
 
         ResponseEntity<Tag> response = tagController.updateTag(tagToUpdate.getId(), tagToUpdate);
 
