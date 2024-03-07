@@ -13,7 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-import java.util.Objects;
+
 
 /**
  * Controller class for the Add Tag scene.
