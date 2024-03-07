@@ -99,6 +99,7 @@ public class MainCtrl {
     public void showStartScreen() {
         primaryStage.setTitle("StartScreen");
         primaryStage.setScene(startScreen);
+        startScreenCtrl.refresh();
     }
 
     /**

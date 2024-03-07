@@ -64,6 +64,9 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         this.mainCtrl = mainCtrl;
     }
 
+    /**
+     * Initialized the start screen and it's links.
+     */
     public void initialize() {
         // initializing the recent event list and the hyperlink list
         recentlyAccessed = new LinkedList<>();
@@ -81,7 +84,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
 
         alreadyJoined.setDisable(true);
         eventCode.textProperty().addListener((observable, oldValue, newValue) -> handleTextChange(newValue));
-
     }
 
     /**
@@ -133,6 +135,12 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         clearField();
     }
 
+    /**
+     * Checks whether the source of the event is a hyperlink or an invite code and returns the correct code for the event
+     *
+     * @param eventSource The source that has caused the event to take place (a button press or hyperlink)
+     * @return a long which is the invite code for an event
+     */
     private Long getEventSource(Object eventSource) {
         if (eventSource instanceof Hyperlink clicked) {
 
@@ -166,6 +174,12 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         alert.showAndWait();
     }
 
+    /**
+     * Will check whether an invite code has been filled in the inviteCode text area. If it is, the checkbox will be
+     * made enables and if not, will stay disabled.
+     *
+     * @param inputtedCode The text contained in the inviteCode textArea
+     */
     private void handleTextChange(String inputtedCode) {
         // Disable CheckBox when text is empty
         alreadyJoined.setDisable(inputtedCode == null || inputtedCode.isEmpty()); // Enable CheckBox when text is entered
@@ -206,6 +220,9 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         eventCode.clear();
     }
 
+    /**
+     * Updates the UI based on the language chosen by the user.
+     */
     @Override
     public void updateUI() {
         createNewEvent.setText(Main.getLocalizedString("NewEvent"));
@@ -216,11 +233,28 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         langButton.setText(Main.getLocalizedString("langButton"));
     }
 
+    /**
+     * Allows the used to switch to Dutch
+     *
+     * @param actionEvent The event that caused this method to be called
+     */
     public void switchToDutch(ActionEvent actionEvent) {
         switchLocale("nl");
     }
 
+    /**
+     * Allows the used to switch to English
+     *
+     * @param actionEvent The event that caused this method to be called
+     */
     public void switchToEnglish(ActionEvent actionEvent) {
         switchLocale("en");
+    }
+
+    /**
+     * Refreshes the startScreen
+     */
+    public void refresh() {
+        alreadyJoined.setDisable(true);
     }
 }
