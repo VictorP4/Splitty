@@ -99,6 +99,7 @@ public class MainCtrl {
     public void showStartScreen() {
         primaryStage.setTitle("StartScreen");
         primaryStage.setScene(startScreen);
+        startScreenCtrl.refresh();
     }
 
     /**
@@ -107,6 +108,10 @@ public class MainCtrl {
     public void showEventOverview(Event event) {
         primaryStage.setTitle("EventOverview");
         primaryStage.setScene(eventOverview);
+        eventOverviewCtrl.refresh(event);
+    }
+
+    public void refreshEventOverview(Event event) {
         eventOverviewCtrl.refresh(event);
     }
 
