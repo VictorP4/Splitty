@@ -19,7 +19,7 @@ public class Expense {
     @ManyToMany(cascade = CascadeType.MERGE)
     private List<Participant> involvedParticipants;
     private Date date;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(nullable = true)
     private Tag tag;
 
