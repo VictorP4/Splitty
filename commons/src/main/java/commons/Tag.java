@@ -31,7 +31,15 @@ public class Tag {
      */
     public Tag(String name, int red, int green, int blue) {
         this.name = name;
-        setColor(red, green, blue);
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+    }
+
+
+
+    public Tag(){
+        //for object mapper
     }
 
     /**
@@ -71,28 +79,6 @@ public class Tag {
     }
 
     /**
-     * Retrieves the RGB color components of the tag.
-     *
-     * @return an array containing the red, green, and blue components in that order
-     */
-    public int[] getColor() {
-        return new int[]{red, green, blue};
-    }
-
-    /**
-     * Sets the RGB color components of the tag.
-     *
-     * @param red   the red component of the tag's color (0-255)
-     * @param green the green component of the tag's color (0-255)
-     * @param blue  the blue component of the tag's color (0-255)
-     */
-    public void setColor(int red, int green, int blue) {
-        this.red = Math.min(Math.max(0, red), 255);
-        this.green = Math.min(Math.max(0, green), 255);
-        this.blue = Math.min(Math.max(0, blue), 255);
-    }
-
-    /**
      * Gets the red component of the tag's color.
      *
      * @return the red component of the tag's color
@@ -107,7 +93,13 @@ public class Tag {
      * @param red the new red component of the tag's color
      */
     public void setRed(int red) {
-        this.red = red;
+        if (red < 0) {
+            this.red = 0;
+        } else if (red > 255) {
+            this.red = 255;
+        } else {
+            this.red = red;
+        }
     }
 
     /**
@@ -125,7 +117,13 @@ public class Tag {
      * @param blue the new blue component of the tag's color
      */
     public void setBlue(int blue) {
-        this.blue = blue;
+        if (blue < 0) {
+            this.blue = 0;
+        } else if (blue > 255) {
+            this.blue = 255;
+        } else {
+            this.blue = blue;
+        }
     }
 
     /**
@@ -143,7 +141,13 @@ public class Tag {
      * @param green the new green component of the tag's color
      */
     public void setGreen(int green) {
-        this.green = green;
+        if (green < 0) {
+            this.green = 0;
+        } else if (green > 255) {
+            this.green = 255;
+        } else {
+            this.green = green;
+        }
     }
 
     /**

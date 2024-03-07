@@ -3,10 +3,8 @@ package client.scenes;
 import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Tag;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import commons.Event;
 import commons.Expense;
@@ -19,17 +17,21 @@ import javafx.stage.Modality;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.awt.*;
 
 public class AddExpenseCtrl implements Main.UpdatableUI {
-    @FXML
-    public Text addEditText;
+
+
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private Event event;
+    private Tag selectedTag;
+    @FXML
+    public Text addEditText;
     @FXML
     public Text whoPaid;
     @FXML
@@ -41,17 +43,13 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     @FXML
     public Text howToSplit;
     @FXML
-    public CheckBox equally;
-    @FXML
     public Text expenseType;
     @FXML
     public Button abort;
-
     @FXML
     public Button add;
     @FXML
     public Button overviewButton;
-    private Event event;
 
     @FXML
     private CheckBox everybodyIn;
@@ -62,14 +60,16 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     @FXML
     private TextField amount;
     @FXML
-    private Spinner<Participant> paidBy;
+    private ComboBox<Participant> paidBy;
     @FXML
     private DatePicker date;
     @FXML
-    private Spinner<String> currency;
+    private ComboBox<String> currency;
     @FXML
     private TextField title;
 
+    @FXML
+    private MenuButton tagMenu;
 
 
     /**
@@ -84,6 +84,9 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         this.server = server;
     }
 
+    /**
+     *
+     */
     @Override
     public void updateUI() {
         overviewButton.setText(Main.getLocalizedString("overviewButton"));
@@ -98,14 +101,12 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         expenseType.setText(Main.getLocalizedString("expType"));
         abort.setText(Main.getLocalizedString("abort"));
         add.setText(Main.getLocalizedString("add"));
-
     }
 
     /**
      * cancels the process of adding a new expense by clearing inout fields and returning to the overview screen
      */
     public void cancel() {
-        clearFields();
         mainCtrl.showEventOverview(event);
     }
 
@@ -116,20 +117,36 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         amount.clear();
         title.clear();
         date.cancelEdit();
-        if(paidBy.getValueFactory()!=null) paidBy.getValueFactory().setValue(null);
+
+        paidBy.getSelectionModel().clearSelection();
+
+        tagMenu.setText("Select Tag");
+
+
         everybodyIn.setSelected(false);
         someIn.setSelected(false);
-        if(currency.getValueFactory()!=null) currency.getValueFactory().setValue(" ");
+        currency.getSelectionModel().clearSelection();
+        paidBy.getItems().removeAll(paidBy.getItems());
+        currency.getItems().removeAll(currency.getItems());
+        box.getChildren().removeAll(box.getChildren());
     }
 
+    /**
+     * creates an expense based on the input
+     * @return new expense
+     */
     public Expense getExpense() {
         String title = this.title.getText();
         double amount = Double.parseDouble(this.amount.getText());
         LocalDate localdate = this.date.getValue();
         Date date = Date.from(localdate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Participant paidBy = this.paidBy.getValue();
+        Participant paidBy = this.paidBy.getSelectionModel().getSelectedItem();
         List<Participant> partIn = add();
-        return new Expense(title, amount, paidBy, partIn, date);
+
+
+        Tag tag = selectedTag;
+        return new Expense(title, amount, paidBy, partIn, date, selectedTag);
+
     }
 
     /**
@@ -137,7 +154,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     public void ok() {
         try {
-            server.addExpense(getExpense());
+            server.addExpense(getExpense(), event.getId());
         }
         catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -155,13 +172,17 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     public void refresh(Event event){
         this.event = event;
+        clearFields();
+        currency.getItems().add("EUR");
         for(Participant p : this.event.getParticipants()){
             if(check(p)) {
                 CheckBox cb = new CheckBox(p.getName());
                 cb.setDisable(true);
                 box.getChildren().add(cb);
+                paidBy.getItems().add(p);
             }
         }
+        populateTagMenu();
     }
 
     /**
@@ -266,6 +287,46 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 c.setDisable(true);
             }
         }
-
     }
+
+    /**
+     * Populates the tag menu with the tags from the server.
+     */
+    private void populateTagMenu() {
+        List<Tag> tags = event.getTags();
+        tagMenu.getItems().clear();
+        for (Tag tag : tags) {
+            MenuItem menuItem = new MenuItem(tag.getName());
+            menuItem.setOnAction(e -> handleTagSelection(tag));
+
+            String colorStyle = String.format("-fx-background-color: rgba(%d, %d, %d, 1);", tag.getRed(), tag.getGreen(), tag.getBlue());
+
+            double brightness = (tag.getRed() * 0.299 + tag.getGreen() * 0.587 + tag.getBlue() * 0.114) / 255;
+            String textColor = brightness < 0.5 ? "white" : "black";
+            colorStyle += String.format("-fx-text-fill: %s;", textColor);
+
+            menuItem.setStyle(colorStyle);
+            tagMenu.getItems().add(menuItem);
+        }
+    }
+
+
+    /**
+     * Handles the selection of a tag from the tag menu.
+     *
+     * @param selected The selected tag.
+     */
+    private void handleTagSelection(Tag selected) {
+        tagMenu.setText(selected.getName());
+        this.selectedTag = selected;
+    }
+
+    /**
+     * Initializes the scene for adding or editing tags.
+     */
+    public void goToAddTags() {
+        clearFields();
+        mainCtrl.showAddTag(event);
+    }
+
 }

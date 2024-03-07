@@ -16,7 +16,9 @@ public class TagTest {
     public void testConstructorAndGetters() {
         Tag tag = new Tag("Test Tag", 120, 180, 220);
         assertEquals("Test Tag", tag.getName());
-        assertArrayEquals(new int[]{120, 180, 220}, tag.getColor());
+        assertEquals(120, tag.getRed());
+        assertEquals(180, tag.getGreen());
+        assertEquals(220, tag.getBlue());
     }
 
     /**
@@ -25,8 +27,12 @@ public class TagTest {
     @Test
     public void testSetColor() {
         Tag tag = new Tag("Test Tag", 120, 180, 220);
-        tag.setColor(50, 75, 100);
-        assertArrayEquals(new int[]{50, 75, 100}, tag.getColor());
+        tag.setRed(100);
+        tag.setGreen(200);
+        tag.setBlue(255);
+        assertEquals(100, tag.getRed());
+        assertEquals(200, tag.getGreen());
+        assertEquals(255, tag.getBlue());
     }
 
     /**
@@ -35,8 +41,12 @@ public class TagTest {
     @Test
     public void testSetColorOutOfRange() {
         Tag tag = new Tag("Test Tag", 120, 180, 220);
-        tag.setColor(300, -50, 500);
-        assertArrayEquals(new int[]{255, 0, 255}, tag.getColor());
+        tag.setRed(100);
+        tag.setGreen(-200);
+        tag.setBlue(255);
+        assertEquals(100, tag.getRed());
+        assertEquals(0, tag.getGreen());
+        assertEquals(255, tag.getBlue());
     }
 
     /**

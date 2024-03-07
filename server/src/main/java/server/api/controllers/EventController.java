@@ -80,6 +80,7 @@ public class EventController {
         update.setTitle(event.getTitle());
         update.setLastActivityDate(event.getLastActivityDate());
         update.setInviteCode(event.getInviteCode());
+        update.setTags(event.getTags());
 
         Event finalUpdate = repo.save(update);
         return ResponseEntity.ok(finalUpdate);
