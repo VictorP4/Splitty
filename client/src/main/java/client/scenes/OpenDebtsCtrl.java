@@ -53,6 +53,9 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         this.server = server;
     }
 
+    /**
+     * updates the UI
+     */
     @Override
     public void updateUI() {
         if(this.strings==null) this.strings = new OpenDebtString();
@@ -112,7 +115,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
     /**
      * Creates a list of transactions to settle the open debt within the group
      *
-     * @param event
+     * @param event the corresponding event
      * @return list of maximum n-1 transactions to settle debt
      */
     public List<Debt> getDebts(Event event){
@@ -168,7 +171,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
      *
      * @param debt     the debt which will be in the content
      * @param tempAP   the anchor pane with the content
-     * @param tempPane
+     * @param tempPane the reference for the title pane
      */
     private void setContentOfPane(Debt debt, AnchorPane tempAP, TitledPane tempPane) {
         tempAP.setMinHeight(0.0);
@@ -259,9 +262,9 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
     }
 
     /**
-     *
-     * @param debt
-     * @param tempBox
+     * Sets the graphic of the individual title pane
+     * @param debt the corresponding debt to the pane
+     * @param tempBox the HBox which will consist the graphic of the pane
      */
     private void settingGraphicOfPane(Debt debt, HBox tempBox) {
         tempBox.setAlignment(Pos.CENTER_RIGHT);
