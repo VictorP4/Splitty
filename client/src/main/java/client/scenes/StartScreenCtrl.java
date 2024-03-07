@@ -93,7 +93,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         Event createdEvent = new Event();
 
         if (eventTitle.getText().isEmpty()) {
-            noValidEventError("Why no title? (0_0) <-- this is supposed to be mad");
+            noValidEventError("Why no title? (>_<) <-- this is supposed to be mad");
             return;
         }
 
