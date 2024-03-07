@@ -13,6 +13,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+
+
 /**
  * Controller class for the Add Tag scene.
  */
@@ -149,10 +151,15 @@ public class AddTagCtrl implements Main.UpdatableUI {
                     tag.setRed(red);
                     tag.setGreen(green);
                     tag.setBlue(blue);
+                    server.updateTag(tag);
+                    this.event=server.updateEvent(event);
                 }
             }
         } else {
-            event.getTags().add(new Tag(name, red, green, blue));
+            Tag tag = new Tag(name,red,green,blue);
+            Tag saved = server.addTag(tag);
+            event.getTags().add(saved);
+            this.event=server.updateEvent(event);
 
         }
         clearFields();
@@ -164,8 +171,16 @@ public class AddTagCtrl implements Main.UpdatableUI {
      */
     public void remove() {
         String name = nameTextField.getText();
-        event.getTags().removeIf(tag -> tag.getName().equals(name));
+        Tag tag1=null;
+        for(Tag tag : event.getTags()){
+            if(name.equals(tag.getName())){
 
+                tag1=tag;
+            }
+        }
+        event.getTags().remove(tag1);
+        server.removeTag(tag1);
+        this.event = server.updateEvent(event);
         clearFields();
         mainCtrl.showAddExpense(event);
     }

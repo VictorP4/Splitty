@@ -90,9 +90,15 @@ public class TagControllerTest {
         tagToUpdate.setGreen(150);
         tagToUpdate.setBlue(200);
 
-        when(tagService.updateTag(eq(1L), anyString(), anyInt(), anyInt(), anyInt())).thenReturn(true);
+        try {
+            when(tagService.updateTag(eq(1L), anyString(), anyInt(), anyInt(), anyInt())).thenReturn(Tag.class.newInstance());
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
 
-        ResponseEntity<Void> response = tagController.updateTag(tagToUpdate.getId(), tagToUpdate);
+        ResponseEntity<Tag> response = tagController.updateTag(tagToUpdate.getId(), tagToUpdate);
 
         verify(tagService, times(1)).updateTag(eq(1L), eq("Updated Tag"), eq(100), eq(150), eq(200));
         assertEquals(HttpStatus.OK, response.getStatusCode());
