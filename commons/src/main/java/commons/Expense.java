@@ -14,12 +14,13 @@ public class Expense {
     private Long id;
     private String title;
     private double amount;
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Participant paidBy;
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.MERGE)
     private List<Participant> involvedParticipants;
     private Date date;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(nullable = true)
     private Tag tag;
 
     /**

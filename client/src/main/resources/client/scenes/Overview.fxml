@@ -29,7 +29,7 @@
             </font>
         </Text>
         <ChoiceBox fx:id="participantBox" layoutX="86.0" layoutY="171.0" prefHeight="25.0" prefWidth="181.0" />
-        <Button fx:id="settleDebts" layoutX="361.0" layoutY="402.0" mnemonicParsing="false" text="Settle Debts" />
+        <Button fx:id="settleDebts" layoutX="361.0" layoutY="402.0" mnemonicParsing="false" text="Settle Debts" onAction="#settleDebts" />
         <Text fx:id="expense" layoutX="88.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense">
             <font>
                 <Font name="System Bold" size="16.0" />

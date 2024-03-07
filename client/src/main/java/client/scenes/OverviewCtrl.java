@@ -284,4 +284,12 @@ public class OverviewCtrl implements Main.UpdatableUI {
         original = FXCollections.observableArrayList(event.getExpenses());
         expenseList.setItems(original);
     }
+
+    /**
+     * switches to the Open Debt scene
+     * @param actionEvent
+     */
+    public void settleDebts(ActionEvent actionEvent) {
+        mainCtrl.showOpenDebts(event);
+    }
 }
