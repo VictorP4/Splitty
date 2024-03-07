@@ -73,10 +73,6 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * goes back go event overview
-     */
-
-    /**
      * goes back to the event overview
      */
     public void back(){
