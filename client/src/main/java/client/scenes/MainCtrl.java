@@ -40,6 +40,8 @@ public class MainCtrl {
     private Scene startScreen;
     private OverviewCtrl eventOverviewCtrl;
     private Scene eventOverview;
+    private AddTagCtrl addTagCtrl;
+    private Scene addTag;
 
     /**
      * Initializes the main controller with the provided dependencies and sets up the primary stage.
@@ -59,7 +61,7 @@ public class MainCtrl {
     public void initialize(Stage primaryStage, Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<ContactDetailsCtrl, Parent> contactDetails, Pair<InvitationCtrl, Parent> invitation,
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<StatisticsCtrl, Parent> statistics,
-                           Pair<StartScreenCtrl, Parent> startScreen, Pair<OverviewCtrl, Parent> eventOverview) {
+                           Pair<StartScreenCtrl, Parent> startScreen, Pair<OverviewCtrl, Parent> eventOverview, Pair<AddTagCtrl, Parent> addTag) {
 
         this.primaryStage = primaryStage;
 
@@ -83,6 +85,9 @@ public class MainCtrl {
 
         this.statisticsCtrl = statistics.getKey();
         this.statistics = new Scene(statistics.getValue());
+
+        this.addTagCtrl = addTag.getKey();
+        this.addTag = new Scene(addTag.getValue());
 
         showStartScreen();
         primaryStage.show();
@@ -161,5 +166,14 @@ public class MainCtrl {
     public void showStatistics() {
         primaryStage.setTitle("Statistics");
         primaryStage.setScene(statistics);
+    }
+
+    /**
+     * Displays the add tag scene in the primary stage.
+     */
+    public void showAddTag(Event event) {
+        primaryStage.setTitle("AddTag");
+        primaryStage.setScene(addTag);
+        addTagCtrl.refresh(event);
     }
 }

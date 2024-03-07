@@ -17,14 +17,13 @@ package client.utils;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import commons.EmailRequestBody;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
+import commons.*;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
+
+import java.util.List;
 
 /**
  * Utility class for interacting with the server.
@@ -97,9 +96,9 @@ public class ServerUtils {
 	 * @param expense expense to be added
 	 * @return html response of the successful post request
 	 */
-	public Expense addExpense(Expense expense){
+	public Expense addExpense(Expense expense, Long id){
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events")
+				.target(SERVER).path("api/events/"+id+"/expenses")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
@@ -124,5 +123,18 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.delete();
+	}
+
+	/**
+	 * Fetches the tags from the server.
+	 *
+	 * @return The list of tags.
+	 */
+	public List<Tag> getTags(Long eventId) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events/" + eventId)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get().readEntity(Event.class).getTags();
 	}
 }

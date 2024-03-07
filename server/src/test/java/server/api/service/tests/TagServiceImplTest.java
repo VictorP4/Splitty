@@ -46,9 +46,9 @@ public class TagServiceImplTest {
 
         assertNotNull(createdTag);
         assertEquals("Test", createdTag.getName());
-        assertEquals(100, createdTag.getColor()[0]);
-        assertEquals(150, createdTag.getColor()[1]);
-        assertEquals(200, createdTag.getColor()[2]);
+        assertEquals(100, createdTag.getRed());
+        assertEquals(150, createdTag.getGreen());
+        assertEquals(200, createdTag.getBlue());
     }
 
     /**
@@ -83,9 +83,9 @@ public class TagServiceImplTest {
 
         assertTrue(result.isPresent());
         assertEquals("Test", result.get().getName());
-        assertEquals(100, result.get().getColor()[0]);
-        assertEquals(150, result.get().getColor()[1]);
-        assertEquals(200, result.get().getColor()[2]);
+        assertEquals(100, result.get().getRed());
+        assertEquals(150, result.get().getGreen());
+        assertEquals(200, result.get().getBlue());
     }
 
     /**

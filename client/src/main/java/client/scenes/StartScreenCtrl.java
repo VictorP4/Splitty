@@ -106,21 +106,26 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      * Has a participant join an existing event either through an invite code or a
      * link
      */
-
     public void joinEvent(ActionEvent event) {
         // checks if one of the hyperlinks was clicked, if not, will take the text from the eventCode
         Long eventId = null;
 
-        if (eventCode.getText().isEmpty() && event.getSource().toString().isEmpty()) {
-            noValidEventError("Event does not exist");
-
-            return;
-        }
         if (event.getSource() instanceof Hyperlink) {
             Hyperlink clicked = (Hyperlink) event.getSource();
+
+            // the link has no event
+            if (clicked.getText().equals("")) {
+                noValidEventError("Event does not exist");
+                return;
+            }
             eventId = recentlyAccessed.get(recentlyViewed.indexOf(clicked)).getId();
         }
         else {
+            // no inviteCode has been inserted
+            if (eventCode.getText().isBlank()) {
+                noValidEventError("Event does not exist");
+                return;
+            }
             eventId = Long.decode(eventCode.getText());
         }
 
@@ -132,7 +137,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
             noValidEventError(e.getMessage());
         }
         clearField();
-        // --> did I initialize a database?
     }
 
     /**
@@ -207,13 +211,5 @@ public class StartScreenCtrl implements Main.UpdatableUI {
 
     public void switchToEnglish(ActionEvent actionEvent) {
         switchLocale("en");
-    }
-
-    /**
-     * Refreshes the start scene
-     */
-    public void refresh() {
-        // refreshes the most recent event's depending on user -> need to know how user
-        // is stored
     }
 }

@@ -28,6 +28,7 @@ public class MyModule implements Module {
     public void configure(Binder binder) {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AddExpenseCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AddTagCtrl.class).in(Scopes.SINGLETON);
         binder.bind(OverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ContactDetailsCtrl.class).in(Scopes.SINGLETON);
         binder.bind(InvitationCtrl.class).in(Scopes.SINGLETON);
