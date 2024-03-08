@@ -33,7 +33,7 @@ public class EventControllerTest {
         sut.add(event1);
         sut.add(event2);
         sut.add(event3);
-        List<Event> events = sut.getAll();
+        List<Event> events = (List<Event>) sut.getAll(null);
         List<Event> expected  = new ArrayList<>();
         expected.add(event1);
         expected.add(event2);
