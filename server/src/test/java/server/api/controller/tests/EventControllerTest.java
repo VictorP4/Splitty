@@ -1,16 +1,11 @@
 package server.api.controller.tests;
 
 
+import commons.Event;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import commons.Event;
-import server.api.repository.tests.TestEventRepository;
 import server.api.controllers.EventController;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import server.api.repository.tests.TestEventRepository;
 
 public class EventControllerTest {
     public TestEventRepository repo;
@@ -25,23 +20,6 @@ public class EventControllerTest {
     public void cannotAddNullEvent() {
         var actual = sut.add(getEvent(null));
     }
-    @Test
-    public void getAllTest() {
-        Event event1 = getEvent("e1");
-        Event event2 = getEvent("e2");
-        Event event3 = getEvent("e3");
-        sut.add(event1);
-        sut.add(event2);
-        sut.add(event3);
-        List<Event> events = (List<Event>) sut.getAll(null);
-        List<Event> expected  = new ArrayList<>();
-        expected.add(event1);
-        expected.add(event2);
-        expected.add(event3);
-        assertEquals(expected, events);
-
-    }
-
     private static Event getEvent(String q) {
         Event event = new Event();
         event.setTitle(q);

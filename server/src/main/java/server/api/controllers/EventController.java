@@ -1,16 +1,11 @@
 package server.api.controllers;
 
 
-import java.util.*;
-
-
+import commons.Event;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import commons.Event;
-import org.springframework.web.client.HttpClientErrorException;
 import server.database.EventRepository;
 
 
