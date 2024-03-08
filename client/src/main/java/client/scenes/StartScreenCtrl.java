@@ -115,11 +115,12 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     public void joinEvent(ActionEvent event) {
         // checks if one of the hyperlinks was clicked, if not, will take the text from the eventCode
         boolean newMember = !(event.getSource() instanceof Hyperlink) && !alreadyJoined.isSelected();
-        Long eventId = getEventSource(event.getSource());
+
+        String inviteCode = getEventSource(event.getSource());
 
         try {
-            Event fetchedEvent = server.getEvent(eventId);
-
+            Event fetchedEvent = server.getEventbyInviteCode(inviteCode);
+            if(fetchedEvent==null) throw new WebApplicationException("Non-existing event");
             mainCtrl.refreshEventOverview(fetchedEvent);
             if (newMember) {
                 Participant joined = new Participant();
@@ -141,14 +142,14 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      * @param eventSource The source that has caused the event to take place (a button press or hyperlink)
      * @return a long which is the invite code for an event
      */
-    private Long getEventSource(Object eventSource) {
+    private String getEventSource(Object eventSource) {
         if (eventSource instanceof Hyperlink clicked) {
             // the link has no event
             if (clicked.getText().isEmpty()) {
                 noValidEventError("Event does not exist");
                 throw new IllegalArgumentException();
             }
-            return recentlyAccessed.get(recentlyViewed.indexOf(clicked)).getId();
+            return recentlyAccessed.get(recentlyViewed.indexOf(clicked)).getInviteCode();
         }
 
         String eventCodeText = eventCode.getText();
@@ -158,13 +159,10 @@ public class StartScreenCtrl implements Main.UpdatableUI {
             throw new IllegalArgumentException();
         }
 
-        try {
+
             // check if the code is a long and if so, return it
-            return Long.decode(eventCodeText);
-        } catch (NumberFormatException e) {
-            noValidEventError("Event does not exist");
-            throw new IllegalArgumentException();
-        }
+            return eventCodeText;
+
     }
 
     /**
