@@ -116,12 +116,9 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void clearFields() {
         amount.clear();
         title.clear();
-        date.cancelEdit();
-
+        date.setValue(null); //TODO: make it give a default
         paidBy.getSelectionModel().clearSelection();
-
         tagMenu.setText("Select Tag");
-
 
         everybodyIn.setSelected(false);
         someIn.setSelected(false);
@@ -129,6 +126,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         paidBy.getItems().removeAll(paidBy.getItems());
         currency.getItems().removeAll(currency.getItems());
         box.getChildren().removeAll(box.getChildren());
+        selectedTag = null;
     }
 
     /**
@@ -146,7 +144,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
         Tag tag = selectedTag;
         return new Expense(title, amount, paidBy, partIn, date, selectedTag);
-
     }
 
     /**
@@ -155,6 +152,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void ok() {
         try {
             server.addExpense(getExpense(), event.getId());
+            event = server.getEvent(event.getId());
         }
         catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);

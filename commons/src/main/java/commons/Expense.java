@@ -208,7 +208,7 @@ public class Expense {
      */
     @Override
     public String toString() {
-        return title + " " + amount + ", " + Objects.requireNonNullElse(tag.getName(), "no tag");
+        return title + " " + amount + ", " + (tag == null ? "no tag" : tag.getName());
     }
 }
 
