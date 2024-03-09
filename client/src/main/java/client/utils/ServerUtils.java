@@ -103,6 +103,7 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
 	}
+
 	public Participant addParticipant(Participant participant){
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/participants")
@@ -158,4 +159,37 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.put(Entity.entity(tag,APPLICATION_JSON), Tag.class);
 	}
+
+	//TODO: make sure this is good:
+
+	/**
+	 * deletes an expense
+	 *
+	 * @param id id of the event whose expense is getting deleted
+	 * @param expense expense to delete
+	 * @return server response
+	 */
+	public Response deleteExpense(Long id, Expense expense){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events/"+id+"/expenses" + expense.getId())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.delete();
+	}
+
+	/**
+	 * updates an expense
+	 *
+	 * @param expense to update
+	 * @param id id of the event whose expense is getting updated
+	 * @return server response
+	 */
+	public Expense updateExpense(Long id, Expense expense){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events/"+id+"/expenses" + expense.getId())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
+	}
+
 }
