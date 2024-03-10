@@ -93,7 +93,6 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
         participant.setBIC(bicField.getText());
         participant.setIBAN(ibanField.getText());
         mainCtrl.updateParticipant(participant);
-        back();
     }
 
     /**

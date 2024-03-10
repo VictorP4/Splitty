@@ -40,6 +40,8 @@ public class MainCtrl {
     private Scene startScreen;
     private OverviewCtrl eventOverviewCtrl;
     private Scene eventOverview;
+    private AddTagCtrl addTagCtrl;
+    private Scene addTag;
 
     private AdminEventOverviewCtrl adminEventOverviewCtrl;
     private Scene adminEventOverview;
@@ -63,7 +65,7 @@ public class MainCtrl {
                            Pair<ContactDetailsCtrl, Parent> contactDetails, Pair<InvitationCtrl, Parent> invitation,
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<StatisticsCtrl, Parent> statistics,
                            Pair<StartScreenCtrl, Parent> startScreen, Pair<OverviewCtrl, Parent> eventOverview,
-                           Pair<AdminEventOverviewCtrl, Parent> adminEventOverviewCtrl) {
+                           Pair<AdminEventOverviewCtrl, Parent> adminEventOverviewCtrl, Pair<AddTagCtrl, Parent> addTag) {
 
         this.primaryStage = primaryStage;
 
@@ -91,6 +93,9 @@ public class MainCtrl {
         this.adminEventOverviewCtrl = adminEventOverviewCtrl.getKey();
         this.adminEventOverview = new Scene(adminEventOverviewCtrl.getValue());
 
+        this.addTagCtrl = addTag.getKey();
+        this.addTag = new Scene(addTag.getValue());
+
         showStartScreen();
         primaryStage.show();
     }
@@ -101,6 +106,7 @@ public class MainCtrl {
     public void showStartScreen() {
         primaryStage.setTitle("StartScreen");
         primaryStage.setScene(startScreen);
+        startScreenCtrl.refresh();
     }
 
     /**
@@ -118,6 +124,10 @@ public class MainCtrl {
     public void showEventOverview(Event event) {
         primaryStage.setTitle("EventOverview");
         primaryStage.setScene(eventOverview);
+        eventOverviewCtrl.refresh(event);
+    }
+
+    public void refreshEventOverview(Event event) {
         eventOverviewCtrl.refresh(event);
     }
 
@@ -177,5 +187,14 @@ public class MainCtrl {
     public void showStatistics() {
         primaryStage.setTitle("Statistics");
         primaryStage.setScene(statistics);
+    }
+
+    /**
+     * Displays the add tag scene in the primary stage.
+     */
+    public void showAddTag(Event event) {
+        primaryStage.setTitle("AddTag");
+        primaryStage.setScene(addTag);
+        addTagCtrl.refresh(event);
     }
 }

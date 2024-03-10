@@ -21,8 +21,9 @@ public class Event {
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Participant> participants;
     @OneToMany(cascade = CascadeType.PERSIST)
-    @Transient
     private List<Expense> expenses;
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private List<Tag> tags;
 
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final SecureRandom RANDOM = new SecureRandom();
@@ -39,6 +40,10 @@ public class Event {
         this.creationDate = new Date();
         this.lastActivityDate = this.creationDate;
         this.inviteCode=generateRandomString(6);
+        this.tags = new ArrayList<>();
+        tags.add(new Tag("Food", 0, 255, 0));
+        tags.add(new Tag("Entrance fees", 0, 0, 255));
+        tags.add(new Tag("Travel", 255, 0, 0));
     }
 
     public static String generateRandomString(int length) {
@@ -177,6 +182,28 @@ public class Event {
     }
 
     /**
+     * Retrieves the list of tags of the event.
+        *
+        * @return the list of tags of the event
+     */
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    /**
+     * Sets the list of tags of the event.
+     *
+     * @param tags the list of tags to set
+     */
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
+    }
+
+    /**
      * Adds a participant to the list of participants of the event.
      *
      * @param participant the participant to add
@@ -237,4 +264,5 @@ public class Event {
     public int hashCode() {
         return Objects.hash(id, title, creationDate, lastActivityDate, inviteCode, participants, expenses);
     }
+
 }

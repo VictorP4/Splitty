@@ -17,15 +17,14 @@ package client.utils;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import commons.EmailRequestBody;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
+import commons.*;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
+
+import java.util.List;
 
 import java.util.ArrayList;
 
@@ -115,9 +114,9 @@ public class ServerUtils {
 	 * @param expense expense to be added
 	 * @return html response of the successful post request
 	 */
-	public Expense addExpense(Expense expense){
+	public Expense addExpense(Expense expense, Long id){
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events")
+				.target(SERVER).path("api/events/"+id+"/expenses")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
@@ -142,5 +141,39 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.delete();
+	}
+
+	/**
+	 * Fetches the tags from the server.
+	 *
+	 * @return The list of tags.
+	 */
+	public List<Tag> getTags(Long eventId) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events/" + eventId)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get().readEntity(Event.class).getTags();
+	}
+	public Tag addTag(Tag tag){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/tags")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.post(Entity.entity(tag,APPLICATION_JSON), Tag.class);
+	}
+	public Response removeTag(Tag tag){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/tags/"+tag.getId())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.delete();
+	}
+	public Tag updateTag(Tag tag){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/tags/"+tag.getId())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.put(Entity.entity(tag,APPLICATION_JSON), Tag.class);
 	}
 }

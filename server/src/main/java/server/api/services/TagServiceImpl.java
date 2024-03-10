@@ -33,16 +33,18 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public boolean updateTag(Long id, String name, int red, int green, int blue) {
+    public Tag updateTag(Long id, String name, int red, int green, int blue) {
         Optional<Tag> optionalTag = tagRepository.findById(id);
         if (optionalTag.isPresent()) {
             Tag tag = optionalTag.get();
             tag.setName(name);
-            tag.setColor(red, green, blue);
-            tagRepository.save(tag);
-            return true;
+            tag.setRed(red);
+            tag.setGreen(green);
+            tag.setBlue(blue);
+
+            return tagRepository.save(tag);
         }
-        return false;
+        return null;
     }
 
     @Override

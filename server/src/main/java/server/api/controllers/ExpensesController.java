@@ -1,16 +1,10 @@
 package server.api.controllers;
-import commons.Event;
 import commons.Expense;
-import commons.Participant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.EventRepository;
-import server.database.ExpensesRepository;
-import server.database.ParticipantRepository;
+import server.api.services.ExpensesService;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,21 +12,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/events")
 public class ExpensesController {
-    private final ExpensesRepository expRepo;
-    private final EventRepository eventRepo;
-    private final ParticipantRepository participantRepo;
 
-    /**
-     * Constructor with both repositories
-     *
-     * @param expRepo         expenses
-     * @param eventRepo       events
-     * @param participantRepo
-     */
-    public ExpensesController(ExpensesRepository expRepo, EventRepository eventRepo, ParticipantRepository participantRepo) {
-        this.expRepo = expRepo;
-        this.eventRepo = eventRepo;
-        this.participantRepo = participantRepo;
+    @Autowired
+    private final ExpensesService expService;
+
+    public ExpensesController(ExpensesService expService) {
+        this.expService = expService;
     }
 
     /**
@@ -42,10 +27,10 @@ public class ExpensesController {
      */
     @GetMapping(path = {"/{id}/expenses"})
     public ResponseEntity<List<Expense>> getAll(@PathVariable("id") long id) {
-        if(id<0 || !eventRepo.existsById(id)){
+        List<Expense> expenses = expService.getAll(id);
+        if (expenses == null)
             return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(eventRepo.findById(id).get().getExpenses());
+        return ResponseEntity.ok(expenses);
     }
 
     /**
@@ -56,28 +41,8 @@ public class ExpensesController {
      */
     @PostMapping(path = {"/{id}/expenses"})
     public ResponseEntity<Expense> addNew(@PathVariable("id") long id, @RequestBody Expense expense){
-        Event event = eventRepo.getReferenceById((id));
-        if (event == null || event.getTitle() == null || expense == null || expense.getTitle() == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        DecimalFormat df = new DecimalFormat("##.00");
-        Expense newExp = expRepo.save(expense);
-        //updating debts
-        Participant p = newExp.getPaidBy();
-        double newDebt = p.getDebt()+Double.parseDouble(df.format(newExp.getAmount()));
-        p.setDebt(newDebt);
-        participantRepo.save(p);
-        for(Participant people : newExp.getInvolvedParticipants()){
-            newDebt = people.getDebt()-Double.parseDouble(df.format(((double)newExp.getAmount())/newExp.getInvolvedParticipants().size()));
-            people.setDebt(newDebt);
-            participantRepo.save(people);
-        }
-        //updating the list of expenses in the event
-        List<Expense> oldExpenses = event.getExpenses();
-        oldExpenses.add((newExp));
-        event.setExpenses(oldExpenses);
-
-        eventRepo.save(event);
+        Expense newExp = expService.addNew(id,expense);
+        if(newExp == null) return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(newExp);
     }
 
@@ -91,39 +56,8 @@ public class ExpensesController {
     @PutMapping(path = "/{id}/expenses/{expId}")
     public ResponseEntity<Expense> update(@PathVariable("id") long id, @PathVariable("expId") long expId,
     @RequestBody Expense expense){
-        if (id < 0 || !eventRepo.existsById(id) || expId < 0 || !expRepo.existsById(expId)) {
-            return ResponseEntity.badRequest().build();
-        }
-        DecimalFormat df = new DecimalFormat("##.00");
-        Expense oldExp = expRepo.findById(expId).get();
-        //resetting debts
-        Participant p1 = oldExp.getPaidBy();
-        double oldDebt = p1.getDebt()-Double.parseDouble(df.format(oldExp.getAmount()));
-        p1.setDebt(oldDebt);
-        participantRepo.save(p1);
-        for(Participant people : oldExp.getInvolvedParticipants()){
-            oldDebt = people.getDebt()+Double.parseDouble(df.format(((double)oldExp.getAmount())/oldExp.getInvolvedParticipants().size()));
-            people.setDebt(oldDebt);
-            participantRepo.save(people);
-        }
-        //updating expense
-        oldExp.setAmount(expense.getAmount());
-        oldExp.setInvolvedParticipants(expense.getInvolvedParticipants());
-        oldExp.setPaidBy(expense.getPaidBy());
-        oldExp.setTitle(expense.getTitle());
-        oldExp.setDate(expense.getDate());
-        //updating debts
-        Participant p = oldExp.getPaidBy();
-        double newDebt = p.getDebt()+Double.parseDouble(df.format(oldExp.getAmount()));
-        p.setDebt(newDebt);
-        participantRepo.save(p);
-        for(Participant people : oldExp.getInvolvedParticipants()){
-            newDebt = people.getDebt()-Double.parseDouble(df.format(((double)oldExp.getAmount())/oldExp.getInvolvedParticipants().size()));
-            people.setDebt(newDebt);
-            participantRepo.save(people);
-        }
-
-        Expense newExp = expRepo.save(oldExp);
+        Expense newExp = expService.update(id, expId, expense);
+        if(newExp == null) return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(newExp);
     }
 
@@ -135,31 +69,9 @@ public class ExpensesController {
      */
     @DeleteMapping(path = "/{id}/expenses/{expId}")
     public ResponseEntity<Expense> delete(@PathVariable("id") long id, @PathVariable("expId") long expId){
-        if (id < 0 || !eventRepo.existsById(id) || expId < 0 || !expRepo.existsById(expId)) {
-            return ResponseEntity.badRequest().build();
-        }
-        DecimalFormat df = new DecimalFormat("##.00");
-        Expense expense = expRepo.findById(expId).get();
-        //resetting debts
-        Participant p1 = expense.getPaidBy();
-        double oldDebt = p1.getDebt()-Double.parseDouble(df.format(expense.getAmount()));
-        p1.setDebt(oldDebt);
-        participantRepo.save(p1);
-        for(Participant people : expense.getInvolvedParticipants()){
-            oldDebt = people.getDebt()+Double.parseDouble(df.format(((double)expense.getAmount())/expense.getInvolvedParticipants().size()));
-            people.setDebt(oldDebt);
-            participantRepo.save(people);
-        }
-        //deleting expense
-        expRepo.deleteById(id);
-        //deleting expense in event
-        Event event = eventRepo.findById(id).get();
-        List<Expense> expenses = event.getExpenses();
-        expenses.remove(expense);
-        event.setExpenses(expenses);
-
-        eventRepo.save(event);
-        return ResponseEntity.ok(expense);
+        Expense exp = expService.delete(id, expId);
+        if(exp == null) return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(exp);
     }
 
     /**
@@ -168,16 +80,10 @@ public class ExpensesController {
      * @return
      */
     @GetMapping(path = "/{id}/expenses/total")
-    public ResponseEntity<Object> total(@PathVariable("id") long id){
-        if (id < 0 || !eventRepo.existsById(id)) {
-            return ResponseEntity.badRequest().build();
-        }
-        Event event = eventRepo.getReferenceById(id);
-        double sum = 0;
-        for(Expense exp : event.getExpenses()){
-            sum+=exp.getAmount();
-        }
-        return ResponseEntity.ok(sum);
+    public ResponseEntity<Double> total(@PathVariable("id") long id){
+        Double total = expService.total(id);
+        if(total == null) return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(total);
     }
 
     /**
@@ -189,20 +95,8 @@ public class ExpensesController {
      */
     @GetMapping(path = "/{id}/expenses/debts")
     public ResponseEntity<Map<String,List<Double>>> debt(@PathVariable("id") long id){
-        if (id < 0 || !eventRepo.existsById(id)) {
-            return ResponseEntity.badRequest().build();
-        }
-        Event event = eventRepo.getReferenceById(id);
-        List<Expense> expenses = event.getExpenses();
-        Map<String, List<Double>> debts = new HashMap<>();
-        for(Expense expense : expenses){
-            String buyer = expense.getPaidBy().getName();
-            debts.putIfAbsent(buyer,new ArrayList<>());
-            List<Double> toPay = debts.get(buyer);
-            double owed = expense.getAmount()/(long) expense.getInvolvedParticipants().size();
-            toPay.add(owed);
-            debts.put(buyer,toPay);
-        }
+        Map<String,List<Double>> debts = expService.debt(id);
+        if(debts == null) return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(debts);
     }
 
@@ -212,22 +106,9 @@ public class ExpensesController {
      * @return
      */
     @GetMapping(path = "/{id}/expenses/shares")
-    public ResponseEntity<Map<String,List<Double>>> share(@PathVariable("id") long id){
-        if (id < 0 || !eventRepo.existsById(id)) {
-            return ResponseEntity.badRequest().build();
-        }
-        Event event = eventRepo.getReferenceById(id);
-        List<Expense> expenses = event.getExpenses();
-        Map<String, List<Double>> share = new HashMap<>();
-        for(Expense expense : expenses){
-            double part = expense.getAmount()/(long) expense.getInvolvedParticipants().size();
-            for(Participant person : expense.getInvolvedParticipants()){
-                share.putIfAbsent(person.getName(),new ArrayList<>());
-                List<Double> toPay = share.get(person.getName());
-                toPay.add(part);
-                share.put(person.getName(),toPay);
-            }
-        }
+    public ResponseEntity<Map<String,List<Double>>> share(@PathVariable("id") long id) {
+        Map<String, List<Double>> share = expService.share(id);
+        if (share == null) return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(share);
     }
 }

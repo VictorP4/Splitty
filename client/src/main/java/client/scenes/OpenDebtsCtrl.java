@@ -1,11 +1,12 @@
 package client.scenes;
-
 import client.Main;
 import client.models.Debt;
+import client.models.OpenDebtString;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.EmailRequestBody;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import jakarta.ws.rs.core.Response;
 import javafx.collections.FXCollections;
@@ -33,40 +34,12 @@ import java.util.List;
 public class OpenDebtsCtrl implements Main.UpdatableUI {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-    @FXML
-    public Text transferTo;
-    @FXML
-    public Text accHolder;
-    @FXML
-    public Text odEmail;
-    @FXML
-    public Button reminderButton;
-    @FXML
-    public Button markReceived;
-    @FXML
-    public Text transferTo1;
-    @FXML
-    public Text accHolder1;
-    @FXML
-    public Text odEmail1;
-    @FXML
-    public Button reminderButton1;
-    @FXML
-    public Button markReceived1;
-    @FXML
-    public Text transferTo2;
-    @FXML
-    public Text accHolder2;
-    @FXML
-    public Text odEmail2;
-    @FXML
-    public Button reminderButton2;
-    @FXML
-    public Button markReceived2;
     private ObservableList<Debt> debts;
     @FXML
     private Accordion debtsOverview;
     private Event event;
+    private OpenDebtString strings;
+    private String lang;
 
     /**
      * Constructs a new instance of an OpenDebtCtrl
@@ -80,27 +53,31 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         this.server = server;
     }
 
+    /**
+     * updates the UI
+     */
     @Override
     public void updateUI() {
-        transferTo.setText(Main.getLocalizedString("transferTo"));
-        accHolder.setText(Main.getLocalizedString("accHolder"));
-        odEmail.setText(Main.getLocalizedString("emailHolder"));
-        reminderButton.setText(Main.getLocalizedString("reminder"));
-        markReceived.setText(Main.getLocalizedString("markReceived"));
-        transferTo1.setText(Main.getLocalizedString("transferTo"));
-        accHolder1.setText(Main.getLocalizedString("accHolder"));
-        odEmail1.setText(Main.getLocalizedString("emailHolder"));
-        reminderButton1.setText(Main.getLocalizedString("reminder"));
-        markReceived1.setText(Main.getLocalizedString("markReceived"));
-        transferTo2.setText(Main.getLocalizedString("transferTo"));
-        accHolder2.setText(Main.getLocalizedString("accHolder"));
-        odEmail2.setText(Main.getLocalizedString("emailHolder"));
-        reminderButton2.setText(Main.getLocalizedString("reminder"));
-        markReceived2.setText(Main.getLocalizedString("markReceived"));
+        if(this.strings==null) this.strings = new OpenDebtString();
+
+        if(Main.getLocalizedString("accHolder").equals("Account Holder:")) lang="en";
+        else lang="nl";
+        strings.setBankInfo(Main.getLocalizedString("transferTo"));
+        strings.setBankAccount(Main.getLocalizedString("accHolder"));
+        strings.setEmail(Main.getLocalizedString("emailHolder"));
+        strings.setSendReminder(Main.getLocalizedString("reminder"));
+        strings.setMarkReceived(Main.getLocalizedString("markReceived"));
+
+
+
     }
 
     /**
      * goes back go event overview
+     */
+
+    /**
+     * goes back to the event overview
      */
     public void back(){
         mainCtrl.showEventOverview(event);
@@ -110,6 +87,9 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
      * refreshes the debts
      */
     public void refresh(Event event){
+        if(this.lang==null) lang="en";
+        this.event=event;
+        if(this.strings==null) this.strings = new OpenDebtString();
         var tempDebts = getDebts(event);
         debts = FXCollections.observableList(tempDebts);
         List<TilePane> titlePanes= new ArrayList<>();
@@ -124,7 +104,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
             tempPane.setGraphic(tempBox);
             //setting the content of pane
             AnchorPane tempAP = new AnchorPane();
-            setContentOfPane(debt, tempAP);
+            setContentOfPane(debt, tempAP,tempPane);
             tempPane.setContent(tempAP);
             debtsOverview.getPanes().add(tempPane);
         }
@@ -135,7 +115,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
     /**
      * Creates a list of transactions to settle the open debt within the group
      *
-     * @param event
+     * @param event the corresponding event
      * @return list of maximum n-1 transactions to settle debt
      */
     public List<Debt> getDebts(Event event){
@@ -166,8 +146,8 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
                 result.add(new Debt(debts[j],list.get(j),list.get(i)));
                 debts[i]=0;
                 debts[j]=0;
-                i--;
-                j++;
+                i++;
+                j--;
             }
             else if(Math.abs(debts[i])<debts[j]){
                 result.add(new Debt(Math.abs(debts[i]),list.get(j),list.get(i)));
@@ -189,10 +169,11 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
     /**
      * Gives the content of the respective pane for the accordion
      *
-     * @param debt the debt which will be in the content
-     * @param tempAP the anchor pane with the content
+     * @param debt     the debt which will be in the content
+     * @param tempAP   the anchor pane with the content
+     * @param tempPane the reference for the title pane
      */
-    private void setContentOfPane(Debt debt, AnchorPane tempAP) {
+    private void setContentOfPane(Debt debt, AnchorPane tempAP, TitledPane tempPane) {
         tempAP.setMinHeight(0.0);
         tempAP.setMinWidth(0.0);
         tempAP.setPrefSize(367,205);
@@ -203,8 +184,12 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
             text1.setLayoutY(27.0);
             text1.setStrokeType(StrokeType.OUTSIDE);
             text1.setStrokeWidth(0.0);
+            text1.textProperty().bind(strings.bankInfo());
+            if(strings.getBankInfo()==null) strings.setBankInfo("Bank information available, transfer the money to:");
 
             Text text2 = new Text("Account Holder: " + debt.getPersonOwed().getName());
+            text2.textProperty().bind(strings.bankAccountProperty());
+            if(strings.getBankAccount()==null) strings.setBankAccount("Account Holder: ");
             text2.setLayoutX(14.0);
             text2.setLayoutY(44.0);
             text2.setStrokeType(StrokeType.OUTSIDE);
@@ -223,19 +208,23 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
             text4.setStrokeWidth(0.0);
 
             Text text5 = new Text("Email configured:");
+            text5.textProperty().bind(strings.email());
+            if(strings.getEmail()==null) strings.setEmail("Email configured:");
             text5.setLayoutX(14.0);
             text5.setLayoutY(108.0);
             text5.setStrokeType(StrokeType.OUTSIDE);
             text5.setStrokeWidth(0.0);
 
             Button emailB = new Button("Send reminder");
+            emailB.textProperty().bind(strings.sendReminder());
+            if(strings.getSendReminder()==null) strings.setSendReminder("Send reminder");
             emailB.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    Node source = (Node) event.getSource();
-                    HBox parent = (HBox) source.getParent();
+                    HBox parent = (HBox) tempPane.getGraphic();
                     ObservableList<Node> list = parent.getChildren();
                     list.remove(1);
+                    emailB.setDisable(true);
                     List<String> message = new ArrayList<>();
                     message.add(debt.getPersonInDebt().getName());
                     message.add(debt.getPersonInDebt().getEmail());
@@ -248,11 +237,13 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
                     } else {
                         System.out.println("Failed to send reminder. Status code: " + response.getStatus());
                     }
-                    list.add(1, new ImageView(new Image("../resources/client/misc/MailActive.png")));
-
+                    ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/client/misc/MailActive.png")));
+                    img.setFitWidth(16);
+                    img.setFitHeight(16);
+                    list.add(1, img);
                 }
             });
-
+            if(debt.getPersonOwed().getEmail().isEmpty()) emailB.setDisable(true);
             emailB.setLayoutX(124);
             emailB.setLayoutY(91);
             emailB.setMnemonicParsing(false);
@@ -260,19 +251,20 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         }
         else{
             text1 = new Text("Bank information not available");
+            text1.textProperty().bind(strings.bankInfoNA());
+            if(strings.getBankInfoNA()==null) strings.setBankInfoNA("Bank information not available");
             text1.setLayoutX(14.0);
             text1.setLayoutY(27.0);
             text1.setStrokeType(StrokeType.OUTSIDE);
             text1.setStrokeWidth(0.0);
             tempAP.getChildren().addAll(text1);
-
         }
     }
 
     /**
-     *
-     * @param debt
-     * @param tempBox
+     * Sets the graphic of the individual title pane
+     * @param debt the corresponding debt to the pane
+     * @param tempBox the HBox which will consist the graphic of the pane
      */
     private void settingGraphicOfPane(Debt debt, HBox tempBox) {
         tempBox.setAlignment(Pos.CENTER_RIGHT);
@@ -280,24 +272,42 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         tempBox.setPrefWidth(422.0);
         tempBox.setSpacing(5);
         Text text = new Text();
-        text.setText(debt.getPersonInDebt().getName()+" gives "+ debt.getAmount()+" € to "+ debt.getPersonOwed().getName());
+
+        if(this.lang.equals("en")) text.setText(debt.getPersonInDebt().getName()+" gives "+ debt.getAmount()+" euro to "+ debt.getPersonOwed().getName());
+        else text.setText(debt.getPersonInDebt().getName()+" geeft "+ debt.getAmount()+" euro ann "+ debt.getPersonOwed().getName());
         text.setWrappingWidth(275);
         text.setStrokeType(StrokeType.OUTSIDE);
         text.setStrokeWidth(0.0);
-        ImageView imgMail = new ImageView( new Image("../resources/client/misc/MailInactive.png"));
+        ImageView imgMail = new ImageView( new Image(getClass().getResourceAsStream("/client/misc/MailInactive.png")));
         imgMail.setId("mail");
-        ImageView imgBank = new ImageView(new Image("../resources/client/misc/HomeInactive.png"));
+        imgMail.setFitHeight(16);
+        imgMail.setFitWidth(16);
+        ImageView imgBank = new ImageView(new Image(getClass().getResourceAsStream("/client/misc/HomeInactive.png")));
         imgBank.setId("bank");
+        imgBank.setFitHeight(16);
+        imgBank.setFitWidth(16);
         Button markReceived = new Button("Mark Received");
+        markReceived.textProperty().bind(strings.markReceived());
+        if(strings.getMarkReceived()==null) strings.setMarkReceived("Mark Received");
+        Event event1 = this.event;
         markReceived.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Node source = (Node) event.getSource();
                 HBox parent = (HBox) source.getParent();
+                markReceived.setDisable(true);
                 ObservableList<Node> list = parent.getChildren();
-                //TODO create expense to settle debt
+                Expense expense = new Expense();
+                expense.setPaidBy(debt.getPersonInDebt());
+                expense.setInvolvedParticipants(new ArrayList<>(List.of(debt.getPersonOwed())));
+                expense.setAmount(debt.getAmount());
+                expense.setTitle("Debt repayment");
+                server.addExpense(expense, event1.getId());
                 list.remove(2);
-                list.add(2,new ImageView(new Image("../resources/client/misc/HomeActive.png")));
+                ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/client/misc/HomeActive.png")));
+                img.setFitHeight(16);
+                img.setFitWidth(16);
+                list.add(2,img);
             }
         });
         markReceived.setAlignment(Pos.CENTER_RIGHT);

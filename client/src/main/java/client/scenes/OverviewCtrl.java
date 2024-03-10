@@ -186,15 +186,14 @@ public class OverviewCtrl implements Main.UpdatableUI {
         if (!participantExists) {
             Participant newPart = serverUtils.addParticipant(participant);
             this.event.getParticipants().add(newPart);
-
         }
         else{
             serverUtils.updateParticipant(participant);
         }
-        System.out.println(event.getParticipants());
+        participant.setEventFollowed(event);
         this.event = serverUtils.updateEvent(event);
         participantsDisplay();
-
+        mainCtrl.showEventOverview(event);
     }
 
     /**
@@ -284,5 +283,13 @@ public class OverviewCtrl implements Main.UpdatableUI {
         expenseList = new ListView<>();
         original = FXCollections.observableArrayList(event.getExpenses());
         expenseList.setItems(original);
+    }
+
+    /**
+     * switches to the Open Debt scene
+     * @param actionEvent
+     */
+    public void settleDebts(ActionEvent actionEvent) {
+        mainCtrl.showOpenDebts(event);
     }
 }
