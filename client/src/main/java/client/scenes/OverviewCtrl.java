@@ -178,7 +178,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
         boolean participantExists = false;
         for (Participant p : event.getParticipants()) {
             if (Objects.equals(p.getId(), participant.getId())) {
-
                 participantExists = true;
                 break;
             }
