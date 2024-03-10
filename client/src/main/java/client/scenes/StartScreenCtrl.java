@@ -165,11 +165,11 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      *              user
      */
     private void updateMostRecent(Event event) {
-//        listViewItems.removeIf(recent -> recent.getId().equals(event.getId()));
-//        listViewItems.addFirst(event);
-//        recentlyAccessed.setItems(listViewItems);
-        recentlyAccessed.getItems().removeIf(recent -> recent.getId().equals(event.getId()));
-        recentlyAccessed.getItems().addFirst(event);
+        listViewItems.removeIf(recent -> recent.getId().equals(event.getId()));
+        listViewItems.addFirst(event);
+        recentlyAccessed.setItems(listViewItems);
+//        recentlyAccessed.getItems().removeIf(recent -> recent.getId().equals(event.getId()));
+//        recentlyAccessed.getItems().addFirst(event);
     }
 
     /**
@@ -211,5 +211,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         eventCode.clear();
         alreadyJoined.setDisable(true);
         alreadyJoined.setSelected(false);
+        recentlyAccessed = new ListView<>();
+        recentlyAccessed.setItems(listViewItems);
     }
 }
