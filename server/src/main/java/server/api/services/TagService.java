@@ -44,7 +44,7 @@ public interface TagService {
      * @param blue the new blue component of the tag's color (0-255)
      * @return true if the tag was updated successfully, false otherwise
      */
-    boolean updateTag(Long id, String name, int red, int green, int blue);
+    Tag updateTag(Long id, String name, int red, int green, int blue);
 
     /**
      * Deletes a tag by its ID.

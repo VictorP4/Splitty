@@ -137,4 +137,25 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.get().readEntity(Event.class).getTags();
 	}
+	public Tag addTag(Tag tag){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/tags")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.post(Entity.entity(tag,APPLICATION_JSON), Tag.class);
+	}
+	public Response removeTag(Tag tag){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/tags/"+tag.getId())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.delete();
+	}
+	public Tag updateTag(Tag tag){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/tags/"+tag.getId())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.put(Entity.entity(tag,APPLICATION_JSON), Tag.class);
+	}
 }

@@ -56,7 +56,7 @@ public class EmailService {
      * @param content Content of the email.
      * @throws MessagingException If an error occurs during the creation or sending of the email message.
      */
-    private void sendEmail(String to, String subject, String content) throws MessagingException {
+    public void sendEmail(String to, String subject, String content) throws MessagingException {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);

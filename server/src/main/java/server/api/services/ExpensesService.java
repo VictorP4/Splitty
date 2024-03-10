@@ -57,6 +57,7 @@ public class ExpensesService {
         p.setDebt(newDebt);
         participantRepo.save(p);
         for(Participant people : newExp.getInvolvedParticipants()){
+            if(p.getId().equals(people.getId())) people.setDebt(p.getDebt());
             newDebt = people.getDebt()-Double.parseDouble(df.format(((double)newExp.getAmount())/newExp.getInvolvedParticipants().size()));
             people.setDebt(newDebt);
             participantRepo.save(people);
@@ -89,6 +90,7 @@ public class ExpensesService {
         p1.setDebt(oldDebt);
         participantRepo.save(p1);
         for(Participant people : oldExp.getInvolvedParticipants()){
+            if(people.getId().equals(p1.getId())) people.setDebt(p1.getDebt());
             oldDebt = people.getDebt()+Double.parseDouble(df.format(((double)oldExp.getAmount())/oldExp.getInvolvedParticipants().size()));
             people.setDebt(oldDebt);
             participantRepo.save(people);
@@ -105,6 +107,7 @@ public class ExpensesService {
         p.setDebt(newDebt);
         participantRepo.save(p);
         for(Participant people : oldExp.getInvolvedParticipants()){
+            if(people.getId().equals(p.getId())) people.setDebt(p.getDebt());
             newDebt = people.getDebt()-Double.parseDouble(df.format(((double)oldExp.getAmount())/oldExp.getInvolvedParticipants().size()));
             people.setDebt(newDebt);
             participantRepo.save(people);
@@ -132,6 +135,7 @@ public class ExpensesService {
         p1.setDebt(oldDebt);
         participantRepo.save(p1);
         for(Participant people : expense.getInvolvedParticipants()){
+            if(people.getId().equals(p1.getId())) people.setDebt(p1.getDebt());
             oldDebt = people.getDebt()+Double.parseDouble(df.format(((double)expense.getAmount())/expense.getInvolvedParticipants().size()));
             people.setDebt(oldDebt);
             participantRepo.save(people);
