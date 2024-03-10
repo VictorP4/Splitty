@@ -82,7 +82,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
 
         recentlyAccessed.setCellFactory(lv -> {
             ListCell<Event> lc = new ListCell<>();
-            lc.setText(lc.getItem().getTitle());
+            if (lc.getItem() != null) lc.setText(lc.getItem().getTitle());
             lc.setOnMouseClicked(me -> {
                 if (lc.getItem() != null) mainCtrl.showEventOverview(lc.getItem());
             });
@@ -104,7 +104,9 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         createdEvent.setTitle(eventTitle.getText());
         try {
             createdEvent = server.addEvent(createdEvent);
+            Participant creator = new Participant();
             mainCtrl.showEventOverview(createdEvent);
+            mainCtrl.showContactDetails(creator, createdEvent);
             updateMostRecent(createdEvent);
         } catch (WebApplicationException e) {
             noValidEventError(e.getMessage());
@@ -120,11 +122,10 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         try {
             long eventId = Long.parseLong(eventCode.getText().trim());
             Event fetchedEvent = server.getEvent(eventId);
+            mainCtrl.showEventOverview(fetchedEvent);
             if (newMember) {
                 Participant joined = new Participant();
                 mainCtrl.showContactDetails(joined, fetchedEvent);
-            } else {
-                mainCtrl.showEventOverview(fetchedEvent);
             }
 
             updateMostRecent(fetchedEvent);
@@ -164,9 +165,11 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      *              user
      */
     private void updateMostRecent(Event event) {
-        listViewItems.removeIf(recent -> recent.getId().equals(event.getId()));
-        listViewItems.addFirst(event);
-        recentlyAccessed.setItems(listViewItems);
+//        listViewItems.removeIf(recent -> recent.getId().equals(event.getId()));
+//        listViewItems.addFirst(event);
+//        recentlyAccessed.setItems(listViewItems);
+        recentlyAccessed.getItems().removeIf(recent -> recent.getId().equals(event.getId()));
+        recentlyAccessed.getItems().addFirst(event);
     }
 
     /**
