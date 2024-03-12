@@ -1,7 +1,7 @@
 package server.api.repository.tests;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
+
 
 
 import commons.Participant;
@@ -288,8 +288,8 @@ public class TestEventRepository implements EventRepository {
      * @return the requested event
      */
     @Override
-    public Collection<Event> getByInviteCode(String inviteCode) {
-        return events.stream().filter(x->x.getInviteCode().equals(inviteCode)).collect(Collectors.toList());
+    public Event getByInviteCode(String inviteCode) {
+        return events.stream().filter(x->x.getInviteCode().equals(inviteCode)).findFirst().get();
     }
 
 }
