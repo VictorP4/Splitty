@@ -158,4 +158,12 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.put(Entity.entity(tag,APPLICATION_JSON), Tag.class);
 	}
+	public Event getEventByInviteCode(String inviteCode){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events")
+				.queryParam("inviteCode",inviteCode)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get().readEntity(Event.class);
+	}
 }

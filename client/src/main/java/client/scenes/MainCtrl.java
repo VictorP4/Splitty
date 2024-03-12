@@ -106,9 +106,9 @@ public class MainCtrl {
      * Displays the event overview scene in the primary stage.
      */
     public void showEventOverview(Event event) {
+        eventOverviewCtrl.refresh(event);
         primaryStage.setTitle("EventOverview");
         primaryStage.setScene(eventOverview);
-        eventOverviewCtrl.refresh(event);
     }
 
     public void refreshEventOverview(Event event) {
@@ -120,9 +120,9 @@ public class MainCtrl {
      * Associates the key pressed event with the AddExpenseCtrl
      */
     public void showAddExpense(Event event) {
+        addExpenseCtrl.refresh(event);
         primaryStage.setTitle("AddExpense");
         primaryStage.setScene(addExpense);
-        addExpenseCtrl.refresh(event);
     }
 
     /**
@@ -131,9 +131,9 @@ public class MainCtrl {
      * @param participant The participant whose details are to be displayed.
      */
     public void showContactDetails(Participant participant, Event event) {
+        contactDetailsCtrl.refresh(participant, event);
         primaryStage.setTitle("ContactDetails");
         primaryStage.setScene(contactDetails);
-        contactDetailsCtrl.refresh(participant, event);
     }
 
     /**
@@ -149,9 +149,9 @@ public class MainCtrl {
      * Displays the invitation scene in the primary stage.
      */
     public void showInvitation(Event event) {
+        invitationCtrl.refresh(event);
         primaryStage.setTitle("Invitation");
         primaryStage.setScene(invitation);
-        invitationCtrl.refresh(event);
     }
 
     /**
@@ -160,9 +160,9 @@ public class MainCtrl {
      * @param event The event for which open debts are to be displayed.
      */
     public void showOpenDebts(Event event) {
+        openDebtsCtrl.refresh(event);
         primaryStage.setTitle("OpenDebts");
         primaryStage.setScene(openDebts);
-        openDebtsCtrl.refresh(event);
     }
 
     /**
@@ -177,8 +177,8 @@ public class MainCtrl {
      * Displays the add tag scene in the primary stage.
      */
     public void showAddTag(Event event) {
+        addTagCtrl.refresh(event);
         primaryStage.setTitle("AddTag");
         primaryStage.setScene(addTag);
-        addTagCtrl.refresh(event);
     }
 }

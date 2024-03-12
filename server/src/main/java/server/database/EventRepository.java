@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Collection;
+
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +34,7 @@ public interface EventRepository extends JpaRepository<Event, Long>{
      * @param inviteCode
      * @return
      */
-    @Query("SELECT Event FROM Event WHERE inviteCode = :inviteCode")
-    Collection<Event> getByInviteCode(@Param("inviteCode") String inviteCode);
+    @Query("SELECT e FROM Event e WHERE e.inviteCode = :inviteCode")
+    Event getByInviteCode(@Param("inviteCode") String inviteCode);
 
 }

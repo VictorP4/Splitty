@@ -18,7 +18,6 @@ import javafx.scene.text.Text;
 
 import static client.Main.switchLocale;
 
-
 /**
  * Controller class for the start screen scene.
  */
@@ -45,7 +44,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     @FXML
     private ListView<Event> recentlyAccessed;
     private ObservableList<Event> listViewItems;
-
 
     /**
      * Constructs a new instance of StartScreenCtrl.
@@ -88,14 +86,16 @@ public class StartScreenCtrl implements Main.UpdatableUI {
                 }
             });
             lc.setOnMouseClicked(me -> {
-                if (lc.getItem() != null) mainCtrl.showEventOverview(lc.getItem());
+                if (lc.getItem() != null)
+                    mainCtrl.showEventOverview(lc.getItem());
             });
             return lc;
         });
     }
 
     /**
-     * Creates a new event. Has checks for if the event does not have a title due to stop back-end throwing errors.
+     * Creates a new event. Has checks for if the event does not have a title due to
+     * stop back-end throwing errors.
      */
     public void createEvent() { // :)
         Event createdEvent = new Event();
@@ -119,20 +119,21 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Has a participant join an existing event either through an invite code or through pressing
-     * a title in the list. Will throw error in case of the event-code not being a long or the event not existing.
+     * Has a participant join an existing event either through an invite code or
+     * through pressing
+     * a title in the list. Will throw error in case of the event-code not being a
+     * long or the event not existing.
      */
     public void joinEvent() {
         boolean newMember = !alreadyJoined.isSelected();
         try {
-            long eventId = Long.parseLong(eventCode.getText().trim());
-            Event fetchedEvent = server.getEvent(eventId);
+            String inviteCode = eventCode.getText().trim();
+            Event fetchedEvent = server.getEventByInviteCode(inviteCode);
             mainCtrl.showEventOverview(fetchedEvent);
             if (newMember) {
                 Participant joined = new Participant();
                 mainCtrl.showContactDetails(joined, fetchedEvent);
             }
-
             updateMostRecent(fetchedEvent);
         } catch (WebApplicationException e) {
             noValidEventError(e.getMessage());
@@ -153,14 +154,16 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Will check whether an invite code has been filled in the inviteCode text area. If it is, the checkbox will be
+     * Will check whether an invite code has been filled in the inviteCode text
+     * area. If it is, the checkbox will be
      * made enables and if not, will stay disabled.
      *
      * @param inputtedCode The text contained in the inviteCode textArea
      */
     private void handleTextChange(String inputtedCode) {
         // Disable CheckBox when text is empty
-        alreadyJoined.setDisable(inputtedCode == null || inputtedCode.isBlank()); // Enable CheckBox when text is entered
+        alreadyJoined.setDisable(inputtedCode == null || inputtedCode.isBlank()); // Enable CheckBox when text is
+                                                                                  // entered
     }
 
     /**
