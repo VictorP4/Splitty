@@ -63,8 +63,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      * Initialized the start screen and the listview
      */
     public void initialize() {
-        // initializing the recent event list and the hyperlink list
-        recentlyAccessed = new ListView<>();
         listViewItems = FXCollections.observableArrayList();
 
         alreadyJoined.setDisable(true);
@@ -82,7 +80,13 @@ public class StartScreenCtrl implements Main.UpdatableUI {
 
         recentlyAccessed.setCellFactory(lv -> {
             ListCell<Event> lc = new ListCell<>();
-            if (lc.getItem() != null) lc.setText(lc.getItem().getTitle());
+            lc.itemProperty().addListener((obs, oldItem, newItem) -> {
+                if (newItem != null) {
+                    lc.setText(newItem.getTitle());
+                } else {
+                    lc.setText(null);
+                }
+            });
             lc.setOnMouseClicked(me -> {
                 if (lc.getItem() != null) mainCtrl.showEventOverview(lc.getItem());
             });
@@ -91,7 +95,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Creates a new event
+     * Creates a new event. Has checks for if the event does not have a title due to stop back-end throwing errors.
      */
     public void createEvent() { // :)
         Event createdEvent = new Event();
@@ -115,7 +119,8 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Has a participant join an existing event either through an invite code or the list
+     * Has a participant join an existing event either through an invite code or through pressing
+     * a title in the list. Will throw error in case of the event-code not being a long or the event not existing.
      */
     public void joinEvent() {
         boolean newMember = !alreadyJoined.isSelected();
@@ -159,7 +164,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * updates the list with most recent events and updates the hyperlinks
+     * updates the list with most recent events.
      * 
      * @param event The current event that has either been created or joined by the
      *              user
@@ -168,8 +173,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         listViewItems.removeIf(recent -> recent.getId().equals(event.getId()));
         listViewItems.addFirst(event);
         recentlyAccessed.setItems(listViewItems);
-//        recentlyAccessed.getItems().removeIf(recent -> recent.getId().equals(event.getId()));
-//        recentlyAccessed.getItems().addFirst(event);
     }
 
     /**
@@ -211,7 +214,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         eventCode.clear();
         alreadyJoined.setDisable(true);
         alreadyJoined.setSelected(false);
-        recentlyAccessed = new ListView<>();
         recentlyAccessed.setItems(listViewItems);
     }
 }
