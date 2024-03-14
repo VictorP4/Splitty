@@ -22,15 +22,74 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Utility class for interacting with the server.
  */
 public class ServerUtils {
 
-	private static final String SERVER = "http://localhost:8080/";
+	private static String SERVER = "";
+	private static StompSession session;
+	private String PORT = "";
+
+	public void setSERVER(String SERVER) {
+		this.SERVER = SERVER;
+	}
+
+	/**
+	 * This method creates a get request to the server entered by the user.
+	 *
+	 * @param userUrl a string representing the url
+	// * @param port the port
+	 * @return a Response object
+	 */
+	public Response checkServer(String userUrl) {
+		this.SERVER = "http://" + userUrl;
+		//this.PORT = port;
+
+		session = connect("ws://" + userUrl + "/websocket");
+		Response response =  ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/connection")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get();
+
+
+		return response;
+	}
+	private StompSession connect(String url) {
+		var client = new StandardWebSocketClient();
+		var stomp = new WebSocketStompClient(client);
+		stomp.setMessageConverter(new MappingJackson2MessageConverter());
+		try {
+			return stomp.connect(url, new StompSessionHandlerAdapter() {
+			}).get();
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		} catch (ExecutionException e) {
+			throw new RuntimeException(e);
+		}
+		throw new IllegalStateException();
+	}
+	/**
+	 * This method starts the websockets on a specific port, not working for the moment.
+	 * @param url - the url of the websocket
+	 * @return the session
+	 */
+	public StompSession startWebSockets(String url){
+		this.session = connect("ws://" + url +"/websocket");
+		return session;
+	}
 
 	/**
 	 * Sends invites via email.

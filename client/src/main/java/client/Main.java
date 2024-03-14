@@ -67,6 +67,7 @@ public class Main extends Application {
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, addExpense, contactDetails,
                 invitation, openDebts, statistics, startScreen, eventOverview, addTag);
+
     }
 
     public static void loadLanguageBundle(String languageCode) throws NotFoundException {
