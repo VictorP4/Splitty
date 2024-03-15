@@ -32,7 +32,6 @@ public class EventController {
      */
     @GetMapping(path = { "", "/" })
     public List<Event> getAll() {
-
         return repo.findAll();
     }
 
