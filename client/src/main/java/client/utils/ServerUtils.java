@@ -160,8 +160,6 @@ public class ServerUtils {
 				.put(Entity.entity(tag,APPLICATION_JSON), Tag.class);
 	}
 
-	//TODO: make sure this is good:
-
 	/**
 	 * deletes an expense
 	 *
@@ -190,6 +188,15 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
+	}
+
+		public Event getEventbyInviteCode(String inviteCode){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events")
+				.queryParam("inviteCode",inviteCode)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get().readEntity(Event.class);
 	}
 
 }
