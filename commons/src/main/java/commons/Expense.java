@@ -201,5 +201,14 @@ public class Expense {
     public int hashCode() {
         return Objects.hash(id, title, amount, paidBy, involvedParticipants, date, tag);
     }
+
+    /**
+     * to string method for an expense
+     * @return string version of object expense
+     */
+    @Override
+    public String toString() {
+        return title + " " + amount + ", " + (tag == null ? "no tag" : tag.getName());
+    }
 }
 

@@ -117,12 +117,17 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     /**
      * Has a participant join an existing event either through an invite code or the list
      */
-    public void joinEvent() {
-        boolean newMember = !alreadyJoined.isSelected();
+
+    public void joinEvent(ActionEvent event) {
+        // checks if one of the hyperlinks was clicked, if not, will take the text from the eventCode
+        boolean newMember = !(event.getSource() instanceof Hyperlink) && !alreadyJoined.isSelected();
+
+        String inviteCode = getEventSource(event.getSource());
+
         try {
-            long eventId = Long.parseLong(eventCode.getText().trim());
-            Event fetchedEvent = server.getEvent(eventId);
-            mainCtrl.showEventOverview(fetchedEvent);
+            Event fetchedEvent = server.getEventbyInviteCode(inviteCode);
+            if(fetchedEvent==null) throw new WebApplicationException("Non-existing event");
+            mainCtrl.refreshEventOverview(fetchedEvent);
             if (newMember) {
                 Participant joined = new Participant();
                 mainCtrl.showContactDetails(joined, fetchedEvent);
@@ -136,6 +141,38 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Checks whether the source of the event is a hyperlink or an invite code and returns the correct code for the event
+     *
+     * @param eventSource The source that has caused the event to take place (a button press or hyperlink)
+     * @return a long which is the invite code for an event
+     */
+    private String getEventSource(Object eventSource) {
+        if (eventSource instanceof Hyperlink clicked) {
+            // the link has no event
+            if (clicked.getText().isEmpty()) {
+                noValidEventError("Event does not exist");
+                throw new IllegalArgumentException();
+            }
+            return recentlyAccessed.get(recentlyViewed.indexOf(clicked)).getInviteCode();
+        }
+
+        String eventCodeText = eventCode.getText();
+        // check if there is a code at all
+        if (eventCodeText.isBlank() || alreadyJoined.isDisable()) {
+            noValidEventError("Event does not exist");
+            throw new IllegalArgumentException();
+        }
+
+
+            // check if the code is a long and if so, return it
+            return eventCodeText;
+
+    }
+
+    /**
+>>>>>>> 8c0a942cf334f178aabd08140398c70cab06a725
      * Creates an error if the user tries to access an event that isn't valid.
      *
      * @param message the message displayed to the user

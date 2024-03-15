@@ -116,19 +116,16 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void clearFields() {
         amount.clear();
         title.clear();
-        date.cancelEdit();
-
+        date.setValue(null); //TODO: make it give a default
         paidBy.getSelectionModel().clearSelection();
-
         tagMenu.setText("Select Tag");
-
 
         everybodyIn.setSelected(false);
         someIn.setSelected(false);
-        currency.getSelectionModel().clearSelection();
         paidBy.getItems().removeAll(paidBy.getItems());
         currency.getItems().removeAll(currency.getItems());
         box.getChildren().removeAll(box.getChildren());
+        selectedTag = null;
     }
 
     /**
@@ -146,7 +143,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
         Tag tag = selectedTag;
         return new Expense(title, amount, paidBy, partIn, date, selectedTag);
-
     }
 
     /**
@@ -155,6 +151,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void ok() {
         try {
             server.addExpense(getExpense(), event.getId());
+            event = server.getEvent(event.getId());
         }
         catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -173,7 +170,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void refresh(Event event){
         this.event = event;
         clearFields();
-        currency.getItems().add("EUR");
+        addToCurrency();
         for(Participant p : this.event.getParticipants()){
             if(check(p)) {
                 CheckBox cb = new CheckBox(p.getName());
@@ -183,6 +180,14 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             }
         }
         populateTagMenu();
+    }
+
+    /**
+     * adds values to the currency picker combobox, separate method for "future use" in case of multiple currencies
+     * being implemented, keeps refresh cleaner
+     */
+    private void addToCurrency() {
+        currency.getItems().add("EUR");
     }
 
     /**

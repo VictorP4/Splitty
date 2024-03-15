@@ -97,4 +97,17 @@ public class EventController {
         repo.deleteById(id);
         return ResponseEntity.ok(event);
     }
+
+    /**
+     * Find event by the invite code
+     * @param inviteCode the invite code of the event
+     * @return the requested event
+     */
+    @GetMapping(path={""},params = "inviteCode")
+    public ResponseEntity<Event> getByInviteCode(@RequestParam("inviteCode") String inviteCode){
+        Event e = repo.getByInviteCode(inviteCode);
+
+        if(e==null) return ResponseEntity.badRequest().build();
+        else return ResponseEntity.ok(e);
+    }
 }
