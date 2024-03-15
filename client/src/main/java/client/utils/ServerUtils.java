@@ -204,27 +204,28 @@ public class ServerUtils {
 	}
 
 	public Response removeTag(Tag tag) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events/" + id + "/expenses" + expense.getId())
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.delete();
+//		return ClientBuilder.newClient(new ClientConfig())
+//				.target(SERVER).path("api/events/" + id + "/expenses" + expense.getId())
+//				.request(APPLICATION_JSON)
+//				.accept(APPLICATION_JSON)
+//				.delete();
+		return Response.status(200).build();
 	}
 
 	public Tag updateTag(Tag tag) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events/" + id + "/expenses" + expense.getId())
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
+//		return ClientBuilder.newClient(new ClientConfig())
+//				.target(SERVER).path("api/events/" + id + "/expenses" + expense.getId())
+//				.request(APPLICATION_JSON)
+//				.accept(APPLICATION_JSON)
+//				.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
+		return null;
 	}
 
-	public Event getEventbyInviteCode(String inviteCode) {
+	public Event getEventByInviteCode(String inviteCode) {
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/events/inviteCode/" + inviteCode)
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get().readEntity(Event.class);
 	}
-
 }

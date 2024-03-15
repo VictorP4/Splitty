@@ -115,7 +115,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         } catch (WebApplicationException e) {
             noValidEventError(e.getMessage());
         }
-        refresh();
     }
 
     /**
@@ -128,6 +127,10 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         boolean newMember = !alreadyJoined.isSelected();
         try {
             String inviteCode = eventCode.getText().trim();
+            if (inviteCode.isBlank()) {
+                noValidEventError("This is not a valid event code :(");
+                return;
+            }
             Event fetchedEvent = server.getEventByInviteCode(inviteCode);
             mainCtrl.showEventOverview(fetchedEvent);
             if (newMember) {
@@ -138,7 +141,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         } catch (WebApplicationException e) {
             noValidEventError(e.getMessage());
         }
-        refresh();
     }
 
     /**
@@ -210,6 +212,13 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     }
 
     /**
+     * Updates all events in listviewItems to keep up with recent updates.
+     */
+    private void updateAllEvents() {
+        listViewItems.replaceAll(event -> server.getEvent(event.getId()));
+    }
+
+    /**
      * Refreshes the startScreen
      */
     public void refresh() {
@@ -217,6 +226,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         eventCode.clear();
         alreadyJoined.setDisable(true);
         alreadyJoined.setSelected(false);
+        updateAllEvents();
         recentlyAccessed.setItems(listViewItems);
     }
 }
