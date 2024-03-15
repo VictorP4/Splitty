@@ -43,6 +43,9 @@ public class MainCtrl {
     private AddTagCtrl addTagCtrl;
     private Scene addTag;
 
+    private AdminEventOverviewCtrl adminEventOverviewCtrl;
+    private Scene adminEventOverview;
+
     /**
      * Initializes the main controller with the provided dependencies and sets up the primary stage.
      * This method sets the primary stage and initializes scenes for different scenes.
@@ -61,7 +64,8 @@ public class MainCtrl {
     public void initialize(Stage primaryStage, Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<ContactDetailsCtrl, Parent> contactDetails, Pair<InvitationCtrl, Parent> invitation,
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<StatisticsCtrl, Parent> statistics,
-                           Pair<StartScreenCtrl, Parent> startScreen, Pair<OverviewCtrl, Parent> eventOverview, Pair<AddTagCtrl, Parent> addTag) {
+                           Pair<StartScreenCtrl, Parent> startScreen, Pair<OverviewCtrl, Parent> eventOverview,
+                           Pair<AdminEventOverviewCtrl, Parent> adminEventOverviewCtrl, Pair<AddTagCtrl, Parent> addTag) {
 
         this.primaryStage = primaryStage;
 
@@ -86,6 +90,9 @@ public class MainCtrl {
         this.statisticsCtrl = statistics.getKey();
         this.statistics = new Scene(statistics.getValue());
 
+        this.adminEventOverviewCtrl = adminEventOverviewCtrl.getKey();
+        this.adminEventOverview = new Scene(adminEventOverviewCtrl.getValue());
+
         this.addTagCtrl = addTag.getKey();
         this.addTag = new Scene(addTag.getValue());
 
@@ -103,12 +110,21 @@ public class MainCtrl {
     }
 
     /**
+     * Displays the admin event overview scene in the primary stage.
+     */
+    public void showAdminEventOverview() {
+        primaryStage.setTitle("AdminEventOverview");
+        adminEventOverviewCtrl.refresh();
+        primaryStage.setScene(adminEventOverview);
+    }
+
+    /**
      * Displays the event overview scene in the primary stage.
      */
     public void showEventOverview(Event event) {
+        eventOverviewCtrl.refresh(event);
         primaryStage.setTitle("EventOverview");
         primaryStage.setScene(eventOverview);
-        eventOverviewCtrl.refresh(event);
     }
 
     public void refreshEventOverview(Event event) {
@@ -120,9 +136,9 @@ public class MainCtrl {
      * Associates the key pressed event with the AddExpenseCtrl
      */
     public void showAddExpense(Event event) {
+        addExpenseCtrl.refresh(event);
         primaryStage.setTitle("AddExpense");
         primaryStage.setScene(addExpense);
-        addExpenseCtrl.refresh(event);
     }
 
     /**
@@ -131,9 +147,9 @@ public class MainCtrl {
      * @param participant The participant whose details are to be displayed.
      */
     public void showContactDetails(Participant participant, Event event) {
+        contactDetailsCtrl.refresh(participant, event);
         primaryStage.setTitle("ContactDetails");
         primaryStage.setScene(contactDetails);
-        contactDetailsCtrl.refresh(participant, event);
     }
 
     /**
@@ -149,9 +165,9 @@ public class MainCtrl {
      * Displays the invitation scene in the primary stage.
      */
     public void showInvitation(Event event) {
+        invitationCtrl.refresh(event);
         primaryStage.setTitle("Invitation");
         primaryStage.setScene(invitation);
-        invitationCtrl.refresh(event);
     }
 
     /**
@@ -160,9 +176,9 @@ public class MainCtrl {
      * @param event The event for which open debts are to be displayed.
      */
     public void showOpenDebts(Event event) {
+        openDebtsCtrl.refresh(event);
         primaryStage.setTitle("OpenDebts");
         primaryStage.setScene(openDebts);
-        openDebtsCtrl.refresh(event);
     }
 
     /**
@@ -177,8 +193,8 @@ public class MainCtrl {
      * Displays the add tag scene in the primary stage.
      */
     public void showAddTag(Event event) {
+        addTagCtrl.refresh(event);
         primaryStage.setTitle("AddTag");
         primaryStage.setScene(addTag);
-        addTagCtrl.refresh(event);
     }
 }
