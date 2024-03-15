@@ -1,17 +1,5 @@
-/*
- * Copyright 2021 Delft University of Technology
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/**
+ * Utility class for interacting with the server.
  */
 package client.utils;
 
@@ -20,14 +8,13 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import commons.*;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.util.List;
+import java.util.ArrayList;
 
-/**
- * Utility class for interacting with the server.
- */
 public class ServerUtils {
 
 	private static final String SERVER = "http://localhost:8080/";
@@ -46,20 +33,60 @@ public class ServerUtils {
 				.post(Entity.entity(requestBody, APPLICATION_JSON));
 	}
 
-    public Event addEvent(Event event) {
+	/**
+	 * Adds an event.
+	 *
+	 * @param event The event to add.
+	 * @return The added event.
+	 */
+	public Event addEvent(Event event) {
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/events")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(event, APPLICATION_JSON), Event.class);
-    }
+	}
 
+	/**
+	 * Retrieves an event by its ID.
+	 *
+	 * @param id The ID of the event.
+	 * @return The event.
+	 */
 	public Event getEvent(long id) {
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/events/" + id)
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get().readEntity(Event.class);
+	}
+
+	/**
+	 * Deletes an event by its ID.
+	 *
+	 * @param id The ID of the event to delete.
+	 * @return The response from the server.
+	 */
+	public Response deleteEvent(Long id) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events/" + id)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.delete();
+	}
+
+	/**
+	 * Retrieves all events.
+	 *
+	 * @return The list of events.
+	 */
+	public ArrayList<Event> getAllEvents() {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get().readEntity(new GenericType<ArrayList<Event>>() {
+				});
 	}
 
 	/**
@@ -76,8 +103,7 @@ public class ServerUtils {
 				.put(Entity.entity(event, APPLICATION_JSON), Event.class);
 	}
 
-
-    /**
+	/**
 	 * Sends reminders via email.
 	 *
 	 * @param emailRequestBody The request body containing email information for reminders.
@@ -92,43 +118,66 @@ public class ServerUtils {
 	}
 
 	/**
+	 * Adds an expense to an event.
 	 *
-	 * @param expense expense to be added
-	 * @return html response of the successful post request
+	 * @param expense The expense to add.
+	 * @param id      The ID of the event.
+	 * @return The added expense.
 	 */
-	public Expense addExpense(Expense expense, Long id){
+	public Expense addExpense(Expense expense, Long id) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events/"+id+"/expenses")
+				.target(SERVER).path("api/events/" + id + "/expenses")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
 	}
 
-	public Participant addParticipant(Participant participant){
+	/**
+	 * Adds a participant.
+	 *
+	 * @param participant The participant to add.
+	 * @return The added participant.
+	 */
+	public Participant addParticipant(Participant participant) {
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/participants")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
-				.post(Entity.entity(participant,APPLICATION_JSON), Participant.class);
+				.post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
 	}
-	public Participant updateParticipant(Participant participant){
+
+	/**
+	 * Updates a participant.
+	 *
+	 * @param participant The participant to update.
+	 * @return The updated participant.
+	 */
+	public Participant updateParticipant(Participant participant) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/participants/"+participant.getId())
+				.target(SERVER).path("api/participants/" + participant.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
-				.put(Entity.entity(participant,APPLICATION_JSON), Participant.class);
+				.put(Entity.entity(participant, APPLICATION_JSON), Participant.class);
 	}
-	public Response deleteParticipant(Participant participant){
+
+	/**
+	 * Deletes a participant.
+	 *
+	 * @param participant The participant to delete.
+	 * @return The response from the server.
+	 */
+	public Response deleteParticipant(Participant participant) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/participants/"+participant.getId())
+				.target(SERVER).path("api/participants/" + participant.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.delete();
 	}
 
 	/**
-	 * Fetches the tags from the server.
+	 * Fetches the tags from the server for a specific event.
 	 *
+	 * @param eventId The ID of the event.
 	 * @return The list of tags.
 	 */
 	public List<Tag> getTags(Long eventId) {
@@ -138,26 +187,46 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.get().readEntity(Event.class).getTags();
 	}
-	public Tag addTag(Tag tag){
+
+	/**
+	 * Adds a tag.
+	 *
+	 * @param tag The tag to add.
+	 * @return The added tag.
+	 */
+	public Tag addTag(Tag tag) {
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/tags")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
-				.post(Entity.entity(tag,APPLICATION_JSON), Tag.class);
+				.post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
 	}
-	public Response removeTag(Tag tag){
+/**
+	 * Removes a tag.
+	 *
+	 * @param tag The tag to remove.
+	 * @return The response from the server.
+	 */
+	public Response removeTag(Tag tag) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/tags/"+tag.getId())
+				.target(SERVER).path("api/tags/" + tag.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.delete();
 	}
-	public Tag updateTag(Tag tag){
+
+	/**
+	 * Updates a tag.
+	 *
+	 * @param tag The tag to update.
+	 * @return The updated tag.
+	 */
+	public Tag updateTag(Tag tag) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/tags/"+tag.getId())
+				.target(SERVER).path("api/tags/" + tag.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
-				.put(Entity.entity(tag,APPLICATION_JSON), Tag.class);
+				.put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
 	}
 
 	/**
@@ -190,7 +259,14 @@ public class ServerUtils {
 				.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
 	}
 
-		public Event getEventbyInviteCode(String inviteCode){
+
+	/**
+	 * gets an event by invite code
+	 * 
+	 * @param inviteCode of the event
+	 * @return server response
+	 */
+	public Event getEventbyInviteCode(String inviteCode){
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/events")
 				.queryParam("inviteCode",inviteCode)

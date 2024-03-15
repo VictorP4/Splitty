@@ -63,10 +63,11 @@ public class Main extends Application {
         var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
         var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");;
         var eventOverview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");;
+        var adminEventOverview = FXML.load(AdminEventOverviewCtrl.class, "client", "scenes", "AdminEventOverview.fxml");;
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, addExpense, contactDetails,
-                invitation, openDebts, statistics, startScreen, eventOverview, addTag);
+                invitation, openDebts, statistics, startScreen, eventOverview, adminEventOverview, addTag);
     }
 
     public static void loadLanguageBundle(String languageCode) throws NotFoundException {
