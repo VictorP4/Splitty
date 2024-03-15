@@ -106,8 +106,8 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
 }
 
 /**
- * imma save this leftover from the previous implementation for later on,
- * when we'll add more UI features for notifying and stuff
+ * imma save this leftover from the previous addParticipant implementation for later on,
+ * when we'll add more UI features for bad input notifying and stuff
  * /**
  *      * Validates email format.
  *      * This method checks whether the provided email address is valid.
