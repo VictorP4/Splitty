@@ -201,8 +201,7 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
 	}
-
-	/**
+/**
 	 * Removes a tag.
 	 *
 	 * @param tag The tag to remove.
@@ -229,6 +228,44 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
 	}
+
+	/**
+	 * deletes an expense
+	 *
+	 * @param id id of the event whose expense is getting deleted
+	 * @param expense expense to delete
+	 * @return server response
+	 */
+	public Response deleteExpense(Long id, Expense expense){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events/"+id+"/expenses" + expense.getId())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.delete();
+	}
+
+	/**
+	 * updates an expense
+	 *
+	 * @param expense to update
+	 * @param id id of the event whose expense is getting updated
+	 * @return server response
+	 */
+	public Expense updateExpense(Long id, Expense expense){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events/"+id+"/expenses" + expense.getId())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
+	}
+
+
+	/**
+	 * gets an event by invite code
+	 * 
+	 * @param inviteCode of the event
+	 * @return server response
+	 */
 	public Event getEventbyInviteCode(String inviteCode){
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/events")
@@ -237,4 +274,5 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.get().readEntity(Event.class);
 	}
+
 }
