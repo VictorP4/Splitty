@@ -107,11 +107,20 @@ public class EventController {
      * @param inviteCode the invite code of the event
      * @return the requested event
      */
-    @GetMapping(path={""}, params = "inviteCode")
-    public ResponseEntity<Event> getByInviteCode(@RequestParam("inviteCode") String inviteCode){
+//    @GetMapping(path={""}, params = "inviteCode")
+//    public ResponseEntity<Event> getByInviteCode(@RequestParam("inviteCode") String inviteCode){
+//        Event e = repo.getByInviteCode(inviteCode);
+//
+//        if(e==null) return ResponseEntity.badRequest().build();
+//        else return ResponseEntity.ok(e);  // --> is not being reached. Will return all events instead
+//    }
+
+    @GetMapping(path={"/inviteCode/{inviteCode}"})
+    public ResponseEntity<Event> getByInviteCode(@PathVariable("inviteCode") String inviteCode){
         Event e = repo.getByInviteCode(inviteCode);
 
         if(e==null) return ResponseEntity.badRequest().build();
         else return ResponseEntity.ok(e);  // --> is not being reached. Will return all events instead
     }
+
 }
