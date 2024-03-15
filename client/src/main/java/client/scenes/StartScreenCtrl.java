@@ -132,10 +132,13 @@ public class StartScreenCtrl implements Main.UpdatableUI {
                 return;
             }
             Event fetchedEvent = server.getEventByInviteCode(inviteCode);
-            mainCtrl.showEventOverview(fetchedEvent);
+            mainCtrl.refreshEventOverview(fetchedEvent);
             if (newMember) {
                 Participant joined = new Participant();
                 mainCtrl.showContactDetails(joined, fetchedEvent);
+            }
+            else {
+                mainCtrl.showEventOverview(fetchedEvent);
             }
             updateMostRecent(fetchedEvent);
         } catch (WebApplicationException e) {

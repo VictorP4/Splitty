@@ -29,7 +29,6 @@ public interface EventRepository extends JpaRepository<Event, Long>{
     void modifyEvent(@Param("id") long id, @Param("title") String title, @Param("lastActivityDate") Date lastActivityDate,
                      @Param("inviteCode") String inviteCode, @Param("participants") List<Participant> participants, @Param("tags") List<Tag> tags);
 
-
     /**
      * Returns the requested event using the invite code
      * @param inviteCode InviteCode of the requested event
