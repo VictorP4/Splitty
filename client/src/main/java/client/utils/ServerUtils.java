@@ -46,6 +46,12 @@ public class ServerUtils {
 				.post(Entity.entity(requestBody, APPLICATION_JSON));
 	}
 
+	/**
+	 * Adds an event to the database.
+	 *
+	 * @param event The newly created event that need to be added to the database.
+	 * @return the event that is now added to the database.
+	 */
     public Event addEvent(Event event) {
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/events")
@@ -54,6 +60,12 @@ public class ServerUtils {
 				.post(Entity.entity(event, APPLICATION_JSON), Event.class);
     }
 
+	/**
+	 * Gets an event from the database by its id.
+	 *
+	 * @param id The id of the event we want to return.
+	 * @return the event we wanted to have.
+	 */
 	public Event getEvent(long id) {
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/events/" + id)
@@ -75,7 +87,6 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.put(Entity.entity(event, APPLICATION_JSON), Event.class);
 	}
-
 
     /**
 	 * Sends reminders via email.
@@ -103,6 +114,7 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
 	}
+
 	public Participant addParticipant(Participant participant){
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/participants")
@@ -110,6 +122,7 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(participant,APPLICATION_JSON), Participant.class);
 	}
+
 	public Participant updateParticipant(Participant participant){
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/participants/"+participant.getId())
@@ -117,6 +130,7 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.put(Entity.entity(participant,APPLICATION_JSON), Participant.class);
 	}
+
 	public Response deleteParticipant(Participant participant){
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/participants/"+participant.getId())
@@ -137,6 +151,7 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.get().readEntity(Event.class).getTags();
 	}
+
 	public Tag addTag(Tag tag){
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/tags")
@@ -144,6 +159,7 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(tag,APPLICATION_JSON), Tag.class);
 	}
+
 	public Response removeTag(Tag tag){
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/tags/"+tag.getId())
@@ -151,6 +167,7 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.delete();
 	}
+
 	public Tag updateTag(Tag tag){
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/tags/"+tag.getId())
@@ -169,7 +186,7 @@ public class ServerUtils {
 
 	public Event getEventByInviteCode(String inviteCode){
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events/" + inviteCode)
+				.target(SERVER).path("api/events/inviteCode/" + inviteCode)
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get().readEntity(Event.class);

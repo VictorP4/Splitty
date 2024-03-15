@@ -176,8 +176,10 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void updateParticipant(Participant participant) {
         boolean participantExists = false;
+        int index = -1;
         for (Participant p : event.getParticipants()) {
             if (Objects.equals(p.getId(), participant.getId())) {
+                index = event.getParticipants().indexOf(p);
                 participantExists = true;
                 break;
             }
@@ -188,6 +190,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         }
         else{
             serverUtils.updateParticipant(participant);
+            this.event.getParticipants().set(index, participant);
         }
         participant.setEventFollowed(event);
         this.event = serverUtils.updateEvent(event);

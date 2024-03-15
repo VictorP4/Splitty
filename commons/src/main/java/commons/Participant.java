@@ -14,7 +14,7 @@ public class Participant {
     private double debt;
     private String iban;
     private String bic;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Event eventFollowed;
 
     /**
