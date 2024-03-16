@@ -77,7 +77,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void initialize() {
         expenseList = new ListView<>();
-        participantBox = new ChoiceBox<>();
+        //participantBox = new ChoiceBox<>();
     }
 
     /**
@@ -300,6 +300,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
         this.event = serverUtils.updateEvent(event);
         titlePrepare();
         participantsDisplay();
+
+        setUpParticipantBox();
+
         expenseList = new ListView<>();
         original = FXCollections.observableArrayList();
         original.setAll(event.getExpenses());
@@ -311,9 +314,19 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
     /**
      * switches to the Open Debt scene
-     * @param actionEvent
+     * @param actionEvent event that calls the method, click on the button
      */
     public void settleDebts(ActionEvent actionEvent) {
         mainCtrl.showOpenDebts(event);
+    }
+
+    /**
+     * sets up the choice box "participant box", clears all options, then adds all current participant of the event
+     */
+    public void setUpParticipantBox(){
+        participantBox.getItems().removeAll(participantBox.getItems());
+        for(Participant p : this.event.getParticipants()){
+                participantBox.getItems().add(p);
+        }
     }
 }
