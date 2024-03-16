@@ -59,6 +59,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private ObservableList<Expense> original;
     @FXML
     private FlowPane participantsField;
+    @FXML
+    private Button statistics;
 
     /**
      * Constructs an OverviewCtrl object.
@@ -94,6 +96,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         inclSelected.setText(Main.getLocalizedString("ovInclSelected"));
         title.setText(Main.getLocalizedString("OverviewTitle"));
         participants.setText(Main.getLocalizedString("ovParticipants"));
+        statistics.setText(Main.getLocalizedString("ovStatistics"));
     }
 
     /**
@@ -345,5 +348,13 @@ public class OverviewCtrl implements Main.UpdatableUI {
         for(Participant p : this.event.getParticipants()){
                 participantBox.getItems().add(p);
         }
+    }
+
+    /**
+     * Shows the statistics of the event
+     * @param actionEvent
+     */
+    public void showStatistics(ActionEvent actionEvent) {
+        mainCtrl.showStatistics(event);
     }
 }
