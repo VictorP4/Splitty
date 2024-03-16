@@ -45,9 +45,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
     @FXML
     public MenuButton langButton;
     @FXML
-    public Tab fromSelected;
+    private Tab fromSelected;
     @FXML
-    public Tab inclSelected;
+    private Tab inclSelected;
     @FXML
     private Text title;
     @FXML
@@ -269,16 +269,23 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
     /**
      * Resets the expenses list and then filters it for all expenses paid by the
-     * selected
-     * participant in the box
+     * selected participant in the box
      */
-    public ListView<Expense> showFromSelected(Event event) {
-        original = FXCollections.observableArrayList(); //do I need this?
-        List<Expense> temp = new ArrayList<>(event.getExpenses());
-        temp = temp.stream().filter(expense -> expense.getPaidBy().equals(participantBox.getValue()))
-                .toList();
-        original.setAll(temp);
-        return new ListView<>(original);
+    public void showFromSelected() {
+
+        expenseList =  new ListView<>();
+        original = FXCollections.observableArrayList();
+        for (Expense e : event.getExpenses()) {
+            if (e.getTitle().equalsIgnoreCase("debt repayment")) {
+                return;
+            }
+            if (e.getPaidBy().equals(participantBox.getSelectionModel().getSelectedItem())) {
+                original.add(e);
+                System.out.println(e);
+            }
+        }
+        expenseList.setItems(original);
+        fromSelected.setContent(expenseList);
     }
 
     /**
@@ -296,13 +303,14 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * participant in the box
      */
     public ListView<Expense> showIncludingSelected(Event event){
-        original = FXCollections.observableArrayList(); //do I need this?
-        List<Expense> temp = new ArrayList<>(event.getExpenses());
-        temp = temp.stream().filter(expense -> (expense.getInvolvedParticipants().contains(participantBox.getValue())
-                || expense.getPaidBy().equals(participantBox.getValue())))
-                        .toList();
-        original.setAll(temp);
+//        original = FXCollections.observableArrayList(); //do I need this?
+//        List<Expense> temp = new ArrayList<>(event.getExpenses());
+//        temp = temp.stream().filter(expense -> (expense.getInvolvedParticipants().contains(participantBox.getValue())
+//                || expense.getPaidBy().equals(participantBox.getValue())))
+//                        .toList();
+//        original.setAll(temp);
         return new ListView<>(original);
+
     }
 
     public void refresh(Event event) {
@@ -311,9 +319,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         participantsDisplay();
         setUpParticipantBox();
         showAllExpenses();
-
-        fromSelected.setContent(showFromSelected(event));
-        inclSelected.setContent(showIncludingSelected(event));
+        //showIncludingSelected();
     }
 
     /**
@@ -325,7 +331,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * sets up the choice box "participant box", clears all options, then adds all current participant of the event
+     * sets up the choice box "participant box", clears all options,
+     * then adds all current participant of the event
      */
     public void setUpParticipantBox(){
         participantBox.getItems().removeAll(participantBox.getItems());
