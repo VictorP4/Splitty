@@ -61,7 +61,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab fx:id="inclSelected" text="Including Selected" >
+                <Tab fx:id="inclSelected" text="Including Selected" onSelectionChanged="#showIncludingSelected">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>

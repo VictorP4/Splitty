@@ -299,17 +299,24 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
     /**
      * Resets the expenses list and then filters it for all expenses that involve
-     * then selected
-     * participant in the box
+     * then selected participant in the box
      */
-    public ListView<Expense> showIncludingSelected(Event event){
-//        original = FXCollections.observableArrayList(); //do I need this?
-//        List<Expense> temp = new ArrayList<>(event.getExpenses());
-//        temp = temp.stream().filter(expense -> (expense.getInvolvedParticipants().contains(participantBox.getValue())
-//                || expense.getPaidBy().equals(participantBox.getValue())))
-//                        .toList();
-//        original.setAll(temp);
-        return new ListView<>(original);
+    public void showIncludingSelected(){
+
+        expenseList =  new ListView<>();
+        original = FXCollections.observableArrayList();
+        for (Expense e : event.getExpenses()) {
+            if (e.getTitle().equalsIgnoreCase("debt repayment")) {
+                return;
+            }
+            if (e.getPaidBy().equals(participantBox.getSelectionModel().getSelectedItem()) ||
+                    e.getInvolvedParticipants().contains(participantBox.getSelectionModel().getSelectedItem())) {
+                original.add(e);
+                System.out.println(e);
+            }
+        }
+        expenseList.setItems(original);
+        inclSelected.setContent(expenseList);
 
     }
 
@@ -319,7 +326,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
         participantsDisplay();
         setUpParticipantBox();
         showAllExpenses();
-        //showIncludingSelected();
     }
 
     /**
