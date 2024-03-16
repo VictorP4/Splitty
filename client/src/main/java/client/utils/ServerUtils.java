@@ -12,8 +12,7 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.simp.stomp.StompFrameHandler;
-import org.springframework.messaging.simp.stomp.StompHeaders;
+
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -28,11 +27,11 @@ import java.util.ArrayList;
 
 public class ServerUtils {
 
-	private static String SERVER = "http://localhost:8080";
+	private static String server = "http://localhost:8080";
 	private static StompSession session;
 
-	public void setSERVER(String SERVER) {
-		this.SERVER = SERVER;
+	public void setSERVER(String server) {
+		this.server = server;
 	}
 
 	/**
@@ -43,12 +42,12 @@ public class ServerUtils {
 	 * @return a Response object
 	 */
 	public Response checkServer(String userUrl) {
-		this.SERVER = "http://" + userUrl;
+		this.server = "http://" + userUrl;
 		//this.PORT = port;
 
 		session = connect("ws://" + userUrl + "/websocket");
 		Response response =  ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/connection")
+				.target(server).path("api/connection")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get();
@@ -88,7 +87,7 @@ public class ServerUtils {
 	 */
 	public Response sendInvites(EmailRequestBody requestBody) {
 		return ClientBuilder.newClient()
-				.target(SERVER).path("api/email/invites")
+				.target(server).path("api/email/invites")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(requestBody, APPLICATION_JSON));
@@ -102,7 +101,7 @@ public class ServerUtils {
 	 */
 	public Event addEvent(Event event) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events")
+				.target(server).path("api/events")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(event, APPLICATION_JSON), Event.class);
@@ -116,7 +115,7 @@ public class ServerUtils {
 	 */
 	public Event getEvent(long id) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events/" + id)
+				.target(server).path("api/events/" + id)
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get().readEntity(Event.class);
@@ -130,7 +129,7 @@ public class ServerUtils {
 	 */
 	public Response deleteEvent(Long id) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events/" + id)
+				.target(server).path("api/events/" + id)
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.delete();
@@ -143,7 +142,7 @@ public class ServerUtils {
 	 */
 	public ArrayList<Event> getAllEvents() {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events")
+				.target(server).path("api/events")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get().readEntity(new GenericType<ArrayList<Event>>() {
@@ -158,7 +157,7 @@ public class ServerUtils {
 	 */
 	public Event updateEvent(Event event) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("/api/events/" + event.getId())
+				.target(server).path("/api/events/" + event.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.put(Entity.entity(event, APPLICATION_JSON), Event.class);
@@ -172,7 +171,7 @@ public class ServerUtils {
 	 */
 	public Response sendReminder(EmailRequestBody emailRequestBody) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/email/reminders")
+				.target(server).path("api/email/reminders")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(emailRequestBody, APPLICATION_JSON));
@@ -187,7 +186,7 @@ public class ServerUtils {
 	 */
 	public Expense addExpense(Expense expense, Long id) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events/" + id + "/expenses")
+				.target(server).path("api/events/" + id + "/expenses")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
@@ -201,7 +200,7 @@ public class ServerUtils {
 	 */
 	public Participant addParticipant(Participant participant) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/participants")
+				.target(server).path("api/participants")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
@@ -215,7 +214,7 @@ public class ServerUtils {
 	 */
 	public Participant updateParticipant(Participant participant) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/participants/" + participant.getId())
+				.target(server).path("api/participants/" + participant.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.put(Entity.entity(participant, APPLICATION_JSON), Participant.class);
@@ -229,7 +228,7 @@ public class ServerUtils {
 	 */
 	public Response deleteParticipant(Participant participant) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/participants/" + participant.getId())
+				.target(server).path("api/participants/" + participant.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.delete();
@@ -243,7 +242,7 @@ public class ServerUtils {
 	 */
 	public List<Tag> getTags(Long eventId) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events/" + eventId)
+				.target(server).path("api/events/" + eventId)
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get().readEntity(Event.class).getTags();
@@ -257,7 +256,7 @@ public class ServerUtils {
 	 */
 	public Tag addTag(Tag tag) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/tags")
+				.target(server).path("api/tags")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
@@ -270,7 +269,7 @@ public class ServerUtils {
 	 */
 	public Response removeTag(Tag tag) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/tags/" + tag.getId())
+				.target(server).path("api/tags/" + tag.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.delete();
@@ -284,7 +283,7 @@ public class ServerUtils {
 	 */
 	public Tag updateTag(Tag tag) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/tags/" + tag.getId())
+				.target(server).path("api/tags/" + tag.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
@@ -299,7 +298,7 @@ public class ServerUtils {
 	 */
 	public Response deleteExpense(Long id, Expense expense){
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events/"+id+"/expenses" + expense.getId())
+				.target(server).path("api/events/"+id+"/expenses" + expense.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.delete();
@@ -314,7 +313,7 @@ public class ServerUtils {
 	 */
 	public Expense updateExpense(Long id, Expense expense){
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events/"+id+"/expenses" + expense.getId())
+				.target(server).path("api/events/"+id+"/expenses" + expense.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
@@ -329,7 +328,7 @@ public class ServerUtils {
 	 */
 	public Event getEventbyInviteCode(String inviteCode){
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events")
+				.target(server).path("api/events")
 				.queryParam("inviteCode",inviteCode)
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
