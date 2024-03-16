@@ -77,7 +77,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void initialize() {
         expenseList = new ListView<>();
-        //participantBox = new ChoiceBox<>();
     }
 
     /**
@@ -255,7 +254,17 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Shows all expenses of the event
      */
     public void showAllExpenses() {
+
+        expenseList = new ListView<>();
+        original = FXCollections.observableArrayList();
+        for (Expense e : event.getExpenses()){
+            if (e.getTitle().equalsIgnoreCase("debt repayment")){
+                return;
+            }
+            original.add(e);
+        }
         expenseList.setItems(original);
+        all.setContent(expenseList);
     }
 
     /**
@@ -300,14 +309,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
         this.event = serverUtils.updateEvent(event);
         titlePrepare();
         participantsDisplay();
-
         setUpParticipantBox();
+        showAllExpenses();
 
-        expenseList = new ListView<>();
-        original = FXCollections.observableArrayList();
-        original.setAll(event.getExpenses());
-        expenseList.setItems(original);
-        all.setContent(expenseList);
         fromSelected.setContent(showFromSelected(event));
         inclSelected.setContent(showIncludingSelected(event));
     }
