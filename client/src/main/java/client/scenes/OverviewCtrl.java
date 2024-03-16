@@ -16,6 +16,8 @@ import javafx.scene.text.Text;
 import commons.Expense;
 import javafx.collections.ObservableList;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -29,6 +31,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public Button addExpense;
     @FXML
     public Button home;
+    @FXML
+    private Tab all;
     private Event event;
     @FXML
     public Button sendInvites;
@@ -76,6 +80,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
         participantBox = new ChoiceBox<>();
     }
 
+    /**
+     * Updates the UI
+     */
     @Override
     public void updateUI() {
         home.setText(Main.getLocalizedString("home"));
@@ -213,10 +220,18 @@ public class OverviewCtrl implements Main.UpdatableUI {
         mainCtrl.showInvitation(this.event);
     }
 
+    /**
+     *
+     * @param actionEvent
+     */
     public void switchToEnglish(ActionEvent actionEvent) {
         Main.switchLocale("en");
     }
 
+    /**
+     *
+     * @param actionEvent
+     */
     public void switchToDutch(ActionEvent actionEvent) {
         Main.switchLocale("nl");
     }
@@ -248,10 +263,13 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * selected
      * participant in the box
      */
-    public void showFromSelected() {
-        showAllExpenses();
-        expenseList.setItems((ObservableList<Expense>) expenseList.getItems().stream()
-                .filter(expense -> expense.getPaidBy().equals(participantBox.getValue())).toList());
+    public ListView<Expense> showFromSelected(Event event) {
+        original = FXCollections.observableArrayList(); //do I need this?
+        List<Expense> temp = new ArrayList<>(event.getExpenses());
+        temp = temp.stream().filter(expense -> expense.getPaidBy().equals(participantBox.getValue()))
+                .toList();
+        original.setAll(temp);
+        return new ListView<>(original);
     }
 
     /**
@@ -268,12 +286,14 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * then selected
      * participant in the box
      */
-    public void showIncludingSelected() {
-        showAllExpenses();
-        expenseList.setItems((ObservableList<Expense>) expenseList.getItems().stream()
-                .filter(expense -> (expense.getInvolvedParticipants().contains(participantBox.getValue())
-                        || expense.getPaidBy().equals(participantBox.getValue())))
-                .toList());
+    public ListView<Expense> showIncludingSelected(Event event){
+        original = FXCollections.observableArrayList(); //do I need this?
+        List<Expense> temp = new ArrayList<>(event.getExpenses());
+        temp = temp.stream().filter(expense -> (expense.getInvolvedParticipants().contains(participantBox.getValue())
+                || expense.getPaidBy().equals(participantBox.getValue())))
+                        .toList();
+        original.setAll(temp);
+        return new ListView<>(original);
     }
 
     public void refresh(Event event) {
@@ -281,8 +301,12 @@ public class OverviewCtrl implements Main.UpdatableUI {
         titlePrepare();
         participantsDisplay();
         expenseList = new ListView<>();
-        original = FXCollections.observableArrayList(event.getExpenses());
+        original = FXCollections.observableArrayList();
+        original.setAll(event.getExpenses());
         expenseList.setItems(original);
+        all.setContent(expenseList);
+        fromSelected.setContent(showFromSelected(event));
+        inclSelected.setContent(showIncludingSelected(event));
     }
 
     /**

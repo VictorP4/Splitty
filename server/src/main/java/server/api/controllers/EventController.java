@@ -1,14 +1,11 @@
 package server.api.controllers;
 
 
-import java.util.*;
-
-
-
+import commons.Event;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import commons.Event;
 import server.database.EventRepository;
 
 
@@ -16,8 +13,6 @@ import server.database.EventRepository;
 @RequestMapping("/api/events")
 public class EventController {
     private final EventRepository repo;
-
-
     /**
      * @param repo            the event repository
      */
@@ -31,9 +26,11 @@ public class EventController {
      * @return all events
      */
     @GetMapping(path = { "", "/" })
-    public List<Event> getAll() {
-
-        return repo.findAll();
+    public ResponseEntity<?> getAll(HttpServletRequest request) {
+        if(request.getSession().getAttribute("adminLogged") == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Only viewable by admins");
+        }
+        else return ResponseEntity.ok(repo.findAll());
     }
 
     /**
@@ -99,5 +96,18 @@ public class EventController {
         Event event = repo.findById(id).get();
         repo.deleteById(id);
         return ResponseEntity.ok(event);
+    }
+
+    /**
+     * Find event by the invite code
+     * @param inviteCode the invite code of the event
+     * @return the requested event
+     */
+    @GetMapping(path={""},params = "inviteCode")
+    public ResponseEntity<Event> getByInviteCode(@RequestParam("inviteCode") String inviteCode){
+        Event e = repo.getByInviteCode(inviteCode);
+
+        if(e==null) return ResponseEntity.badRequest().build();
+        else return ResponseEntity.ok(e);
     }
 }
