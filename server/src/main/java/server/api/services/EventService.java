@@ -1,8 +1,9 @@
 package server.api.services;
 
 import commons.Event;
+import org.springframework.stereotype.Service;
 import server.database.EventRepository;
-
+@Service
 public class EventService {
     private EventRepository repo;
 

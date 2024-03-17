@@ -3,6 +3,7 @@ package server.api.controllers;
 
 import commons.Event;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import server.database.EventRepository;
 @RequestMapping("/api/events")
 public class EventController {
     private final EventRepository repo;
+    @Autowired
     private final EventService evServ;
     /**
      * @param repo   the event repository
@@ -21,7 +23,6 @@ public class EventController {
      */
     public EventController(EventRepository repo, EventService evServ) {
         this.repo = repo;
-
         this.evServ = evServ;
     }
 
