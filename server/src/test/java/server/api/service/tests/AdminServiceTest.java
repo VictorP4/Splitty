@@ -80,7 +80,7 @@ public class AdminServiceTest {
      * @throws IllegalAccessException if the field is inaccessible
      */
     @Test
-    public void testAdminLogin_Success() throws NoSuchFieldException, IllegalAccessException {
+    public void testAdminLoginSuccess() throws NoSuchFieldException, IllegalAccessException {
         Field sessionPassField = AdminService.class.getDeclaredField("sessionPass");
         sessionPassField.setAccessible(true);
         sessionPassField.set(adminService, RandomStringUtils.random(15));
@@ -96,7 +96,7 @@ public class AdminServiceTest {
      * @throws IllegalAccessException if the field is inaccessible
      */
     @Test
-    public void testAdminLogin_Failure() throws NoSuchFieldException, IllegalAccessException {
+    public void testAdminLoginFailure() throws NoSuchFieldException, IllegalAccessException {
         Field sessionPassField = AdminService.class.getDeclaredField("sessionPass");
         sessionPassField.setAccessible(true);
         sessionPassField.set(adminService, "correctPassword");
@@ -125,7 +125,7 @@ public class AdminServiceTest {
      * @throws IllegalAccessException if the field is inaccessible
      */
     @Test
-    public void testAdminLogin_NullPassword() throws NoSuchFieldException, IllegalAccessException {
+    public void testAdminLoginNullPassword() throws NoSuchFieldException, IllegalAccessException {
         Field sessionPassField = AdminService.class.getDeclaredField("sessionPass");
         sessionPassField.setAccessible(true);
         sessionPassField.set(adminService, "correctPassword");
@@ -141,7 +141,7 @@ public class AdminServiceTest {
      * @throws IllegalAccessException if the field is inaccessible
      */
     @Test
-    public void testAdminLogin_EmptyPassword() throws NoSuchFieldException, IllegalAccessException {
+    public void testAdminLoginEmptyPassword() throws NoSuchFieldException, IllegalAccessException {
         Field sessionPassField = AdminService.class.getDeclaredField("sessionPass");
         sessionPassField.setAccessible(true);
         sessionPassField.set(adminService, "correctPassword");
@@ -157,7 +157,7 @@ public class AdminServiceTest {
      * @throws IllegalAccessException if the field is inaccessible
      */
     @Test
-    public void testAdminLogin_WhitespacePassword() throws NoSuchFieldException, IllegalAccessException {
+    public void testAdminLoginWhitespacePassword() throws NoSuchFieldException, IllegalAccessException {
         Field sessionPassField = AdminService.class.getDeclaredField("sessionPass");
         sessionPassField.setAccessible(true);
         sessionPassField.set(adminService, "correctPassword");
