@@ -355,4 +355,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public void showStatistics(ActionEvent actionEvent) {
         mainCtrl.showStatistics(event);
     }
+
+    public void selected(){
+        showFromSelected();
+        showIncludingSelected();
+    }
 }

@@ -28,7 +28,7 @@
                 <Font name="System Bold" size="16.0" />
             </font>
         </Text>
-        <ChoiceBox fx:id="participantBox" layoutX="86.0" layoutY="171.0" prefHeight="26.0" prefWidth="167.0" />
+        <ChoiceBox fx:id="participantBox" layoutX="86.0" layoutY="171.0" prefHeight="26.0" prefWidth="167.0" onAction="#selected"/>
         <Button fx:id="settleDebts" layoutX="361.0" layoutY="402.0" mnemonicParsing="false" onAction="#settleDebts" text="Settle Debts" />
         <Text fx:id="expense" layoutX="88.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense">
             <font>
