@@ -284,7 +284,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
             }
             if (e.getPaidBy().equals(participantBox.getSelectionModel().getSelectedItem())) {
                 original.add(e);
-                System.out.println(e);
             }
         }
         expenseList.setItems(original);
@@ -315,7 +314,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
             if (e.getPaidBy().equals(participantBox.getSelectionModel().getSelectedItem()) ||
                     e.getInvolvedParticipants().contains(participantBox.getSelectionModel().getSelectedItem())) {
                 original.add(e);
-                System.out.println(e);
             }
         }
         expenseList.setItems(original);
