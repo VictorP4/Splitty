@@ -24,7 +24,6 @@ import java.util.concurrent.ExecutionException;
 
 import java.util.ArrayList;
 
-
 public class ServerUtils {
 
 	private static String server = "http://localhost:8080";
@@ -38,23 +37,23 @@ public class ServerUtils {
 	 * This method creates a get request to the server entered by the user.
 	 *
 	 * @param userUrl a string representing the url
-	// * @param port the port
+	 *                // * @param port the port
 	 * @return a Response object
 	 */
 	public Response checkServer(String userUrl) {
 		this.server = "http://" + userUrl;
-		//this.PORT = port;
+		// this.PORT = port;
 
 		session = connect("ws://" + userUrl + "/websocket");
-		Response response =  ClientBuilder.newClient(new ClientConfig())
+		Response response = ClientBuilder.newClient(new ClientConfig())
 				.target(server).path("api/connection")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get();
 
-
 		return response;
 	}
+
 	private StompSession connect(String url) {
 		var client = new StandardWebSocketClient();
 		var stomp = new WebSocketStompClient(client);
@@ -69,13 +68,16 @@ public class ServerUtils {
 		}
 		throw new IllegalStateException();
 	}
+
 	/**
-	 * This method starts the websockets on a specific port, not working for the moment.
+	 * This method starts the websockets on a specific port, not working for the
+	 * moment.
+	 * 
 	 * @param url - the url of the websocket
 	 * @return the session
 	 */
-	public StompSession startWebSockets(String url){
-		this.session = connect("ws://" + url +"/websocket");
+	public StompSession startWebSockets(String url) {
+		this.session = connect("ws://" + url + "/websocket");
 		return session;
 	}
 
@@ -166,7 +168,8 @@ public class ServerUtils {
 	/**
 	 * Sends reminders via email.
 	 *
-	 * @param emailRequestBody The request body containing email information for reminders.
+	 * @param emailRequestBody The request body containing email information for
+	 *                         reminders.
 	 * @return The response from the server.
 	 */
 	public Response sendReminder(EmailRequestBody emailRequestBody) {
@@ -261,12 +264,7 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
 	}
-/**
-	 * Removes a tag.
-	 *
-	 * @param tag The tag to remove.
-	 * @return The response from the server.
-	 */
+
 	public Response removeTag(Tag tag) {
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(server).path("api/tags/" + tag.getId())
@@ -292,13 +290,13 @@ public class ServerUtils {
 	/**
 	 * deletes an expense
 	 *
-	 * @param id id of the event whose expense is getting deleted
+	 * @param id      id of the event whose expense is getting deleted
 	 * @param expense expense to delete
 	 * @return server response
 	 */
-	public Response deleteExpense(Long id, Expense expense){
+	public Response deleteExpense(Long id, Expense expense) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(server).path("api/events/"+id+"/expenses" + expense.getId())
+				.target(server).path("api/events/" + id + "/expenses" + expense.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.delete();
@@ -308,31 +306,22 @@ public class ServerUtils {
 	 * updates an expense
 	 *
 	 * @param expense to update
-	 * @param id id of the event whose expense is getting updated
+	 * @param id      id of the event whose expense is getting updated
 	 * @return server response
 	 */
-	public Expense updateExpense(Long id, Expense expense){
+	public Expense updateExpense(Long id, Expense expense) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(server).path("api/events/"+id+"/expenses" + expense.getId())
+				.target(server).path("api/events/" + id + "/expenses" + expense.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
 	}
 
-
-	/**
-	 * gets an event by invite code
-	 * 
-	 * @param inviteCode of the event
-	 * @return server response
-	 */
-	public Event getEventbyInviteCode(String inviteCode){
+	public Event getEventByInviteCode(String inviteCode) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(server).path("api/events")
-				.queryParam("inviteCode",inviteCode)
+				.target(server).path("api/events/inviteCode/" + inviteCode)
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get().readEntity(Event.class);
 	}
-
 }
