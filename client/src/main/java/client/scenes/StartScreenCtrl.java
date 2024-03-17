@@ -79,7 +79,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         recentlyViewed.add(link4);
         // initializing all the recently events to contain no links
         for (Hyperlink l: recentlyViewed) {
-            l.setText("");
+            if(l!=null) l.setText("");
         }
         alreadyJoined.setDisable(true);
         eventCode.textProperty().addListener((observable, oldValue, newValue) -> handleTextChange(newValue));
