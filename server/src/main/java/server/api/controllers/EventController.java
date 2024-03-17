@@ -35,7 +35,7 @@ public class EventController {
 
     /**
      * Finds the event by id
-     * @param id
+     * @param id The id if the event
      * @return the event requested
      */
     @GetMapping("/{id}")
@@ -48,8 +48,8 @@ public class EventController {
 
     /**
      * Creates a new event
-     * @param event
-     * @return
+     * @param event The event to be added
+     * @return The event that has been adding
      */
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Event> add(@RequestBody Event event) {
@@ -100,14 +100,16 @@ public class EventController {
 
     /**
      * Find event by the invite code
+     *
      * @param inviteCode the invite code of the event
      * @return the requested event
      */
-    @GetMapping(path={""},params = "inviteCode")
-    public ResponseEntity<Event> getByInviteCode(@RequestParam("inviteCode") String inviteCode){
+    @GetMapping(path = "/inviteCode/{inviteCode}")
+    public ResponseEntity<Event> getByInviteCode(@PathVariable("inviteCode") String inviteCode){
         Event e = repo.getByInviteCode(inviteCode);
 
         if(e==null) return ResponseEntity.badRequest().build();
         else return ResponseEntity.ok(e);
     }
+
 }
