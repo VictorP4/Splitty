@@ -76,11 +76,12 @@
         <FlowPane fx:id="participantsField" layoutX="87.0" layoutY="92.0" prefHeight="58.0" prefWidth="354.0" />
         <Button fx:id="sendInvites" layoutX="218.0" layoutY="60.0" mnemonicParsing="false" onAction="#showInvites" text="Send Invites" />
       <Button fx:id="statisticsButton" layoutX="361.0" layoutY="171.0" mnemonicParsing="false" onAction="#showStatistics" prefHeight="26.0" prefWidth="80.0" text="Statistics" />
-      <Pane fx:id="options" layoutX="120.0" layoutY="250.0" prefHeight="116.0" prefWidth="285.0" visible="false">
+      <Pane fx:id="block" opacity="0.37" prefHeight="446.0" prefWidth="534.0" style="-fx-background-color: black;" visible="false" />
+      <Pane fx:id="options" layoutX="120.0" layoutY="250.0" opacity="0.72" prefHeight="116.0" prefWidth="285.0" style="-fx-background-color: white;" visible="false">
          <children>
-            <Button layoutX="14.0" layoutY="45.0" mnemonicParsing="false" text="cancel" />
-            <Button layoutX="117.0" layoutY="45.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="42.0" text="edit" />
-            <Button layoutX="220.0" layoutY="45.0" mnemonicParsing="false" text="delete" />
+            <Button layoutX="14.0" layoutY="45.0" mnemonicParsing="false" onAction="#cancel" text="cancel" />
+            <Button layoutX="117.0" layoutY="45.0" mnemonicParsing="false" onAction="#edit" prefHeight="26.0" prefWidth="42.0" text="edit" />
+            <Button layoutX="220.0" layoutY="45.0" mnemonicParsing="false" onAction="#delete" text="delete" />
          </children>
       </Pane>
       </children>
