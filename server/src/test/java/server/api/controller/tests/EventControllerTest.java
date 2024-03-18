@@ -16,7 +16,7 @@ public class EventControllerTest {
 
     @BeforeEach
     public void setup(){
-        evServ = new EventService();
+        evServ = new EventService(repo);
        repo = new TestEventRepository();
        sut = new EventController(repo, evServ);
 
