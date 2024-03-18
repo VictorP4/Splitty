@@ -29,21 +29,23 @@ public class ServerUtils {
 	private static String server = "http://localhost:8080";
 	private static StompSession session;
 
+	/**
+	 * Sets the server URL.
+	 *
+	 * @param server The server URL.
+	 */
 	public void setSERVER(String server) {
 		this.server = server;
 	}
 
 	/**
-	 * This method creates a get request to the server entered by the user.
+	 * Checks server connectivity.
 	 *
-	 * @param userUrl a string representing the url
-	 *                // * @param port the port
-	 * @return a Response object
+	 * @param userUrl The user-provided server URL.
+	 * @return The response from the server.
 	 */
 	public Response checkServer(String userUrl) {
 		this.server = "http://" + userUrl;
-		// this.PORT = port;
-
 		session = connect("ws://" + userUrl + "/websocket");
 		Response response = ClientBuilder.newClient(new ClientConfig())
 				.target(server).path("api/connection")
@@ -54,6 +56,12 @@ public class ServerUtils {
 		return response;
 	}
 
+	/**
+	 * Connects to a WebSocket.
+	 *
+	 * @param url The WebSocket URL.
+	 * @return The StompSession object.
+	 */
 	private StompSession connect(String url) {
 		var client = new StandardWebSocketClient();
 		var stomp = new WebSocketStompClient(client);
@@ -70,11 +78,10 @@ public class ServerUtils {
 	}
 
 	/**
-	 * This method starts the websockets on a specific port, not working for the
-	 * moment.
-	 * 
-	 * @param url - the url of the websocket
-	 * @return the session
+	 * Starts WebSocket communication.
+	 *
+	 * @param url The WebSocket URL.
+	 * @return The StompSession object.
 	 */
 	public StompSession startWebSockets(String url) {
 		this.session = connect("ws://" + url + "/websocket");

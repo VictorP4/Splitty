@@ -7,6 +7,10 @@ import server.database.EventRepository;
 public class EventService {
     private EventRepository repo;
 
+    public EventService(EventRepository repo) {
+        this.repo = repo;
+    }
+
     public Event getById(long id){
         if (id < 0 || !repo.existsById(id)) {
             return null;
