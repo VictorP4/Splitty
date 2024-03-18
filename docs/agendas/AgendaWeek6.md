@@ -23,11 +23,9 @@ Minute taker:   {Egemen Yildiz}
 
 - Talking about the current state of the project (5 min)
    - Keep everyone up to date with the current state of the app.
-- Forming a roadmap for the next Sprint (10 min)
+- Discuss the feedback received and what changes we should make in our approach (15 min)
+- Forming a roadmap for the next Sprint and dividing the work (10 min)
    - We are done with the basic requirements, so we should agree together on how we'll divide our time next, what we want to prioritize and in what order
-- Dividing the work for week 6 (10 min)
-- Feedback regarding our work-proccess (5 min)
-   - We've been working together for a month now. What are the things we think we can improve in our workflow?
 - Deciding the chair and minute taker for next meeting (1 min)    
      
  
