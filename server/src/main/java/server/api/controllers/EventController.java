@@ -94,8 +94,8 @@ public class EventController {
      * @param inviteCode the invite code of the event
      * @return the requested event
      */
-    @GetMapping(path={""},params = "inviteCode")
-    public ResponseEntity<Event> getByInviteCode(@RequestParam("inviteCode") String inviteCode){
+    @GetMapping(path={"/inviteCode/{inviteCode}"})
+    public ResponseEntity<Event> getByInviteCode(@PathVariable("inviteCode") String inviteCode){
         Event e = evServ.getByInviteCode(inviteCode);
         if(e == null) return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(e);
