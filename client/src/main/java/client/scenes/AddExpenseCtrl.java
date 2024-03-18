@@ -224,7 +224,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * adds all the participants of an expense to teh list in
+     * adds all the participants of an expense to the list in
      * @param in list with all the participants of the expense
      */
     private void ticked(List<Participant> in) {
