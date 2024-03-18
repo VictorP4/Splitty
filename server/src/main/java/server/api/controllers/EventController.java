@@ -3,9 +3,11 @@ package server.api.controllers;
 
 import commons.Event;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import server.api.services.EventService;
 import server.database.EventRepository;
 
 
@@ -13,12 +15,15 @@ import server.database.EventRepository;
 @RequestMapping("/api/events")
 public class EventController {
     private final EventRepository repo;
+    @Autowired
+    private final EventService evServ;
     /**
-     * @param repo            the event repository
+     * @param repo   the event repository
+     * @param evServ
      */
-    public EventController(EventRepository repo) {
+    public EventController(EventRepository repo, EventService evServ) {
         this.repo = repo;
-
+        this.evServ = evServ;
     }
 
     /**
@@ -35,30 +40,28 @@ public class EventController {
 
     /**
      * Finds the event by id
-     * @param id The id if the event
+     * @param id
      * @return the event requested
      */
     @GetMapping("/{id}")
     public ResponseEntity<Event> getById(@PathVariable("id") long id) {
-        if (id < 0 || !repo.existsById(id)) {
+        Event ev = evServ.getById(id);
+        if(ev == null){
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(repo.findById(id).get());
+        return ResponseEntity.ok(ev);
     }
 
     /**
      * Creates a new event
-     * @param event The event to be added
-     * @return The event that has been adding
+     * @param event
+     * @return
      */
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Event> add(@RequestBody Event event) {
-        if (event.getTitle() == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        Event saved = repo.save(event);
-        return ResponseEntity.ok(saved);
+        Event newEvent = evServ.add(event);
+        if(newEvent == null) return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(newEvent);
     }
 
     /**
@@ -69,18 +72,9 @@ public class EventController {
      */
     @PutMapping(path = {"/{id}"})
     public ResponseEntity<Event> put(@PathVariable("id") long id, @RequestBody Event event){
-        if (id < 0 || !repo.existsById(id)) {
-            return ResponseEntity.badRequest().build();
-        }
-        Event update = repo.findById(id).get();
-        update.setParticipants(event.getParticipants());
-        update.setTitle(event.getTitle());
-        update.setLastActivityDate(event.getLastActivityDate());
-        update.setInviteCode(event.getInviteCode());
-        update.setTags(event.getTags());
-
-        Event finalUpdate = repo.save(update);
-        return ResponseEntity.ok(finalUpdate);
+        Event finalEv = evServ.put(id, event);
+        if (finalEv == null) return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(finalEv);
     }
 
     /**
@@ -90,26 +84,20 @@ public class EventController {
      */
     @DeleteMapping(path = {"/{id}"})
     public ResponseEntity<Event> delete(@PathVariable("id") long id){
-        if (id < 0 || !repo.existsById(id)) {
-            return ResponseEntity.badRequest().build();
-        }
-        Event event = repo.findById(id).get();
-        repo.deleteById(id);
+        Event event = evServ.delete(id);
+        if(event == null) return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(event);
     }
 
     /**
      * Find event by the invite code
-     *
      * @param inviteCode the invite code of the event
      * @return the requested event
      */
-    @GetMapping(path = "/inviteCode/{inviteCode}")
-    public ResponseEntity<Event> getByInviteCode(@PathVariable("inviteCode") String inviteCode){
-        Event e = repo.getByInviteCode(inviteCode);
-
-        if(e==null) return ResponseEntity.badRequest().build();
-        else return ResponseEntity.ok(e);
+    @GetMapping(path={""},params = "inviteCode")
+    public ResponseEntity<Event> getByInviteCode(@RequestParam("inviteCode") String inviteCode){
+        Event e = evServ.getByInviteCode(inviteCode);
+        if(e == null) return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(e);
     }
-
 }

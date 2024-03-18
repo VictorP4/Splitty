@@ -6,14 +6,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import server.api.controllers.EventController;
 import server.api.repository.tests.TestEventRepository;
+import server.api.services.EventService;
 
 public class EventControllerTest {
     public TestEventRepository repo;
     private EventController sut;
+    private EventService evServ;
+
+
     @BeforeEach
     public void setup(){
+        evServ = new EventService();
        repo = new TestEventRepository();
-       sut = new EventController(repo);
+       sut = new EventController(repo, evServ);
 
     }
     @Test
