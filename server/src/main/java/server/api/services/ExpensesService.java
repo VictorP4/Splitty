@@ -9,10 +9,8 @@ import server.database.ExpensesRepository;
 import server.database.ParticipantRepository;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.DecimalFormatSymbols;
+import java.util.*;
 
 @Service
 public class ExpensesService {
@@ -49,12 +47,18 @@ public class ExpensesService {
         if (event == null || event.getTitle() == null || expense == null || expense.getTitle() == null) {
             return null;
         }
-        DecimalFormat df = new DecimalFormat("##.00");
+        // forcing the decimal format to be '.', since depending on ont the user location, the DecimalFormat works differently
+        Locale currentLocale = Locale.getDefault();
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(currentLocale);
+        DecimalFormat df = new DecimalFormat("##.00", otherSymbols);
+        otherSymbols.setDecimalSeparator('.');
+        df.setDecimalFormatSymbols(otherSymbols);
+
         Expense newExp = expRepo.save(expense);
         //updating debts
         Participant p = newExp.getPaidBy();
-        String test = df.format(newExp.getAmount());
-        double newDebt = p.getDebt()+Double.parseDouble(test);
+
+        double newDebt = p.getDebt()+Double.parseDouble(df.format(newExp.getAmount()));
         p.setDebt(newDebt);
         participantRepo.save(p);
         for(Participant people : newExp.getInvolvedParticipants()){
