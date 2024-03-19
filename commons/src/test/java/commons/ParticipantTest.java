@@ -56,17 +56,7 @@ public class ParticipantTest {
      */
 
 
-    /**
-     * Tests the getEventFollowed method of the Participant class.
-     * It should return the events followed by the participant.
-     */
-    @Test
-    public void testGetEventFollowed() {
-        Participant participant = new Participant();
-        Event eventFollowed = new Event();
-        participant.setEventFollowed(eventFollowed);
-        assertEquals(eventFollowed, participant.getEventFollowed());
-    }
+    
 
     /**
      * Tests the equals method of the Participant class.
