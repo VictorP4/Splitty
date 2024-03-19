@@ -53,7 +53,8 @@ public class ExpensesService {
         Expense newExp = expRepo.save(expense);
         //updating debts
         Participant p = newExp.getPaidBy();
-        double newDebt = p.getDebt()+Double.parseDouble(df.format(newExp.getAmount()));
+        String test = df.format(newExp.getAmount());
+        double newDebt = p.getDebt()+Double.parseDouble(test);
         p.setDebt(newDebt);
         participantRepo.save(p);
         for(Participant people : newExp.getInvolvedParticipants()){
