@@ -87,7 +87,12 @@ public class ExpensesService {
         if (id < 0 || !eventRepo.existsById(id) || expId < 0 || !expRepo.existsById(expId)) {
             return null;
         }
-        DecimalFormat df = new DecimalFormat("##.00");
+
+        Locale currentLocale = Locale.getDefault();
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(currentLocale);
+        DecimalFormat df = new DecimalFormat("##.00", otherSymbols);
+        otherSymbols.setDecimalSeparator('.');
+        df.setDecimalFormatSymbols(otherSymbols);
         Expense oldExp = expRepo.findById(expId).get();
         //resetting debts
         Participant p1 = oldExp.getPaidBy();
@@ -132,7 +137,12 @@ public class ExpensesService {
         if (id < 0 || !eventRepo.existsById(id) || expId < 0 || !expRepo.existsById(expId)) {
             return null;
         }
-        DecimalFormat df = new DecimalFormat("##.00");
+
+        Locale currentLocale = Locale.getDefault();
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(currentLocale);
+        DecimalFormat df = new DecimalFormat("##.00", otherSymbols);
+        otherSymbols.setDecimalSeparator('.');
+        df.setDecimalFormatSymbols(otherSymbols);
         Expense expense = expRepo.findById(expId).get();
         //resetting debts
         Participant p1 = expense.getPaidBy();
