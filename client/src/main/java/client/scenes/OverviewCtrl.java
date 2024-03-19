@@ -5,13 +5,16 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Participant;
+import jakarta.ws.rs.core.Response;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import commons.Expense;
 import javafx.collections.ObservableList;
@@ -29,6 +32,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public Button addExpense;
     @FXML
     public Button home;
+    @FXML
+    private Pane block;
     @FXML
     private Tab all;
     private Event event;
@@ -59,6 +64,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private FlowPane participantsField;
     @FXML
     private Button statistics;
+    @FXML
+    private Pane options;
 
     /**
      * Constructs an OverviewCtrl object.
@@ -258,6 +265,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void showAllExpenses() {
 
+        //all.setContent(null); //ak treba +1
         expenseList = new ListView<>();
         original = FXCollections.observableArrayList();
         for (Expense e : event.getExpenses()){
@@ -268,6 +276,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         }
         expenseList.setItems(original);
         all.setContent(expenseList);
+        selectExpense();
     }
 
     /**
@@ -288,6 +297,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         }
         expenseList.setItems(original);
         fromSelected.setContent(expenseList);
+        selectExpense();
     }
 
     /**
@@ -318,6 +328,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         }
         expenseList.setItems(original);
         inclSelected.setContent(expenseList);
+        selectExpense();
 
     }
 
@@ -356,8 +367,84 @@ public class OverviewCtrl implements Main.UpdatableUI {
         mainCtrl.showStatistics(event);
     }
 
+    /**
+     * Calls methods showFromSelected & showIncludingSelected
+     * when a participant is picked in the choice box
+     */
     public void selected(){
         showFromSelected();
         showIncludingSelected();
     }
+
+    /**
+     * When an expense is clicked on / selected an options pop-up pops-up
+     */
+    public void selectExpense(){
+
+        this.expenseList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        this.expenseList.setOnMouseClicked((MouseEvent event) -> {
+
+           options.setVisible(true);
+           block.setVisible(true);
+
+        });
+    }
+
+    /**
+     * Closes the options popup without any changes to the expense
+     */
+    public void cancel(){
+        options.setVisible(false);
+        block.setVisible(false);
+    }
+
+    /**
+     * Deletes the selected expense
+     */
+    public void delete(){
+        try{
+            Response response = serverUtils.deleteExpense(this.event.getId(), expenseList.getSelectionModel().getSelectedItem());
+            if(response.getStatus() == Response.Status.OK.getStatusCode()){
+                System.out.println("OK! good job " + response.getStatus() );
+            }
+            else{
+                System.out.println("Status code: " + response.getStatus());
+            }
+
+            event.removeExpense(expenseList.getSelectionModel().getSelectedItem());
+            this.event = serverUtils.updateEvent(this.event);
+        }
+        finally {
+            options.setVisible(false);
+            block.setVisible(false);
+            mainCtrl.showEventOverview(event);
+        }
+    }
+
+    public void edit(){
+        Expense toEdit = expenseList.getSelectionModel().getSelectedItem();
+//        if(toEdit == null) {
+//            System.out.println("nothing selected");
+//            return;
+//        }
+//
+//        Expense updatedExpense = serverUtils.updateExpense(this.event.getId(), toEdit);
+//
+//        int index = 0;
+//        for(Expense e : this.event.getExpenses()){
+//            if(e.getId().equals(toEdit.getId())){
+//                this.event.getExpenses().set(index, updatedExpense);
+//                return;
+//            }
+//            else{
+//                index++;
+//            }
+//        }
+
+        this.event = serverUtils.updateEvent(this.event);
+        options.setVisible(false);
+        block.setVisible(false);
+        mainCtrl.showEventOverview(event);
+    }
+
 }
