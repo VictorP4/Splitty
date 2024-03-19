@@ -5,6 +5,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Participant;
+import commons.Tag;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -12,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import commons.Expense;
 import javafx.collections.ObservableList;
@@ -231,8 +233,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
-     *
-     * @param actionEvent
+     * Switches the language to Dutch.
      */
     public void switchToDutch(ActionEvent actionEvent) {
         Main.switchLocale("nl");
@@ -253,18 +254,52 @@ public class OverviewCtrl implements Main.UpdatableUI {
         mainCtrl.showAddExpense(event);
     }
 
+
+    /**
+     * Fills the expense list with the expenses of the event
+     * @return the list of expenses
+     */
+    public ListView<Expense> expenseFiller() {
+        expenseList.setCellFactory(listView -> new ListCell<Expense>() {
+            @Override
+            protected void updateItem(Expense expense, boolean empty) {
+                super.updateItem(expense, empty);
+                if (empty || expense == null) {
+                    setText(null);
+                    setStyle(null);
+                } else {
+                    setText(expense.toString());
+
+                    Tag tag = expense.getTag();
+                    if (tag != null) {
+                        String colorStyle = String.format("-fx-background-color: rgba(%d, %d, %d, 1);", tag.getRed(), tag.getGreen(), tag.getBlue());
+                        setStyle(colorStyle);
+
+                        double brightness = (tag.getRed() * 0.299 + tag.getGreen() * 0.587 + tag.getBlue() * 0.114) / 255;
+
+                        String textColor = brightness < 0.5 ? "white" : "black";
+                        setTextFill(Color.web(textColor));
+                    }
+                }
+            }
+        });
+        return expenseList;
+    }
+
     /**
      * Shows all expenses of the event
      */
     public void showAllExpenses() {
-
         expenseList = new ListView<>();
         original = FXCollections.observableArrayList();
-        for (Expense e : event.getExpenses()){
-            if (e.getTitle().equalsIgnoreCase("debt repayment")){
-                return;
+
+        expenseList = expenseFiller();
+
+
+        for (Expense e : event.getExpenses()) {
+            if (!e.getTitle().equalsIgnoreCase("debt repayment")) {
+                original.add(e);
             }
-            original.add(e);
         }
         expenseList.setItems(original);
         all.setContent(expenseList);
@@ -275,14 +310,12 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * selected participant in the box
      */
     public void showFromSelected() {
-
-        expenseList =  new ListView<>();
+        expenseList = new ListView<>();
         original = FXCollections.observableArrayList();
+        expenseList = expenseFiller();
+
         for (Expense e : event.getExpenses()) {
-            if (e.getTitle().equalsIgnoreCase("debt repayment")) {
-                return;
-            }
-            if (e.getPaidBy().equals(participantBox.getSelectionModel().getSelectedItem())) {
+            if (!e.getTitle().equalsIgnoreCase("debt repayment") && e.getPaidBy().equals(participantBox.getSelectionModel().getSelectedItem())) {
                 original.add(e);
             }
         }
@@ -291,22 +324,13 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Adds a new participant.
-     * This method opens the contact details scene to add a new participant.
-     */
-    @FXML
-    public void addParticipant() {
-        mainCtrl.showContactDetails(new Participant(), event);
-    }
-
-    /**
      * Resets the expenses list and then filters it for all expenses that involve
      * then selected participant in the box
      */
-    public void showIncludingSelected(){
-
-        expenseList =  new ListView<>();
+    public void showIncludingSelected() {
+        expenseList = new ListView<>();
         original = FXCollections.observableArrayList();
+
         for (Expense e : event.getExpenses()) {
             if (e.getTitle().equalsIgnoreCase("debt repayment")) {
                 return;
@@ -316,9 +340,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
                 original.add(e);
             }
         }
-        expenseList.setItems(original);
-        inclSelected.setContent(expenseList);
 
+        expenseList.setItems(original);
+        expenseList = expenseFiller();
+
+        inclSelected.setContent(expenseList);
     }
 
     public void refresh(Event event) {
@@ -327,6 +353,15 @@ public class OverviewCtrl implements Main.UpdatableUI {
         participantsDisplay();
         setUpParticipantBox();
         showAllExpenses();
+    }
+
+    /**
+     * Adds a new participant.
+     * This method opens the contact details scene to add a new participant.
+     */
+    @FXML
+    public void addParticipant() {
+        mainCtrl.showContactDetails(new Participant(), event);
     }
 
     /**
