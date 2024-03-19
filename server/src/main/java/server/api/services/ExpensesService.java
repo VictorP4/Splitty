@@ -140,15 +140,17 @@ public class ExpensesService {
             people.setDebt(oldDebt);
             participantRepo.save(people);
         }
-        //deleting expense
-        expRepo.deleteById(id);
+
         //deleting expense in event
         Event event = eventRepo.findById(id).get();
         List<Expense> expenses = event.getExpenses();
         expenses.remove(expense);
         event.setExpenses(expenses);
-
         eventRepo.save(event);
+
+        //deleting expense
+        expRepo.deleteById(expId);
+
         return expense;
     }
 
