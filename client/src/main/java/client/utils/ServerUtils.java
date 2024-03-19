@@ -324,6 +324,12 @@ public class ServerUtils {
 				.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
 	}
 
+	/**
+	 * Gets an event by invite code.
+	 *
+	 * @param inviteCode of the event to get
+	 * @return the event
+	 */
 	public Event getEventByInviteCode(String inviteCode) {
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(server).path("api/events/inviteCode/" + inviteCode)
