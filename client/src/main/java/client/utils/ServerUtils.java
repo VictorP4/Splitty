@@ -18,8 +18,10 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import java.util.ArrayList;
@@ -325,10 +327,10 @@ public class ServerUtils {
 	}
 
 	/**
-	 * Gets an event by invite code.
+	 * Retrieves the event by its invite code.
 	 *
-	 * @param inviteCode of the event to get
-	 * @return the event
+	 * @param inviteCode The invite code of the event.
+	 * @return The event.
 	 */
 	public Event getEventByInviteCode(String inviteCode) {
 		return ClientBuilder.newClient(new ClientConfig())
@@ -336,5 +338,41 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get().readEntity(Event.class);
+	}
+
+	/**
+	 * Retrieves exchange rates for a specific date.
+	 *
+	 * @param date The date for which exchange rates are retrieved.
+	 * @return A map of currency codes to exchange rates.
+	 */
+	public Map<String, Double> getExchangeRates(String date) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("api/currency/rates")
+				.queryParam("date", date)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get().readEntity(new GenericType<Map<String, Double>>() {});
+	}
+
+	/**
+	 * Converts currency for a specific date.
+	 *
+	 * @param amount       The amount of currency to convert.
+	 * @param fromCurrency The currency to convert from.
+	 * @param toCurrency   The currency to convert to.
+	 * @param date         The date for which the conversion is done.
+	 * @return The converted amount.
+	 */
+	public Double convertCurrency(double amount, String fromCurrency, String toCurrency, LocalDate date) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("api/currency/convert")
+				.queryParam("amount", amount)
+				.queryParam("fromCurrency", fromCurrency)
+				.queryParam("toCurrency", toCurrency)
+				.queryParam("date", date)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get().readEntity(Double.class);
 	}
 }

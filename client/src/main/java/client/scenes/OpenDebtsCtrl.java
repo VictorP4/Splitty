@@ -40,6 +40,8 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
     private Event event;
     private OpenDebtString strings;
     private String lang;
+    @FXML
+    private Text openDebt;
 
     /**
      * Constructs a new instance of an OpenDebtCtrl
@@ -67,7 +69,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         strings.setEmail(Main.getLocalizedString("emailHolder"));
         strings.setSendReminder(Main.getLocalizedString("reminder"));
         strings.setMarkReceived(Main.getLocalizedString("markReceived"));
-
+        openDebt.setText(Main.getLocalizedString("openDebt"));
 
 
     }

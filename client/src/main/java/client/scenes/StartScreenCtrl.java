@@ -109,7 +109,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         try {
             createdEvent = server.addEvent(createdEvent);
             Participant creator = new Participant();
-            mainCtrl.showEventOverview(createdEvent);
+            mainCtrl.refreshEventOverview(createdEvent);
             mainCtrl.showContactDetails(creator, createdEvent);
             updateMostRecent(createdEvent);
         } catch (WebApplicationException e) {

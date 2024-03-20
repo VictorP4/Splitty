@@ -206,7 +206,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
             serverUtils.updateParticipant(participant);
             this.event.getParticipants().set(index, participant);
         }
-        participant.setEventFollowed(event);
         this.event = serverUtils.updateEvent(event);
         participantsDisplay();
         mainCtrl.showEventOverview(event);
