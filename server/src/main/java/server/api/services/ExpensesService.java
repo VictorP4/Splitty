@@ -113,7 +113,7 @@ public class ExpensesService {
             participantRepo.save(people);
         }
 
-        Expense newExp = expRepo.save(oldExp);
+        Expense newExp = expRepo.save(oldExp); // ! ERROR OCCURS HERE
         return newExp;
     }
 

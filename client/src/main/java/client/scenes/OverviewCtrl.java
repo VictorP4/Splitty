@@ -265,7 +265,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void showAllExpenses() {
 
-        //all.setContent(null); //ak treba +1
         expenseList = new ListView<>();
         original = FXCollections.observableArrayList();
         for (Expense e : event.getExpenses()){
@@ -334,6 +333,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
     public void refresh(Event event) {
         this.event = serverUtils.updateEvent(event);
+        options.setVisible(false);
+        block.setVisible(false);
         titlePrepare();
         participantsDisplay();
         setUpParticipantBox();
@@ -421,30 +422,18 @@ public class OverviewCtrl implements Main.UpdatableUI {
         }
     }
 
+    /**
+     * Shows add/edit expense overview with the selected expense so the user can edit it
+     */
     public void edit(){
         Expense toEdit = expenseList.getSelectionModel().getSelectedItem();
-//        if(toEdit == null) {
-//            System.out.println("nothing selected");
-//            return;
-//        }
-//
-//        Expense updatedExpense = serverUtils.updateExpense(this.event.getId(), toEdit);
-//
-//        int index = 0;
-//        for(Expense e : this.event.getExpenses()){
-//            if(e.getId().equals(toEdit.getId())){
-//                this.event.getExpenses().set(index, updatedExpense);
-//                return;
-//            }
-//            else{
-//                index++;
-//            }
-//        }
 
-        this.event = serverUtils.updateEvent(this.event);
-        options.setVisible(false);
-        block.setVisible(false);
-        mainCtrl.showEventOverview(event);
+        if(toEdit == null) {
+            System.out.println("nothing selected");
+        }
+        else {
+            mainCtrl.showExpense(this.event, toEdit);
+        }
     }
 
 }
