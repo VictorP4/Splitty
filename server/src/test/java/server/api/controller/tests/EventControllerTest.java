@@ -18,7 +18,7 @@ public class EventControllerTest {
     public void setup(){
         evServ = new EventService(repo);
        repo = new TestEventRepository();
-       sut = new EventController(repo, evServ);
+       sut = new EventController(repo, evServ, null);
 
     }
     @Test

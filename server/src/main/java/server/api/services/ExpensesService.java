@@ -233,6 +233,15 @@ public class ExpensesService {
         }
         return sum;
     }
+    /**
+     * Used for the updates handling for the websockets
+     * @param id event id
+     * @return the found event
+     *
+     */
+    public Event getEvent(Long id){
+        return eventRepo.findById(id).get();
+    }
 
 
 

@@ -2,9 +2,11 @@ package client.scenes;
 
 import client.Main;
 import client.utils.ServerUtils;
+import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Participant;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -16,6 +18,7 @@ import javafx.scene.text.Text;
 import commons.Expense;
 import javafx.collections.ObservableList;
 
+import java.net.http.WebSocket;
 import java.util.Objects;
 
 /**
@@ -59,6 +62,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private FlowPane participantsField;
     @FXML
     private Button statistics;
+    private WebSocketUtils webSocket;
 
     /**
      * Constructs an OverviewCtrl object.
@@ -67,9 +71,10 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * @param mainCtrl    The main controller of the application.
      */
     @Inject
-    public OverviewCtrl(ServerUtils serverUtils, MainCtrl mainCtrl) {
+    public OverviewCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, WebSocketUtils webSocket) {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
+        this.webSocket = webSocket;
     }
 
     /**
@@ -77,6 +82,16 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void initialize() {
         expenseList = new ListView<>();
+        webSocket.connect("ws://localhost:8080/websocket");
+        webSocket.addEventListener((event)->{
+            if(this.event==null||!this.event.getId().equals(event.getId())) return;
+            else{
+                Platform.runLater(()->{
+                    refresh(event);
+                });
+            }
+        });
+
     }
 
     /**
@@ -163,8 +178,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
             label.setOnMouseClicked(mouseEvent -> {
                 if (mouseEvent.getClickCount() == 2) {
                     if (mouseEvent.getButton() == MouseButton.SECONDARY) {
-                        serverUtils.deleteParticipant(contact);
                         event.removeParticipant(contact);
+                        serverUtils.updateEvent(event);
+                        serverUtils.deleteParticipant(contact);
                         this.event = serverUtils.updateEvent(this.event);
                         participantsDisplay();
                     } else
@@ -321,7 +337,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     public void refresh(Event event) {
-        this.event = serverUtils.updateEvent(event);
+        this.event = serverUtils.getEvent(event.getId());
         titlePrepare();
         participantsDisplay();
         setUpParticipantBox();

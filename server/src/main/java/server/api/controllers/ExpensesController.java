@@ -1,7 +1,9 @@
 package server.api.controllers;
+import commons.Event;
 import commons.Expense;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.api.services.ExpensesService;
 
@@ -15,9 +17,11 @@ public class ExpensesController {
 
     @Autowired
     private final ExpensesService expService;
+    private final SimpMessagingTemplate smt;
 
-    public ExpensesController(ExpensesService expService) {
+    public ExpensesController(ExpensesService expService, SimpMessagingTemplate smt) {
         this.expService = expService;
+        this.smt = smt;
     }
 
     /**
@@ -43,6 +47,8 @@ public class ExpensesController {
     public ResponseEntity<Expense> addNew(@PathVariable("id") long id, @RequestBody Expense expense){
         Expense newExp = expService.addNew(id,expense);
         if(newExp == null) return ResponseEntity.badRequest().build();
+        Event modifiedEvent = expService.getEvent(id);
+        smt.convertAndSend("/topic/events",modifiedEvent);
         return ResponseEntity.ok(newExp);
     }
 
