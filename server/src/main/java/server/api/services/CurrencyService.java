@@ -8,7 +8,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,12 +17,23 @@ public class CurrencyService {
     private final RestTemplate restTemplate;
     private final String apiKey;
 
+    /**
+     * Constructor for CurrencyService.
+     *
+     * @param restTemplate The RestTemplate instance used for making HTTP requests.
+     * @param apiKey       The API key for accessing the currency exchange service.
+     */
     public CurrencyService(RestTemplate restTemplate, @Value("${openexchangerates.api.key}") String apiKey) {
         this.restTemplate = restTemplate;
         this.apiKey = apiKey;
     }
 
-
+    /**
+     * Caches the exchange rates into a file.
+     *
+     * @param fileName The name of the file to cache the rates.
+     * @param rates    The exchange rates to cache.
+     */
     private void cacheRates(String fileName, Map<String, Double> rates) {
         File directory = new File("rates");
         if (!directory.exists()) {
@@ -39,6 +49,12 @@ public class CurrencyService {
         }
     }
 
+    /**
+     * Fetches exchange rates for a specific date from the currency exchange service.
+     *
+     * @param date The date for which exchange rates are requested.
+     * @return ResponseEntity containing a map of currency codes to exchange rates.
+     */
     public ResponseEntity<Map<String, Double>> fetchExchangeRates(LocalDate date) {
         String cacheFileName = "rates/" + date + ".txt";
 
@@ -62,6 +78,15 @@ public class CurrencyService {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
     }
 
+    /**
+     * Converts an amount of currency from one currency to another for a specific date.
+     *
+     * @param amount       The amount of currency to convert.
+     * @param fromCurrency The currency to convert from.
+     * @param toCurrency   The currency to convert to.
+     * @param date         The date for which the conversion is done.
+     * @return ResponseEntity containing the converted amount.
+     */
     public ResponseEntity<Double> convertCurrency(double amount, String fromCurrency, String toCurrency, LocalDate date) {
         String cacheFileName = "rates/" + date + ".txt";
 
@@ -78,6 +103,12 @@ public class CurrencyService {
         return ResponseEntity.ok(convertedAmount);
     }
 
+    /**
+     * Reads cached exchange rates from a file.
+     *
+     * @param fileName The name of the file containing cached rates.
+     * @return The map of currency codes to exchange rates read from the file.
+     */
     private Map<String, Double> readCachedRates(String fileName) {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             Map<String, Double> rates = new HashMap<>();
