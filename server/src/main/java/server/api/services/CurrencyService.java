@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,36 +17,12 @@ public class CurrencyService {
 
     private final RestTemplate restTemplate;
     private final String apiKey;
-    private final String apiUrl = "https://openexchangerates.org/api/latest.json?app_id=";
 
     public CurrencyService(RestTemplate restTemplate, @Value("${openexchangerates.api.key}") String apiKey) {
         this.restTemplate = restTemplate;
         this.apiKey = apiKey;
     }
 
-    public ResponseEntity<Map<String, Double>> fetchExchangeRates() {
-        LocalDate today = LocalDate.now();
-        String cacheFileName = "rates/" + today + ".txt";
-
-        try {
-            if (new File(cacheFileName).exists()) {
-                Map<String, Double> cachedRates = readCachedRates(cacheFileName);
-                return ResponseEntity.ok(cachedRates);
-            }
-
-            String url = apiUrl + apiKey;
-            ResponseEntity<Map> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, Map.class);
-            if (responseEntity.getStatusCode().is2xxSuccessful()) {
-                Map<String, Double> exchangeRates = (Map<String, Double>) responseEntity.getBody().get("rates");
-                cacheRates(cacheFileName, exchangeRates);
-                return ResponseEntity.ok(exchangeRates);
-            }
-        } catch (RestClientException e) {
-            e.printStackTrace();
-        }
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-    }
 
     private void cacheRates(String fileName, Map<String, Double> rates) {
         File directory = new File("rates");
@@ -62,8 +39,31 @@ public class CurrencyService {
         }
     }
 
-    public ResponseEntity<Double> convertCurrency(double amount, String fromCurrency, String toCurrency) {
-        String cacheFileName = "rates/" + LocalDate.now() + ".txt";
+    public ResponseEntity<Map<String, Double>> fetchExchangeRates(LocalDate date) {
+        String cacheFileName = "rates/" + date + ".txt";
+
+        try {
+            if (new File(cacheFileName).exists()) {
+                Map<String, Double> cachedRates = readCachedRates(cacheFileName);
+                return ResponseEntity.ok(cachedRates);
+            }
+
+            String url = "https://openexchangerates.org/api/historical/" + date + ".json?app_id=" + apiKey;
+            ResponseEntity<Map> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, Map.class);
+            if (responseEntity.getStatusCode().is2xxSuccessful()) {
+                Map<String, Double> exchangeRates = (Map<String, Double>) responseEntity.getBody().get("rates");
+                cacheRates(cacheFileName, exchangeRates);
+                return ResponseEntity.ok(exchangeRates);
+            }
+        } catch (RestClientException e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
+
+    public ResponseEntity<Double> convertCurrency(double amount, String fromCurrency, String toCurrency, LocalDate date) {
+        String cacheFileName = "rates/" + date + ".txt";
 
         Map<String, Double> exchangeRates = readCachedRates(cacheFileName);
 
