@@ -31,6 +31,8 @@ public class StatisticsCtrl implements Main.UpdatableUI {
     public Text total;
     @FXML
     public PieChart pieChart;
+    Map<String, Double> expensesPerTag = new HashMap<>();
+    Map<String, Color> tagColors = new HashMap<>();
 
     /**
      * Constructs a new instance of a StatisticsCtrl
@@ -52,8 +54,6 @@ public class StatisticsCtrl implements Main.UpdatableUI {
         stats.setText(Main.getLocalizedString("statistics"));
         eventCost.setText(Main.getLocalizedString("statEventCost"));
         backButton.setText(Main.getLocalizedString("back"));
-        getTotal();
-        populatePieChart();
     }
 
     /**
@@ -65,6 +65,7 @@ public class StatisticsCtrl implements Main.UpdatableUI {
         this.event = event;
         getTotal();
         populatePieChart();
+        paintChart();
     }
 
     /**
@@ -80,8 +81,8 @@ public class StatisticsCtrl implements Main.UpdatableUI {
      * Populates the pie chart with expenses per tag.
      */
     private void populatePieChart() {
-        Map<String, Double> expensesPerTag = new HashMap<>();
-        Map<String, Color> tagColors = new HashMap<>();
+        expensesPerTag = new HashMap<>();
+        tagColors = new HashMap<>();
 
         for (Expense expense : event.getExpenses()) {
             Tag tag = expense.getTag();
@@ -100,13 +101,23 @@ public class StatisticsCtrl implements Main.UpdatableUI {
             String tagName = entry.getKey();
             double amount = entry.getValue();
             double relativeValue = amount / totalExpense;
-            Color color = tagColors.get(tagName);
             PieChart.Data data = new PieChart.Data(tagName + String.format("\n%.2f \u20AC (%.2f%%)", amount, relativeValue * 100), amount);
-            //data.getNode().setStyle("-fx-pie-color: rgb(" + (int) (255 * color.getRed()) + "," + (int) (255 * color.getGreen()) + "," + (int) (255 * color.getBlue()) + ");");
             pieChartData.add(data);
         }
-
         pieChart.setData(pieChartData);
+    }
+
+    /**
+     * Paints the pie chart with the colors of the tags.
+     */
+    private void paintChart() {
+        for (Map.Entry<String, Double> entry : expensesPerTag.entrySet()) {
+            String tagName = entry.getKey();
+            for (PieChart.Data data : pieChart.getData()) {
+                Color color = tagColors.get(tagName);
+                data.getNode().setStyle("-fx-pie-color: rgb(" + (int) (255 * color.getRed()) + "," + (int) (255 * color.getGreen()) + "," + (int) (255 * color.getBlue()) + ");");
+            }
+        }
     }
 
     /**
