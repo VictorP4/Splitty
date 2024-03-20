@@ -9,10 +9,8 @@ import server.database.ExpensesRepository;
 import server.database.ParticipantRepository;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.DecimalFormatSymbols;
+import java.util.*;
 
 @Service
 public class ExpensesService {
@@ -49,10 +47,17 @@ public class ExpensesService {
         if (event == null || event.getTitle() == null || expense == null || expense.getTitle() == null) {
             return null;
         }
-        DecimalFormat df = new DecimalFormat("##.00");
+        // forcing the decimal format to be '.', since depending on ont the user location, the DecimalFormat works differently
+        Locale currentLocale = Locale.getDefault();
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(currentLocale);
+        DecimalFormat df = new DecimalFormat("##.00", otherSymbols);
+        otherSymbols.setDecimalSeparator('.');
+        df.setDecimalFormatSymbols(otherSymbols);
+
         Expense newExp = expRepo.save(expense);
         //updating debts
         Participant p = newExp.getPaidBy();
+
         double newDebt = p.getDebt()+Double.parseDouble(df.format(newExp.getAmount()));
         p.setDebt(newDebt);
         participantRepo.save(p);
@@ -82,7 +87,12 @@ public class ExpensesService {
         if (id < 0 || !eventRepo.existsById(id) || expId < 0 || !expRepo.existsById(expId)) {
             return null;
         }
-        DecimalFormat df = new DecimalFormat("##.00");
+
+        Locale currentLocale = Locale.getDefault();
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(currentLocale);
+        DecimalFormat df = new DecimalFormat("##.00", otherSymbols);
+        otherSymbols.setDecimalSeparator('.');
+        df.setDecimalFormatSymbols(otherSymbols);
         Expense oldExp = expRepo.findById(expId).get();
         //resetting debts
         Participant p1 = oldExp.getPaidBy();
@@ -127,7 +137,12 @@ public class ExpensesService {
         if (id < 0 || !eventRepo.existsById(id) || expId < 0 || !expRepo.existsById(expId)) {
             return null;
         }
-        DecimalFormat df = new DecimalFormat("##.00");
+
+        Locale currentLocale = Locale.getDefault();
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(currentLocale);
+        DecimalFormat df = new DecimalFormat("##.00", otherSymbols);
+        otherSymbols.setDecimalSeparator('.');
+        df.setDecimalFormatSymbols(otherSymbols);
         Expense expense = expRepo.findById(expId).get();
         //resetting debts
         Participant p1 = expense.getPaidBy();
