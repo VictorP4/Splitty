@@ -1,6 +1,7 @@
 package server.api.controllers;
 import commons.Event;
 import commons.Expense;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -47,7 +48,7 @@ public class ExpensesController {
     public ResponseEntity<Expense> addNew(@PathVariable("id") long id, @RequestBody Expense expense){
         Expense newExp = expService.addNew(id,expense);
         if(newExp == null) return ResponseEntity.badRequest().build();
-        Event modifiedEvent = expService.getEvent(id);
+        Event modifiedEvent = (Event) Hibernate.unproxy(expService.getEvent(id));
         smt.convertAndSend("/topic/events",modifiedEvent);
         return ResponseEntity.ok(newExp);
     }
