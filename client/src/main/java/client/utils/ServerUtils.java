@@ -18,8 +18,10 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import java.util.ArrayList;
@@ -330,5 +332,25 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get().readEntity(Event.class);
+	}
+	public Map<String, Double> getExchangeRates(String date) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("api/currency/rates")
+				.queryParam("date", date)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get().readEntity(new GenericType<Map<String, Double>>() {});
+	}
+
+	public Double convertCurrency(double amount, String fromCurrency, String toCurrency, LocalDate date) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("api/currency/convert")
+				.queryParam("amount", amount)
+				.queryParam("fromCurrency", fromCurrency)
+				.queryParam("toCurrency", toCurrency)
+				.queryParam("date", date)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get().readEntity(Double.class);
 	}
 }
