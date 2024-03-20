@@ -384,8 +384,10 @@ public class OverviewCtrl implements Main.UpdatableUI {
         this.expenseList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         this.expenseList.setOnMouseClicked((MouseEvent event) -> {
 
-           options.setVisible(true);
-           block.setVisible(true);
+            if(event.getClickCount() == 2){
+                options.setVisible(true);
+                block.setVisible(true);
+            }
 
         });
     }
