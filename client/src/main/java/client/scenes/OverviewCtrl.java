@@ -268,7 +268,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         original = FXCollections.observableArrayList();
         for (Expense e : event.getExpenses()){
             if (e.getTitle().equalsIgnoreCase("debt repayment")){
-                return;
+                continue;
             }
             original.add(e);
         }
@@ -287,7 +287,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         original = FXCollections.observableArrayList();
         for (Expense e : event.getExpenses()) {
             if (e.getTitle().equalsIgnoreCase("debt repayment")) {
-                return;
+                continue;
             }
             if (e.getPaidBy().equals(participantBox.getSelectionModel().getSelectedItem())) {
                 original.add(e);
@@ -317,7 +317,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         original = FXCollections.observableArrayList();
         for (Expense e : event.getExpenses()) {
             if (e.getTitle().equalsIgnoreCase("debt repayment")) {
-                return;
+                continue;
             }
             if (e.getPaidBy().equals(participantBox.getSelectionModel().getSelectedItem()) ||
                     e.getInvolvedParticipants().contains(participantBox.getSelectionModel().getSelectedItem())) {

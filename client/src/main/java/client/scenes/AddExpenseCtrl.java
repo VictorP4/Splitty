@@ -144,6 +144,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
 
         Tag tag = selectedTag;
+
         return new Expense(title, amount, paidBy, partIn, date, selectedTag);
     }
 
@@ -178,6 +179,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             return;
         }
         clearFields();
+        this.expense=null;
         mainCtrl.showEventOverview(event);
     }
 
