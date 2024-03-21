@@ -11,18 +11,13 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 
-import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
+
 
 import java.util.ArrayList;
 
