@@ -3,7 +3,6 @@
  */
 package client.utils;
 
-import static com.google.common.net.HttpHeaders.SERVER;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import commons.*;
@@ -12,6 +11,7 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -19,6 +19,7 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -157,7 +158,7 @@ public class ServerUtils {
 				.target(server).path("api/events")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
-				.get().readEntity(new GenericType<ArrayList<Event>>() {
+				.get().readEntity(new GenericType<>() {
 				});
 	}
 
@@ -375,5 +376,14 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get().readEntity(Double.class);
+	}
+
+	public String adminLogin(String password) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("api/admin/login")
+				.queryParam("password", password)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.post(Entity.entity(password, APPLICATION_JSON), String.class);
 	}
 }

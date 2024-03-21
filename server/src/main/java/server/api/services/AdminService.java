@@ -40,7 +40,6 @@ public class AdminService implements ApplicationListener<ApplicationStartedEvent
     }
 
     public boolean adminLogin(String password){
-        if(sessionPass.equals(password)) return true;
-        return false;
+        return sessionPass.equals(password);
     }
 }
