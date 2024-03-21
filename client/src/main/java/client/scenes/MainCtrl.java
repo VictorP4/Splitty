@@ -17,6 +17,7 @@
 package client.scenes;
 
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -198,4 +199,17 @@ public class MainCtrl {
         primaryStage.setTitle("AddTag");
         primaryStage.setScene(addTag);
     }
+
+    /**
+     * Displays an overview of an expense in the add/edit expense scene
+     * @param event of the expense
+     * @param expense displayed
+     */
+    public void showExpense(Event event, Expense expense){
+        addExpenseCtrl.refreshExp(event, expense);
+        primaryStage.setTitle("EditExpense");
+        primaryStage.setScene(addExpense);
+    }
+
+
 }

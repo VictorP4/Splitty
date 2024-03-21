@@ -9,10 +9,8 @@ import server.database.ExpensesRepository;
 import server.database.ParticipantRepository;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.DecimalFormatSymbols;
+import java.util.*;
 
 @Service
 public class ExpensesService {
@@ -49,10 +47,17 @@ public class ExpensesService {
         if (event == null || event.getTitle() == null || expense == null || expense.getTitle() == null) {
             return null;
         }
-        DecimalFormat df = new DecimalFormat("##.00");
+        // forcing the decimal format to be '.', since depending on ont the user location, the DecimalFormat works differently
+        Locale currentLocale = Locale.getDefault();
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(currentLocale);
+        DecimalFormat df = new DecimalFormat("##.00", otherSymbols);
+        otherSymbols.setDecimalSeparator('.');
+        df.setDecimalFormatSymbols(otherSymbols);
+
         Expense newExp = expRepo.save(expense);
         //updating debts
         Participant p = newExp.getPaidBy();
+
         double newDebt = p.getDebt()+Double.parseDouble(df.format(newExp.getAmount()));
         p.setDebt(newDebt);
         participantRepo.save(p);
@@ -82,7 +87,12 @@ public class ExpensesService {
         if (id < 0 || !eventRepo.existsById(id) || expId < 0 || !expRepo.existsById(expId)) {
             return null;
         }
-        DecimalFormat df = new DecimalFormat("##.00");
+
+        Locale currentLocale = Locale.getDefault();
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(currentLocale);
+        DecimalFormat df = new DecimalFormat("##.00", otherSymbols);
+        otherSymbols.setDecimalSeparator('.');
+        df.setDecimalFormatSymbols(otherSymbols);
         Expense oldExp = expRepo.findById(expId).get();
         //resetting debts
         Participant p1 = oldExp.getPaidBy();
@@ -95,24 +105,32 @@ public class ExpensesService {
             people.setDebt(oldDebt);
             participantRepo.save(people);
         }
+
         //updating expense
         oldExp.setAmount(expense.getAmount());
         oldExp.setInvolvedParticipants(expense.getInvolvedParticipants());
         oldExp.setPaidBy(expense.getPaidBy());
         oldExp.setTitle(expense.getTitle());
         oldExp.setDate(expense.getDate());
+        oldExp.setTag(expense.getTag());
+        
         //updating debts
+        oldExp.setPaidBy(participantRepo.getById(oldExp.getPaidBy().getId()));
         Participant p = oldExp.getPaidBy();
         double newDebt = p.getDebt()+Double.parseDouble(df.format(oldExp.getAmount()));
         p.setDebt(newDebt);
         participantRepo.save(p);
-        for(Participant people : oldExp.getInvolvedParticipants()){
-            if(people.getId().equals(p.getId())) people.setDebt(p.getDebt());
+        for(int i=0; i<oldExp.getInvolvedParticipants().size();i++){
+            Participant people = oldExp.getInvolvedParticipants().get(i);
+            if(people.getId().equals(p.getId())) {
+                oldExp.getInvolvedParticipants().remove(i);
+                oldExp.getInvolvedParticipants().add(i,p);
+                people = oldExp.getInvolvedParticipants().get(i);
+            }
             newDebt = people.getDebt()-Double.parseDouble(df.format(((double)oldExp.getAmount())/oldExp.getInvolvedParticipants().size()));
             people.setDebt(newDebt);
             participantRepo.save(people);
         }
-
         Expense newExp = expRepo.save(oldExp);
         return newExp;
     }
@@ -127,7 +145,12 @@ public class ExpensesService {
         if (id < 0 || !eventRepo.existsById(id) || expId < 0 || !expRepo.existsById(expId)) {
             return null;
         }
-        DecimalFormat df = new DecimalFormat("##.00");
+
+        Locale currentLocale = Locale.getDefault();
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(currentLocale);
+        DecimalFormat df = new DecimalFormat("##.00", otherSymbols);
+        otherSymbols.setDecimalSeparator('.');
+        df.setDecimalFormatSymbols(otherSymbols);
         Expense expense = expRepo.findById(expId).get();
         //resetting debts
         Participant p1 = expense.getPaidBy();
@@ -140,15 +163,17 @@ public class ExpensesService {
             people.setDebt(oldDebt);
             participantRepo.save(people);
         }
-        //deleting expense
-        expRepo.deleteById(id);
+
         //deleting expense in event
         Event event = eventRepo.findById(id).get();
         List<Expense> expenses = event.getExpenses();
         expenses.remove(expense);
         event.setExpenses(expenses);
-
         eventRepo.save(event);
+
+        //deleting expense
+        expRepo.deleteById(expId);
+
         return expense;
     }
 

@@ -14,8 +14,6 @@ public class Participant {
     private double debt;
     private String iban;
     private String bic;
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    private Event eventFollowed;
 
     /**
      * Constructs a Participant with the specified name and email.
@@ -89,23 +87,6 @@ public class Participant {
     public void setEmail(String email) {
         this.email = email;
     }
-    /**
-     * Retrieves the events followed by the participant.
-     *
-     * @return the events followed by the participant
-     */
-    public Event getEventFollowed() {
-        return eventFollowed;
-    }
-
-    /**
-     * Sets the events followed by the participant.
-     *
-     * @param eventFollowed the events followed by the participant
-     */
-    public void setEventFollowed(Event eventFollowed) {
-        this.eventFollowed = eventFollowed;
-    }
 
     /**
      * Returns the open debt
@@ -168,13 +149,12 @@ public class Participant {
         Participant that = (Participant) o;
         return Double.compare(that.debt, debt) == 0 && Objects.equals(id, that.id) &&
                 Objects.equals(name, that.name) && Objects.equals(email, that.email) &&
-                Objects.equals(iban, that.iban) && Objects.equals(bic, that.bic) &&
-                Objects.equals(eventFollowed, that.eventFollowed);
+                Objects.equals(iban, that.iban) && Objects.equals(bic, that.bic);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, debt, iban, bic, eventFollowed);
+        return Objects.hash(id, name, email, debt, iban, bic);
     }
 
     /**

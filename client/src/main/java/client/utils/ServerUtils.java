@@ -18,8 +18,10 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import java.util.ArrayList;
@@ -303,7 +305,7 @@ public class ServerUtils {
 	 */
 	public Response deleteExpense(Long id, Expense expense) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(server).path("api/events/" + id + "/expenses" + expense.getId())
+				.target(server).path("api/events/" + id + "/expenses/" + expense.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.delete();
@@ -318,17 +320,59 @@ public class ServerUtils {
 	 */
 	public Expense updateExpense(Long id, Expense expense) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(server).path("api/events/" + id + "/expenses" + expense.getId())
+				.target(server).path("api/events/" + id + "/expenses/" + expense.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
 	}
 
+	/**
+	 * Retrieves the event by its invite code.
+	 *
+	 * @param inviteCode The invite code of the event.
+	 * @return The event.
+	 */
 	public Event getEventByInviteCode(String inviteCode) {
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(server).path("api/events/inviteCode/" + inviteCode)
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get().readEntity(Event.class);
+	}
+
+	/**
+	 * Retrieves exchange rates for a specific date.
+	 *
+	 * @param date The date for which exchange rates are retrieved.
+	 * @return A map of currency codes to exchange rates.
+	 */
+	public Map<String, Double> getExchangeRates(String date) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("api/currency/rates")
+				.queryParam("date", date)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get().readEntity(new GenericType<Map<String, Double>>() {});
+	}
+
+	/**
+	 * Converts currency for a specific date.
+	 *
+	 * @param amount       The amount of currency to convert.
+	 * @param fromCurrency The currency to convert from.
+	 * @param toCurrency   The currency to convert to.
+	 * @param date         The date for which the conversion is done.
+	 * @return The converted amount.
+	 */
+	public Double convertCurrency(double amount, String fromCurrency, String toCurrency, LocalDate date) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("api/currency/convert")
+				.queryParam("amount", amount)
+				.queryParam("fromCurrency", fromCurrency)
+				.queryParam("toCurrency", toCurrency)
+				.queryParam("date", date)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get().readEntity(Double.class);
 	}
 }
