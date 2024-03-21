@@ -376,15 +376,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Adds a new participant.
-     * This method opens the contact details scene to add a new participant.
-     */
-    @FXML
-    public void addParticipant() {
-        mainCtrl.showContactDetails(new Participant(), event);
-    }
-
-    /**
      * switches to the Open Debt scene
      * @param actionEvent event that calls the method, click on the button
      */
