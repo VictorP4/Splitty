@@ -65,6 +65,7 @@ public class ExpensesController {
     @RequestBody Expense expense){
         Expense newExp = expService.update(id, expId, expense);
         if(newExp == null) return ResponseEntity.badRequest().build();
+        smt.convertAndSend("/topic/events",Hibernate.unproxy(expService.getEvent(id)));
         return ResponseEntity.ok(newExp);
     }
 
