@@ -5,6 +5,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Participant;
+import jakarta.ws.rs.core.Response;
 import commons.Tag;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,7 +13,9 @@ import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import commons.Expense;
@@ -31,6 +34,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public Button addExpense;
     @FXML
     public Button home;
+    @FXML
+    private Pane block;
     @FXML
     private Tab all;
     private Event event;
@@ -61,6 +66,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private FlowPane participantsField;
     @FXML
     private Button statistics;
+    @FXML
+    private Pane options;
 
     /**
      * Constructs an OverviewCtrl object.
@@ -291,17 +298,15 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public void showAllExpenses() {
         expenseList = new ListView<>();
         original = FXCollections.observableArrayList();
-
-        expenseList = expenseFiller();
-
-
-        for (Expense e : event.getExpenses()) {
-            if (!e.getTitle().equalsIgnoreCase("debt repayment")) {
-                original.add(e);
+        for (Expense e : event.getExpenses()){
+            if (e.getTitle().equalsIgnoreCase("debt repayment")){
+                continue;
             }
+            original.add(e);
         }
         expenseList.setItems(original);
         all.setContent(expenseList);
+        selectExpense();
     }
 
     /**
@@ -314,12 +319,24 @@ public class OverviewCtrl implements Main.UpdatableUI {
         expenseList = expenseFiller();
 
         for (Expense e : event.getExpenses()) {
-            if (!e.getTitle().equalsIgnoreCase("debt repayment") && e.getPaidBy().equals(participantBox.getSelectionModel().getSelectedItem())) {
+            if (e.getTitle().equalsIgnoreCase("debt repayment")) {
+                continue;
+            }
+            if (e.getPaidBy().equals(participantBox.getSelectionModel().getSelectedItem())) {
                 original.add(e);
             }
         }
         expenseList.setItems(original);
         fromSelected.setContent(expenseList);
+    }
+
+    /**
+     * Adds a new participant.
+     * This method opens the contact details scene to add a new participant.
+     */
+    @FXML
+    public void addParticipant() {
+        mainCtrl.showContactDetails(new Participant(), event);
     }
 
     /**
@@ -332,7 +349,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
         for (Expense e : event.getExpenses()) {
             if (e.getTitle().equalsIgnoreCase("debt repayment")) {
-                return;
+                continue;
             }
             if (e.getPaidBy().equals(participantBox.getSelectionModel().getSelectedItem()) ||
                     e.getInvolvedParticipants().contains(participantBox.getSelectionModel().getSelectedItem())) {
@@ -344,23 +361,18 @@ public class OverviewCtrl implements Main.UpdatableUI {
         expenseList = expenseFiller();
 
         inclSelected.setContent(expenseList);
+        selectExpense();
+
     }
 
     public void refresh(Event event) {
         this.event = serverUtils.updateEvent(event);
+        options.setVisible(false);
+        block.setVisible(false);
         titlePrepare();
         participantsDisplay();
         setUpParticipantBox();
         showAllExpenses();
-    }
-
-    /**
-     * Adds a new participant.
-     * This method opens the contact details scene to add a new participant.
-     */
-    @FXML
-    public void addParticipant() {
-        mainCtrl.showContactDetails(new Participant(), event);
     }
 
     /**
@@ -390,8 +402,74 @@ public class OverviewCtrl implements Main.UpdatableUI {
         mainCtrl.showStatistics(event);
     }
 
+    /**
+     * Calls methods showFromSelected & showIncludingSelected
+     * when a participant is picked in the choice box
+     */
     public void selected(){
         showFromSelected();
         showIncludingSelected();
     }
+
+    /**
+     * When an expense is clicked on / selected an options pop-up pops-up
+     */
+    public void selectExpense(){
+
+        this.expenseList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        this.expenseList.setOnMouseClicked((MouseEvent event) -> {
+
+            if(event.getClickCount() == 2){
+                options.setVisible(true);
+                block.setVisible(true);
+            }
+
+        });
+    }
+
+    /**
+     * Closes the options popup without any changes to the expense
+     */
+    public void cancel(){
+        options.setVisible(false);
+        block.setVisible(false);
+    }
+
+    /**
+     * Deletes the selected expense
+     */
+    public void delete(){
+        try{
+            Response response = serverUtils.deleteExpense(this.event.getId(), expenseList.getSelectionModel().getSelectedItem());
+            if(response.getStatus() == Response.Status.OK.getStatusCode()){
+                System.out.println("OK! good job " + response.getStatus() );
+            }
+            else{
+                System.out.println("Status code: " + response.getStatus());
+            }
+
+            event.removeExpense(expenseList.getSelectionModel().getSelectedItem());
+            this.event = serverUtils.updateEvent(this.event);
+        }
+        finally {
+            options.setVisible(false);
+            block.setVisible(false);
+            mainCtrl.showEventOverview(event);
+        }
+    }
+
+    /**
+     * Shows add/edit expense overview with the selected expense so the user can edit it
+     */
+    public void edit(){
+        Expense toEdit = expenseList.getSelectionModel().getSelectedItem();
+
+        if(toEdit == null) {
+            System.out.println("nothing selected");
+        }
+        else {
+            mainCtrl.showExpense(this.event, toEdit);
+        }
+    }
+
 }
