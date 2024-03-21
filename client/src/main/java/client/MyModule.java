@@ -16,6 +16,7 @@
 package client;
 
 import client.scenes.*;
+import client.utils.WebSocketUtils;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
@@ -35,5 +36,6 @@ public class MyModule implements Module {
         binder.bind(OpenDebtsCtrl.class).in(Scopes.SINGLETON);
         binder.bind(StartScreenCtrl.class).in(Scopes.SINGLETON);
         binder.bind(StatisticsCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(WebSocketUtils.class).in(Scopes.SINGLETON);
     }
 }
