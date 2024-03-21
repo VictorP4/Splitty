@@ -305,7 +305,7 @@ public class ServerUtils {
 	 */
 	public Response deleteExpense(Long id, Expense expense) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(server).path("api/events/" + id + "/expenses" + expense.getId())
+				.target(server).path("api/events/" + id + "/expenses/" + expense.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.delete();
@@ -320,7 +320,7 @@ public class ServerUtils {
 	 */
 	public Expense updateExpense(Long id, Expense expense) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(server).path("api/events/" + id + "/expenses" + expense.getId())
+				.target(server).path("api/events/" + id + "/expenses/" + expense.getId())
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
