@@ -79,6 +79,7 @@ public class ExpensesController {
     public ResponseEntity<Expense> delete(@PathVariable("id") long id, @PathVariable("expId") long expId){
         Expense exp = expService.delete(id, expId);
         if(exp == null) return ResponseEntity.badRequest().build();
+        smt.convertAndSend("/topic/events",Hibernate.unproxy(expService.getEvent(id)));
         return ResponseEntity.ok(exp);
     }
 

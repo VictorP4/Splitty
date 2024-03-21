@@ -469,8 +469,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
                 System.out.println("Status code: " + response.getStatus());
             }
 
-            event.removeExpense(expenseList.getSelectionModel().getSelectedItem());
-            this.event = serverUtils.updateEvent(this.event);
+//            event.removeExpense(expenseList.getSelectionModel().getSelectedItem());
+            this.event = serverUtils.getEvent(this.event.getId());
         }
         finally {
             options.setVisible(false);
