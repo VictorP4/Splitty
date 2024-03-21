@@ -82,6 +82,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void initialize() {
         expenseList = new ListView<>();
+        //TODO connect to the given server url when the initial startscreen is created
         webSocket.connect("ws://localhost:8080/websocket");
         webSocket.addEventListener((event)->{
             if(this.event==null||!this.event.getId().equals(event.getId())) return;

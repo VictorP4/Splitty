@@ -18,12 +18,25 @@ public class WebSocketUtils {
     private StompSession session;
     private List<Consumer<Event>> eventListener;
 
+    /**
+     * constructor for the webscoket utils
+     */
     public WebSocketUtils() {
         eventListener = new ArrayList<>();
     }
+
+    /**
+     * adds event listener for updates
+     * @param listener event listener
+     */
     public void addEventListener(Consumer<Event> listener){
         eventListener.add(listener);
     }
+
+    /**
+     * Creates stomp connection and registers for updates
+     * @param url the server url
+     */
     public void connect(String url){
         var client = new StandardWebSocketClient();
         var stomp = new WebSocketStompClient(client);
@@ -41,6 +54,13 @@ public class WebSocketUtils {
         }
     }
 
+    /**
+     * registers to the given destination for updates of the specified type
+     * @param dest destination
+     * @param type type of payload
+     * @param action consumer faction for the received payload
+     * @param <T> type of payload
+     */
     private <T> void registerForUpdates(String dest, Class<T> type, Consumer<T> action) {
         session.subscribe(dest, new StompSessionHandlerAdapter() {
             @Override
