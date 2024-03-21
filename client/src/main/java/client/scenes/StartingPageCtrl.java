@@ -8,6 +8,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 
 public class StartingPageCtrl implements Main.UpdatableUI {
 
@@ -21,6 +22,8 @@ public class StartingPageCtrl implements Main.UpdatableUI {
     public Button setUrl;
     @FXML
     public Button login;
+    @FXML
+    private AnchorPane ap;
 
 
     /**
@@ -39,7 +42,7 @@ public class StartingPageCtrl implements Main.UpdatableUI {
      * Initialized the start screen and the listview
      */
     public void initialize() {
-        login.setOnKeyPressed(event -> {
+        ap.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 mainCtrl.showStartScreen();
             }

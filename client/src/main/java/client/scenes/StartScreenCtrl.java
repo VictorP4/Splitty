@@ -10,6 +10,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 
 import com.google.inject.Inject;
@@ -45,6 +47,8 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     private CheckBox alreadyJoined;
     @FXML
     private ListView<Event> recentlyAccessed;
+    @FXML
+    private AnchorPane ap;
     private ObservableList<Event> listViewItems;
 
     /**
@@ -68,13 +72,16 @@ public class StartScreenCtrl implements Main.UpdatableUI {
 
         alreadyJoined.setDisable(true);
 
-        startingPage.setOnKeyPressed(event -> {
+        ap.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 mainCtrl.showStartingPage();
             }
         });
 
         eventCode.textProperty().addListener((observable, oldValue, newValue) -> handleTextChange(newValue));
+        startingPage.setOnAction(event -> {
+            mainCtrl.showStartingPage();
+        });
         eventCode.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 joinEvent();

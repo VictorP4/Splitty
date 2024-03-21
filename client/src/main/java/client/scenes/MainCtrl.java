@@ -105,7 +105,6 @@ public class MainCtrl {
         this.startingPageCtrl = startingPage.getKey();
         this.startingPage = new Scene(startingPage.getValue());
 
-//        showStartScreen();
         showStartingPage();
         primaryStage.show();
     }
