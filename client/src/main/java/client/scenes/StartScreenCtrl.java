@@ -64,7 +64,9 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         listViewItems = FXCollections.observableArrayList();
 
         alreadyJoined.setDisable(true);
-        eventCode.textProperty().addListener((observable, oldValue, newValue) -> handleTextChange(newValue));
+        eventCode.textProperty().addListener((observable, oldValue, newValue) -> {
+            alreadyJoined.setDisable(newValue == null || newValue.isBlank());
+        });
         eventCode.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 joinEvent();
@@ -155,19 +157,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    /**
-     * Will check whether an invite code has been filled in the inviteCode text
-     * area. If it is, the checkbox will be
-     * made enables and if not, will stay disabled.
-     *
-     * @param inputtedCode The text contained in the inviteCode textArea
-     */
-    private void handleTextChange(String inputtedCode) {
-        // Disable CheckBox when text is empty
-        alreadyJoined.setDisable(inputtedCode == null || inputtedCode.isBlank()); // Enable CheckBox when text is
-                                                                                  // entered
     }
 
     /**
