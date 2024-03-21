@@ -319,6 +319,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public void showAllExpenses() {
         expenseList = new ListView<>();
         original = FXCollections.observableArrayList();
+
+        expenseList = expenseFiller();
+
         for (Expense e : event.getExpenses()){
             if (e.getTitle().equalsIgnoreCase("debt repayment")){
                 continue;
