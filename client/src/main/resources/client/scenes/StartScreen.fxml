@@ -32,6 +32,7 @@
          </items>
       </MenuButton>
       <CheckBox fx:id="alreadyJoined" layoutX="87.0" layoutY="175.0" mnemonicParsing="false" text="Already joined" />
-      <ListView fx:id="recentlyAccessed" layoutX="87.0" layoutY="227.0" prefHeight="117.0" prefWidth="301.0"/>
+      <ListView fx:id="recentlyAccessed" layoutX="87.0" layoutY="227.0" prefHeight="117.0" prefWidth="301.0" />
+      <Button fx:id="startingPage" layoutX="45.0" layoutY="24.0" mnemonicParsing="false" onAction="#createEvent" prefHeight="25.0" prefWidth="77.0" text="Start Page" />
    </children>
 </AnchorPane>

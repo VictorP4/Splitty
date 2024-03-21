@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="534.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="534.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
     <children>
         <TextField fx:id="titleField" layoutX="88.0" layoutY="13.0" prefHeight="51.0" prefWidth="182.0">
             <font>
@@ -28,7 +28,7 @@
                 <Font name="System Bold" size="16.0" />
             </font>
         </Text>
-        <ChoiceBox fx:id="participantBox" layoutX="86.0" layoutY="171.0" prefHeight="26.0" prefWidth="167.0" onAction="#selected"/>
+        <ChoiceBox fx:id="participantBox" layoutX="86.0" layoutY="171.0" onAction="#selected" prefHeight="26.0" prefWidth="167.0" />
         <Button fx:id="settleDebts" layoutX="361.0" layoutY="402.0" mnemonicParsing="false" onAction="#settleDebts" text="Settle Debts" />
         <Text fx:id="expense" layoutX="88.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense">
             <font>
@@ -52,7 +52,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab fx:id="fromSelected" text="From Selected" onSelectionChanged="#showFromSelected">
+                <Tab fx:id="fromSelected" onSelectionChanged="#showFromSelected" text="From Selected">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -61,7 +61,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab fx:id="inclSelected" text="Including Selected" onSelectionChanged="#showIncludingSelected">
+                <Tab fx:id="inclSelected" onSelectionChanged="#showIncludingSelected" text="Including Selected">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -72,7 +72,15 @@
                 </Tab>
             </tabs>
         </TabPane>
-        <Button fx:id="home" layoutX="14.0" layoutY="26.0" mnemonicParsing="false" onAction="#backToStartScreen" text="Home" />
+        <Button fx:id="home" layoutX="14.0" layoutY="21.0" mnemonicParsing="false" onAction="#backToStartScreen" text="">
+            <graphic>
+                <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@/client/misc/HomeActive.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
         <FlowPane fx:id="participantsField" layoutX="87.0" layoutY="92.0" prefHeight="58.0" prefWidth="354.0" />
         <Button fx:id="sendInvites" layoutX="218.0" layoutY="60.0" mnemonicParsing="false" onAction="#showInvites" text="Send Invites" />
       <Button fx:id="statistics" layoutX="361.0" layoutY="171.0" mnemonicParsing="false" onAction="#showStatistics" prefHeight="26.0" prefWidth="80.0" text="Statistics" />
