@@ -87,7 +87,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
-     *
+     * Updates the UI based on the language chosen by the user.
      */
     @Override
     public void updateUI() {

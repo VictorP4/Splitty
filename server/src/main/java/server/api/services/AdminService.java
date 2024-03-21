@@ -20,6 +20,7 @@ public class AdminService implements ApplicationListener<ApplicationStartedEvent
     public void onApplicationEvent(ApplicationStartedEvent event) {
         generateSessionPass();
         try {
+            System.out.println(sessionPass);
             serv.sendEmail("splittyadmin@protonmail.com","Session Password",
                 "Your admin password for this session is: "+sessionPass);
         } catch (MessagingException e) {

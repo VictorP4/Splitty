@@ -3,7 +3,6 @@ package client.scenes;
 import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
@@ -13,6 +12,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 public class StartingPageCtrl implements Main.UpdatableUI {
@@ -55,44 +56,66 @@ public class StartingPageCtrl implements Main.UpdatableUI {
     public void initialize() {
         serverUrl.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                setServer();
+                toStartScreen();
             }
         });
         adminPassword.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                adminLogin();
+                login();
             }
         });
     }
 
-    private void setServer() {
-        if (serverUrl.getText().isBlank()) {
-            emptyFieldsError("server needed to enter the application");
-        }
+    /**
+     * Sets the server for the session according to the users choice. If no server is chosen, a default server will
+     * be selected (http://localhost:8080)
+     */
+    public void setServer() {
+        String serverUrlString = serverUrl.getText();
         try {
-            return;
+            if (serverUrlString.isBlank()) {
+                server.setSERVER("http://localhost:8080");
+            }
+            else {
+                server.checkServer(serverUrlString);
+                server.setSERVER("http://" + serverUrlString);
+            }
         } catch(Exception e) {
             e.printStackTrace();
             emptyFieldsError(e.getMessage());
         }
     }
 
-    private void adminLogin() {
-        if (adminPassword.getText().isBlank()) {
+    /**
+     * Lets the admin give a password and login. If the admin did not fill in a server, the server is set to the default
+     * server (http://localhost:8080).
+     */
+    public void login() {
+        String password = adminPassword.getText().trim();
+        if (password.isBlank()) {
             emptyFieldsError("Password needed to enter the admin overview");
         }
-//        else if (serverUrl.getText().isBlank()) {
-//            emptyFieldsError("server needed to enter the application");
-//        }
-
-         try {
-             String password = adminPassword.getText().trim();
-             server.adminLogin(password);
-             mainCtrl.showAdminEventOverview();
-         } catch(Exception e) {
+        try {
+            setServer();
+            server.adminLogin(password);
+            mainCtrl.showAdminEventOverview();
+        } catch(Exception e) {
              e.printStackTrace();
              emptyFieldsError(e.getMessage());
-         }
+        }
+    }
+
+    /**
+     * Sets the server according to the user their input and directs a user to the mainCtrl.
+     */
+    public void toStartScreen() {
+        try {
+            setServer();
+            mainCtrl.showStartScreen();
+        } catch(Exception e) {
+            e.printStackTrace();
+            emptyFieldsError(e.getMessage());
+        }
     }
 
     private void emptyFieldsError(String message) {
@@ -111,7 +134,7 @@ public class StartingPageCtrl implements Main.UpdatableUI {
     }
 
     /**
-     *
+     * Updates the UI based on the language chosen by the user.
      */
     @Override
     public void updateUI() {

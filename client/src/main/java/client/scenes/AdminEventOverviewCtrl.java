@@ -12,6 +12,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public class AdminEventOverviewCtrl {
