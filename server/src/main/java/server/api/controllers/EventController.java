@@ -5,11 +5,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Event;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.api.services.EventService;
 import server.database.EventRepository;
@@ -19,15 +19,17 @@ import server.database.EventRepository;
 @RequestMapping("/api/events")
 public class EventController {
     private final EventRepository repo;
-    @Autowired
     private final EventService evServ;
+    private final SimpMessagingTemplate smt;
     /**
      * @param repo   the event repository
      * @param evServ
+     * @param smt
      */
-    public EventController(EventRepository repo, EventService evServ) {
+    public EventController(EventRepository repo, EventService evServ, SimpMessagingTemplate smt) {
         this.repo = repo;
         this.evServ = evServ;
+        this.smt = smt;
     }
 
     /**
@@ -78,6 +80,7 @@ public class EventController {
     public ResponseEntity<Event> put(@PathVariable("id") long id, @RequestBody Event event){
         Event finalEv = evServ.put(id, event);
         if (finalEv == null) return ResponseEntity.badRequest().build();
+        smt.convertAndSend("/topic/events",finalEv);
         return ResponseEntity.ok(finalEv);
     }
 

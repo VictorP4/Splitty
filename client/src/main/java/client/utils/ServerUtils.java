@@ -11,25 +11,19 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 
-import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
+
 
 import java.util.ArrayList;
 
 public class ServerUtils {
 
 	private static String server = "http://localhost:8080";
-	private static StompSession session;
 
 	/**
 	 * Sets the server URL.
@@ -48,7 +42,6 @@ public class ServerUtils {
 	 */
 	public Response checkServer(String userUrl) {
 		this.server = "http://" + userUrl;
-		session = connect("ws://" + userUrl + "/websocket");
 		Response response = ClientBuilder.newClient(new ClientConfig())
 				.target(server).path("api/connection")
 				.request(APPLICATION_JSON)
@@ -57,39 +50,6 @@ public class ServerUtils {
 
 		return response;
 	}
-
-	/**
-	 * Connects to a WebSocket.
-	 *
-	 * @param url The WebSocket URL.
-	 * @return The StompSession object.
-	 */
-	private StompSession connect(String url) {
-		var client = new StandardWebSocketClient();
-		var stomp = new WebSocketStompClient(client);
-		stomp.setMessageConverter(new MappingJackson2MessageConverter());
-		try {
-			return stomp.connect(url, new StompSessionHandlerAdapter() {
-			}).get();
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-		} catch (ExecutionException e) {
-			throw new RuntimeException(e);
-		}
-		throw new IllegalStateException();
-	}
-
-	/**
-	 * Starts WebSocket communication.
-	 *
-	 * @param url The WebSocket URL.
-	 * @return The StompSession object.
-	 */
-	public StompSession startWebSockets(String url) {
-		this.session = connect("ws://" + url + "/websocket");
-		return session;
-	}
-
 	/**
 	 * Sends invites via email.
 	 *
