@@ -3,12 +3,14 @@ import client.Main;
 import client.models.Debt;
 import client.models.OpenDebtString;
 import client.utils.ServerUtils;
+import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
 import commons.EmailRequestBody;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import jakarta.ws.rs.core.Response;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -42,6 +44,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
     private String lang;
     @FXML
     private Text openDebt;
+    private WebSocketUtils webSocket;
 
     /**
      * Constructs a new instance of an OpenDebtCtrl
@@ -50,11 +53,26 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
      * @param mainCtrl The main controller of the application.
      */
     @Inject
-    public OpenDebtsCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public OpenDebtsCtrl(ServerUtils server, MainCtrl mainCtrl, WebSocketUtils webSocket) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.webSocket= webSocket;
     }
 
+    /**
+     * Initializes the open debt scene
+     */
+    public void initialize(){
+
+        webSocket.addEventListener((event)->{
+            if(this.event==null||!this.event.getId().equals(event.getId())) return;
+            else{
+                Platform.runLater(()->{
+                    refresh(event);
+                });
+            }
+        });
+    }
     /**
      * updates the UI
      */

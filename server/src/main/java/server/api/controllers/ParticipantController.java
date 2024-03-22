@@ -3,6 +3,7 @@ package server.api.controllers;
 
 import commons.Participant;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import server.database.ParticipantRepository;
@@ -10,13 +11,17 @@ import server.database.ParticipantRepository;
 @RequestMapping("/api/participants")
 public class ParticipantController {
     private final ParticipantRepository repo;
+    private final SimpMessagingTemplate smt;
 
-    /**Constructor for controller
+    /**
+     * Constructor for controller
      *
      * @param repo Participant repository
+     * @param smt
      */
-    public ParticipantController(ParticipantRepository repo) {
+    public ParticipantController(ParticipantRepository repo, SimpMessagingTemplate smt) {
         this.repo = repo;
+        this.smt = smt;
     }
 
     /**
@@ -28,6 +33,7 @@ public class ParticipantController {
     public ResponseEntity<Participant> add(@RequestBody Participant participant){
         if(participant.getName()==null) return ResponseEntity.badRequest().build();
         Participant saved = repo.save(participant);
+
         return ResponseEntity.ok(saved);
     }
 

@@ -61,8 +61,13 @@ public class ExpensesService {
         double newDebt = p.getDebt()+Double.parseDouble(df.format(newExp.getAmount()));
         p.setDebt(newDebt);
         participantRepo.save(p);
-        for(Participant people : newExp.getInvolvedParticipants()){
-            if(p.getId().equals(people.getId())) people.setDebt(p.getDebt());
+        for(int i=0; i<expense.getInvolvedParticipants().size();i++){
+            Participant people = expense.getInvolvedParticipants().get(i);
+            if(people.getId().equals(p.getId())) {
+                expense.getInvolvedParticipants().remove(i);
+                expense.getInvolvedParticipants().add(i,p);
+                people = expense.getInvolvedParticipants().get(i);
+            }
             newDebt = people.getDebt()-Double.parseDouble(df.format(((double)newExp.getAmount())/newExp.getInvolvedParticipants().size()));
             people.setDebt(newDebt);
             participantRepo.save(people);
@@ -125,6 +130,11 @@ public class ExpensesService {
             if(people.getId().equals(p.getId())) {
                 oldExp.getInvolvedParticipants().remove(i);
                 oldExp.getInvolvedParticipants().add(i,p);
+                people = oldExp.getInvolvedParticipants().get(i);
+            }
+            else{
+                oldExp.getInvolvedParticipants().remove(i);
+                oldExp.getInvolvedParticipants().add(i,participantRepo.findById(people.getId()).get());
                 people = oldExp.getInvolvedParticipants().get(i);
             }
             newDebt = people.getDebt()-Double.parseDouble(df.format(((double)oldExp.getAmount())/oldExp.getInvolvedParticipants().size()));
@@ -242,6 +252,15 @@ public class ExpensesService {
             sum += exp.getAmount();
         }
         return sum;
+    }
+    /**
+     * Used for the updates handling for the websockets
+     * @param id event id
+     * @return the found event
+     *
+     */
+    public Event getEvent(Long id){
+        return eventRepo.findById(id).get();
     }
 
 
