@@ -1,7 +1,6 @@
 package server.api.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Event;
 import org.springframework.stereotype.Service;
@@ -66,7 +65,6 @@ public class EventService {
      * @return a string of the requested event
      */
     public String getEventById(Long id) {
-        //map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try{
             return map.writeValueAsString(repo.getById(id));
         }
