@@ -27,6 +27,8 @@ import commons.Expense;
 import javafx.collections.ObservableList;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -194,6 +196,20 @@ public class OverviewCtrl implements Main.UpdatableUI {
                     if (mouseEvent.getButton() == MouseButton.SECONDARY) {
                         event.removeParticipant(contact);
                         serverUtils.updateEvent(event);
+                        List<Expense> toDelete = new ArrayList<>();
+                        for(Expense expense : event.getExpenses()){
+                            if(expense.getPaidBy().equals(contact)) toDelete.add(expense);
+                            else if(expense.getInvolvedParticipants().contains(contact)){
+                                if(expense.getInvolvedParticipants().size()==1) toDelete.add(expense);
+                                else{
+                                    expense.getInvolvedParticipants().remove(contact);
+                                    serverUtils.updateExpense(event.getId(), expense);
+                                }
+                            }
+                        }
+                        for(Expense expense1: toDelete){
+                            serverUtils.deleteExpense(event.getId(), expense1);
+                        }
                         serverUtils.deleteParticipant(contact);
                         this.event = serverUtils.updateEvent(this.event);
                         participantsDisplay();
