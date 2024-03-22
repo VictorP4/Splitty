@@ -48,8 +48,8 @@ public class MainCtrl {
     private AdminEventOverviewCtrl adminEventOverviewCtrl;
     private Scene adminEventOverview;
 
-    private StartingPageCtrl startingPageCtrl;
-    private Scene startingPage;
+    private SettingsPageCtrl settingsPageCtrl;
+    private Scene settingsPage;
 
     /**
      * Initializes the main controller with the provided dependencies and sets up the primary stage.
@@ -71,7 +71,7 @@ public class MainCtrl {
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<StatisticsCtrl, Parent> statistics,
                            Pair<StartScreenCtrl, Parent> startScreen, Pair<OverviewCtrl, Parent> eventOverview,
                            Pair<AdminEventOverviewCtrl, Parent> adminEventOverviewCtrl, Pair<AddTagCtrl, Parent> addTag,
-                           Pair<StartingPageCtrl, Parent> startingPage) {
+                           Pair<SettingsPageCtrl, Parent> settingsPage) {
 
         this.primaryStage = primaryStage;
 
@@ -102,20 +102,20 @@ public class MainCtrl {
         this.addTagCtrl = addTag.getKey();
         this.addTag = new Scene(addTag.getValue());
 
-        this.startingPageCtrl = startingPage.getKey();
-        this.startingPage = new Scene(startingPage.getValue());
+        this.settingsPageCtrl = settingsPage.getKey();
+        this.settingsPage = new Scene(settingsPage.getValue());
 
-        showStartingPage();
+        showStartScreen();
         primaryStage.show();
     }
 
     /**
      * Displays the starting page scene in the primary stage.
      */
-    public void showStartingPage() {
+    public void showSettingsPage() {
         primaryStage.setTitle("StartingPage");
-        primaryStage.setScene(startingPage);
-        startingPageCtrl.refresh();
+        primaryStage.setScene(settingsPage);
+        settingsPageCtrl.refresh();
     }
 
     /**
