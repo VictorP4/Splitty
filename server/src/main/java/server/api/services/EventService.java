@@ -1,11 +1,15 @@
 package server.api.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Event;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;
 @Service
 public class EventService {
     private EventRepository repo;
+    private ObjectMapper map = new ObjectMapper();
 
     public EventService(EventRepository repo) {
         this.repo = repo;
@@ -54,5 +58,20 @@ public class EventService {
         Event e = repo.getByInviteCode(inviteCode);
         if(e==null) return null;
         else return e;
+    }
+
+    /**
+     * Gets an event by its id
+     * @param id id of the event to get
+     * @return a string of the requested event
+     */
+    public String getEventById(Long id) {
+        //map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        try{
+            return map.writeValueAsString(repo.getById(id));
+        }
+        catch (JsonProcessingException jpe){
+            return "error" + jpe.getMessage();
+        }
     }
 }

@@ -1,9 +1,13 @@
 package server.api.controllers;
 
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Event;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -99,5 +103,31 @@ public class EventController {
         Event e = evServ.getByInviteCode(inviteCode);
         if(e == null) return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(e);
+    }
+
+    /**
+     * Find event by id
+     * @param id id of the event
+     * @return Json representation of the requested event
+     */
+    @GetMapping(path = {"/id"}, consumes="application/json")
+    public ResponseEntity<Resource> getEventJSON(@PathVariable("id") long id){
+
+//        //Check if user is an admin somehow
+//        if(false){ //!authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))
+//            ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not an admin");        }
+
+        try{
+            ObjectMapper map = new ObjectMapper();
+            map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            String event = evServ.getEventById(id);
+            byte[] eventBytes = event.getBytes();
+            ByteArrayResource resource = new ByteArrayResource(eventBytes);
+
+            return ResponseEntity.ok().body(resource);
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
