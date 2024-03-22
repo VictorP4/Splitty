@@ -35,12 +35,6 @@
       </MenuButton>
       <CheckBox fx:id="alreadyJoined" layoutX="87.0" layoutY="175.0" mnemonicParsing="false" text="Already joined" />
       <ListView fx:id="recentlyAccessed" layoutX="87.0" layoutY="227.0" prefHeight="117.0" prefWidth="301.0" />
-      <Button fx:id="settingsPage" layoutX="465.0" layoutY="33.0" mnemonicParsing="false" onAction="#toSettings" prefHeight="25.0" prefWidth="77.0" >
-         <graphic>
-            <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
-               <Image url="@/client/misc/setting.png"/>
-            </ImageView>
-         </graphic>
-      </Button>
+      <Button fx:id="settingsPage" layoutX="465.0" layoutY="33.0" mnemonicParsing="false" onAction="#toSettings" text="settings" prefHeight="25.0" prefWidth="77.0" />
    </children>
 </AnchorPane>

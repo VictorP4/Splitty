@@ -3,6 +3,7 @@ package server.api.controllers;
 
 import commons.Event;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,7 @@ public class EventController {
      */
     @GetMapping(path = { "", "/" })
     public ResponseEntity<List<Event>> getAll(HttpServletRequest request) {
+        HttpSession test = request.getSession();
         if(request.getSession().getAttribute("adminLogged") == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ArrayList<>());
         }

@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -68,6 +69,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private Button statistics;
     @FXML
     private Pane options;
+    @FXML
+    public AnchorPane ap;
 
     /**
      * Constructs an OverviewCtrl object.
@@ -85,6 +88,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Initializes the controller.
      */
     public void initialize() {
+        ap.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                backToStartScreen();
+            }
+        });
         expenseList = new ListView<>();
     }
 
@@ -401,7 +409,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Shows the statistics of the event
      * @param actionEvent
      */
-    public void showStatistics(ActionEvent actionEvent) {
+    public void showStatistics() {
         mainCtrl.showStatistics(event);
     }
 

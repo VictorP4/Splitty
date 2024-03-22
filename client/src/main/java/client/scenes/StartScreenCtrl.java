@@ -10,7 +10,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 
 import com.google.inject.Inject;
@@ -27,7 +26,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     private final MainCtrl mainCtrl;
     public Text createNewEvent;
     @FXML
-    public Button startingPage;
+    public Button settingsPage;
     @FXML
     public Text joinEvent;
     @FXML
@@ -46,8 +45,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     private CheckBox alreadyJoined;
     @FXML
     private ListView<Event> recentlyAccessed;
-    @FXML
-    private AnchorPane ap;
     private ObservableList<Event> listViewItems;
 
     /**
@@ -69,17 +66,13 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     public void initialize() {
         listViewItems = FXCollections.observableArrayList();
 
+        //setting the server to a default.
+        server.setSERVER("http://localhost:8080");
         alreadyJoined.setDisable(true);
 
-        ap.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ESCAPE) {
-                mainCtrl.showStartingPage();
-            }
-        });
-
         eventCode.textProperty().addListener((observable, oldValue, newValue) -> handleTextChange(newValue));
-        startingPage.setOnAction(event -> {
-            mainCtrl.showStartingPage();
+        settingsPage.setOnAction(event -> {
+            mainCtrl.showSettingsPage();
         });
         eventCode.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -246,5 +239,12 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         alreadyJoined.setSelected(false);
         updateAllEvents();
         recentlyAccessed.setItems(listViewItems);
+    }
+
+    /**
+     * Directs users to the settings page. Here they can fill in a server of their choice & login as an admin
+     */
+    public void toSettings() {
+        mainCtrl.showSettingsPage();
     }
 }
