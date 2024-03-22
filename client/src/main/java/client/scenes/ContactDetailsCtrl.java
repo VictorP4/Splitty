@@ -13,8 +13,6 @@ import commons.Event;
 import commons.Participant;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
-
-import javax.management.Notification;
 import java.util.Objects;
 
 public class ContactDetailsCtrl implements Main.UpdatableUI {
