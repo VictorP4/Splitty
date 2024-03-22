@@ -2,6 +2,7 @@ package server.api.controllers;
 
 
 import commons.Participant;
+import org.hibernate.Hibernate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -60,6 +61,7 @@ public class ParticipantController {
         if(id<0|| !repo.existsById(id)) return ResponseEntity.badRequest().build();
         Participant deleted = repo.findById(id).get();
         repo.deleteById(id);
+        smt.convertAndSend("/topic/participants", Hibernate.unproxy(deleted));
         return ResponseEntity.ok(deleted);
     }
 }

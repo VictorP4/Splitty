@@ -2,8 +2,10 @@ package client.scenes;
 
 import client.Main;
 import client.utils.ServerUtils;
+import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
 import commons.Tag;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 import commons.Event;
@@ -72,6 +74,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     private MenuButton tagMenu;
 
     private Expense expense;
+    private WebSocketUtils webSocket;
 
 
     /**
@@ -81,11 +84,29 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * @param mainCtrl The main controller of the application.
      */
     @Inject
-    public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl, WebSocketUtils webSocket) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.webSocket = webSocket;
     }
 
+    /**
+     * initializes the Add Expense Controller
+     */
+    public void initialize(){
+        webSocket.addExpenseListener((expense ->{
+            if(this.expense==null||!Objects.equals(expense.getId(),this.expense.getId())) return;
+            else{
+                Platform.runLater(()->{
+                    cancel();
+                    var alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.initModality(Modality.APPLICATION_MODAL);
+                    alert.setContentText("The expense was deleted by another user.");
+                    alert.showAndWait();
+                });
+            }
+        }));
+    }
     /**
      *
      */
@@ -109,6 +130,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * cancels the process of adding a new expense by clearing inout fields and returning to the overview screen
      */
     public void cancel() {
+        this.expense=null;
         mainCtrl.showEventOverview(event);
     }
 
