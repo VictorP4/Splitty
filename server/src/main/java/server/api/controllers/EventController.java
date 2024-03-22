@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import server.api.services.EventService;
 import server.database.EventRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/events")
@@ -17,6 +20,7 @@ public class EventController {
     private final EventRepository repo;
     @Autowired
     private final EventService evServ;
+
     /**
      * @param repo   the event repository
      * @param evServ
@@ -31,9 +35,9 @@ public class EventController {
      * @return all events
      */
     @GetMapping(path = { "", "/" })
-    public ResponseEntity<?> getAll(HttpServletRequest request) {
+    public ResponseEntity<List<Event>> getAll(HttpServletRequest request) {
         if(request.getSession().getAttribute("adminLogged") == null){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Only viewable by admins");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ArrayList<>());
         }
         else return ResponseEntity.ok(repo.findAll());
     }

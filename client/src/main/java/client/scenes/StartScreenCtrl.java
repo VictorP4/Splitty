@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 
 import com.google.inject.Inject;
@@ -25,6 +26,8 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     public Text createNewEvent;
+    @FXML
+    public Button startingPage;
     @FXML
     public Text joinEvent;
     @FXML
@@ -43,6 +46,8 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     private CheckBox alreadyJoined;
     @FXML
     private ListView<Event> recentlyAccessed;
+    @FXML
+    private AnchorPane ap;
     private ObservableList<Event> listViewItems;
 
     /**
@@ -58,13 +63,24 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Initialized the start screen and the listview
+     * Initialized the start screen. It sets the cell factory for the listview, allowing it to be populated with events.
+     * Furthermore, the method contain keyPress events for ease of use for the user.
      */
     public void initialize() {
         listViewItems = FXCollections.observableArrayList();
 
         alreadyJoined.setDisable(true);
+
+        ap.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                mainCtrl.showStartingPage();
+            }
+        });
+
         eventCode.textProperty().addListener((observable, oldValue, newValue) -> handleTextChange(newValue));
+        startingPage.setOnAction(event -> {
+            mainCtrl.showStartingPage();
+        });
         eventCode.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 joinEvent();

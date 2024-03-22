@@ -12,6 +12,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+
 import java.util.List;
 
 public class AdminEventOverviewCtrl {
@@ -61,7 +62,6 @@ public class AdminEventOverviewCtrl {
         });
 
         eventsTable.getColumns().addAll(titleColumn, creationDateColumn, lastActivityColumn, deleteColumn);
-
         eventsTable.getItems().addAll(events);
 
         eventsTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);

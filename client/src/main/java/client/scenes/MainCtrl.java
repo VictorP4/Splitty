@@ -24,6 +24,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+
 public class MainCtrl {
 
     private Stage primaryStage;
@@ -47,6 +48,9 @@ public class MainCtrl {
     private AdminEventOverviewCtrl adminEventOverviewCtrl;
     private Scene adminEventOverview;
 
+    private StartingPageCtrl startingPageCtrl;
+    private Scene startingPage;
+
     /**
      * Initializes the main controller with the provided dependencies and sets up the primary stage.
      * This method sets the primary stage and initializes scenes for different scenes.
@@ -66,7 +70,8 @@ public class MainCtrl {
                            Pair<ContactDetailsCtrl, Parent> contactDetails, Pair<InvitationCtrl, Parent> invitation,
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<StatisticsCtrl, Parent> statistics,
                            Pair<StartScreenCtrl, Parent> startScreen, Pair<OverviewCtrl, Parent> eventOverview,
-                           Pair<AdminEventOverviewCtrl, Parent> adminEventOverviewCtrl, Pair<AddTagCtrl, Parent> addTag) {
+                           Pair<AdminEventOverviewCtrl, Parent> adminEventOverviewCtrl, Pair<AddTagCtrl, Parent> addTag,
+                           Pair<StartingPageCtrl, Parent> startingPage) {
 
         this.primaryStage = primaryStage;
 
@@ -97,8 +102,20 @@ public class MainCtrl {
         this.addTagCtrl = addTag.getKey();
         this.addTag = new Scene(addTag.getValue());
 
-        showStartScreen();
+        this.startingPageCtrl = startingPage.getKey();
+        this.startingPage = new Scene(startingPage.getValue());
+
+        showStartingPage();
         primaryStage.show();
+    }
+
+    /**
+     * Displays the starting page scene in the primary stage.
+     */
+    public void showStartingPage() {
+        primaryStage.setTitle("StartingPage");
+        primaryStage.setScene(startingPage);
+        startingPageCtrl.refresh();
     }
 
     /**
