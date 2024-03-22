@@ -2,16 +2,12 @@ package server.api.controllers;
 
 import commons.Event;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.api.services.EventService;
 import server.database.EventRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -38,11 +34,10 @@ public class EventController {
      */
     @GetMapping(path = { "", "/" })
     public ResponseEntity<List<Event>> getAll(HttpServletRequest request) {
-        HttpSession test = request.getSession();
-        if (request.getSession().getAttribute("adminLogged") == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ArrayList<>());
-        } else
-            return ResponseEntity.ok(repo.findAll());
+//        if (request.getSession().getAttribute("adminLogged") == null) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ArrayList<>());
+//        }
+        return ResponseEntity.ok(repo.findAll());
     }
 
     /**

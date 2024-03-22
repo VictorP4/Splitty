@@ -202,6 +202,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         joinButton.setText(Main.getLocalizedString("joinEventButton"));
         recentViewedEvents.setText(Main.getLocalizedString("recentEvents"));
         langButton.setText(Main.getLocalizedString("langButton"));
+        settingsPage.setText(Main.getLocalizedString("settings"));
     }
 
     /**
