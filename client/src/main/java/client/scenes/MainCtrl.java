@@ -186,6 +186,7 @@ public class MainCtrl {
      * Displays the statistics scene in the primary stage.
      */
     public void showStatistics(Event event) {
+        statisticsCtrl.refresh(event);
         primaryStage.setTitle("Statistics");
         primaryStage.setScene(statistics);
     }
