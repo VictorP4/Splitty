@@ -276,7 +276,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Switches the language to Dutch.
+     *
+     * @param actionEvent
      */
     public void switchToDutch(ActionEvent actionEvent) {
         Main.switchLocale("nl");
@@ -297,6 +298,14 @@ public class OverviewCtrl implements Main.UpdatableUI {
         mainCtrl.showAddExpense(event);
     }
 
+    /**
+     * Adds a new participant.
+     * This method opens the contact details scene to add a new participant.
+     */
+    @FXML
+    public void addParticipant() {
+        mainCtrl.showContactDetails(new Participant(), event);
+    }
 
     /**
      * Fills the expense list with the expenses of the event
@@ -333,6 +342,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Shows all expenses of the event
      */
     public void showAllExpenses() {
+
         expenseList = new ListView<>();
         original = FXCollections.observableArrayList();
 
@@ -354,8 +364,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * selected participant in the box
      */
     public void showFromSelected() {
-        expenseList = new ListView<>();
+        expenseList =  new ListView<>();
         original = FXCollections.observableArrayList();
+
         expenseList = expenseFiller();
 
         for (Expense e : event.getExpenses()) {
@@ -371,21 +382,14 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Adds a new participant.
-     * This method opens the contact details scene to add a new participant.
-     */
-    @FXML
-    public void addParticipant() {
-        mainCtrl.showContactDetails(new Participant(), event);
-    }
-
-    /**
      * Resets the expenses list and then filters it for all expenses that involve
      * then selected participant in the box
      */
     public void showIncludingSelected() {
         expenseList = new ListView<>();
         original = FXCollections.observableArrayList();
+
+        expenseList = expenseFiller();
 
         for (Expense e : event.getExpenses()) {
             if (e.getTitle().equalsIgnoreCase("debt repayment")) {
@@ -398,7 +402,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
         }
 
         expenseList.setItems(original);
-        expenseList = expenseFiller();
 
         inclSelected.setContent(expenseList);
         selectExpense();
