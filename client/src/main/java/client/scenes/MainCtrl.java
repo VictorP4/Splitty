@@ -113,18 +113,18 @@ public class MainCtrl {
      * Displays the starting page scene in the primary stage.
      */
     public void showSettingsPage() {
+        settingsPageCtrl.refresh();
         primaryStage.setTitle("StartingPage");
         primaryStage.setScene(settingsPage);
-        settingsPageCtrl.refresh();
     }
 
     /**
      * Displays the start screen scene in the primary stage.
      */
     public void showStartScreen() {
+        startScreenCtrl.refresh();
         primaryStage.setTitle("StartScreen");
         primaryStage.setScene(startScreen);
-        startScreenCtrl.refresh();
     }
 
     /**
