@@ -37,8 +37,20 @@
         </Text>
         <MenuButton fx:id="langButton" layoutX="87.0" layoutY="402.0" mnemonicParsing="false" text="Language">
             <items>
-                <MenuItem mnemonicParsing="false" onAction="#switchToEnglish" text="English" />
-                <MenuItem mnemonicParsing="false" onAction="#switchToDutch" text="Dutch" />
+                <MenuItem mnemonicParsing="false" onAction="#switchToEnglish" text="English">
+                    <graphic>
+                        <ImageView fitWidth="16" fitHeight="12">
+                            <Image url="@/client/misc/uk_flag.png" />
+                        </ImageView>
+                    </graphic>
+                </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#switchToDutch" text="Dutch">
+                    <graphic>
+                        <ImageView fitWidth="16" fitHeight="12">
+                            <Image url="@/client/misc/nl_flag.png" />
+                        </ImageView>
+                    </graphic>
+                </MenuItem>
             </items>
         </MenuButton>
         <TabPane layoutX="87.0" layoutY="206.0" prefHeight="179.0" prefWidth="354.0" tabClosingPolicy="UNAVAILABLE">
