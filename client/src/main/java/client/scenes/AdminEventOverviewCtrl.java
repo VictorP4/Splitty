@@ -6,12 +6,18 @@ import commons.Event;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.Writer;
 import java.util.List;
 
 public class AdminEventOverviewCtrl {
@@ -60,7 +66,26 @@ public class AdminEventOverviewCtrl {
             return new SimpleObjectProperty<>(deleteButton);
         });
 
-        eventsTable.getColumns().addAll(titleColumn, creationDateColumn, lastActivityColumn, deleteColumn);
+        TableColumn<Event, Button> backupColumn = new TableColumn<>("Backup");
+        backupColumn.setCellValueFactory(param ->{
+            Button backupButton = new Button("create backup");
+            backupButton.setOnAction(event -> {
+                Event selectedEvent = param.getValue();
+                try{
+                    Writer writer = new BufferedWriter(new FileWriter("event " + selectedEvent.getTitle() + ".json"));
+                    writer.write(server.getEventJSON(selectedEvent.getId()));
+                    writer.flush(); writer.close();
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                    errorPopup(e.getMessage());
+                }
+
+            });
+            return new SimpleObjectProperty<>(backupButton);
+        });
+
+        eventsTable.getColumns().addAll(titleColumn, creationDateColumn, lastActivityColumn, deleteColumn, backupColumn);
 
         eventsTable.getItems().addAll(events);
 
@@ -90,4 +115,16 @@ public class AdminEventOverviewCtrl {
     public void showStartScreen(){
         mainCtrl.showStartScreen();
     }
+
+    /**
+     *
+     * @param message
+     */
+    private void errorPopup(String message) {
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 }

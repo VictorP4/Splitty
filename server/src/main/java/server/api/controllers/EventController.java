@@ -1,8 +1,6 @@
 package server.api.controllers;
 
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Event;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.io.ByteArrayResource;
@@ -116,13 +114,11 @@ public class EventController {
     @GetMapping(path = {"/id"}, consumes="application/json")
     public ResponseEntity<Resource> getEventJSON(@PathVariable("id") long id){
 
-//        //Check if user is an admin somehow
-//        if(false){ //!authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))
-//            ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not an admin");        }
-
+//        HttpServletRequest req;
+//        if(req.getSession().getAttribut() != "adminLogged"){
+//            return  ResponseEntity.status(HttpStatus.FORBIDDEN).build(); //"not an admin"
+//        }
         try{
-            ObjectMapper map = new ObjectMapper();
-            map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             String event = evServ.getEventById(id);
             byte[] eventBytes = event.getBytes();
             ByteArrayResource resource = new ByteArrayResource(eventBytes);
