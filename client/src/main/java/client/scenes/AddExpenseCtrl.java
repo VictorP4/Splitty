@@ -5,6 +5,8 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Tag;
 import javafx.fxml.FXML;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import commons.Event;
 import commons.Expense;
@@ -28,6 +30,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    @FXML
+    public AnchorPane anchor;
     private Event event;
     private Tag selectedTag;
     @FXML
@@ -84,6 +88,20 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+    }
+
+    /**
+     * initializes the controller
+     */
+    public void initialize() {
+        anchor.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ESCAPE) {
+                mainCtrl.showEventOverview(event);
+            }
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                ok();
+            }
+        });
     }
 
     /**
