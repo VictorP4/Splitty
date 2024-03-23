@@ -2,26 +2,21 @@ package client.scenes;
 
 import client.Main;
 import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import commons.Event;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.stage.FileChooser;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 
-import com.google.inject.Inject;
-import javafx.event.ActionEvent;
-import javafx.scene.text.Text;
-
-import java.awt.*;
 import java.io.*;
 import java.util.Objects;
 import java.util.Properties;

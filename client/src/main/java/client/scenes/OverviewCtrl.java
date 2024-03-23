@@ -43,7 +43,7 @@ import static client.Main.switchLocale;
  */
 public class OverviewCtrl implements Main.UpdatableUI {
 
-    private static  String SELECTED_IMAGE_KEY;
+    private static final String SELECTED_IMAGE_KEY =  "selectedImage";
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     @FXML
