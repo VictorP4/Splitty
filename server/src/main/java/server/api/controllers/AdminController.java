@@ -32,6 +32,9 @@ public class AdminController {
                                    RedirectAttributes redirectAttributes){
         logger.info("Received a login request with password: {}", password);
         boolean loginAttempt = adminService.adminLogin(password);
+
+        System.out.println("Password was correct?    " + loginAttempt);
+
         if(loginAttempt){
             request.getSession().setAttribute("adminLogged", true);
             redirectAttributes.addFlashAttribute("Login successful!");
