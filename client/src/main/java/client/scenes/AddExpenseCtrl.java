@@ -106,6 +106,14 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 });
             }
         }));
+        webSocket.addEventListener((event)->{
+            if(this.event==null||!Objects.equals(this.event.getId(),event.getId())) return;
+            else{
+                Platform.runLater(()->{
+                    refresh(event);
+                });
+            }
+        });
     }
     /**
      *
@@ -132,6 +140,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void cancel() {
         this.expense=null;
         mainCtrl.showEventOverview(event);
+        this.event=null;
     }
 
     /**
@@ -203,6 +212,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         clearFields();
         this.expense=null;
         mainCtrl.showEventOverview(event);
+        this.event=null;
     }
 
     /**
@@ -303,7 +313,9 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     public void backToOverview() {
         clearFields();
+        this.expense=null;
         mainCtrl.showEventOverview(event);
+        this.event=null;
     }
 
     /**
