@@ -9,6 +9,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 
@@ -16,7 +18,9 @@ import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.scene.text.Text;
 
+import java.util.Objects;
 import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 import static client.Main.switchLocale;
 
@@ -38,6 +42,8 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     @FXML
     public MenuButton langButton;
     @FXML
+    public ImageView menuButtonView;
+    @FXML
     private TextField eventTitle;
     @FXML
     private TextField eventCode;
@@ -46,6 +52,9 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     @FXML
     private ListView<Event> recentlyAccessed;
     private ObservableList<Event> listViewItems;
+    private static final String SELECTED_IMAGE_KEY = "selectedImage";
+
+    private Preferences prefs = Preferences.userNodeForPackage(StartScreenCtrl.class);;
 
     /**
      * Constructs a new instance of StartScreenCtrl.
@@ -64,7 +73,8 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      */
     public void initialize() {
         listViewItems = FXCollections.observableArrayList();
-
+        Image image = new Image(Objects.requireNonNull(getClass().getResource(prefs.get(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png"))).toExternalForm());
+        menuButtonView.setImage(image);
         alreadyJoined.setDisable(true);
         eventCode.textProperty().addListener((observable, oldValue, newValue) -> handleTextChange(newValue));
         eventCode.setOnKeyPressed(event -> {
@@ -204,6 +214,9 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      */
     public void switchToDutch(ActionEvent actionEvent) throws BackingStoreException {
         switchLocale("nl");
+        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/nl_flag.png")).toExternalForm());
+        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/nl_flag.png");
+        menuButtonView.setImage(image);
     }
 
     /**
@@ -213,10 +226,16 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      */
     public void switchToEnglish(ActionEvent actionEvent) throws BackingStoreException {
         switchLocale("en");
+        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/uk_flag.png")).toExternalForm());
+        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png");
+        menuButtonView.setImage(image);
     }
 
     public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
         switchLocale("es");
+        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
+        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/es_flag.png");
+        menuButtonView.setImage(image);
     }
 
     /**
@@ -236,6 +255,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         alreadyJoined.setSelected(false);
         updateAllEvents();
         recentlyAccessed.setItems(listViewItems);
+
     }
 
 
