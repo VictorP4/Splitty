@@ -215,6 +215,10 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         switchLocale("en");
     }
 
+    public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
+        switchLocale("es");
+    }
+
     /**
      * Updates all events in listviewItems to keep up with recent updates.
      */
@@ -233,4 +237,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         updateAllEvents();
         recentlyAccessed.setItems(listViewItems);
     }
+
+
 }

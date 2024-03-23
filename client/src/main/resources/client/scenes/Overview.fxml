@@ -51,6 +51,13 @@
                         </ImageView>
                     </graphic>
                 </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#switchToSpanish" text="Spanish">
+                    <graphic>
+                        <ImageView fitWidth="16" fitHeight="12">
+                            <Image url="@/client/misc/es_flag.png" />
+                        </ImageView>
+                    </graphic>
+                </MenuItem>
             </items>
         </MenuButton>
         <TabPane layoutX="87.0" layoutY="206.0" prefHeight="179.0" prefWidth="354.0" tabClosingPolicy="UNAVAILABLE">

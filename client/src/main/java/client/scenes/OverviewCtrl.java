@@ -284,6 +284,10 @@ public class OverviewCtrl implements Main.UpdatableUI {
         Main.switchLocale("nl");
     }
 
+    public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
+        Main.switchLocale("es");
+    }
+
     /**
      * Directs user back to the startScreen. Here they can join other events if they
      * want to
