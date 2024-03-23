@@ -27,6 +27,8 @@ import commons.Expense;
 import javafx.collections.ObservableList;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -194,6 +196,20 @@ public class OverviewCtrl implements Main.UpdatableUI {
                     if (mouseEvent.getButton() == MouseButton.SECONDARY) {
                         event.removeParticipant(contact);
                         serverUtils.updateEvent(event);
+                        List<Expense> toDelete = new ArrayList<>();
+                        for(Expense expense : event.getExpenses()){
+                            if(expense.getPaidBy().equals(contact)) toDelete.add(expense);
+                            else if(expense.getInvolvedParticipants().contains(contact)){
+                                if(expense.getInvolvedParticipants().size()==1) toDelete.add(expense);
+                                else{
+                                    expense.getInvolvedParticipants().remove(contact);
+                                    serverUtils.updateExpense(event.getId(), expense);
+                                }
+                            }
+                        }
+                        for(Expense expense1: toDelete){
+                            serverUtils.deleteExpense(event.getId(), expense1);
+                        }
                         serverUtils.deleteParticipant(contact);
                         this.event = serverUtils.updateEvent(this.event);
                         participantsDisplay();
@@ -260,7 +276,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Switches the language to Dutch.
+     *
+     * @param actionEvent
      */
     public void switchToDutch(ActionEvent actionEvent) {
         Main.switchLocale("nl");
@@ -281,6 +298,14 @@ public class OverviewCtrl implements Main.UpdatableUI {
         mainCtrl.showAddExpense(event);
     }
 
+    /**
+     * Adds a new participant.
+     * This method opens the contact details scene to add a new participant.
+     */
+    @FXML
+    public void addParticipant() {
+        mainCtrl.showContactDetails(new Participant(), event);
+    }
 
     /**
      * Fills the expense list with the expenses of the event
@@ -317,6 +342,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Shows all expenses of the event
      */
     public void showAllExpenses() {
+
         expenseList = new ListView<>();
         original = FXCollections.observableArrayList();
 
@@ -338,8 +364,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * selected participant in the box
      */
     public void showFromSelected() {
-        expenseList = new ListView<>();
+        expenseList =  new ListView<>();
         original = FXCollections.observableArrayList();
+
         expenseList = expenseFiller();
 
         for (Expense e : event.getExpenses()) {
@@ -355,21 +382,14 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Adds a new participant.
-     * This method opens the contact details scene to add a new participant.
-     */
-    @FXML
-    public void addParticipant() {
-        mainCtrl.showContactDetails(new Participant(), event);
-    }
-
-    /**
      * Resets the expenses list and then filters it for all expenses that involve
      * then selected participant in the box
      */
     public void showIncludingSelected() {
         expenseList = new ListView<>();
         original = FXCollections.observableArrayList();
+
+        expenseList = expenseFiller();
 
         for (Expense e : event.getExpenses()) {
             if (e.getTitle().equalsIgnoreCase("debt repayment")) {
@@ -382,7 +402,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
         }
 
         expenseList.setItems(original);
-        expenseList = expenseFiller();
 
         inclSelected.setContent(expenseList);
         selectExpense();
