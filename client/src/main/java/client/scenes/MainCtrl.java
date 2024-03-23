@@ -17,11 +17,13 @@
 package client.scenes;
 
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+
 
 public class MainCtrl {
 
@@ -46,6 +48,9 @@ public class MainCtrl {
     private AdminEventOverviewCtrl adminEventOverviewCtrl;
     private Scene adminEventOverview;
 
+    private SettingsPageCtrl settingsPageCtrl;
+    private Scene settingsPage;
+
     /**
      * Initializes the main controller with the provided dependencies and sets up the primary stage.
      * This method sets the primary stage and initializes scenes for different scenes.
@@ -65,7 +70,8 @@ public class MainCtrl {
                            Pair<ContactDetailsCtrl, Parent> contactDetails, Pair<InvitationCtrl, Parent> invitation,
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<StatisticsCtrl, Parent> statistics,
                            Pair<StartScreenCtrl, Parent> startScreen, Pair<OverviewCtrl, Parent> eventOverview,
-                           Pair<AdminEventOverviewCtrl, Parent> adminEventOverviewCtrl, Pair<AddTagCtrl, Parent> addTag) {
+                           Pair<AdminEventOverviewCtrl, Parent> adminEventOverviewCtrl, Pair<AddTagCtrl, Parent> addTag,
+                           Pair<SettingsPageCtrl, Parent> settingsPage) {
 
         this.primaryStage = primaryStage;
 
@@ -96,8 +102,20 @@ public class MainCtrl {
         this.addTagCtrl = addTag.getKey();
         this.addTag = new Scene(addTag.getValue());
 
+        this.settingsPageCtrl = settingsPage.getKey();
+        this.settingsPage = new Scene(settingsPage.getValue());
+
         showStartScreen();
         primaryStage.show();
+    }
+
+    /**
+     * Displays the starting page scene in the primary stage.
+     */
+    public void showSettingsPage() {
+        primaryStage.setTitle("StartingPage");
+        primaryStage.setScene(settingsPage);
+        settingsPageCtrl.refresh();
     }
 
     /**
@@ -185,6 +203,7 @@ public class MainCtrl {
      * Displays the statistics scene in the primary stage.
      */
     public void showStatistics(Event event) {
+        statisticsCtrl.refresh(event);
         primaryStage.setTitle("Statistics");
         primaryStage.setScene(statistics);
     }
@@ -197,4 +216,17 @@ public class MainCtrl {
         primaryStage.setTitle("AddTag");
         primaryStage.setScene(addTag);
     }
+
+    /**
+     * Displays an overview of an expense in the add/edit expense scene
+     * @param event of the expense
+     * @param expense displayed
+     */
+    public void showExpense(Event event, Expense expense){
+        addExpenseCtrl.refreshExp(event, expense);
+        primaryStage.setTitle("EditExpense");
+        primaryStage.setScene(addExpense);
+    }
+
+
 }

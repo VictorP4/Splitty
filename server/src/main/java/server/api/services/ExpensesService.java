@@ -61,8 +61,13 @@ public class ExpensesService {
         double newDebt = p.getDebt()+Double.parseDouble(df.format(newExp.getAmount()));
         p.setDebt(newDebt);
         participantRepo.save(p);
-        for(Participant people : newExp.getInvolvedParticipants()){
-            if(p.getId().equals(people.getId())) people.setDebt(p.getDebt());
+        for(int i=0; i<expense.getInvolvedParticipants().size();i++){
+            Participant people = expense.getInvolvedParticipants().get(i);
+            if(people.getId().equals(p.getId())) {
+                expense.getInvolvedParticipants().remove(i);
+                expense.getInvolvedParticipants().add(i,p);
+                people = expense.getInvolvedParticipants().get(i);
+            }
             newDebt = people.getDebt()-Double.parseDouble(df.format(((double)newExp.getAmount())/newExp.getInvolvedParticipants().size()));
             people.setDebt(newDebt);
             participantRepo.save(people);
@@ -105,24 +110,37 @@ public class ExpensesService {
             people.setDebt(oldDebt);
             participantRepo.save(people);
         }
+
         //updating expense
         oldExp.setAmount(expense.getAmount());
         oldExp.setInvolvedParticipants(expense.getInvolvedParticipants());
         oldExp.setPaidBy(expense.getPaidBy());
         oldExp.setTitle(expense.getTitle());
         oldExp.setDate(expense.getDate());
+        oldExp.setTag(expense.getTag());
+        
         //updating debts
+        oldExp.setPaidBy(participantRepo.getById(oldExp.getPaidBy().getId()));
         Participant p = oldExp.getPaidBy();
         double newDebt = p.getDebt()+Double.parseDouble(df.format(oldExp.getAmount()));
         p.setDebt(newDebt);
         participantRepo.save(p);
-        for(Participant people : oldExp.getInvolvedParticipants()){
-            if(people.getId().equals(p.getId())) people.setDebt(p.getDebt());
+        for(int i=0; i<oldExp.getInvolvedParticipants().size();i++){
+            Participant people = oldExp.getInvolvedParticipants().get(i);
+            if(people.getId().equals(p.getId())) {
+                oldExp.getInvolvedParticipants().remove(i);
+                oldExp.getInvolvedParticipants().add(i,p);
+                people = oldExp.getInvolvedParticipants().get(i);
+            }
+            else{
+                oldExp.getInvolvedParticipants().remove(i);
+                oldExp.getInvolvedParticipants().add(i,participantRepo.findById(people.getId()).get());
+                people = oldExp.getInvolvedParticipants().get(i);
+            }
             newDebt = people.getDebt()-Double.parseDouble(df.format(((double)oldExp.getAmount())/oldExp.getInvolvedParticipants().size()));
             people.setDebt(newDebt);
             participantRepo.save(people);
         }
-
         Expense newExp = expRepo.save(oldExp);
         return newExp;
     }
@@ -155,15 +173,17 @@ public class ExpensesService {
             people.setDebt(oldDebt);
             participantRepo.save(people);
         }
-        //deleting expense
-        expRepo.deleteById(id);
+
         //deleting expense in event
         Event event = eventRepo.findById(id).get();
         List<Expense> expenses = event.getExpenses();
         expenses.remove(expense);
         event.setExpenses(expenses);
-
         eventRepo.save(event);
+
+        //deleting expense
+        expRepo.deleteById(expId);
+
         return expense;
     }
 
@@ -232,6 +252,15 @@ public class ExpensesService {
             sum += exp.getAmount();
         }
         return sum;
+    }
+    /**
+     * Used for the updates handling for the websockets
+     * @param id event id
+     * @return the found event
+     *
+     */
+    public Event getEvent(Long id){
+        return eventRepo.findById(id).get();
     }
 
 

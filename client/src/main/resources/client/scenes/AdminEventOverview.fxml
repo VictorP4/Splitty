@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="457.0" prefWidth="616.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminEventOverviewCtrl">
+<AnchorPane fx:id="ap" prefHeight="457.0" prefWidth="616.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminEventOverviewCtrl">
    <children>
       <Text layoutX="221.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Overview">
          <font>

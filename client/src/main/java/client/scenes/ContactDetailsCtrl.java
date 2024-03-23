@@ -5,6 +5,8 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import commons.Event;
 import commons.Participant;
@@ -43,6 +45,8 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
 
     @FXML
     private TextField bicField;
+    @FXML
+    public AnchorPane ap;
 
     /**
      * Constructs a new instance of ContactDetailsCtrl.
@@ -54,6 +58,17 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
     public ContactDetailsCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+    }
+
+    public void initialize() {
+        ap.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                back();
+            }
+            else if (event.getCode() == KeyCode.ENTER) {
+                save();
+            }
+        });
     }
 
     @Override

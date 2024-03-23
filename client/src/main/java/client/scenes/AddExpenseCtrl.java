@@ -71,6 +71,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     @FXML
     private MenuButton tagMenu;
 
+    private Expense expense;
+
 
     /**
      * Constructs a new instance of a AddExpenseCtrl.
@@ -85,7 +87,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
-     *
+     * Updates the UI based on the language chosen by the user.
      */
     @Override
     public void updateUI() {
@@ -142,6 +144,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
 
         Tag tag = selectedTag;
+
         return new Expense(title, amount, paidBy, partIn, date, selectedTag);
     }
 
@@ -150,7 +153,22 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     public void ok() {
         try {
-            server.addExpense(getExpense(), event.getId());
+            Expense addExp = getExpense();
+            if(this.expense != null){
+                addExp.setId(this.expense.getId());
+            }
+            List<Long> ids = new ArrayList<>();
+            for(Expense e : event.getExpenses()){
+                ids.add(e.getId());
+            }
+            if(ids.contains(addExp.getId())){
+                updateExp(addExp);
+                server.updateExpense(event.getId(), addExp);
+            }
+            else{
+                server.addExpense(addExp, event.getId());
+            }
+
             event = server.getEvent(event.getId());
         }
         catch (WebApplicationException e) {
@@ -161,6 +179,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             return;
         }
         clearFields();
+        this.expense=null;
         mainCtrl.showEventOverview(event);
     }
 
@@ -188,6 +207,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     private void addToCurrency() {
         currency.getItems().add("EUR");
+        currency.getItems().add("HRK");
     }
 
     /**
@@ -332,6 +352,69 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void goToAddTags() {
         clearFields();
         mainCtrl.showAddTag(event);
+    }
+
+    /**
+     * Populates the add/edit expense scene with information about the selected expense.
+     *
+     * @param event of the expense
+     * @param expense selected expense
+     */
+    public void refreshExp(Event event, Expense expense){
+        this.event = event;
+        refresh(event);
+        this.expense = expense;
+
+        this.title.setText(expense.getTitle());
+        this.amount.setText(Double.toString(expense.getAmount()));
+        LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        this.date.setValue(localDate);
+        paidBy.getSelectionModel().select(expense.getPaidBy());
+
+        if(expense.getInvolvedParticipants().equals(event.getParticipants())){
+            everybodyIn.setSelected(true);
+        }
+        else{
+            someIn.setSelected(true);
+            deSelAll();
+            for(Node n : box.getChildren()){
+                if (n instanceof CheckBox){
+                    CheckBox c = (CheckBox) n;
+                    List<String> names = new ArrayList<>();
+                    for(Participant p : expense.getInvolvedParticipants()){
+                        names.add(p.getName());
+                    }
+                    if(names.contains(c.getText())){
+                        c.setSelected(true);
+                    }
+                }
+            }
+        }
+        if(expense.getTag() != null){
+            this.tagMenu.setText(expense.getTag().getName());
+        }
+        this.currency.getSelectionModel().selectFirst();
+        //this works bc we only have one currency; rn currency isn't getting saved w/ the expense anyway
+
+    }
+
+    /**
+     * updates the expanse in the event
+     * @param expense the updated expense
+     */
+    public void updateExp(Expense expense){
+
+        int index = 0;
+        for(Expense e : this.event.getExpenses()){
+            if(e.getId().equals(expense.getId())){
+                this.event.getExpenses().set(index, expense);
+                System.out.println(event.getExpenses()); //TODO
+                return;
+            }
+            else{
+                index++;
+            }
+        }
     }
 
 }
