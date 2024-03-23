@@ -16,6 +16,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -27,22 +29,29 @@ import commons.Expense;
 import javafx.collections.ObservableList;
 
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.prefs.BackingStoreException;
+import static client.Main.prefs;
+import static client.Main.switchLocale;
 
 /**
  * Controller class for the overview scene.
  */
 public class OverviewCtrl implements Main.UpdatableUI {
 
+    private static  String SELECTED_IMAGE_KEY;
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     @FXML
     public Button addExpense;
     @FXML
     public Button home;
+    @FXML
+    public ImageView menuButtonView;
     @FXML
     private Pane block;
     @FXML
@@ -91,12 +100,15 @@ public class OverviewCtrl implements Main.UpdatableUI {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
         this.webSocket = webSocket;
+        MenuItem item = new MenuItem("Text");
     }
 
     /**
      * Initializes the controller.
      */
     public void initialize() {
+        Image image = new Image(Objects.requireNonNull(getClass().getResource(prefs.get(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png"))).toExternalForm());
+        menuButtonView.setImage(image);
         expenseList = new ListView<>();
         //TODO connect to the given server url when the initial startscreen is created
         webSocket.connect("ws://localhost:8080/websocket");
@@ -273,7 +285,10 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * @param actionEvent
      */
     public void switchToEnglish(ActionEvent actionEvent) throws BackingStoreException {
-        Main.switchLocale("en");
+        switchLocale("en");
+        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/uk_flag.png")).toExternalForm());
+        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png");
+        menuButtonView.setImage(image);
     }
 
     /**
@@ -281,11 +296,49 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * @param actionEvent
      */
     public void switchToDutch(ActionEvent actionEvent) throws BackingStoreException {
-        Main.switchLocale("nl");
+        switchLocale("nl");
+        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/nl_flag.png")).toExternalForm());
+        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/nl_flag.png");
+        menuButtonView.setImage(image);
+    }
+
+    public void addLang(ActionEvent actionEvent){
+        Properties newLang = new Properties();
+        try (BufferedReader reader = new BufferedReader(new FileReader("client/src/main/resources/client/misc/langTemplate.txt"))) {
+            newLang.load(reader);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (OutputStream output = new FileOutputStream("client/src/main/resources/client/misc/messages.properties")) {
+            newLang.store(output, "IMPORTANT: Rename this file so it doesn't get overwritten next time you try to add a language!\n" +
+                    "Add the name of your new language to the first line of this file as a comment");
+            String newLangPath = "client/src/main/resources/client/misc/messages.properties";
+            File file = new File(newLangPath);
+
+            String osName = System.getProperty("os.name").toLowerCase();
+            if (osName.contains("windows")) {
+                ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "start", newLangPath);
+                pb.start();
+            }
+            else if(osName.contains("linux")){
+                ProcessBuilder pb = new ProcessBuilder("xdg-open", newLangPath);
+                pb.start();
+            }
+            else if(osName.contains("mac")){
+                ProcessBuilder pb = new ProcessBuilder("open", newLangPath);
+                pb.start();
+            }
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
     }
 
     public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
-        Main.switchLocale("es");
+        switchLocale("es");
+        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
+        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/es_flag.png");
+        menuButtonView.setImage(image);
     }
 
     /**

@@ -53,6 +53,8 @@
                   </ImageView>
                </graphic>
             </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#addLang" text="Add Language">
+            </MenuItem>
          </items>
       </MenuButton>
       <CheckBox fx:id="alreadyJoined" layoutX="87.0" layoutY="175.0" mnemonicParsing="false" text="Already joined" />

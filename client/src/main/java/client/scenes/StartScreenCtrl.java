@@ -9,16 +9,22 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 
 import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.scene.text.Text;
 
+import java.awt.*;
+import java.io.*;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -238,6 +244,37 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         menuButtonView.setImage(image);
     }
 
+    public void addLang(ActionEvent actionEvent){
+        Properties newLang = new Properties();
+        try (BufferedReader reader = new BufferedReader(new FileReader("client/src/main/resources/client/misc/langTemplate.txt"))) {
+            newLang.load(reader);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (OutputStream output = new FileOutputStream("client/src/main/resources/client/misc/messages.properties")) {
+            newLang.store(output, "IMPORTANT: Rename this file so it doesn't get overwritten next time you try to add a language!\n" +
+                    "Add the name of your new language to the first line of this file as a comment");
+            String newLangPath = "client/src/main/resources/client/misc/messages.properties";
+            File file = new File(newLangPath);
+
+            String osName = System.getProperty("os.name").toLowerCase();
+            if (osName.contains("windows")) {
+                ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "start", newLangPath);
+                pb.start();
+            }
+            else if(osName.contains("linux")){
+                ProcessBuilder pb = new ProcessBuilder("xdg-open", newLangPath);
+                pb.start();
+            }
+            else if(osName.contains("mac")){
+                ProcessBuilder pb = new ProcessBuilder("open", newLangPath);
+                pb.start();
+            }
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
+    }
     /**
      * Updates all events in listviewItems to keep up with recent updates.
      */

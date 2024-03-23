@@ -36,7 +36,7 @@ import javassist.NotFoundException;
 
 public class Main extends Application {
     private static final String LANGUAGE_PREF_KEY = "language";
-    private static Preferences prefs;
+    public static Preferences prefs;
 
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);

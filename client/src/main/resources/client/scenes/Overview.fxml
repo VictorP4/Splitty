@@ -36,6 +36,9 @@
             </font>
         </Text>
         <MenuButton fx:id="langButton" layoutX="87.0" layoutY="402.0" mnemonicParsing="false" text="Language">
+            <graphic>
+                <ImageView fx:id="menuButtonView" fitWidth="16" fitHeight="12" preserveRatio="true"/>
+            </graphic>
             <items>
                 <MenuItem mnemonicParsing="false" onAction="#switchToEnglish" text="English">
                     <graphic>
