@@ -30,6 +30,7 @@ import javafx.collections.ObservableList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.prefs.BackingStoreException;
 
 /**
  * Controller class for the overview scene.
@@ -271,7 +272,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      *
      * @param actionEvent
      */
-    public void switchToEnglish(ActionEvent actionEvent) {
+    public void switchToEnglish(ActionEvent actionEvent) throws BackingStoreException {
         Main.switchLocale("en");
     }
 
@@ -279,7 +280,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      *
      * @param actionEvent
      */
-    public void switchToDutch(ActionEvent actionEvent) {
+    public void switchToDutch(ActionEvent actionEvent) throws BackingStoreException {
         Main.switchLocale("nl");
     }
 

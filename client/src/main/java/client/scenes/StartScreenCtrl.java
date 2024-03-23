@@ -16,6 +16,8 @@ import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.scene.text.Text;
 
+import java.util.prefs.BackingStoreException;
+
 import static client.Main.switchLocale;
 
 /**
@@ -200,7 +202,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      *
      * @param actionEvent The event that caused this method to be called
      */
-    public void switchToDutch(ActionEvent actionEvent) {
+    public void switchToDutch(ActionEvent actionEvent) throws BackingStoreException {
         switchLocale("nl");
     }
 
@@ -209,7 +211,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      *
      * @param actionEvent The event that caused this method to be called
      */
-    public void switchToEnglish(ActionEvent actionEvent) {
+    public void switchToEnglish(ActionEvent actionEvent) throws BackingStoreException {
         switchLocale("en");
     }
 
