@@ -160,6 +160,17 @@ public class MainCtrl {
     }
 
     /**
+     * Shows addExpense screen as it was before adding a new tag,
+     *  with the new tag in the tag menu
+     */
+    public void showAddExpenseFromTag(Event event) {
+        addExpenseCtrl.populateTagMenu();
+        primaryStage.setTitle("AddExpense");
+        primaryStage.setScene(addExpense);
+    }
+
+
+    /**
      * Displays the contact details scene for the given participant in the primary stage.
      *
      * @param participant The participant whose details are to be displayed.

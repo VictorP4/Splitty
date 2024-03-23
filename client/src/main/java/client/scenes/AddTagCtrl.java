@@ -163,7 +163,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
 
         }
         clearFields();
-        mainCtrl.showAddExpense(event);
+        mainCtrl.showAddExpenseFromTag(event);
     }
 
     /**
@@ -182,7 +182,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
         server.removeTag(tag1);
         this.event = server.updateEvent(event);
         clearFields();
-        mainCtrl.showAddExpense(event);
+        mainCtrl.showAddExpenseFromTag(event);
     }
 
     /**
@@ -206,7 +206,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
      */
     public void back() {
         clearFields();
-        mainCtrl.showAddExpense(event);
+        mainCtrl.showAddExpenseFromTag(event);
     }
 
     /**
