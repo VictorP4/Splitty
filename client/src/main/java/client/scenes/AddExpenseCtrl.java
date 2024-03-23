@@ -2,8 +2,10 @@ package client.scenes;
 
 import client.Main;
 import client.utils.ServerUtils;
+import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
 import commons.Tag;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 import commons.Event;
@@ -72,6 +74,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     private MenuButton tagMenu;
 
     private Expense expense;
+    private WebSocketUtils webScoket;
 
 
     /**
@@ -81,11 +84,22 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * @param mainCtrl The main controller of the application.
      */
     @Inject
-    public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl, WebSocketUtils webScoket) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.webScoket = webScoket;
     }
 
+    public void initialize(){
+        webScoket.addEventListener((event)->{
+            if(this.event==null||!Objects.equals(event.getId(),this.event.getId())) return;
+            else{
+                Platform.runLater(()->{
+                    refresh(event);
+                });
+            }
+        });
+    }
     /**
      *
      */
@@ -181,6 +195,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         clearFields();
         this.expense=null;
         mainCtrl.showEventOverview(event);
+        this.event=null;
     }
 
     /**
@@ -282,6 +297,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void backToOverview() {
         clearFields();
         mainCtrl.showEventOverview(event);
+        this.event=null;
     }
 
     /**
