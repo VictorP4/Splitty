@@ -8,6 +8,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import commons.Event;
 import commons.Participant;
@@ -48,7 +50,12 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
 
     @FXML
     private TextField bicField;
+
     private WebSocketUtils webSocket;
+
+    @FXML
+    public AnchorPane ap;
+
 
     /**
      * Constructs a new instance of ContactDetailsCtrl.
@@ -68,6 +75,14 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
      *
      */
     public void initialize(){
+        ap.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                back();
+            }
+            else if (event.getCode() == KeyCode.ENTER) {
+                save();
+            }
+        });
         webSocket.addParticipantListener((participant)->{
             if(this.participant==null||!Objects.equals(participant.getId(),this.participant.getId())) return;
             else{
@@ -81,6 +96,8 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
             }
         });
     }
+
+
 
     @Override
     public void updateUI() {

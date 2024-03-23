@@ -91,6 +91,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
+<<<<<<< HEAD
      * initializes the Add Expense Controller
      */
     public void initialize(){
@@ -117,6 +118,9 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
     /**
      *
+=======
+     * Updates the UI based on the language chosen by the user.
+>>>>>>> main
      */
     @Override
     public void updateUI() {
