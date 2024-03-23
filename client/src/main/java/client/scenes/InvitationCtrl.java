@@ -11,6 +11,8 @@ import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 /**
@@ -36,6 +38,8 @@ public class InvitationCtrl implements Main.UpdatableUI {
     @FXML
     private Text inviteCodeText;
     private String inviteCode;
+    @FXML
+    public AnchorPane ap;
 
     /**
      * Constructs a new instance of InvitationCtrl.
@@ -55,6 +59,12 @@ public class InvitationCtrl implements Main.UpdatableUI {
      * Initializes the controller.
      */
     public void initialize() {
+        ap.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                backToOverview();
+            }
+        });
+
         setInviteCode();
     }
 

@@ -18,8 +18,10 @@ public class AdminService implements ApplicationListener<ApplicationStartedEvent
     private EmailService serv;
     @Override
     public void onApplicationEvent(ApplicationStartedEvent event) {
+
         generateSessionPass();
         try {
+            System.out.println(sessionPass);
             serv.sendEmail("splittyadmin@protonmail.com","Session Password",
                 "Your admin password for this session is: "+sessionPass);
         } catch (MessagingException e) {
@@ -40,7 +42,6 @@ public class AdminService implements ApplicationListener<ApplicationStartedEvent
     }
 
     public boolean adminLogin(String password){
-        if(sessionPass.equals(password)) return true;
-        return false;
+        return sessionPass.equals(password);
     }
 }

@@ -10,8 +10,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+
 import java.util.List;
 
 public class AdminEventOverviewCtrl {
@@ -22,6 +25,8 @@ public class AdminEventOverviewCtrl {
     public TableView<Event> eventsTable;
     @FXML
     public VBox container;
+    @FXML
+    public AnchorPane ap;
 
 
     @Inject
@@ -33,6 +38,14 @@ public class AdminEventOverviewCtrl {
     public void refresh(){
         events = server.getAllEvents();
         displayEvents();
+    }
+
+    public void initialize() {
+        ap.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                showStartScreen();
+            }
+        });
     }
 
     public void displayEvents(){
@@ -61,7 +74,6 @@ public class AdminEventOverviewCtrl {
         });
 
         eventsTable.getColumns().addAll(titleColumn, creationDateColumn, lastActivityColumn, deleteColumn);
-
         eventsTable.getItems().addAll(events);
 
         eventsTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
