@@ -75,7 +75,7 @@ public class AdminEventOverviewCtrl {
                 server.deleteEvent(selectedEvent.getId());
                 events.remove(selectedEvent);
                 displayEvents();
-                Popup("event deleted");
+                popup("event deleted");
             });
             return new SimpleObjectProperty<>(deleteButton);
         });
@@ -89,7 +89,7 @@ public class AdminEventOverviewCtrl {
                     Writer writer = new BufferedWriter(new FileWriter("event " + selectedEvent.getTitle() + ".json"));
                     writer.write(server.getEventJSON(selectedEvent.getId()));
                     writer.flush(); writer.close();
-                    Popup("Backup created");
+                    popup("Backup created");
                 }
                 catch (Exception e){
                     e.printStackTrace();
@@ -145,7 +145,7 @@ public class AdminEventOverviewCtrl {
      * Popup that lets admin know backup was created successfully
      * @param message message to print on screen
      */
-    private void Popup(String message) {
+    private void popup(String message) {
         var alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setContentText(message);
