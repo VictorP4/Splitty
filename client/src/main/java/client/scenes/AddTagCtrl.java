@@ -210,14 +210,6 @@ public class AddTagCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Clears all input fields and returns to the Add Expense scene.
-     */
-    public void ok() {
-        clearFields();
-        mainCtrl.showAddExpense(event);
-    }
-
-    /**
      * Clears all input fields.
      */
     public void clearFields() {
