@@ -111,6 +111,11 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
         }
     }
 
+    /**
+     * A general method to create a popup error on the application, with custom message.
+     *
+     * @param message The message passed in.
+     */
     private void errorPopup(String message) {
         var alert = new Alert(Alert.AlertType.ERROR);
         alert.initModality(Modality.APPLICATION_MODAL);

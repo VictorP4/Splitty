@@ -172,8 +172,18 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * accepts inputted expense, adds it to the server, returns to the event overview scene
      */
     public void ok() {
+        Expense addExp = null;
+
+        // Checks if all mandatory boxes have been filled in
         try {
-            Expense addExp = getExpense();
+            addExp = getExpense();
+        } catch(Exception e) {
+            errorPopup("Missing title, amount or date");
+            return;
+        }
+
+        // Checks for any other related errors
+        try {
             userConfig.setCurrencyConfig(properties, currency.getValue());
             if(this.expense != null){
                 addExp.setId(this.expense.getId());
@@ -192,15 +202,24 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             event = server.getEvent(event.getId());
         }
         catch (WebApplicationException e) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+            errorPopup(e.getMessage());
             return;
         }
         clearFields();
         this.expense=null;
         mainCtrl.showEventOverview(event);
+    }
+
+    /**
+     * A general method to create a popup error on the application, with custom message.
+     *
+     * @param message The message passed in.
+     */
+    private void errorPopup(String message) {
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     /**
