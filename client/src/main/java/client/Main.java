@@ -37,6 +37,7 @@ public class Main extends Application {
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
     private static ResourceBundle resourceBundle;
+
     public static void main(String[] args) throws URISyntaxException, IOException {
         launch();
     }
@@ -69,7 +70,7 @@ public class Main extends Application {
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, addExpense, contactDetails,
                 invitation, openDebts, statistics, startScreen, eventOverview, adminEventOverview, addTag, settingsPage);
-
+        updateUILanguage();
     }
 
     public static void loadLanguageBundle(String languageCode) throws NotFoundException {

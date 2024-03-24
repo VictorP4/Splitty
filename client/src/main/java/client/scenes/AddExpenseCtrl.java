@@ -18,18 +18,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
 import java.util.*;
 
 public class AddExpenseCtrl implements Main.UpdatableUI {
-
-
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Event event;
@@ -71,13 +65,11 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     private ComboBox<String> currency;
     @FXML
     private TextField title;
-
     @FXML
     private MenuButton tagMenu;
     @FXML
     public AnchorPane ap;
     private Expense expense;
-
     private final UserConfig userConfig = new UserConfig();
 
     /**

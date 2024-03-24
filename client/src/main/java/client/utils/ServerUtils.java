@@ -3,6 +3,7 @@
  */
 package client.utils;
 
+import client.UserConfig;
 import commons.*;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -19,15 +20,21 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
-	private static String server = "http://localhost:8080";
+	private static String server;
+	private final UserConfig userConfig = new UserConfig();
+
+	public ServerUtils() {
+		server = userConfig.getServerURLConfig();
+	}
 
 	/**
 	 * Sets the server URL.
 	 *
 	 * @param server The server URL.
 	 */
-	public void setSERVER(String server) {
+	public String setSERVER(String server) {
 		this.server = server;
+		return this.server;
 	}
 
 	/**

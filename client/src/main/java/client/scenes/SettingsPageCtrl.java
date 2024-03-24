@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.Main;
+import client.UserConfig;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -15,6 +16,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 
 import java.util.List;
+import java.util.Properties;
 
 
 public class SettingsPageCtrl implements Main.UpdatableUI {
@@ -37,7 +39,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     public Button login;
     @FXML
     public AnchorPane ap;
-
+    private final UserConfig userConfig = new UserConfig();
 
     /**
      * Constructs a new instance of StartingPageCtrl.
@@ -73,28 +75,31 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Sets the server for the session according to the users choice. If no server is chosen, a default server will
-     * be selected (http://localhost:8080)
+     * Sets the server for the session according to the users choice. If no server is chosen, the server in the
+     * user_config file will be selected
      */
     public void setServer() {
         String serverUrlString = serverUrl.getText();
         try {
             if (serverUrlString.isBlank()) {
-                server.setSERVER("http://localhost:8080");
+                server.setSERVER(userConfig.getServerURLConfig());
             }
-            else {
-                server.checkServer(serverUrlString);
-                server.setSERVER("http://" + serverUrlString);
+            else if(server.checkServer(serverUrlString).getStatus()!=200){
+                errorPopup("The server url is not correct");
+            } else {
+                String newUrl = server.setSERVER("http://" + serverUrlString);
+                userConfig.setServerUrlConfig(newUrl);
             }
         } catch(Exception e) {
             e.printStackTrace();
             errorPopup(e.getMessage());
         }
+        refresh();
     }
 
     /**
-     * Lets the admin give a password and login. If the admin did not fill in a server, the server is set to the default
-     * server (http://localhost:8080).
+     * Lets the admin give a password and login. If no server is chosen, the server in the
+     * user_config file will be selected
      */
     public void login() {
         String password = adminPassword.getText().trim();
@@ -124,7 +129,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Refreshes the starting page.
+     * Refreshes the settings page.
      */
     public void refresh() {
         serverUrl.clear();
