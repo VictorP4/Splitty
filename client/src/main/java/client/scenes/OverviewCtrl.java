@@ -16,6 +16,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -28,21 +30,32 @@ import commons.Expense;
 import javafx.collections.ObservableList;
 
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Properties;
+import java.util.prefs.BackingStoreException;
+import static client.Main.prefs;
+import static client.Main.switchLocale;
 
 /**
  * Controller class for the overview scene.
  */
 public class OverviewCtrl implements Main.UpdatableUI {
 
+    private static final String SELECTED_IMAGE_KEY =  "selectedImage";
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     @FXML
     public Button addExpense;
     @FXML
     public Button home;
+    @FXML
+    public ImageView menuButtonView;
     @FXML
     private Pane block;
     @FXML
@@ -93,12 +106,15 @@ public class OverviewCtrl implements Main.UpdatableUI {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
         this.webSocket = webSocket;
+        MenuItem item = new MenuItem("Text");
     }
 
     /**
      * Initializes the controller.
      */
     public void initialize() {
+        Image image = new Image(Objects.requireNonNull(getClass().getResource(prefs.get(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png"))).toExternalForm());
+        menuButtonView.setImage(image);
         ap.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 backToStartScreen();
@@ -279,16 +295,59 @@ public class OverviewCtrl implements Main.UpdatableUI {
      *
      * @param actionEvent
      */
-    public void switchToEnglish(ActionEvent actionEvent) {
-        Main.switchLocale("en");
+    public void switchToEnglish(ActionEvent actionEvent) throws BackingStoreException {
+        switchLocale("messages", "en");
+        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/uk_flag.png")).toExternalForm());
+        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png");
+        menuButtonView.setImage(image);
     }
 
     /**
      *
      * @param actionEvent
      */
-    public void switchToDutch(ActionEvent actionEvent) {
-        Main.switchLocale("nl");
+    public void switchToDutch(ActionEvent actionEvent) throws BackingStoreException {
+        switchLocale("messages", "nl");
+        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/nl_flag.png")).toExternalForm());
+        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/nl_flag.png");
+        menuButtonView.setImage(image);
+    }
+
+    public void addLang(ActionEvent actionEvent) throws BackingStoreException {
+        Properties newLang = new Properties();
+        try (BufferedReader reader = new BufferedReader(new FileReader("client/src/main/resources/client/misc/langTemplate.txt"))) {
+            newLang.load(reader);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String newLangPath;
+        try (OutputStream output = new FileOutputStream("client/src/main/resources/client/misc/messages.properties")) {
+            newLang.store(output, "Add the name of your new language to the first line of this file as a comment\n"+
+                    "Send the final translation version to ooppteam58@gmail.com");
+
+            newLangPath = "client/src/main/resources/client/misc/messages.properties";
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        File file = new File(newLangPath);
+        String saveDir = System.getProperty("user.home") + "/Downloads" + "/" + file.getName();
+        try {
+            Files.move(file.toPath(), Paths.get(saveDir), StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("File downloaded to: " + saveDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
+        switchLocale("messages","es");
+        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
+        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/es_flag.png");
+        menuButtonView.setImage(image);
     }
 
     /**
@@ -447,7 +506,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
     /**
      * Shows the statistics of the event
-     * @param actionEvent
      */
     public void showStatistics() {
         mainCtrl.showStatistics(event);
