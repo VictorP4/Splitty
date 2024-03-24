@@ -4,6 +4,7 @@ import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import commons.Expense;
 import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -179,8 +180,14 @@ public class AddTagCtrl implements Main.UpdatableUI {
             }
         }
         event.getTags().remove(tag1);
-        server.removeTag(tag1);
         this.event = server.updateEvent(event);
+        for(Expense expense: event.getExpenses()){
+            if(expense.getTag().equals(tag1)){
+                expense.setTag(null);
+                server.updateExpense(event.getId(), expense);
+            }
+        }
+        server.removeTag(tag1);
         clearFields();
         mainCtrl.showAddExpenseFromTag(event);
     }
