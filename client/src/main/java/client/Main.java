@@ -73,13 +73,8 @@ public class Main extends Application {
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, addExpense, contactDetails,
-<<<<<<< HEAD
-                invitation, openDebts, statistics, startScreen, eventOverview, adminEventOverview, addTag);
-        updateUILanguage();
-=======
                 invitation, openDebts, statistics, startScreen, eventOverview, adminEventOverview, addTag, settingsPage);
-
->>>>>>> dc93a55303ad22c481b4f0c1683cccc567b93d8b
+        updateUILanguage();
     }
 
     public static void loadLanguageBundle(String languageCode) throws NotFoundException {

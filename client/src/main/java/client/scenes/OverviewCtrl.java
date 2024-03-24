@@ -113,16 +113,13 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Initializes the controller.
      */
     public void initialize() {
-<<<<<<< HEAD
         Image image = new Image(Objects.requireNonNull(getClass().getResource(prefs.get(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png"))).toExternalForm());
         menuButtonView.setImage(image);
-=======
         ap.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 backToStartScreen();
             }
         });
->>>>>>> dc93a55303ad22c481b4f0c1683cccc567b93d8b
         expenseList = new ListView<>();
         //TODO connect to the given server url when the initial startscreen is created
         webSocket.connect("ws://localhost:8080/websocket");
@@ -509,7 +506,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
     /**
      * Shows the statistics of the event
-     * @param actionEvent
      */
     public void showStatistics() {
         mainCtrl.showStatistics(event);
