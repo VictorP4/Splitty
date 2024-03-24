@@ -22,6 +22,7 @@ public class Expense {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(nullable = true)
     private Tag tag;
+    private String currency;
 
     /**
      * Constructs an Expense with the specified title, amount, payer, involved participants, and date.
@@ -32,13 +33,14 @@ public class Expense {
      * @param involvedParticipants the list of participants involved in the expense
      * @param date               the date of the expense
      */
-    public Expense(String title, double amount, Participant paidBy, List<Participant> involvedParticipants, Date date, Tag tag) {
+    public Expense(String title, double amount, Participant paidBy, List<Participant> involvedParticipants, Date date, Tag tag, String currency) {
         this.title = title;
         this.amount = amount;
         this.paidBy = paidBy;
         this.involvedParticipants = involvedParticipants;
         this.date = date;
         this.tag = tag;
+        this.currency = currency;
     }
 
     /**
@@ -171,6 +173,15 @@ public class Expense {
     public void setTag(Tag tag) {
         this.tag = tag;
     }
+
+    /**
+     * Retrieves the currency of the expense.
+     *
+     * @return the currency of the expense
+     */
+    public String getCurrency() { return currency; }
+
+    public void setCurrency(String currency) { this.currency = currency; }
 
     /**
      * Checks if this expense is equal to another object.

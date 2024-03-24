@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.Main;
+import client.UserConfig;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Tag;
@@ -18,10 +19,7 @@ import javafx.stage.Modality;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class AddExpenseCtrl implements Main.UpdatableUI {
 
@@ -72,6 +70,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     private MenuButton tagMenu;
 
     private Expense expense;
+    private UserConfig userConfig;
 
 
     /**
@@ -141,11 +140,11 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         Date date = Date.from(localdate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         Participant paidBy = this.paidBy.getSelectionModel().getSelectedItem();
         List<Participant> partIn = add();
-
+        String selectedCurrecy = currency.getValue();
 
         Tag tag = selectedTag;
 
-        return new Expense(title, amount, paidBy, partIn, date, selectedTag);
+        return new Expense(title, amount, paidBy, partIn, date, selectedTag, selectedCurrecy);
     }
 
     /**
@@ -156,6 +155,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             Expense addExp = getExpense();
             if(this.expense != null){
                 addExp.setId(this.expense.getId());
+                userConfig.setCurrencyConfig(new Properties(), currency.getValue());
             }
             List<Long> ids = new ArrayList<>();
             for(Expense e : event.getExpenses()){
@@ -168,7 +168,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             else{
                 server.addExpense(addExp, event.getId());
             }
-
             event = server.getEvent(event.getId());
         }
         catch (WebApplicationException e) {
@@ -198,6 +197,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 paidBy.getItems().add(p);
             }
         }
+        currency.setValue(userConfig.getCurrencyConfig(new Properties()));
         populateTagMenu();
     }
 
@@ -370,6 +370,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         this.date.setValue(localDate);
         paidBy.getSelectionModel().select(expense.getPaidBy());
+        currency.setValue(this.expense.getCurrency());
 
         if(expense.getInvolvedParticipants().equals(event.getParticipants())){
             everybodyIn.setSelected(true);
@@ -393,9 +394,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         if(expense.getTag() != null){
             this.tagMenu.setText(expense.getTag().getName());
         }
-        this.currency.getSelectionModel().selectFirst();
-        //this works bc we only have one currency; rn currency isn't getting saved w/ the expense anyway
-
     }
 
     /**
@@ -403,7 +401,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * @param expense the updated expense
      */
     public void updateExp(Expense expense){
-
         int index = 0;
         for(Expense e : this.event.getExpenses()){
             if(e.getId().equals(expense.getId())){
