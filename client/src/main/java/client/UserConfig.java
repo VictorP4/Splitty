@@ -15,6 +15,9 @@ public class UserConfig {
     private final Properties properties = new Properties();
 
 
+    /**
+     * Initialized the userConfig and properties with the properties in the user_config file.
+     */
     public UserConfig() {
         try (FileInputStream fis = new FileInputStream(configPath)) {
             properties.load(fis);
@@ -24,6 +27,11 @@ public class UserConfig {
         }
     }
 
+    /**
+     * Gets the properties of the UserConfig.
+     *
+     * @return the properties of the UserConfig.
+     */
     public Properties getProperties() {
         return properties;
     }
@@ -31,12 +39,11 @@ public class UserConfig {
     /**
      * Checks what url is in the config file.
      *
-     * @param p the properties object containing the server url
      * @return the url of the session in properties
      */
-    public String getServerURLConfig(Properties p) {
+    public String getServerURLConfig() {
         try {
-            String url = p.getProperty("serverUrl");
+            String url = properties.getProperty("serverUrl");
             if (url == null || url.isBlank()) {
                 return "ws://localhost:8080/websocket";
             }
@@ -50,13 +57,12 @@ public class UserConfig {
     /**
      * Changes the configuration of the server url.
      *
-     * @param p the properties object containing the properties
      * @param url the new server url
      */
-    public void setServerUrlConfig(Properties p, String url) {
-        p.setProperty("serverUrl", url);
+    public void setServerUrlConfig(String url) {
+        properties.setProperty("serverUrl", url);
         try (OutputStream out = new FileOutputStream(configPath)) {
-            p.store(out, "new serverUrl");
+            properties.store(out, "new serverUrl");
         } catch(IOException e) {
             e.printStackTrace();
 //            log.log(Level.WARNING, e.getMessage(), e);
@@ -67,12 +73,11 @@ public class UserConfig {
     /**
      * Checks what url is in the config file.
      *
-     * @param p the properties object containing the server url
      * @return the url of the session in properties
      */
-    public String getCurrencyConfig(Properties p) {
+    public String getCurrencyConfig() {
         try {
-            String currency = p.getProperty("currency");
+            String currency = properties.getProperty("currency");
             if (currency == null || currency.isBlank()) {
                 throw new Error();
             }
@@ -86,13 +91,12 @@ public class UserConfig {
     /**
      * Changes the configuration of the server url.
      *
-     * @param p the properties object containing the properties
-     * @param url the new server url
+     * @param currency the new currency
      */
-    public void setCurrencyConfig(Properties p, String currency) {
-        p.setProperty("currency", currency);
+    public void setCurrencyConfig(String currency) {
+        properties.setProperty("currency", currency);
         try (OutputStream out = new FileOutputStream(configPath)) {
-            p.store(out, "new currency");
+            properties.store(out, "new currency");
         } catch(IOException e) {
             e.printStackTrace();
 //            log.log(Level.WARNING, e.getMessage(), e);
@@ -105,12 +109,11 @@ public class UserConfig {
     /**
      * Checks what language is in the config file.
      *
-     * @param p the properties object which has the language configuration
      * @return the language in the file
      */
-    public String getLanguageConfig(Properties p) {
+    public String getLanguageConfig() {
         try {
-            String language = p.getProperty("language");
+            String language = properties.getProperty("language");
             if (language == null || language.isBlank()) {
                 return "english";
             }
@@ -124,13 +127,12 @@ public class UserConfig {
     /**
      * Changes the configuration of the language.
      *
-     * @param p the properties object containing the properties
      * @param language the new language
      */
-    public void changeLanguageConfig(Properties p, String language) {
-        p.setProperty("language", language);
+    public void changeLanguageConfig(String language) {
+        properties.setProperty("language", language);
         try (OutputStream out = new FileOutputStream(configPath)) {
-            p.store(out, "new language");
+            properties.store(out, "new language");
         } catch(IOException e) {
             e.printStackTrace();
 //            log.log(Level.WARNING, e.getMessage(), e);

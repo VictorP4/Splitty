@@ -79,8 +79,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     private Expense expense;
 
     private final UserConfig userConfig = new UserConfig();
-    private final Properties properties = userConfig.getProperties();
-
 
     /**
      * Constructs a new instance of a AddExpenseCtrl.
@@ -181,10 +179,22 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             errorPopup("Missing title, amount or date");
             return;
         }
+        if (addExp.getPaidBy() == null) {
+            errorPopup("No paid by found.");
+            return;
+        }
+         if (addExp.getAmount() < 0) {
+             errorPopup("Invalid amount.");
+             return;
+         }
+         if (addExp.getInvolvedParticipants().equals(new ArrayList<>())) {
+             errorPopup("No involved participants selected.");
+             return;
+         }
 
         // Checks for any other related errors
         try {
-            userConfig.setCurrencyConfig(properties, currency.getValue());
+            userConfig.setCurrencyConfig(currency.getValue());
             if(this.expense != null){
                 addExp.setId(this.expense.getId());
             }
@@ -238,7 +248,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 paidBy.getItems().add(p);
             }
         }
-        currency.setValue(userConfig.getCurrencyConfig(properties));
+        currency.setValue(userConfig.getCurrencyConfig());
         populateTagMenu();
     }
 

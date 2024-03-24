@@ -23,9 +23,9 @@
          </font>
       </Text>
       <TextField fx:id="serverUrl" layoutX="108.0" layoutY="136.0" prefHeight="25.0" prefWidth="263.0" />
-      <Button fx:id="setServer" layoutX="388.0" layoutY="136.0" mnemonicParsing="false" text="Set server" />
+      <Button fx:id="setServer" layoutX="388.0" layoutY="136.0" mnemonicParsing="false" text="Set server" onAction="#setServer"/>
       <Button fx:id="login" layoutX="390.0" layoutY="213.0" mnemonicParsing="false" onAction="#login" text="Login" />
-      <PasswordField fx:id="adminPassword" layoutX="108.0" layoutY="213.0" prefHeight="25.0" prefWidth="263.0" />
+      <PasswordField fx:id="adminPassword" layoutX="108.0" layoutY="213.0" prefHeight="25.0" prefWidth="263.0" onAction="#login"/>
       <Button fx:id="home" layoutX="40.0" layoutY="39.0" mnemonicParsing="false" onAction="#toStartScreen">
          <graphic>
             <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">

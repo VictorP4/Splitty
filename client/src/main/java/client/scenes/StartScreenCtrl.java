@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.Main;
+import client.UserConfig;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Participant;
@@ -46,6 +47,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     @FXML
     private ListView<Event> recentlyAccessed;
     private ObservableList<Event> listViewItems;
+    private final UserConfig userConfig = new UserConfig();
 
     /**
      * Constructs a new instance of StartScreenCtrl.
@@ -68,7 +70,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         listViewItems = FXCollections.observableArrayList();
 
         // setting the server to a default.
-        server.setSERVER("http://localhost:8080");
+        server.setSERVER(userConfig.getServerURLConfig());
         alreadyJoined.setDisable(true);
 
         eventCode.textProperty().addListener((observable, oldValue, newValue) -> {
