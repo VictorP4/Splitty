@@ -109,11 +109,14 @@ public class Main extends Application {
      * Requires a localization string like nl, en, es etc
      * @param languageCode
      */
-    public static void switchLocale(String languageCode) throws BackingStoreException {
-        prefs.put(LANGUAGE_PREF_KEY, languageCode);
-        prefs.flush();
-        Locale locale = new Locale(languageCode);
-        resourceBundle = ResourceBundle.getBundle("messages", locale);
+    public static void switchLocale(String baseName, String languageCode) throws BackingStoreException {
+        if(languageCode!=null) {
+            prefs.put(LANGUAGE_PREF_KEY, languageCode);
+            prefs.flush();
+            Locale locale = new Locale(languageCode);
+            resourceBundle = ResourceBundle.getBundle(baseName, locale);
+        }
+        else {resourceBundle = ResourceBundle.getBundle(baseName,Locale.getDefault());}
         updateUILanguage();
     }
 

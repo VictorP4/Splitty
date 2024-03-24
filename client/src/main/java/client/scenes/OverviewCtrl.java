@@ -30,6 +30,9 @@ import javafx.collections.ObservableList;
 
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -285,7 +288,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * @param actionEvent
      */
     public void switchToEnglish(ActionEvent actionEvent) throws BackingStoreException {
-        switchLocale("en");
+        switchLocale("messages", "en");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/uk_flag.png")).toExternalForm());
         prefs.put(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png");
         menuButtonView.setImage(image);
@@ -296,13 +299,13 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * @param actionEvent
      */
     public void switchToDutch(ActionEvent actionEvent) throws BackingStoreException {
-        switchLocale("nl");
+        switchLocale("messages", "nl");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/nl_flag.png")).toExternalForm());
         prefs.put(SELECTED_IMAGE_KEY, "/client/misc/nl_flag.png");
         menuButtonView.setImage(image);
     }
 
-    public void addLang(ActionEvent actionEvent){
+    public void addLang(ActionEvent actionEvent) throws BackingStoreException {
         Properties newLang = new Properties();
         try (BufferedReader reader = new BufferedReader(new FileReader("client/src/main/resources/client/misc/langTemplate.txt"))) {
             newLang.load(reader);
@@ -310,32 +313,30 @@ public class OverviewCtrl implements Main.UpdatableUI {
             e.printStackTrace();
         }
 
+        String newLangPath;
         try (OutputStream output = new FileOutputStream("client/src/main/resources/client/misc/messages.properties")) {
-            newLang.store(output, "IMPORTANT: Rename this file so it doesn't get overwritten next time you try to add a language!\n" +
-                    "Add the name of your new language to the first line of this file as a comment");
-            String newLangPath = "client/src/main/resources/client/misc/messages.properties";
-            File file = new File(newLangPath);
+            newLang.store(output, "Add the name of your new language to the first line of this file as a comment\n"+
+                    "Send the final translation version to ooppteam58@gmail.com");
 
-            String osName = System.getProperty("os.name").toLowerCase();
-            if (osName.contains("windows")) {
-                ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "start", newLangPath);
-                pb.start();
-            }
-            else if(osName.contains("linux")){
-                ProcessBuilder pb = new ProcessBuilder("xdg-open", newLangPath);
-                pb.start();
-            }
-            else if(osName.contains("mac")){
-                ProcessBuilder pb = new ProcessBuilder("open", newLangPath);
-                pb.start();
-            }
-        } catch (IOException io) {
-            io.printStackTrace();
+            newLangPath = "client/src/main/resources/client/misc/messages.properties";
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        File file = new File(newLangPath);
+        String saveDir = System.getProperty("user.home") + "/Downloads" + "/" + file.getName();
+        try {
+            Files.move(file.toPath(), Paths.get(saveDir), StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("File downloaded to: " + saveDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
-        switchLocale("es");
+        switchLocale("messages","es");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
         prefs.put(SELECTED_IMAGE_KEY, "/client/misc/es_flag.png");
         menuButtonView.setImage(image);
