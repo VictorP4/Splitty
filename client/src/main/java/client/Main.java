@@ -24,6 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 import client.scenes.*;
 import com.google.inject.Injector;
@@ -33,6 +35,8 @@ import javafx.stage.Stage;
 import javassist.NotFoundException;
 
 public class Main extends Application {
+    private static final String LANGUAGE_PREF_KEY = "language";
+    public static Preferences prefs;
 
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
@@ -52,8 +56,9 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException, NotFoundException {
-
-        loadLanguageBundle("en");
+        prefs = Preferences.userNodeForPackage(Main.class);
+        String savedLanguage = prefs.get(LANGUAGE_PREF_KEY, "en");
+        loadLanguageBundle(savedLanguage);
 
         var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
         var addTag = FXML.load(AddTagCtrl.class, "client", "scenes", "AddTag.fxml");
@@ -69,7 +74,7 @@ public class Main extends Application {
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, addExpense, contactDetails,
                 invitation, openDebts, statistics, startScreen, eventOverview, adminEventOverview, addTag, settingsPage);
-
+        updateUILanguage();
     }
 
     public static void loadLanguageBundle(String languageCode) throws NotFoundException {
@@ -105,9 +110,14 @@ public class Main extends Application {
      * Requires a localization string like nl, en, es etc
      * @param languageCode
      */
-    public static void switchLocale(String languageCode) {
-        Locale locale = new Locale(languageCode);
-        resourceBundle = ResourceBundle.getBundle("messages", locale);
+    public static void switchLocale(String baseName, String languageCode) throws BackingStoreException {
+        if(languageCode!=null) {
+            prefs.put(LANGUAGE_PREF_KEY, languageCode);
+            prefs.flush();
+            Locale locale = new Locale(languageCode);
+            resourceBundle = ResourceBundle.getBundle(baseName, locale);
+        }
+        else {resourceBundle = ResourceBundle.getBundle(baseName,Locale.getDefault());}
         updateUILanguage();
     }
 
