@@ -1,6 +1,8 @@
 package client.utils;
 
 import commons.Event;
+import commons.Expense;
+import commons.Participant;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -17,12 +19,16 @@ import java.util.function.Consumer;
 public class WebSocketUtils {
     private StompSession session;
     private List<Consumer<Event>> eventListener;
+    private List<Consumer<Participant>> participantListener;
+    private List<Consumer<Expense>> expenseListener;
 
     /**
      * constructor for the webscoket utils
      */
     public WebSocketUtils() {
         eventListener = new ArrayList<>();
+        participantListener = new ArrayList<>();
+        expenseListener = new ArrayList<>();
     }
 
     /**
@@ -31,6 +37,22 @@ public class WebSocketUtils {
      */
     public void addEventListener(Consumer<Event> listener){
         eventListener.add(listener);
+    }
+
+    /**
+     * adds participant listener for deletes
+     * @param listener participant listener
+     */
+    public void addParticipantListener(Consumer<Participant> listener){
+        participantListener.add(listener);
+    }
+
+    /**
+     * adds expense listener for deletes
+     * @param listener expense listener
+     */
+    public void addExpenseListener(Consumer<Expense> listener){
+        expenseListener.add(listener);
     }
 
     /**
@@ -46,6 +68,12 @@ public class WebSocketUtils {
             }).get();
             registerForUpdates("/topic/events",Event.class, event ->{
                 eventListener.forEach(listener ->listener.accept(event));
+            });
+            registerForUpdates("/topic/participants", Participant.class, participant -> {
+                participantListener.forEach(listener -> listener.accept(participant));
+            });
+            registerForUpdates("/topic/expenses", Expense.class, expense ->{
+                expenseListener.forEach((listener -> listener.accept(expense)));
             });
         } catch (ExecutionException e) {
             throw new RuntimeException(e);

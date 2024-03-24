@@ -2,6 +2,10 @@ package server.api.controllers;
 
 import commons.Event;
 import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -140,5 +144,29 @@ public class EventController {
         if (e == null)
             return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(e);
+    }
+
+    /**
+     * Find event by id
+     * @param id id of the event
+     * @return Json representation of the requested event
+     */
+    @GetMapping(path = {"/id"}, consumes="application/json")
+    public ResponseEntity<Resource> getEventJSON(@PathVariable("id") long id){
+
+//        HttpServletRequest req;
+//        if(req.getSession().getAttribut() != "adminLogged"){
+//            return  ResponseEntity.status(HttpStatus.FORBIDDEN).build(); //"not an admin"
+//        }
+        try{
+            String event = evServ.getEventById(id);
+            byte[] eventBytes = event.getBytes();
+            ByteArrayResource resource = new ByteArrayResource(eventBytes);
+
+            return ResponseEntity.ok().body(resource);
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

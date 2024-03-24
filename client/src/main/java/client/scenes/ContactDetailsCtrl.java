@@ -2,8 +2,11 @@ package client.scenes;
 
 import client.Main;
 import client.utils.ServerUtils;
+import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
@@ -11,6 +14,8 @@ import javafx.scene.text.Text;
 import commons.Event;
 import commons.Participant;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
+import java.util.Objects;
 
 public class ContactDetailsCtrl implements Main.UpdatableUI {
 /**
@@ -45,8 +50,12 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
 
     @FXML
     private TextField bicField;
+
+    private WebSocketUtils webSocket;
+
     @FXML
     public AnchorPane ap;
+
 
     /**
      * Constructs a new instance of ContactDetailsCtrl.
@@ -55,12 +64,17 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
      * @param mainCtrl The main controller of the application.
      */
     @Inject
-    public ContactDetailsCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public ContactDetailsCtrl(ServerUtils server, MainCtrl mainCtrl, WebSocketUtils webSocket) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.webSocket=webSocket;
     }
 
-    public void initialize() {
+    /**
+     * initializes the Contact Details Controller
+     *
+     */
+    public void initialize(){
         ap.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 back();
@@ -69,7 +83,21 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
                 save();
             }
         });
+        webSocket.addParticipantListener((participant)->{
+            if(this.participant==null||!Objects.equals(participant.getId(),this.participant.getId())) return;
+            else{
+                Platform.runLater(()->{
+                    back();
+                    var alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.initModality(Modality.APPLICATION_MODAL);
+                    alert.setContentText("The participant was deleted by another user.");
+                    alert.showAndWait();
+                });
+            }
+        });
     }
+
+
 
     @Override
     public void updateUI() {
@@ -108,6 +136,7 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
         participant.setBIC(bicField.getText());
         participant.setIBAN(ibanField.getText());
         mainCtrl.updateParticipant(participant);
+        this.participant=null;
     }
 
     /**
@@ -115,6 +144,7 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
      */
     @FXML
     public void back() {
+        this.participant=null;
         mainCtrl.showEventOverview(event);
     }
 
