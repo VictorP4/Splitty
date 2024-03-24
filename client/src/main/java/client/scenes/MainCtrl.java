@@ -113,18 +113,18 @@ public class MainCtrl {
      * Displays the starting page scene in the primary stage.
      */
     public void showSettingsPage() {
+        settingsPageCtrl.refresh();
         primaryStage.setTitle("StartingPage");
         primaryStage.setScene(settingsPage);
-        settingsPageCtrl.refresh();
     }
 
     /**
      * Displays the start screen scene in the primary stage.
      */
     public void showStartScreen() {
+        startScreenCtrl.refresh();
         primaryStage.setTitle("StartScreen");
         primaryStage.setScene(startScreen);
-        startScreenCtrl.refresh();
     }
 
     /**
@@ -158,6 +158,17 @@ public class MainCtrl {
         primaryStage.setTitle("AddExpense");
         primaryStage.setScene(addExpense);
     }
+
+    /**
+     * Shows addExpense screen as it was before adding a new tag,
+     *  with the new tag in the tag menu
+     */
+    public void showAddExpenseFromTag(Event event) {
+        addExpenseCtrl.populateTagMenu();
+        primaryStage.setTitle("AddExpense");
+        primaryStage.setScene(addExpense);
+    }
+
 
     /**
      * Displays the contact details scene for the given participant in the primary stage.

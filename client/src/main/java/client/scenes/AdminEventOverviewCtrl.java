@@ -6,6 +6,7 @@ import commons.Event;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -14,6 +15,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.Writer;
 
 import java.util.List;
 
@@ -69,11 +75,32 @@ public class AdminEventOverviewCtrl {
                 server.deleteEvent(selectedEvent.getId());
                 events.remove(selectedEvent);
                 displayEvents();
+                popup("event deleted");
             });
             return new SimpleObjectProperty<>(deleteButton);
         });
 
-        eventsTable.getColumns().addAll(titleColumn, creationDateColumn, lastActivityColumn, deleteColumn);
+        TableColumn<Event, Button> backupColumn = new TableColumn<>("Backup");
+        backupColumn.setCellValueFactory(param ->{
+            Button backupButton = new Button("create backup");
+            backupButton.setOnAction(event -> {
+                Event selectedEvent = param.getValue();
+                try{
+                    Writer writer = new BufferedWriter(new FileWriter("event " + selectedEvent.getTitle() + ".json"));
+                    writer.write(server.getEventJSON(selectedEvent.getId()));
+                    writer.flush(); writer.close();
+                    popup("Backup created");
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                    errorPopup(e.getMessage());
+                }
+
+            });
+            return new SimpleObjectProperty<>(backupButton);
+        });
+
+        eventsTable.getColumns().addAll(titleColumn, creationDateColumn, lastActivityColumn, deleteColumn, backupColumn);
         eventsTable.getItems().addAll(events);
 
         eventsTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
@@ -102,4 +129,27 @@ public class AdminEventOverviewCtrl {
     public void showStartScreen(){
         mainCtrl.showStartScreen();
     }
+
+    /**
+     * Pops up when an error occurs
+     * @param message error message
+     */
+    private void errorPopup(String message) {
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    /**
+     * Popup that lets admin know backup was created successfully
+     * @param message message to print on screen
+     */
+    private void popup(String message) {
+        var alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 }

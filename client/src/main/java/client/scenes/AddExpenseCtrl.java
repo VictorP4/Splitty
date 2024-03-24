@@ -7,6 +7,8 @@ import com.google.inject.Inject;
 import commons.Tag;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import commons.Event;
 import commons.Expense;
@@ -30,6 +32,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    @FXML
+    public AnchorPane anchor;
     private Event event;
     private Tag selectedTag;
     @FXML
@@ -91,10 +95,17 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
-<<<<<<< HEAD
      * initializes the Add Expense Controller
      */
     public void initialize(){
+        anchor.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ESCAPE) {
+                mainCtrl.showEventOverview(event);
+            }
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                ok();
+            }
+        });
         webSocket.addExpenseListener((expense ->{
             if(this.expense==null||!Objects.equals(expense.getId(),this.expense.getId())) return;
             else{
@@ -117,10 +128,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         });
     }
     /**
-     *
-=======
      * Updates the UI based on the language chosen by the user.
->>>>>>> main
      */
     @Override
     public void updateUI() {
@@ -355,7 +363,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     /**
      * Populates the tag menu with the tags from the server.
      */
-    private void populateTagMenu() {
+    public void populateTagMenu() {
         List<Tag> tags = event.getTags();
         tagMenu.getItems().clear();
         for (Tag tag : tags) {
@@ -388,7 +396,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * Initializes the scene for adding or editing tags.
      */
     public void goToAddTags() {
-        clearFields();
         mainCtrl.showAddTag(event);
     }
 
