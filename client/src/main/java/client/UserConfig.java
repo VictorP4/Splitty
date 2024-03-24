@@ -2,6 +2,7 @@ package client;
 
 import org.springframework.context.annotation.Configuration;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -10,8 +11,22 @@ import java.util.Properties;
 @Configuration
 public class UserConfig {
 
-    private final String configPath = "client/src/main/resources/user_configs.properties";
+    private final String configPath = "src\\main\\resources\\user_configs.properties";
+    private final Properties properties = new Properties();
 
+
+    public UserConfig() {
+        try (FileInputStream fis = new FileInputStream(configPath)) {
+            properties.load(fis);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public Properties getProperties() {
+        return properties;
+    }
 
     /**
      * Checks what url is in the config file.
@@ -23,12 +38,12 @@ public class UserConfig {
         try {
             String url = p.getProperty("serverUrl");
             if (url == null || url.isBlank()) {
-                return "http://localhost:5000";
+                return "ws://localhost:8080/websocket";
             }
             return url;
         } catch (Error e) {
             System.out.println("Something went wrong. Server changed to the default server");
-            return "http://localhost:5000";
+            return "ws://localhost:8080/websocket";
         }
     }
 

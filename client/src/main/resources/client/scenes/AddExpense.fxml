@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="overviewButton" prefHeight="421.0" prefWidth="484.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
+<AnchorPane fx:id="ap" id="overviewButton" prefHeight="421.0" prefWidth="484.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
    <children>
       <Text fx:id="addEditText" layoutX="110.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Edit Expense">
          <font>
@@ -71,7 +71,7 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="overviewButton" layoutX="14.0" layoutY="25.0" mnemonicParsing="false" onAction="#backToOverview" text="Back">
+      <Button fx:id="overviewButton" layoutX="14.0" layoutY="25.0" mnemonicParsing="false" onAction="#cancel" text="Back">
          <font>
             <Font size="13.0" />
          </font>

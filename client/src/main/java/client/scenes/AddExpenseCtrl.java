@@ -6,6 +6,8 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Tag;
 import javafx.fxml.FXML;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import commons.Event;
 import commons.Expense;
@@ -16,6 +18,10 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
@@ -68,9 +74,12 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
     @FXML
     private MenuButton tagMenu;
-
+    @FXML
+    public AnchorPane ap;
     private Expense expense;
-    private UserConfig userConfig;
+
+    private final UserConfig userConfig = new UserConfig();
+    private final Properties properties = userConfig.getProperties();
 
 
     /**
@@ -83,6 +92,17 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+    }
+
+    public void initialize() {
+        ap.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ESCAPE) {
+                cancel();
+            }
+            else if (keyEvent.getCode() == KeyCode.ENTER) {
+                ok();
+            }
+        });
     }
 
     /**
@@ -108,6 +128,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * cancels the process of adding a new expense by clearing inout fields and returning to the overview screen
      */
     public void cancel() {
+        clearFields();
         mainCtrl.showEventOverview(event);
     }
 
@@ -153,9 +174,9 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void ok() {
         try {
             Expense addExp = getExpense();
+            userConfig.setCurrencyConfig(properties, currency.getValue());
             if(this.expense != null){
                 addExp.setId(this.expense.getId());
-                userConfig.setCurrencyConfig(new Properties(), currency.getValue());
             }
             List<Long> ids = new ArrayList<>();
             for(Expense e : event.getExpenses()){
@@ -183,10 +204,11 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
-     *
+     * Refreshes the AddExpense page corresponding with the new event.
      */
     public void refresh(Event event){
         this.event = event;
+        addEditText.setText("Add Expense");
         clearFields();
         addToCurrency();
         for(Participant p : this.event.getParticipants()){
@@ -197,7 +219,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 paidBy.getItems().add(p);
             }
         }
-        currency.setValue(userConfig.getCurrencyConfig(new Properties()));
+        currency.setValue(userConfig.getCurrencyConfig(properties));
         populateTagMenu();
     }
 
@@ -277,14 +299,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Directs a used back to the event overview scene
-     */
-    public void backToOverview() {
-        clearFields();
-        mainCtrl.showEventOverview(event);
-    }
-
-    /**
      * deselects only some in when everybody in is selected
      */
     public  void deSelSome(){
@@ -355,7 +369,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Populates the add/edit expense scene with information about the selected expense.
+     * Populates the add/edit expense scene with information about the (already existing) selected expense.
      *
      * @param event of the expense
      * @param expense selected expense
@@ -363,8 +377,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void refreshExp(Event event, Expense expense){
         this.event = event;
         refresh(event);
+        addEditText.setText("Edit Expense");
         this.expense = expense;
-
         this.title.setText(expense.getTitle());
         this.amount.setText(Double.toString(expense.getAmount()));
         LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

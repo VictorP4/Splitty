@@ -219,7 +219,7 @@ public class Expense {
      */
     @Override
     public String toString() {
-        return title + " " + amount + ", " + (tag == null ? "no tag" : tag.getName());
+        return title + " " + amount + " " + currency + ", " + (tag == null ? "no tag" : tag.getName());
     }
 }
 
