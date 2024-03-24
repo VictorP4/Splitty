@@ -3,6 +3,9 @@ package server.api.services;
 import commons.Event;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;
+
+import java.util.Date;
+
 @Service
 public class EventService {
     private EventRepository repo;
@@ -33,7 +36,7 @@ public class EventService {
         Event update = repo.findById(id).get();
         update.setParticipants(event.getParticipants());
         update.setTitle(event.getTitle());
-        update.setLastActivityDate(event.getLastActivityDate());
+        update.setLastActivityDate(new Date());
         update.setInviteCode(event.getInviteCode());
         update.setTags(event.getTags());
 

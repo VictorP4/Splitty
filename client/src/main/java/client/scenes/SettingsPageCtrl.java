@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.Main;
 import client.utils.ServerUtils;
+import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import javafx.fxml.FXML;
@@ -37,7 +38,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     public Button login;
     @FXML
     public AnchorPane ap;
-
+    private WebSocketUtils webSocket;
 
     /**
      * Constructs a new instance of StartingPageCtrl.
@@ -46,9 +47,10 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
      * @param mainCtrl The main controller of the application.
      */
     @Inject
-    public SettingsPageCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public SettingsPageCtrl(ServerUtils server, MainCtrl mainCtrl, WebSocketUtils webSocket) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.webSocket = webSocket;
     }
 
     /**
@@ -85,6 +87,8 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
             else {
                 server.checkServer(serverUrlString);
                 server.setSERVER("http://" + serverUrlString);
+                webSocket.disconnect();
+                webSocket.connect("ws://"+serverUrlString+"/websocket");
             }
         } catch(Exception e) {
             e.printStackTrace();

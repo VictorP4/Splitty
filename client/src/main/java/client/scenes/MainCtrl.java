@@ -227,6 +227,8 @@ public class MainCtrl {
         primaryStage.setTitle("EditExpense");
         primaryStage.setScene(addExpense);
     }
-
+    public String getSceneTitle(){
+        return primaryStage.getTitle();
+    }
 
 }
