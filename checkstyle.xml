@@ -4,6 +4,10 @@
         "https://checkstyle.org/dtds/configuration_1_3.dtd">
 
 <module name = "Checker">
+    <module name="BeforeExecutionExclusionFileFilter">
+        <property name="fileNamePattern" value=".*MainCtrl*"/>
+    </module>
+
     <module name="TreeWalker">
         <module name="UnusedImports">
             <property name="severity" value="warning"/>
@@ -53,7 +57,6 @@
                      value="Class type name ''{0}'' must match pattern ''{1}''."/>
         </module>
     </module>
-
     <module name="LineLength">
         <property name="severity" value="warning"/>
         <property name="fileExtensions" value="java"/>

@@ -80,6 +80,7 @@ public class ExpensesController {
         Expense exp = expService.delete(id, expId);
         if(exp == null) return ResponseEntity.badRequest().build();
         smt.convertAndSend("/topic/events",Hibernate.unproxy(expService.getEvent(id)));
+        smt.convertAndSend("/topic/expenses",Hibernate.unproxy(exp));
         return ResponseEntity.ok(exp);
     }
 

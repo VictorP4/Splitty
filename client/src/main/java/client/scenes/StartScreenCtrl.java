@@ -37,6 +37,8 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     private final MainCtrl mainCtrl;
     public Text createNewEvent;
     @FXML
+    public Button settingsPage;
+    @FXML
     public Text joinEvent;
     @FXML
     public Button createButton;
@@ -76,14 +78,23 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Initialized the start screen and the listview
+     * Initialized the start screen. It sets the cell factory for the listview, allowing it to be populated with events.
+     * Furthermore, the method contain keyPress events for ease of use for the user.
      */
     public void initialize() {
         listViewItems = FXCollections.observableArrayList();
         Image image = new Image(Objects.requireNonNull(getClass().getResource(prefs.get(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png"))).toExternalForm());
         menuButtonView.setImage(image);
+
+
+        //setting the server to a default.
+        server.setSERVER("http://localhost:8080");
         alreadyJoined.setDisable(true);
+
         eventCode.textProperty().addListener((observable, oldValue, newValue) -> handleTextChange(newValue));
+        settingsPage.setOnAction(event -> {
+            mainCtrl.showSettingsPage();
+        });
         eventCode.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 joinEvent();
@@ -212,6 +223,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         joinButton.setText(Main.getLocalizedString("joinEventButton"));
         recentViewedEvents.setText(Main.getLocalizedString("recentEvents"));
         langButton.setText(Main.getLocalizedString("langButton"));
+        settingsPage.setText(Main.getLocalizedString("settings"));
     }
 
     /**
@@ -299,5 +311,11 @@ public class StartScreenCtrl implements Main.UpdatableUI {
 
     }
 
+    /**
+     * Directs users to the settings page. Here they can fill in a server of their choice & login as an admin
+     */
+    public void toSettings() {
+        mainCtrl.showSettingsPage();
+    }
 
 }

@@ -25,17 +25,18 @@ import client.scenes.MainCtrl;
 
 public class MyModule implements Module {
 
-    @Override
-    public void configure(Binder binder) {
-        binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(AddExpenseCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(AddTagCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(OverviewCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(ContactDetailsCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(InvitationCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(OpenDebtsCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(StartScreenCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(StatisticsCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(WebSocketUtils.class).in(Scopes.SINGLETON);
-    }
+        @Override
+        public void configure(Binder binder) {
+                binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
+                binder.bind(AddExpenseCtrl.class).in(Scopes.SINGLETON);
+                binder.bind(AddTagCtrl.class).in(Scopes.SINGLETON);
+                binder.bind(OverviewCtrl.class).in(Scopes.SINGLETON);
+                binder.bind(ContactDetailsCtrl.class).in(Scopes.SINGLETON);
+                binder.bind(InvitationCtrl.class).in(Scopes.SINGLETON);
+                binder.bind(OpenDebtsCtrl.class).in(Scopes.SINGLETON);
+                binder.bind(StartScreenCtrl.class).in(Scopes.SINGLETON);
+                binder.bind(StatisticsCtrl.class).in(Scopes.SINGLETON);
+                binder.bind(SettingsPageCtrl.class).in(Scopes.SINGLETON);
+                binder.bind(WebSocketUtils.class).in(Scopes.SINGLETON);
+        }
 }
