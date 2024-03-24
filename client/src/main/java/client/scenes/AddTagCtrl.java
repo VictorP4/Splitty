@@ -164,7 +164,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
 
         }
         clearFields();
-        mainCtrl.showAddExpense(event);
+        mainCtrl.showAddExpenseFromTag(event);
     }
 
     /**
@@ -189,7 +189,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
         }
         server.removeTag(tag1);
         clearFields();
-        mainCtrl.showAddExpense(event);
+        mainCtrl.showAddExpenseFromTag(event);
     }
 
     /**
@@ -213,15 +213,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
      */
     public void back() {
         clearFields();
-        mainCtrl.showAddExpense(event);
-    }
-
-    /**
-     * Clears all input fields and returns to the Add Expense scene.
-     */
-    public void ok() {
-        clearFields();
-        mainCtrl.showAddExpense(event);
+        mainCtrl.showAddExpenseFromTag(event);
     }
 
     /**

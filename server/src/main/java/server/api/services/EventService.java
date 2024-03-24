@@ -1,5 +1,7 @@
 package server.api.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
@@ -16,9 +18,13 @@ import java.util.List;
 @Service
 public class EventService {
     private EventRepository repo;
+
     private ParticipantRepository participantRepository;
     private ExpensesRepository expensesRepository;
     private TagRepository tagRepository;
+
+    private ObjectMapper map = new ObjectMapper();
+
 
     public EventService(EventRepository repo, ParticipantRepository participantRepository, ExpensesRepository expensesRepository, TagRepository tagRepository) {
         this.repo = repo;
@@ -86,5 +92,19 @@ public class EventService {
         Event e = repo.getByInviteCode(inviteCode);
         if(e==null) return null;
         else return e;
+    }
+
+    /**
+     * Gets an event by its id
+     * @param id id of the event to get
+     * @return a string of the requested event
+     */
+    public String getEventById(Long id) {
+        try{
+            return map.writeValueAsString(repo.getById(id));
+        }
+        catch (JsonProcessingException jpe){
+            return "error" + jpe.getMessage();
+        }
     }
 }

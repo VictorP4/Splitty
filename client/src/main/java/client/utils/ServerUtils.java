@@ -90,6 +90,20 @@ public class ServerUtils {
 	}
 
 	/**
+	 * Retrieves a JSON representation of an event by its ID.
+	 * @param id id of the event
+	 * @return String of event
+	 */
+	public String getEventJSON(long id) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("api/events/" + id)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get()
+				.readEntity(String.class);
+	}
+
+	/**
 	 * Deletes an event by its ID.
 	 *
 	 * @param id The ID of the event to delete.
