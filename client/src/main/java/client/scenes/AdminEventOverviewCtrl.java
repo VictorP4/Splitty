@@ -3,8 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
-import javafx.application.Platform;
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,7 +23,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.Writer;
 
-import java.util.List;
 
 public class AdminEventOverviewCtrl {
     private final ServerUtils server;
