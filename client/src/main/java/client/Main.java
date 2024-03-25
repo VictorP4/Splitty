@@ -75,6 +75,9 @@ public class Main extends Application {
         mainCtrl.initialize(primaryStage, addExpense, contactDetails,
                 invitation, openDebts, statistics, startScreen, eventOverview, adminEventOverview, addTag, settingsPage);
         updateUILanguage();
+        primaryStage.setOnCloseRequest((e)->{
+            adminEventOverview.getKey().stop();
+        });
     }
 
     public static void loadLanguageBundle(String languageCode) throws NotFoundException {
