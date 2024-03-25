@@ -9,11 +9,16 @@ import commons.Tag;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;
+
+
+import java.util.Date;
+
 import server.database.ExpensesRepository;
 import server.database.ParticipantRepository;
 import server.database.TagRepository;
 
 import java.util.List;
+
 
 @Service
 public class EventService {
@@ -55,7 +60,7 @@ public class EventService {
         Event update = repo.findById(id).get();
         update.setParticipants(event.getParticipants());
         update.setTitle(event.getTitle());
-        update.setLastActivityDate(event.getLastActivityDate());
+        update.setLastActivityDate(new Date());
         update.setInviteCode(event.getInviteCode());
         update.setTags(event.getTags());
 

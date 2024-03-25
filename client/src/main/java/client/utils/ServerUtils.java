@@ -14,6 +14,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -357,4 +360,20 @@ public class ServerUtils {
 				.post(Entity.entity(password, APPLICATION_JSON)).readEntity(new GenericType<List<Event>>() {
 				});
 	}
+	private static final ExecutorService exec = Executors.newSingleThreadExecutor();
+	public void registerForUpdates(Consumer<Event> consumer){
+		exec.submit(() -> {
+			while(true){
+				var res = ClientBuilder.newClient(new ClientConfig())
+						.target(server).path("api/events/updates")
+						.request(APPLICATION_JSON)
+						.accept(APPLICATION_JSON)
+						.get(Response.class);
+				if(res.getStatus()==204) continue;
+				var e = res.readEntity(Event.class);
+				consumer.accept(e);
+			}
+		});
+	}
+
 }

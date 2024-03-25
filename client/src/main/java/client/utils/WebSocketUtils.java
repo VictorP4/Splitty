@@ -102,4 +102,7 @@ public class WebSocketUtils {
             }
         });
     }
+    public void disconnect(){
+        this.session.disconnect();
+    }
 }

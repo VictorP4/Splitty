@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -50,6 +51,20 @@ public class AdminEventOverviewCtrl {
         ap.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 showStartScreen();
+            }
+        });
+        server.registerForUpdates(event -> {
+            if(events.stream().map(x -> x.getId()).anyMatch(x -> x == event.getId())){
+                events.removeIf(x -> x.getId()== event.getId());
+                events.add(event);
+            }
+            else{
+                events.add(event);
+            }
+            if(mainCtrl.getSceneTitle().equals("AdminEventOverview")){
+                Platform.runLater(()->{
+                    displayEvents();
+                });
             }
         });
     }
