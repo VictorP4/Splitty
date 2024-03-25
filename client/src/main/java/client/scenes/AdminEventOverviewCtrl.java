@@ -4,7 +4,10 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import javafx.application.Platform;
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -27,7 +30,7 @@ import java.util.List;
 public class AdminEventOverviewCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-    private List<Event> events;
+    private ObservableList<Event> events;
     @FXML
     public TableView<Event> eventsTable;
     @FXML
@@ -43,7 +46,7 @@ public class AdminEventOverviewCtrl {
     }
 
     public void refresh(){
-        events = server.getAllEvents();
+        events = FXCollections.observableList(server.getAllEvents());
         displayEvents();
     }
 
@@ -61,11 +64,7 @@ public class AdminEventOverviewCtrl {
             else{
                 events.add(event);
             }
-            if(mainCtrl.getSceneTitle().equals("AdminEventOverview")){
-                Platform.runLater(()->{
-                    displayEvents();
-                });
-            }
+
         });
     }
 
@@ -89,7 +88,7 @@ public class AdminEventOverviewCtrl {
                 Event selectedEvent = param.getValue();
                 server.deleteEvent(selectedEvent.getId());
                 events.remove(selectedEvent);
-                displayEvents();
+                refresh();
                 popup("event deleted");
             });
             return new SimpleObjectProperty<>(deleteButton);
@@ -116,7 +115,7 @@ public class AdminEventOverviewCtrl {
         });
 
         eventsTable.getColumns().addAll(titleColumn, creationDateColumn, lastActivityColumn, deleteColumn, backupColumn);
-        eventsTable.getItems().addAll(events);
+        eventsTable.setItems(events);
 
         eventsTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         deleteColumn.setPrefWidth(60);
@@ -133,7 +132,7 @@ public class AdminEventOverviewCtrl {
             public void handle(MouseEvent event) {
                 if (event.getClickCount() == 2) {
                     Event selectedEvent = eventsTable.getSelectionModel().getSelectedItem();
-                    mainCtrl.showEventOverview(selectedEvent);
+                    if(selectedEvent!=null) mainCtrl.showEventOverview(selectedEvent);
                 }
             }
         });
