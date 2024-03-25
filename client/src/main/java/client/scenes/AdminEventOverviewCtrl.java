@@ -54,8 +54,8 @@ public class AdminEventOverviewCtrl {
             }
         });
         server.registerForUpdates(event -> {
-            if(events.stream().map(x -> x.getId()).anyMatch(x -> x == event.getId())){
-                events.removeIf(x -> x.getId()== event.getId());
+            if(events.stream().map(x -> x.getId()).anyMatch(x -> x.equals(event.getId()))){
+                events.removeIf(x -> x.getId().equals(event.getId()));
                 events.add(event);
             }
             else{
@@ -166,5 +166,13 @@ public class AdminEventOverviewCtrl {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    /**
+     * stopping the thread for long polling
+     */
+    public void stop(){
+        server.stop();
+    }
+
 
 }

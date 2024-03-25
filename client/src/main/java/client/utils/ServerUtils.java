@@ -361,9 +361,14 @@ public class ServerUtils {
 				});
 	}
 	private static final ExecutorService exec = Executors.newSingleThreadExecutor();
+
+	/**
+	 * Registering for event updates using long polling
+	 * @param consumer
+	 */
 	public void registerForUpdates(Consumer<Event> consumer){
 		exec.submit(() -> {
-			while(true){
+			while(!Thread.interrupted()){
 				var res = ClientBuilder.newClient(new ClientConfig())
 						.target(server).path("api/events/updates")
 						.request(APPLICATION_JSON)
@@ -374,6 +379,13 @@ public class ServerUtils {
 				consumer.accept(e);
 			}
 		});
+	}
+
+	/**
+	 * Stopping the thread for long polling
+	 */
+	public void stop(){
+		exec.shutdownNow();
 	}
 
 }
