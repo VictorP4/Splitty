@@ -139,7 +139,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     @Override
     public void updateUI() {
-        home.setText(Main.getLocalizedString("home"));
         addExpense.setText(Main.getLocalizedString("addExpense"));
         sendInvites.setText(Main.getLocalizedString("ovSendInvites"));
         settleDebts.setText(Main.getLocalizedString("ovSettleDebt"));
@@ -147,7 +146,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
         langButton.setText(Main.getLocalizedString("langButton"));
         fromSelected.setText(Main.getLocalizedString("ovFromSelected"));
         inclSelected.setText(Main.getLocalizedString("ovInclSelected"));
-        title.setText(Main.getLocalizedString("OverviewTitle"));
         participants.setText(Main.getLocalizedString("ovParticipants"));
         statistics.setText(Main.getLocalizedString("ovStatistics"));
     }
