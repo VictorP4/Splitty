@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.Main;
+import client.UserConfig;
 import client.utils.ServerUtils;
 import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
@@ -80,6 +81,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private Pane options;
     @FXML
     public AnchorPane ap;
+    private final UserConfig userConfig = new UserConfig();
 
 
     /**
@@ -99,6 +101,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Initializes the controller.
      */
     public void initialize() {
+
         ap.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 backToStartScreen();
@@ -280,6 +283,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * @param actionEvent
      */
     public void switchToEnglish(ActionEvent actionEvent) {
+        userConfig.setLanguageConfig("en");
         Main.switchLocale("en");
     }
 
@@ -288,6 +292,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * @param actionEvent
      */
     public void switchToDutch(ActionEvent actionEvent) {
+        userConfig.setLanguageConfig("nl");
         Main.switchLocale("nl");
     }
 

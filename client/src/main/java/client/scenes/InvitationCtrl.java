@@ -128,13 +128,19 @@ public class InvitationCtrl implements Main.UpdatableUI {
         }
     }
 
-
-
+    /**
+     * Refreshed the invitationCtrl scene by setting the invite code the the one corresponding to the current event.
+     *
+     * @param event The event we want to send invites for.
+     */
     public void refresh(Event event) {
         this.event=event;
         setInviteCode();
     }
 
+    /**
+     * Sets the text based on the language chosen by the user.
+     */
     @Override
     public void updateUI() {
         title.setText(Main.getLocalizedString("OverviewTitle"));

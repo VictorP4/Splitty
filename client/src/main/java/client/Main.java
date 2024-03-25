@@ -37,6 +37,7 @@ public class Main extends Application {
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
     private static ResourceBundle resourceBundle;
+    private final UserConfig userConfig = new UserConfig();
 
     public static void main(String[] args) throws URISyntaxException, IOException {
         launch();
@@ -53,8 +54,7 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException, NotFoundException {
-
-        loadLanguageBundle("en");
+        loadLanguageBundle(userConfig.getLanguageConfig());
 
         var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
         var addTag = FXML.load(AddTagCtrl.class, "client", "scenes", "AddTag.fxml");
@@ -73,6 +73,12 @@ public class Main extends Application {
         updateUILanguage();
     }
 
+    /**
+     * Loads the language bundle when the application is initialized.
+     *
+     * @param languageCode The language code of the persisted language.
+     * @throws NotFoundException Exception is thrown when the language file does not exist.
+     */
     public static void loadLanguageBundle(String languageCode) throws NotFoundException {
         Locale locale = new Locale(languageCode);
         String bundleName = "messages_" + locale;
@@ -84,6 +90,11 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * returns the resource bundle of the language.
+     *
+     * @return the language bundle.
+     */
     public static ResourceBundle getResourceBundle() {
         return resourceBundle;
     }
@@ -104,7 +115,7 @@ public class Main extends Application {
 
     /**
      * Requires a localization string like nl, en, es etc
-     * @param languageCode
+     * @param languageCode the language code
      */
     public static void switchLocale(String languageCode) {
         Locale locale = new Locale(languageCode);
@@ -123,7 +134,8 @@ public class Main extends Application {
             INJECTOR.getInstance(OpenDebtsCtrl.class),
             INJECTOR.getInstance(OverviewCtrl.class),
             INJECTOR.getInstance(StartScreenCtrl.class),
-            INJECTOR.getInstance(StatisticsCtrl.class)
+            INJECTOR.getInstance(StatisticsCtrl.class),
+            INJECTOR.getInstance(SettingsPageCtrl.class)
         );
         for (UpdatableUI controller : controllers) {
             controller.updateUI();

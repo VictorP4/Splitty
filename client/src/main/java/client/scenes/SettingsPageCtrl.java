@@ -148,6 +148,10 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
         login.setText(Main.getLocalizedString("login"));
     }
 
+    /**
+     * Takes the user back to the startscreen.
+     */
+    @FXML
     public void toStartScreen() {
         mainCtrl.showStartScreen();
     }

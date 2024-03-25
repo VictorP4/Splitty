@@ -129,7 +129,7 @@ public class UserConfig {
      *
      * @param language the new language
      */
-    public void changeLanguageConfig(String language) {
+    public void setLanguageConfig(String language) {
         properties.setProperty("language", language);
         try (OutputStream out = new FileOutputStream(configPath)) {
             properties.store(out, "new language");

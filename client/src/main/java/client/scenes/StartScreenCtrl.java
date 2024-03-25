@@ -203,6 +203,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      * @param actionEvent The event that caused this method to be called
      */
     public void switchToDutch(ActionEvent actionEvent) {
+        userConfig.setLanguageConfig("nl");
         switchLocale("nl");
     }
 
@@ -212,6 +213,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      * @param actionEvent The event that caused this method to be called
      */
     public void switchToEnglish(ActionEvent actionEvent) {
+        userConfig.setLanguageConfig("en");
         switchLocale("en");
     }
 
