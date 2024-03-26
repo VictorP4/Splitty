@@ -86,9 +86,8 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
         try {
             if (serverUrlString.isBlank()) {
                 server.setSERVER(userConfig.getServerURLConfig());
-            } else if (server.checkServer(serverUrlString).getStatus() != 200) {
-                errorPopup("The server url is not correct");
-            } else {
+            }
+            else if (server.checkServer(serverUrlString).getStatus() == 200) {
                 server.setSERVER("http://" + serverUrlString);
                 webSocket.disconnect();
                 webSocket.connect("ws://" + serverUrlString + "/websocket");
