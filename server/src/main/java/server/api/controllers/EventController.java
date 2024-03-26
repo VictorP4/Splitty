@@ -28,7 +28,7 @@ public class EventController {
 
     /**
      * @param repo   the event repository
-     * @param evServ
+     * @param evServ event service
      * @param smt
      */
     public EventController(EventRepository repo, EventService evServ, SimpMessagingTemplate smt) {
@@ -100,6 +100,25 @@ public class EventController {
     }
 
     /**
+     * Creates an event from an imported file
+     *
+     * @param event event to save
+     * @return response, created event
+     */
+    @PostMapping(path = { "/import"})
+    public ResponseEntity<Event> addJSON(@RequestBody Event event) {
+
+        //check for admin
+
+        Event newEvent = evServ.importJSON(event);
+        if (newEvent == null)
+            return ResponseEntity.badRequest().build();
+        listeners.forEach((k,l)->{
+            l.accept(newEvent);
+        });
+        return ResponseEntity.ok(newEvent);
+    }
+    /**
      * Updates an event
      * 
      * @param id
@@ -158,6 +177,7 @@ public class EventController {
 //        if(req.getSession().getAttribut() != "adminLogged"){
 //            return  ResponseEntity.status(HttpStatus.FORBIDDEN).build(); //"not an admin"
 //        }
+
         try{
             String event = evServ.getEventById(id);
             byte[] eventBytes = event.getBytes();
@@ -169,4 +189,5 @@ public class EventController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 }
