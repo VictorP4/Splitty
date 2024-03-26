@@ -21,7 +21,7 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 public class ServerUtils {
 
 	private static String server;
-	private final UserConfig userConfig = new UserConfig();
+    private final UserConfig userConfig = new UserConfig();
 
 	public ServerUtils() {
 		server = userConfig.getServerURLConfig();
@@ -32,9 +32,8 @@ public class ServerUtils {
 	 *
 	 * @param server The server URL.
 	 */
-	public String setSERVER(String server) {
+	public void setSERVER(String server) {
 		this.server = server;
-		return this.server;
 	}
 
 	/**
@@ -294,7 +293,7 @@ public class ServerUtils {
 	 * Retrieves the event by its invite code.
 	 *
 	 * @param inviteCode The invite code of the event.
-	 * @return The event.
+	 * @return The event connected to said inviteCode.
 	 */
 	public Event getEventByInviteCode(String inviteCode) {
 		return ClientBuilder.newClient(new ClientConfig())
@@ -341,6 +340,12 @@ public class ServerUtils {
 				.get().readEntity(Double.class);
 	}
 
+	/**
+	 * Checks the admin password to allow the user to login.
+	 *
+	 * @param password The password passed in by the user
+	 * @return A list of events.
+	 */
 	public List<Event> adminLogin(String password) {
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(server).path("api/admin/login")
@@ -350,4 +355,5 @@ public class ServerUtils {
 				.post(Entity.entity(password, APPLICATION_JSON)).readEntity(new GenericType<List<Event>>() {
 				});
 	}
+
 }

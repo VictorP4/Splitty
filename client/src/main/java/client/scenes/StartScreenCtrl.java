@@ -68,8 +68,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      */
     public void initialize() {
         listViewItems = FXCollections.observableArrayList();
-
-        // setting the server to a default.
         server.setSERVER(userConfig.getServerURLConfig());
         alreadyJoined.setDisable(true);
 

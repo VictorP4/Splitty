@@ -45,12 +45,12 @@ public class UserConfig {
         try {
             String url = properties.getProperty("serverUrl");
             if (url == null || url.isBlank()) {
-                return "ws://localhost:8080/websocket";
+                throw new Error();
             }
             return url;
         } catch (Error e) {
             System.out.println("Something went wrong. Server changed to the default server");
-            return "ws://localhost:8080/websocket";
+            return "http://localhost:8080";
         }
     }
 
@@ -66,6 +66,38 @@ public class UserConfig {
         } catch(IOException e) {
             e.printStackTrace();
 //            log.log(Level.WARNING, e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Checks what server port is in the config file.
+     *
+     * @return the port of the session in properties
+     */
+    public int getServerPortConfig() {
+        try {
+            String port = properties.getProperty("server.port");
+            if (port == null || port.isBlank()) {
+                throw new Error();
+            }
+            return Integer.parseInt(port);
+        } catch (Error e) {
+            System.out.println("Something went wrong. Server changed to the default server");
+            return 8080;
+        }
+    }
+
+    /**
+     * Changes the configuration of the server port.
+     *
+     * @param port the new server port
+     */
+    public void setServerPortConfig(int port) {
+        properties.setProperty("server.port", Integer.toString(port));
+        try (OutputStream out = new FileOutputStream(configPath)) {
+            properties.store(out, "new server port");
+        } catch(IOException e) {
+            e.printStackTrace();
         }
     }
 

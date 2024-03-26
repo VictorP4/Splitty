@@ -87,8 +87,8 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
             else if(server.checkServer(serverUrlString).getStatus()!=200){
                 errorPopup("The server url is not correct");
             } else {
-                String newUrl = server.setSERVER("http://" + serverUrlString);
-                userConfig.setServerUrlConfig(newUrl);
+                server.setSERVER("http://" + serverUrlString);
+                userConfig.setServerUrlConfig("http://" + serverUrlString);
             }
         } catch(Exception e) {
             e.printStackTrace();
