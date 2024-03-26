@@ -263,6 +263,4 @@ public class ExpensesService {
         return eventRepo.findById(id).get();
     }
 
-
-
 }
