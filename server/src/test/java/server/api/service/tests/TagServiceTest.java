@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import server.api.services.TagServiceImpl;
+import server.api.services.TagService;
 import server.database.TagRepository;
 import commons.Tag;
 
@@ -18,23 +18,23 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Unit tests for the {@link TagServiceImpl} class.
+ * Unit tests for the {@link TagService} class.
  */
-public class TagServiceImplTest {
+public class TagServiceTest {
 
     @Mock
     private TagRepository tagRepository;
 
     @InjectMocks
-    private TagServiceImpl tagService;
+    private TagService tagService;
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     /**
-     * Tests the {@link TagServiceImpl#createTag(String, int, int, int)} method.
+     * Tests the {@link TagService#createTag(String, int, int, int)} method.
      * Verifies that a tag is successfully created with the provided name and color.
      */
     @Test
@@ -52,7 +52,7 @@ public class TagServiceImplTest {
     }
 
     /**
-     * Tests the {@link TagServiceImpl#getAllTags()} method.
+     * Tests the {@link TagService#getAllTags()} method.
      * Verifies that a list of all tags is returned from the repository.
      */
     @Test
@@ -71,7 +71,7 @@ public class TagServiceImplTest {
     }
 
     /**
-     * Tests the {@link TagServiceImpl#getTagById(Long)} method.
+     * Tests the {@link TagService#getTagById(Long)} method.
      * Verifies that a tag is retrieved by its ID if it exists.
      */
     @Test
@@ -89,7 +89,7 @@ public class TagServiceImplTest {
     }
 
     /**
-     * Tests the {@link TagServiceImpl#getTagById(Long)} method.
+     * Tests the {@link TagService#getTagById(Long)} method.
      * Verifies that an empty optional is returned when no tag is found with the given ID.
      */
     @Test
