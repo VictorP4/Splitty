@@ -34,6 +34,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -71,6 +72,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public Text expense;
     @FXML
     public MenuButton langButton;
+    @FXML
+    public MenuButton currencyButton;
     @FXML
     private Tab fromSelected;
     @FXML
@@ -402,7 +405,21 @@ public class OverviewCtrl implements Main.UpdatableUI {
         });
         return expenseList;
     }
+    public List<Expense> convertCurrency(List<Expense> a){
+        for(Expense b:a){
+            if(!b.getCurrency().equals(event.getPreferredCurrency())){
+                b.setAmount(serverUtils.convertCurrency(b.getAmount(),b.getCurrency(),
+                        event.getPreferredCurrency(), b.getDate().toInstant()
+                        .atZone(ZoneId.systemDefault()).toLocalDate()));
+                b.setCurrency(event.getPreferredCurrency());
+            }
+        }
+        return a;
+    }
+    @FXML
+    public void changePreferredCurrency(){
 
+    }
     /**
      * Shows all expenses of the event
      */
@@ -419,6 +436,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
             }
             original.add(e);
         }
+        original = (ObservableList<Expense>) convertCurrency(original);
         expenseList.setItems(original);
         all.setContent(expenseList);
         selectExpense();
@@ -442,6 +460,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
                 original.add(e);
             }
         }
+        original = (ObservableList<Expense>) convertCurrency(original);
         expenseList.setItems(original);
         fromSelected.setContent(expenseList);
     }
@@ -465,7 +484,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
                 original.add(e);
             }
         }
-
+        original = (ObservableList<Expense>) convertCurrency(original);
         expenseList.setItems(original);
 
         inclSelected.setContent(expenseList);

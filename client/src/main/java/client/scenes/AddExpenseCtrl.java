@@ -277,7 +277,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     private void addToCurrency() {
         currency.getItems().add("EUR");
-        currency.getItems().add("HRK");
+        currency.getItems().add("CHF");
+        currency.getItems().add("USD");
     }
 
     /**

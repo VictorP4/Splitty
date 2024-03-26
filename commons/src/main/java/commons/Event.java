@@ -18,6 +18,7 @@ public class Event {
     private Date creationDate;
     private Date lastActivityDate;
     private String inviteCode;
+    private String preferredCurrency;
     @OneToMany(cascade = CascadeType.MERGE)
     private List<Participant> participants;
     @OneToMany(cascade = CascadeType.PERSIST)
@@ -41,6 +42,7 @@ public class Event {
         this.lastActivityDate = this.creationDate;
         this.inviteCode=generateRandomString(6);
         this.tags = new ArrayList<>();
+        this.preferredCurrency="EUR";
         tags.add(new Tag("Food", 0, 255, 0));
         tags.add(new Tag("Entrance fees", 0, 0, 255));
         tags.add(new Tag("Travel", 255, 0, 0));
@@ -240,11 +242,30 @@ public class Event {
     }
 
     /**
+     * Retrieves the preferred currency set by the user.
+     *
+     * @return The preferred currency as a String.
+     */
+    public String getPreferredCurrency() {
+        return preferredCurrency;
+    }
+
+    /**
+     * Sets the preferred currency for the user.
+     *
+     * @param preferredCurrency The preferred currency to set.
+     */
+    public void setPreferredCurrency(String preferredCurrency) {
+        this.preferredCurrency = preferredCurrency;
+    }
+
+    /**
      * Checks if this event is equal to another object.
      *
      * @param o the object to compare
      * @return true if this event is equal to the other object, false otherwise
      */
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
