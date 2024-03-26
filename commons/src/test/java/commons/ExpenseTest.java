@@ -22,14 +22,16 @@ public class ExpenseTest {
         involvedParticipants.add(new Participant("Jane Doe", "jane.doe@example.com"));
         Date date = new Date();
         Tag tag = new Tag();
+        String currency = "EUR";
 
-        Expense expense = new Expense("Groceries", 50.0, paidBy, involvedParticipants, date, tag);
+        Expense expense = new Expense("Groceries", 50.0, paidBy, involvedParticipants, date, tag, currency);
         assertEquals("Groceries", expense.getTitle());
         assertEquals(50.0, expense.getAmount());
         assertEquals(paidBy, expense.getPaidBy());
         assertEquals(involvedParticipants, expense.getInvolvedParticipants());
         assertEquals(date, expense.getDate());
         assertEquals(tag, expense.getTag());
+        assertEquals(currency, expense.getCurrency());
     }
 
     /**
@@ -103,6 +105,17 @@ public class ExpenseTest {
     }
 
     /**
+     * Tests the getCurrency method of the Expense class.
+     * It should return the currency of the expense.
+     */
+    @Test
+    public void testGetCurrency() {
+        Expense expense = new Expense();
+        expense.setCurrency("HRK");
+        assertEquals("HRK", expense.getCurrency());
+    }
+
+    /**
      * Tests the equals method of the Expense class.
      * It should check if two expenses are equal.
      */
@@ -113,16 +126,20 @@ public class ExpenseTest {
         involvedParticipants.add(new Participant("Jane Doe", "jane.doe@example.com"));
         Tag tag = new Tag("Test Tag", 120, 180, 220);
 
-        Expense expense1 = new Expense("Groceries", 50.0, paidBy, involvedParticipants, new Date(), new Tag());
+        Expense expense1 = new Expense("Groceries", 50.0, paidBy, involvedParticipants, new Date(), new Tag(), "EUR");
         expense1.setId(1L);
         expense1.setTag(tag);
-        Expense expense2 = new Expense("Groceries", 50.0, paidBy, involvedParticipants, new Date(), new Tag());
+        Expense expense2 = new Expense("Groceries", 50.0, paidBy, involvedParticipants, new Date(), new Tag(), "EUR");
         expense2.setId(1L);
         expense2.setTag(tag);
 
         assertEquals(expense1, expense2);
     }
 
+    /**
+     * Tests if the hashcode of 2 expenses will be equal if the
+     * expenses are equal
+     */
     @Test
     public void testHashCodeEquals() {
         Expense expense1 = new Expense();
