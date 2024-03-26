@@ -118,6 +118,7 @@ public class ExpensesService {
         oldExp.setTitle(expense.getTitle());
         oldExp.setDate(expense.getDate());
         oldExp.setTag(expense.getTag());
+        oldExp.setCurrency(expense.getCurrency());
         
         //updating debts
         oldExp.setPaidBy(participantRepo.getById(oldExp.getPaidBy().getId()));
