@@ -92,16 +92,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         this.webSocket = webSocket;
     }
 
-    public void initialize() {
-        ap.setOnKeyPressed(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.ESCAPE) {
-                cancel();
-            } else if (keyEvent.getCode() == KeyCode.ENTER) {
-                ok();
-            }
-        });
-    }
-
     /**
      * initializes the Add Expense Controller
      */
@@ -251,19 +241,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         this.expense = null;
         mainCtrl.showEventOverview(event);
 
-    }
-
-    /**
-     * A general method to create a popup error on the application, with custom
-     * message.
-     *
-     * @param message The message passed in.
-     */
-    private void errorPopup(String message) {
-        var alert = new Alert(Alert.AlertType.ERROR);
-        alert.initModality(Modality.APPLICATION_MODAL);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     /**

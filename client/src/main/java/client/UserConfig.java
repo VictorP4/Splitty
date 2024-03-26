@@ -167,10 +167,7 @@ public class UserConfig {
             properties.store(out, "new language");
         } catch(IOException e) {
             e.printStackTrace();
-//            log.log(Level.WARNING, e.getMessage(), e);
         }
     }
-
-    // TODO: method to get the right file for the language and it's contents
 
 }

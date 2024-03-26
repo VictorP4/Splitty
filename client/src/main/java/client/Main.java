@@ -20,12 +20,8 @@ import static com.google.inject.Guice.createInjector;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.prefs.BackingStoreException;
-import java.util.prefs.Preferences;
 
 import client.scenes.*;
 import com.google.inject.Injector;
@@ -35,8 +31,6 @@ import javafx.stage.Stage;
 import javassist.NotFoundException;
 
 public class Main extends Application {
-    private static final String LANGUAGE_PREF_KEY = "language";
-    public static Preferences prefs;
 
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
@@ -60,10 +54,10 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException, NotFoundException {
-        prefs = Preferences.userNodeForPackage(Main.class);
-        String savedLanguage = prefs.get(LANGUAGE_PREF_KEY, "en");
-        loadLanguageBundle(savedLanguage);
-        // loadLanguageBundle(userConfig.getLanguageConfig());
+//        prefs = Preferences.userNodeForPackage(Main.class);
+//        String savedLanguage = prefs.get(LANGUAGE_PREF_KEY, "en");
+//        loadLanguageBundle(savedLanguage);
+         loadLanguageBundle(userConfig.getLanguageConfig());
 
         var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
         var addTag = FXML.load(AddTagCtrl.class, "client", "scenes", "AddTag.fxml");
@@ -72,9 +66,7 @@ public class Main extends Application {
         var openDebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
         var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
         var startScreen = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
-        ;
         var eventOverview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
-        ;
         var adminEventOverview = FXML.load(AdminEventOverviewCtrl.class, "client", "scenes", "AdminEventOverview.fxml");
         var settingsPage = FXML.load(SettingsPageCtrl.class, "client", "scenes", "SettingsPage.fxml");
 
@@ -134,8 +126,10 @@ public class Main extends Application {
      */
     public static void switchLocale(String baseName, String languageCode) throws BackingStoreException {
         if (languageCode != null) {
-            prefs.put(LANGUAGE_PREF_KEY, languageCode);
-            prefs.flush();
+            UserConfig uc = new UserConfig();
+            uc.setLanguageConfig(languageCode);
+//            prefs.put(LANGUAGE_PREF_KEY, languageCode);
+//            prefs.flush();
             Locale locale = new Locale(languageCode);
             resourceBundle = ResourceBundle.getBundle(baseName, locale);
         } else {

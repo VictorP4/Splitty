@@ -86,10 +86,11 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      */
     public void initialize() {
         listViewItems = FXCollections.observableArrayList();
-        Image image = new Image(Objects
-                .requireNonNull(getClass().getResource(prefs.get(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png")))
-                .toExternalForm());
-        menuButtonView.setImage(image);
+        String lp = userConfig.getLanguageConfig();
+        if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
+            Image image = new Image("/client/misc/" + lp +  "_flag.png");
+            menuButtonView.setImage(image);
+        }
 
         server.setSERVER(userConfig.getServerURLConfig());
         alreadyJoined.setDisable(true);
@@ -241,8 +242,8 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         userConfig.setLanguageConfig("en");
         switchLocale("messages", "en");
         Image image = new Image(
-                Objects.requireNonNull(getClass().getResource("/client/misc/uk_flag.png")).toExternalForm());
-        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png");
+                Objects.requireNonNull(getClass().getResource("/client/misc/en_flag.png")).toExternalForm());
+        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/en_flag.png");
         menuButtonView.setImage(image);
     }
 

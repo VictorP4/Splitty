@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.prefs.BackingStoreException;
-import static client.Main.prefs;
 import static client.Main.switchLocale;
 
 /**
@@ -115,8 +114,12 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Initializes the controller.
      */
     public void initialize() {
-        Image image = new Image(Objects.requireNonNull(getClass().getResource(prefs.get(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png"))).toExternalForm());
-        menuButtonView.setImage(image);
+        File imageFile = new File("/client/misc/" + userConfig.getLanguageConfig() +  "_flag.png");
+        if (imageFile.exists()) {
+            Image image = new Image(imageFile.getName());
+            menuButtonView.setImage(image);
+        }
+
         ap.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 backToStartScreen();
@@ -294,32 +297,21 @@ public class OverviewCtrl implements Main.UpdatableUI {
      *
      * @param actionEvent
      */
-<<<<<<< HEAD
-    public void switchToEnglish(ActionEvent actionEvent) {
-        userConfig.setLanguageConfig("en");
-        Main.switchLocale("en");
-=======
     public void switchToEnglish(ActionEvent actionEvent) throws BackingStoreException {
+        userConfig.setLanguageConfig("en");
         switchLocale("messages", "en");
-        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/uk_flag.png")).toExternalForm());
-        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png");
+        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/en_flag.png")).toExternalForm());
         menuButtonView.setImage(image);
->>>>>>> main
     }
 
     /**
      *
      * @param actionEvent
      */
-<<<<<<< HEAD
-    public void switchToDutch(ActionEvent actionEvent) {
-        userConfig.setLanguageConfig("nl");
-        Main.switchLocale("nl");
-=======
     public void switchToDutch(ActionEvent actionEvent) throws BackingStoreException {
+//        userConfig.setLanguageConfig("nl");
         switchLocale("messages", "nl");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/nl_flag.png")).toExternalForm());
-        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/nl_flag.png");
         menuButtonView.setImage(image);
     }
 
@@ -354,11 +346,10 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
+        userConfig.setLanguageConfig("es");
         switchLocale("messages","es");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
-        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/es_flag.png");
         menuButtonView.setImage(image);
->>>>>>> main
     }
 
     /**
