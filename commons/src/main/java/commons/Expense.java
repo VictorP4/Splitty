@@ -22,6 +22,7 @@ public class Expense {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(nullable = true)
     private Tag tag;
+    private String currency;
 
     /**
      * Constructs an Expense with the specified title, amount, payer, involved participants, and date.
@@ -31,14 +32,16 @@ public class Expense {
      * @param paidBy             the participant who paid for the expense
      * @param involvedParticipants the list of participants involved in the expense
      * @param date               the date of the expense
+     * @param currency           the currency of the event
      */
-    public Expense(String title, double amount, Participant paidBy, List<Participant> involvedParticipants, Date date, Tag tag) {
+    public Expense(String title, double amount, Participant paidBy, List<Participant> involvedParticipants, Date date, Tag tag, String currency) {
         this.title = title;
         this.amount = amount;
         this.paidBy = paidBy;
         this.involvedParticipants = involvedParticipants;
         this.date = date;
         this.tag = tag;
+        this.currency = currency;
     }
 
     /**
@@ -173,6 +176,24 @@ public class Expense {
     }
 
     /**
+     * Retrieves the title of the expense.
+     *
+     * @return the title of the expense
+     */
+    public String getCurrency() {
+        return currency;
+    }
+
+    /**
+     * Sets the title of the expense.
+     *
+     * @param title the title of the expense to set
+     */
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    /**
      * Checks if this expense is equal to another object.
      *
      * @param o the object to compare
@@ -189,7 +210,8 @@ public class Expense {
                 Objects.equals(paidBy, expense.paidBy) &&
                 Objects.equals(involvedParticipants, expense.involvedParticipants) &&
                 Objects.equals(date, expense.date) &&
-                Objects.equals(tag, expense.tag);
+                Objects.equals(tag, expense.tag) &&
+                Objects.equals(currency, expense.currency);
     }
 
     /**
@@ -199,7 +221,7 @@ public class Expense {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, amount, paidBy, involvedParticipants, date, tag);
+        return Objects.hash(id, title, amount, paidBy, involvedParticipants, date, tag, currency);
     }
 
     /**
@@ -208,7 +230,7 @@ public class Expense {
      */
     @Override
     public String toString() {
-        return title + " " + amount + ", " + (tag == null ? "no tag" : tag.getName());
+        return title + " " + amount + " " + currency +  ", " + (tag == null ? "no tag" : tag.getName());
     }
 }
 

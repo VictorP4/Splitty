@@ -111,10 +111,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             else{
                 Platform.runLater(()->{
                     cancel();
-                    var alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.initModality(Modality.APPLICATION_MODAL);
-                    alert.setContentText("The expense was deleted by another user.");
-                    alert.showAndWait();
+                    errorPopup("The expense was deleted by another user.");
                 });
             }
         }));
@@ -184,19 +181,40 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         Date date = Date.from(localdate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         Participant paidBy = this.paidBy.getSelectionModel().getSelectedItem();
         List<Participant> partIn = add();
-
-
         Tag tag = selectedTag;
+        String selectedCurrecy = currency.getValue();
 
-        return new Expense(title, amount, paidBy, partIn, date, selectedTag);
+        return new Expense(title, amount, paidBy, partIn, date, selectedTag, selectedCurrecy);
     }
 
     /**
      * accepts inputted expense, adds it to the server, returns to the event overview scene
      */
     public void ok() {
+        Expense addExp = null;
+
+        // Checks if all mandatory boxes have been filled in
         try {
-            Expense addExp = getExpense();
+            addExp = getExpense();
+        } catch(Exception e) {
+            errorPopup("Missing title, amount or date");
+            return;
+        }
+        if (addExp.getPaidBy() == null) {
+            errorPopup("No paid by found.");
+            return;
+        }
+        if (addExp.getAmount() < 0) {
+            errorPopup("Invalid amount.");
+            return;
+        }
+        if (addExp.getInvolvedParticipants().equals(new ArrayList<>())) {
+            errorPopup("No involved participants selected.");
+            return;
+        }
+
+        // Checks for any other related errors
+        try {
             if(this.expense != null){
                 addExp.setId(this.expense.getId());
             }
@@ -211,20 +229,28 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             else{
                 server.addExpense(addExp, event.getId());
             }
-
             event = server.getEvent(event.getId());
         }
         catch (WebApplicationException e) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+            errorPopup(e.getMessage());
             return;
         }
         clearFields();
         this.expense=null;
         mainCtrl.showEventOverview(event);
-        this.event=null;
+
+    }
+
+    /**
+     * A general method to create a popup error on the application, with custom message.
+     *
+     * @param message The message passed in.
+     */
+    private void errorPopup(String message) {
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     /**
@@ -415,6 +441,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         this.date.setValue(localDate);
         paidBy.getSelectionModel().select(expense.getPaidBy());
+        currency.setValue(this.expense.getCurrency());
 
         if(expense.getInvolvedParticipants().equals(event.getParticipants())){
             everybodyIn.setSelected(true);
