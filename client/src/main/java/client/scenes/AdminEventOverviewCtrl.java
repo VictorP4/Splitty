@@ -220,8 +220,8 @@ public class AdminEventOverviewCtrl {
                 if(event != null){
                     server.addEventJSON(event);
                 }
+                stage.close();
             });
-            //stage.close(); TODO
         });
 
         VBox vbox = new VBox(30, label, button, ok);
