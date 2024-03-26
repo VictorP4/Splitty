@@ -2,13 +2,22 @@ package server.api.controllers;
 
 import commons.Event;
 import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 import server.api.services.EventService;
 import server.database.EventRepository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 @RestController
 @RequestMapping("/api/events")
@@ -26,6 +35,24 @@ public class EventController {
         this.repo = repo;
         this.evServ = evServ;
         this.smt = smt;
+    }
+
+    private Map<Object, Consumer<Event>> listeners = new HashMap<>();
+
+    /**
+     * long polling for new or updated events(used for admin event overview)
+     * @return the new or updated event, or http status 204 no content
+     */
+    @GetMapping("/updates")
+    public DeferredResult<ResponseEntity<Event>> getUpdates(){
+        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        var res = new DeferredResult<ResponseEntity<Event>>(5000L,noContent);
+        var key = new Object();
+        listeners.put(key, e -> {
+            res.setResult(ResponseEntity.ok(e));
+        });
+        res.onCompletion(()->listeners.remove(key));
+        return res;
     }
 
     /**
@@ -66,6 +93,9 @@ public class EventController {
         Event newEvent = evServ.add(event);
         if (newEvent == null)
             return ResponseEntity.badRequest().build();
+        listeners.forEach((k,l)->{
+            l.accept(newEvent);
+        });
         return ResponseEntity.ok(newEvent);
     }
 
@@ -81,6 +111,9 @@ public class EventController {
         Event finalEv = evServ.put(id, event);
         if (finalEv == null)
             return ResponseEntity.badRequest().build();
+        listeners.forEach((k,l) -> {
+            l.accept(finalEv);
+        });
         smt.convertAndSend("/topic/events", finalEv);
         return ResponseEntity.ok(finalEv);
     }
@@ -111,5 +144,29 @@ public class EventController {
         if (e == null)
             return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(e);
+    }
+
+    /**
+     * Find event by id
+     * @param id id of the event
+     * @return Json representation of the requested event
+     */
+    @GetMapping(path = {"/id"}, consumes="application/json")
+    public ResponseEntity<Resource> getEventJSON(@PathVariable("id") long id){
+
+//        HttpServletRequest req;
+//        if(req.getSession().getAttribut() != "adminLogged"){
+//            return  ResponseEntity.status(HttpStatus.FORBIDDEN).build(); //"not an admin"
+//        }
+        try{
+            String event = evServ.getEventById(id);
+            byte[] eventBytes = event.getBytes();
+            ByteArrayResource resource = new ByteArrayResource(eventBytes);
+
+            return ResponseEntity.ok().body(resource);
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

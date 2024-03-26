@@ -3,6 +3,7 @@ package client.scenes;
 import client.Main;
 import client.UserConfig;
 import client.utils.ServerUtils;
+import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import javafx.fxml.FXML;
@@ -17,7 +18,6 @@ import javafx.stage.Modality;
 
 import java.util.List;
 import java.util.Properties;
-
 
 public class SettingsPageCtrl implements Main.UpdatableUI {
 
@@ -39,6 +39,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     public Button login;
     @FXML
     public AnchorPane ap;
+    private WebSocketUtils webSocket;
     private final UserConfig userConfig = new UserConfig();
 
     /**
@@ -48,9 +49,10 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
      * @param mainCtrl The main controller of the application.
      */
     @Inject
-    public SettingsPageCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public SettingsPageCtrl(ServerUtils server, MainCtrl mainCtrl, WebSocketUtils webSocket) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.webSocket = webSocket;
     }
 
     /**
@@ -75,7 +77,8 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Sets the server for the session according to the users choice. If no server is chosen, the server in the
+     * Sets the server for the session according to the users choice. If no server
+     * is chosen, the server in the
      * user_config file will be selected
      */
     public void setServer() {
@@ -83,14 +86,15 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
         try {
             if (serverUrlString.isBlank()) {
                 server.setSERVER(userConfig.getServerURLConfig());
-            }
-            else if(server.checkServer(serverUrlString).getStatus()!=200){
+            } else if (server.checkServer(serverUrlString).getStatus() != 200) {
                 errorPopup("The server url is not correct");
             } else {
                 server.setSERVER("http://" + serverUrlString);
+                webSocket.disconnect();
+                webSocket.connect("ws://" + serverUrlString + "/websocket");
                 userConfig.setServerUrlConfig("http://" + serverUrlString);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             errorPopup(e.getMessage());
         }
@@ -98,7 +102,8 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Lets the admin give a password and login. If no server is chosen, the server in the
+     * Lets the admin give a password and login. If no server is chosen, the server
+     * in the
      * user_config file will be selected
      */
     public void login() {
@@ -108,16 +113,17 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
         }
         try {
             setServer();
-            List<Event> events = server.adminLogin(password);   // return null
+            List<Event> events = server.adminLogin(password); // return null
             mainCtrl.showAdminEventOverview();
-        } catch(Exception e) {
-             e.printStackTrace();
-             errorPopup(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            errorPopup(e.getMessage());
         }
     }
 
     /**
-     * A general method to create a popup error on the application, with custom message.
+     * A general method to create a popup error on the application, with custom
+     * message.
      *
      * @param message The message passed in.
      */

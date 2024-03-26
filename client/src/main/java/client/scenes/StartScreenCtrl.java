@@ -3,19 +3,30 @@ package client.scenes;
 import client.Main;
 import client.UserConfig;
 import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import commons.Event;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 
-import com.google.inject.Inject;
-import javafx.event.ActionEvent;
-import javafx.scene.text.Text;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Objects;
+import java.util.Properties;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 import static client.Main.switchLocale;
 
@@ -39,6 +50,10 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     @FXML
     public MenuButton langButton;
     @FXML
+    public ImageView menuButtonView;
+    @FXML
+    public Menu customLangs;
+    @FXML
     private TextField eventTitle;
     @FXML
     private TextField eventCode;
@@ -47,6 +62,9 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     @FXML
     private ListView<Event> recentlyAccessed;
     private ObservableList<Event> listViewItems;
+    private static final String SELECTED_IMAGE_KEY = "selectedImage";
+
+    private Preferences prefs = Preferences.userNodeForPackage(StartScreenCtrl.class);;
     private final UserConfig userConfig = new UserConfig();
 
     /**
@@ -68,6 +86,11 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      */
     public void initialize() {
         listViewItems = FXCollections.observableArrayList();
+        Image image = new Image(Objects
+                .requireNonNull(getClass().getResource(prefs.get(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png")))
+                .toExternalForm());
+        menuButtonView.setImage(image);
+
         server.setSERVER(userConfig.getServerURLConfig());
         alreadyJoined.setDisable(true);
 
@@ -200,9 +223,13 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      *
      * @param actionEvent The event that caused this method to be called
      */
-    public void switchToDutch(ActionEvent actionEvent) {
+    public void switchToDutch(ActionEvent actionEvent) throws BackingStoreException {
         userConfig.setLanguageConfig("nl");
-        switchLocale("nl");
+        switchLocale("messages", "nl");
+        Image image = new Image(
+                Objects.requireNonNull(getClass().getResource("/client/misc/nl_flag.png")).toExternalForm());
+        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/nl_flag.png");
+        menuButtonView.setImage(image);
     }
 
     /**
@@ -210,9 +237,57 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      *
      * @param actionEvent The event that caused this method to be called
      */
-    public void switchToEnglish(ActionEvent actionEvent) {
+    public void switchToEnglish(ActionEvent actionEvent) throws BackingStoreException {
         userConfig.setLanguageConfig("en");
-        switchLocale("en");
+        switchLocale("messages", "en");
+        Image image = new Image(
+                Objects.requireNonNull(getClass().getResource("/client/misc/uk_flag.png")).toExternalForm());
+        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png");
+        menuButtonView.setImage(image);
+    }
+
+    public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
+        switchLocale("messages", "es");
+        Image image = new Image(
+                Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
+        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/es_flag.png");
+        menuButtonView.setImage(image);
+    }
+
+    public EventHandler<ActionEvent> customSwitch(String bundlePath) throws BackingStoreException {
+        switchLocale(bundlePath, null);
+        return null;
+    }
+
+    public void addLang(ActionEvent actionEvent) throws BackingStoreException {
+        Properties newLang = new Properties();
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader("client/src/main/resources/client/misc/langTemplate.txt"))) {
+            newLang.load(reader);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String newLangPath;
+        try (OutputStream output = new FileOutputStream("client/src/main/resources/client/misc/messages.properties")) {
+            newLang.store(output, "Add the name of your new language to the first line of this file as a comment\n" +
+                    "Send the final translation version to ooppteam58@gmail.com");
+
+            newLangPath = "client/src/main/resources/client/misc/messages.properties";
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        File file = new File(newLangPath);
+        String saveDir = System.getProperty("user.home") + "/Downloads" + "/" + file.getName();
+        try {
+            Files.move(file.toPath(), Paths.get(saveDir), StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("File downloaded to: " + saveDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -232,6 +307,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         alreadyJoined.setSelected(false);
         updateAllEvents();
         recentlyAccessed.setItems(listViewItems);
+
     }
 
     /**
@@ -241,4 +317,5 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     public void toSettings() {
         mainCtrl.showSettingsPage();
     }
+
 }

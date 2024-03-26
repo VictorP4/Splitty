@@ -6,7 +6,11 @@
 
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StartScreenCtrl">
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StartScreenCtrl">
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
    <children>
       <Text fx:id="createNewEvent" layoutX="88.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create New event">
          <font>
@@ -28,9 +32,33 @@
          </font>
       </Text>
       <MenuButton fx:id="langButton" layoutX="45.0" layoutY="349.0" mnemonicParsing="false" text="Language">
+         <graphic>
+            <ImageView fx:id="menuButtonView" fitWidth="16" fitHeight="12" preserveRatio="true"/>
+         </graphic>
          <items>
-            <MenuItem mnemonicParsing="false" onAction="#switchToEnglish" text="English" />
-            <MenuItem mnemonicParsing="false" onAction="#switchToDutch" text="Dutch" />
+            <MenuItem mnemonicParsing="false" onAction="#switchToEnglish" text="English">
+               <graphic>
+                  <ImageView fitWidth="16" fitHeight="12">
+                     <Image url="@/client/misc/uk_flag.png" />
+                  </ImageView>
+               </graphic>
+            </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#switchToDutch" text="Dutch">
+               <graphic>
+                  <ImageView fitWidth="16" fitHeight="12">
+                     <Image url="@/client/misc/nl_flag.png" />
+                  </ImageView>
+               </graphic>
+            </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#switchToSpanish" text="Spanish">
+               <graphic>
+                  <ImageView fitWidth="16" fitHeight="12">
+                     <Image url="@/client/misc/es_flag.png" />
+                  </ImageView>
+               </graphic>
+            </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#addLang" text="Add Language">
+            </MenuItem>
          </items>
       </MenuButton>
       <CheckBox fx:id="alreadyJoined" layoutX="87.0" layoutY="175.0" mnemonicParsing="false" text="Already joined" />

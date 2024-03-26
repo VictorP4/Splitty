@@ -15,13 +15,16 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
 	private static String server;
-    private final UserConfig userConfig = new UserConfig();
+	private final UserConfig userConfig = new UserConfig();
 
 	public ServerUtils() {
 		server = userConfig.getServerURLConfig();
@@ -93,6 +96,21 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get().readEntity(Event.class);
+	}
+
+	/**
+	 * Retrieves a JSON representation of an event by its ID.
+	 * 
+	 * @param id id of the event
+	 * @return String of event
+	 */
+	public String getEventJSON(long id) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("api/events/" + id)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get()
+				.readEntity(String.class);
 	}
 
 	/**
@@ -354,6 +372,36 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(password, APPLICATION_JSON)).readEntity(new GenericType<List<Event>>() {
 				});
+	}
+
+	private static final ExecutorService exec = Executors.newSingleThreadExecutor();
+
+	/**
+	 * Registering for event updates using long polling
+	 * 
+	 * @param consumer
+	 */
+	public void registerForUpdates(Consumer<Event> consumer) {
+		exec.submit(() -> {
+			while (!Thread.interrupted()) {
+				var res = ClientBuilder.newClient(new ClientConfig())
+						.target(server).path("api/events/updates")
+						.request(APPLICATION_JSON)
+						.accept(APPLICATION_JSON)
+						.get(Response.class);
+				if (res.getStatus() == 204)
+					continue;
+				var e = res.readEntity(Event.class);
+				consumer.accept(e);
+			}
+		});
+	}
+
+	/**
+	 * Stopping the thread for long polling
+	 */
+	public void stop() {
+		exec.shutdownNow();
 	}
 
 }
