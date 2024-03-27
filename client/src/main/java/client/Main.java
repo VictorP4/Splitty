@@ -71,7 +71,9 @@ public class Main extends Application {
         mainCtrl.initialize(primaryStage, addExpense, contactDetails,
                 invitation, openDebts, statistics, startScreen, eventOverview, adminEventOverview, addTag,
                 settingsPage);
-
+        primaryStage.setOnCloseRequest((e)->{
+            adminEventOverview.getKey().stop();
+        });
     }
 
     /**
