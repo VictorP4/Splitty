@@ -68,6 +68,7 @@ public class StatisticsCtrl implements Main.UpdatableUI {
         getTotal();
         populatePieChart();
         paintChart();
+        pieChart.getParent().layout();
     }
 
     /**
