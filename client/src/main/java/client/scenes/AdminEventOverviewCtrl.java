@@ -132,7 +132,7 @@ public class AdminEventOverviewCtrl {
             public void handle(MouseEvent event) {
                 if (event.getClickCount() == 2) {
                     Event selectedEvent = eventsTable.getSelectionModel().getSelectedItem();
-                    if(selectedEvent!=null) mainCtrl.showEventOverview(selectedEvent);
+                    if(selectedEvent!=null) mainCtrl.showEventOverviewFromAdmin(selectedEvent);
                 }
             }
         });

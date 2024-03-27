@@ -94,6 +94,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private Pane options;
     @FXML
     public AnchorPane ap;
+    private boolean admin;
 
 
     /**
@@ -114,6 +115,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Initializes the controller.
      */
     public void initialize() {
+        admin=false;
         Image image = new Image(Objects.requireNonNull(getClass().getResource(prefs.get(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png"))).toExternalForm());
         menuButtonView.setImage(image);
         ap.setOnKeyPressed(event -> {
@@ -362,7 +364,10 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * want to
      */
     public void backToStartScreen() {
-        mainCtrl.showStartScreen();
+        if(admin){
+            mainCtrl.showAdminEventOverview();
+        }
+        else mainCtrl.showStartScreen();
     }
 
     /**
@@ -588,4 +593,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
         }
     }
 
+    /**
+     * marks that an admin is accessing the event overview
+     * @param b
+     */
+    public void setAdmin(boolean b) {
+        this.admin=true;
+    }
 }
