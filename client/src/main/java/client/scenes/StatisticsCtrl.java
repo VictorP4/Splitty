@@ -140,7 +140,6 @@ public class StatisticsCtrl implements Main.UpdatableUI {
      * Returns to the Overview scene.
      */
     public void back() {
-        pieChart.getData().clear();
         mainCtrl.showEventOverview(event);
     }
 }
