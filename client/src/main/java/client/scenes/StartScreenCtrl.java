@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.Main;
+import client.UserConfig;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -64,6 +65,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     private static final String SELECTED_IMAGE_KEY = "selectedImage";
 
     private Preferences prefs = Preferences.userNodeForPackage(StartScreenCtrl.class);;
+    private final UserConfig userConfig = new UserConfig();
 
     /**
      * Constructs a new instance of StartScreenCtrl.
@@ -78,20 +80,24 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Initialized the start screen. It sets the cell factory for the listview, allowing it to be populated with events.
+     * Initialized the start screen. It sets the cell factory for the listview,
+     * allowing it to be populated with events.
      * Furthermore, the method contain keyPress events for ease of use for the user.
      */
     public void initialize() {
         listViewItems = FXCollections.observableArrayList();
-        Image image = new Image(Objects.requireNonNull(getClass().getResource(prefs.get(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png"))).toExternalForm());
-        menuButtonView.setImage(image);
+        String lp = userConfig.getLanguageConfig();
+        if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
+            Image image = new Image("/client/misc/" + lp +  "_flag.png");
+            menuButtonView.setImage(image);
+        }
 
-
-        //setting the server to a default.
-        server.setSERVER("http://localhost:8080");
+        server.setSERVER(userConfig.getServerURLConfig());
         alreadyJoined.setDisable(true);
 
-        eventCode.textProperty().addListener((observable, oldValue, newValue) -> handleTextChange(newValue));
+        eventCode.textProperty().addListener((observable, oldValue, newValue) -> {
+            alreadyJoined.setDisable(newValue == null || newValue.isBlank());
+        });
         settingsPage.setOnAction(event -> {
             mainCtrl.showSettingsPage();
         });
@@ -188,19 +194,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Will check whether an invite code has been filled in the inviteCode text
-     * area. If it is, the checkbox will be
-     * made enables and if not, will stay disabled.
-     *
-     * @param inputtedCode The text contained in the inviteCode textArea
-     */
-    private void handleTextChange(String inputtedCode) {
-        // Disable CheckBox when text is empty
-        alreadyJoined.setDisable(inputtedCode == null || inputtedCode.isBlank()); // Enable CheckBox when text is
-                                                                                  // entered
-    }
-
-    /**
      * updates the list with most recent events.
      * 
      * @param event The current event that has either been created or joined by the
@@ -232,8 +225,10 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      * @param actionEvent The event that caused this method to be called
      */
     public void switchToDutch(ActionEvent actionEvent) throws BackingStoreException {
-        switchLocale("messages","nl");
-        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/nl_flag.png")).toExternalForm());
+        userConfig.setLanguageConfig("nl");
+        switchLocale("messages", "nl");
+        Image image = new Image(
+                Objects.requireNonNull(getClass().getResource("/client/misc/nl_flag.png")).toExternalForm());
         prefs.put(SELECTED_IMAGE_KEY, "/client/misc/nl_flag.png");
         menuButtonView.setImage(image);
     }
@@ -244,35 +239,39 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      * @param actionEvent The event that caused this method to be called
      */
     public void switchToEnglish(ActionEvent actionEvent) throws BackingStoreException {
-        switchLocale("messages","en");
-        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/uk_flag.png")).toExternalForm());
-        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png");
+        userConfig.setLanguageConfig("en");
+        switchLocale("messages", "en");
+        Image image = new Image(
+                Objects.requireNonNull(getClass().getResource("/client/misc/en_flag.png")).toExternalForm());
+        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/en_flag.png");
         menuButtonView.setImage(image);
     }
 
     public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
-        switchLocale("messages","es");
-        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
+        switchLocale("messages", "es");
+        Image image = new Image(
+                Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
         prefs.put(SELECTED_IMAGE_KEY, "/client/misc/es_flag.png");
         menuButtonView.setImage(image);
     }
 
     public EventHandler<ActionEvent> customSwitch(String bundlePath) throws BackingStoreException {
-        switchLocale(bundlePath,null);
+        switchLocale(bundlePath, null);
         return null;
     }
 
     public void addLang(ActionEvent actionEvent) throws BackingStoreException {
         Properties newLang = new Properties();
-        try (BufferedReader reader = new BufferedReader(new FileReader("client/src/main/resources/client/misc/langTemplate.txt"))) {
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader("client/src/main/resources/client/misc/langTemplate.txt"))) {
             newLang.load(reader);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         String newLangPath;
-        try (OutputStream output = new FileOutputStream("client/src/main/resources/client/misc/messages.properties")) {
-            newLang.store(output, "Add the name of your new language to the first line of this file as a comment\n"+
+        try (OutputStream output = new FileOutputStream("src/main/resources/client/misc/messages.properties")) {
+            newLang.store(output, "Add the name of your new language to the first line of this file as a comment\n" +
                     "Send the final translation version to ooppteam58@gmail.com");
 
             newLangPath = "client/src/main/resources/client/misc/messages.properties";
@@ -291,7 +290,8 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         }
 
     }
-        /**
+
+    /**
      * Updates all events in listviewItems to keep up with recent updates.
      */
     private void updateAllEvents() {
@@ -302,6 +302,11 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      * Refreshes the startScreen
      */
     public void refresh() {
+        String lp = userConfig.getLanguageConfig();
+        if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
+            Image image = new Image("/client/misc/" + lp +  "_flag.png");
+            menuButtonView.setImage(image);
+        }
         eventTitle.clear();
         eventCode.clear();
         alreadyJoined.setDisable(true);
@@ -312,10 +317,10 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Directs users to the settings page. Here they can fill in a server of their choice & login as an admin
+     * Directs users to the settings page. Here they can fill in a server of their
+     * choice & login as an admin
      */
     public void toSettings() {
         mainCtrl.showSettingsPage();
     }
-
 }

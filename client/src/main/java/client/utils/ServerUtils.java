@@ -3,7 +3,9 @@
  */
 package client.utils;
 
+import client.UserConfig;
 import commons.*;
+import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -22,7 +24,8 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
-	private static String server = "http://localhost:8080";
+	private static  final UserConfig userConfig = new UserConfig();
+	private static String server = userConfig.getServerURLConfig();
 
 	/**
 	 * Sets the server URL.
@@ -40,13 +43,16 @@ public class ServerUtils {
 	 * @return The response from the server.
 	 */
 	public Response checkServer(String userUrl) {
-		this.server = "http://" + userUrl;
-		Response response = ClientBuilder.newClient(new ClientConfig())
-				.target(server).path("api/connection")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.get();
-
+		Response response = null;
+		try {
+			response = ClientBuilder.newClient(new ClientConfig())
+					.target(server).path("api/connection")
+					.request(APPLICATION_JSON)
+					.accept(APPLICATION_JSON)
+					.get();
+		} catch (ProcessingException e) {
+			response = Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
 		return response;
 	}
 
@@ -108,6 +114,7 @@ public class ServerUtils {
 
 	/**
 	 * Retrieves a JSON representation of an event by its ID.
+	 * 
 	 * @param id id of the event
 	 * @return String of event
 	 */
@@ -318,7 +325,7 @@ public class ServerUtils {
 	 * Retrieves the event by its invite code.
 	 *
 	 * @param inviteCode The invite code of the event.
-	 * @return The event.
+	 * @return The event connected to said inviteCode.
 	 */
 	public Event getEventByInviteCode(String inviteCode) {
 		return ClientBuilder.newClient(new ClientConfig())
@@ -365,6 +372,12 @@ public class ServerUtils {
 				.get().readEntity(Double.class);
 	}
 
+	/**
+	 * Checks the admin password to allow the user to login.
+	 *
+	 * @param password The password passed in by the user
+	 * @return A list of events.
+	 */
 	public List<Event> adminLogin(String password) {
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(server).path("api/admin/login")
@@ -374,21 +387,24 @@ public class ServerUtils {
 				.post(Entity.entity(password, APPLICATION_JSON)).readEntity(new GenericType<List<Event>>() {
 				});
 	}
+
 	private static final ExecutorService exec = Executors.newSingleThreadExecutor();
 
 	/**
 	 * Registering for event updates using long polling
+	 * 
 	 * @param consumer
 	 */
-	public void registerForUpdates(Consumer<Event> consumer){
+	public void registerForUpdates(Consumer<Event> consumer) {
 		exec.submit(() -> {
-			while(!Thread.interrupted()){
+			while (!Thread.interrupted()) {
 				var res = ClientBuilder.newClient(new ClientConfig())
 						.target(server).path("api/events/updates")
 						.request(APPLICATION_JSON)
 						.accept(APPLICATION_JSON)
 						.get(Response.class);
-				if(res.getStatus()==204) continue;
+				if (res.getStatus() == 204)
+					continue;
 				var e = res.readEntity(Event.class);
 				consumer.accept(e);
 			}
@@ -398,7 +414,7 @@ public class ServerUtils {
 	/**
 	 * Stopping the thread for long polling
 	 */
-	public void stop(){
+	public void stop() {
 		exec.shutdownNow();
 	}
 

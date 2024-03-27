@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.Main;
+import client.UserConfig;
 import client.utils.ServerUtils;
 import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
@@ -39,7 +40,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.prefs.BackingStoreException;
-import static client.Main.prefs;
 import static client.Main.switchLocale;
 
 /**
@@ -93,6 +93,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private Pane options;
     @FXML
     public AnchorPane ap;
+    private final UserConfig userConfig = new UserConfig();
 
 
     /**
@@ -113,15 +114,18 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Initializes the controller.
      */
     public void initialize() {
-        Image image = new Image(Objects.requireNonNull(getClass().getResource(prefs.get(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png"))).toExternalForm());
-        menuButtonView.setImage(image);
+        String lp = userConfig.getLanguageConfig();
+        if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
+            Image image = new Image("/client/misc/" + lp +  "_flag.png");
+            menuButtonView.setImage(image);
+        }
+
         ap.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 backToStartScreen();
             }
         });
         expenseList = new ListView<>();
-        //TODO connect to the given server url when the initial startscreen is created
         webSocket.connect("ws://localhost:8080/websocket");
         webSocket.addEventListener((event)->{
             if(this.event==null||!this.event.getId().equals(event.getId())) return;
@@ -294,9 +298,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * @param actionEvent
      */
     public void switchToEnglish(ActionEvent actionEvent) throws BackingStoreException {
+        userConfig.setLanguageConfig("en");
         switchLocale("messages", "en");
-        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/uk_flag.png")).toExternalForm());
-        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/uk_flag.png");
+        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/en_flag.png")).toExternalForm());
         menuButtonView.setImage(image);
     }
 
@@ -305,9 +309,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * @param actionEvent
      */
     public void switchToDutch(ActionEvent actionEvent) throws BackingStoreException {
+//        userConfig.setLanguageConfig("nl");
         switchLocale("messages", "nl");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/nl_flag.png")).toExternalForm());
-        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/nl_flag.png");
         menuButtonView.setImage(image);
     }
 
@@ -342,9 +346,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
+        userConfig.setLanguageConfig("es");
         switchLocale("messages","es");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
-        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/es_flag.png");
         menuButtonView.setImage(image);
     }
 
@@ -474,6 +478,12 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     public void refresh(Event event) {
+        String lp = userConfig.getLanguageConfig();
+        if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
+            Image image = new Image("/client/misc/" + lp +  "_flag.png");
+            menuButtonView.setImage(image);
+        }
+
         this.event = serverUtils.getEvent(event.getId());
         options.setVisible(false);
         block.setVisible(false);

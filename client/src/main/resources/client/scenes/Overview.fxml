@@ -43,7 +43,7 @@
                 <MenuItem mnemonicParsing="false" onAction="#switchToEnglish" text="English">
                     <graphic>
                         <ImageView fitWidth="16" fitHeight="12">
-                            <Image url="@/client/misc/uk_flag.png" />
+                            <Image url="@/client/misc/en_flag.png" />
                         </ImageView>
                     </graphic>
                 </MenuItem>

@@ -88,8 +88,6 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         strings.setSendReminder(Main.getLocalizedString("reminder"));
         strings.setMarkReceived(Main.getLocalizedString("markReceived"));
         openDebt.setText(Main.getLocalizedString("openDebt"));
-
-
     }
 
     /**
