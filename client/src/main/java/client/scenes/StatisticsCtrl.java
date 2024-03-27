@@ -86,12 +86,16 @@ public class StatisticsCtrl implements Main.UpdatableUI {
 
         for (Expense expense : event.getExpenses()) {
             Tag tag = expense.getTag();
+            String tagName;
             if (tag != null) {
-                String tagName = tag.getName();
-                double amount = expense.getAmount();
-                expensesPerTag.put(tagName, expensesPerTag.getOrDefault(tagName, 0.0) + amount);
-                tagColors.putIfAbsent(tagName, Color.rgb(tag.getRed(), tag.getGreen(), tag.getBlue()));
+                tagName = tag.getName();
+            } else {
+                tagName = "Other";
+                tag = new Tag("Other", 255, 255, 255);
             }
+            double amount = expense.getAmount();
+            expensesPerTag.put(tagName, expensesPerTag.getOrDefault(tagName, 0.0) + amount);
+            tagColors.putIfAbsent(tagName, Color.rgb(tag.getRed(), tag.getGreen(), tag.getBlue()));
         }
 
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
@@ -106,6 +110,7 @@ public class StatisticsCtrl implements Main.UpdatableUI {
         }
         pieChart.setData(pieChartData);
     }
+
 
     /**
      * Paints the pie chart with the colors of the tags.
