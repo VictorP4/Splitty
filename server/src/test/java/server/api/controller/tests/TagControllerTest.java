@@ -8,8 +8,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import server.api.controllers.TagController;
-import server.api.services.TagServiceImpl;
 import commons.Tag;
+import server.api.services.TagService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 public class TagControllerTest {
 
     @Mock
-    private TagServiceImpl tagService;
+    private TagService tagService;
 
     @InjectMocks
     private TagController tagController;
