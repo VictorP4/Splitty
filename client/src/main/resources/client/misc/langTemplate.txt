@@ -49,3 +49,4 @@ ovStatistics = Statistics
 openDebt = Open Debt
 gives = gives
 to = to
+infoNotAvailable = Bank information not available

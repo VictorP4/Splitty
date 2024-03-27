@@ -1,7 +1,6 @@
 package client.scenes;
 import client.Main;
 import client.models.Debt;
-import client.models.OpenDebtString;
 import client.utils.ServerUtils;
 import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
@@ -40,8 +39,6 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
     @FXML
     private Accordion debtsOverview;
     private Event event;
-    private OpenDebtString strings;
-    private String lang;
     @FXML
     private Text openDebt;
     private WebSocketUtils webSocket;
@@ -78,18 +75,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
      */
     @Override
     public void updateUI() {
-        if(this.strings==null) this.strings = new OpenDebtString();
-
-        if(Main.getLocalizedString("accHolder").equals("Account Holder:")) lang="en";
-        else lang="nl";
-        strings.setBankInfo(Main.getLocalizedString("transferTo"));
-        strings.setBankAccount(Main.getLocalizedString("accHolder"));
-        strings.setEmail(Main.getLocalizedString("emailHolder"));
-        strings.setSendReminder(Main.getLocalizedString("reminder"));
-        strings.setMarkReceived(Main.getLocalizedString("markReceived"));
-        openDebt.setText(Main.getLocalizedString("openDebt"));
-
-
+        //translation takes place when the scene is refreshed
     }
 
     /**
@@ -103,9 +89,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
      * refreshes the debts
      */
     public void refresh(Event event){
-        if(this.lang==null) lang="en";
         this.event=event;
-        if(this.strings==null) this.strings = new OpenDebtString();
         var tempDebts = getDebts(event);
         debts = FXCollections.observableList(tempDebts);
         List<TilePane> titlePanes= new ArrayList<>();
@@ -194,18 +178,14 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         tempAP.setMinWidth(0.0);
         tempAP.setPrefSize(367,205);
         Text text1 = null;
-        if(debt.getPersonOwed().getIban()!=null&&debt.getPersonOwed().getBic()!=null) {
-            text1 = new Text("Bank information available, transfer the money to:");
+        if(debt.getPersonOwed().getIban()!=null&&debt.getPersonOwed().getBic()!=null&&!debt.getPersonOwed().getIban().isEmpty()) {
+            text1 = new Text(Main.getLocalizedString("transferTo"));
             text1.setLayoutX(14.0);
             text1.setLayoutY(27.0);
             text1.setStrokeType(StrokeType.OUTSIDE);
             text1.setStrokeWidth(0.0);
-            text1.textProperty().bind(strings.bankInfo());
-            if(strings.getBankInfo()==null) strings.setBankInfo("Bank information available, transfer the money to:");
 
-            Text text2 = new Text("Account Holder: " + debt.getPersonOwed().getName());
-            text2.textProperty().bind(strings.bankAccountProperty());
-            if(strings.getBankAccount()==null) strings.setBankAccount("Account Holder: ");
+            Text text2 = new Text(Main.getLocalizedString("accHolder")+" "+ debt.getPersonOwed().getName());
             text2.setLayoutX(14.0);
             text2.setLayoutY(44.0);
             text2.setStrokeType(StrokeType.OUTSIDE);
@@ -223,17 +203,13 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
             text4.setStrokeType(StrokeType.OUTSIDE);
             text4.setStrokeWidth(0.0);
 
-            Text text5 = new Text("Email configured:");
-            text5.textProperty().bind(strings.email());
-            if(strings.getEmail()==null) strings.setEmail("Email configured:");
+            Text text5 = new Text(Main.getLocalizedString("emailHolder"));
             text5.setLayoutX(14.0);
             text5.setLayoutY(108.0);
             text5.setStrokeType(StrokeType.OUTSIDE);
             text5.setStrokeWidth(0.0);
 
-            Button emailB = new Button("Send reminder");
-            emailB.textProperty().bind(strings.sendReminder());
-            if(strings.getSendReminder()==null) strings.setSendReminder("Send reminder");
+            Button emailB = new Button(Main.getLocalizedString("reminder"));
             emailB.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -266,9 +242,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
             tempAP.getChildren().addAll(text1, text2, text3, text4, text5, emailB);
         }
         else{
-            text1 = new Text("Bank information not available");
-            text1.textProperty().bind(strings.bankInfoNA());
-            if(strings.getBankInfoNA()==null) strings.setBankInfoNA("Bank information not available");
+            text1 = new Text(Main.getLocalizedString("infoNotAvailable"));
             text1.setLayoutX(14.0);
             text1.setLayoutY(27.0);
             text1.setStrokeType(StrokeType.OUTSIDE);
@@ -301,9 +275,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         imgBank.setId("bank");
         imgBank.setFitHeight(16);
         imgBank.setFitWidth(16);
-        Button markReceived = new Button("Mark Received");
-        markReceived.textProperty().bind(strings.markReceived());
-        if(strings.getMarkReceived()==null) strings.setMarkReceived("Mark Received");
+        Button markReceived = new Button(Main.getLocalizedString("markReceived"));
         Event event1 = this.event;
         markReceived.setOnAction(new EventHandler<ActionEvent>() {
             @Override
