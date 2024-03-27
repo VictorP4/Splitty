@@ -1,7 +1,6 @@
 package server.api.controllers;
 
 import commons.Tag;
-import server.api.services.TagServiceImpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,19 +8,20 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import server.api.services.TagService;
 
 @RestController
 @RequestMapping("/api/tags")
 public class TagController {
 
-    private final TagServiceImpl tagServiceImpl;
+    private final TagService tagServiceImpl;
 
     /**
      * Constructs a new TagController with the specified TagService.
      *
      * @param tagServiceImpl the TagService to use for tag management
      */
-    public TagController(TagServiceImpl tagServiceImpl) {
+    public TagController(TagService tagServiceImpl) {
         this.tagServiceImpl = tagServiceImpl;
     }
 
