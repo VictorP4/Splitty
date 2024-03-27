@@ -12,21 +12,25 @@
             <Font name="System Bold" size="24.0" />
          </font>
       </Text>
-      <Text fx:id="eventCost" layoutX="69.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Cost of Event:">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Text>
-      <Text fx:id="total" layoutX="199.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0.00" wrappingWidth="100.6640625">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Text>
       <Button fx:id="backButton" layoutX="14.0" layoutY="25.0" mnemonicParsing="false" onAction="#back" text="Back">
          <font>
             <Font size="13.0" />
          </font>
       </Button>
       <PieChart fx:id="pieChart" layoutX="80.0" layoutY="112.0" prefHeight="260.0" prefWidth="426.0" />
+      <HBox layoutX="66.0" layoutY="70.0" prefHeight="27.0" prefWidth="347.0">
+         <children>
+            <Text fx:id="eventCost" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Cost of Event:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <Text fx:id="total" strokeType="OUTSIDE" strokeWidth="0.0" text="0.00" wrappingWidth="86.6640625">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>
