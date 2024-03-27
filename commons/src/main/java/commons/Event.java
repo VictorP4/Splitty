@@ -1,6 +1,8 @@
 package commons;
 
 import jakarta.persistence.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -46,6 +48,12 @@ public class Event {
         tags.add(new Tag("Travel", 255, 0, 0));
     }
 
+    /**
+     * Generates a random string for the inviteCode.
+     *
+     * @param length the length of the random string.
+     * @return a randomly generated string of a set length.
+     */
     public static String generateRandomString(int length) {
         StringBuilder sb = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
@@ -247,12 +255,7 @@ public class Event {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Event)) return false;
-        Event event = (Event) o;
-        return Objects.equals(id, event.id) && Objects.equals(title, event.title) &&
-                Objects.equals(creationDate, event.creationDate) && Objects.equals(lastActivityDate, event.lastActivityDate) &&
-                Objects.equals(inviteCode, event.inviteCode) && Objects.equals(participants, event.participants) && Objects.equals(expenses, event.expenses);
+        return EqualsBuilder.reflectionEquals(this, o);
     }
 
     /**
@@ -262,7 +265,7 @@ public class Event {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, creationDate, lastActivityDate, inviteCode, participants, expenses);
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
 }
