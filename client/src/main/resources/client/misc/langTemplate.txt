@@ -51,3 +51,5 @@ gives = gives
 to = to
 infoNotAvailable = Bank information not available
 back = Back
+localServer= Back to locally hosted server:
+setToLocalServer= Local Server

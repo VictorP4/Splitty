@@ -79,7 +79,6 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
     public void updateUI() {
         openDebt.setText(Main.getLocalizedString("openDebt"));
         back.setText(Main.getLocalizedString("back"));
-
     }
 
     /**
