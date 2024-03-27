@@ -85,6 +85,20 @@ public class ServerUtils {
 	}
 
 	/**
+	 * Adds an event imported from a JSON file
+	 *
+	 * @param event event to add.
+	 * @return The added event.
+	 */
+	public Event addEventJSON(Event event) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("api/events/import")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.post(Entity.entity(event, APPLICATION_JSON), Event.class);
+	}
+
+	/**
 	 * Retrieves an event by its ID.
 	 *
 	 * @param id The ID of the event.
@@ -405,3 +419,7 @@ public class ServerUtils {
 	}
 
 }
+
+//Path path = Paths.get(event.getAbsolutePath());
+//byte[] data = Files.readAllBytes(path);
+//Entity<byte[]> entity = Entity.entity(data, MediaType.MULTIPART_FORM_DATA_TYPE);
