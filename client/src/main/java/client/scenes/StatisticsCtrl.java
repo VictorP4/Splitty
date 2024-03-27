@@ -116,12 +116,10 @@ public class StatisticsCtrl implements Main.UpdatableUI {
      * Paints the pie chart with the colors of the tags.
      */
     private void paintChart() {
-        for (Map.Entry<String, Double> entry : expensesPerTag.entrySet()) {
-            String tagName = entry.getKey();
-            for (PieChart.Data data : pieChart.getData()) {
-                Color color = tagColors.get(tagName);
-                data.getNode().setStyle("-fx-pie-color: rgb(" + (int) (255 * color.getRed()) + "," + (int) (255 * color.getGreen()) + "," + (int) (255 * color.getBlue()) + ");");
-            }
+        for (PieChart.Data data : pieChart.getData()) {
+            String tagName = data.getName().split("\n")[0];
+            Color color = tagColors.get(tagName);
+            data.getNode().setStyle("-fx-pie-color: rgb(" + (int) (255 * color.getRed()) + "," + (int) (255 * color.getGreen()) + "," + (int) (255 * color.getBlue()) + ");");
         }
     }
 
