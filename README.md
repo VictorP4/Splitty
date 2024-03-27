@@ -18,8 +18,10 @@ There, the participants in the event can be seen and added. Expenses can be disp
 
 User can settle the debt in an event by clicking settle debt.
 
-User can see the statistics of the event (tbd)
+User can see the statistics of the event.
 
 User can add a new expense. When adding expense, user can fill information like who, to who, how much etc. User can also choose a tag for this expense which will be displayed with the expense together. 
+
+Users can choose the currency they want to operate with for expense creation.
 
 User can click the pencil and add/edit tags. If a known tag's name is written, it will be in edit mode, otherwise in adding mode.
