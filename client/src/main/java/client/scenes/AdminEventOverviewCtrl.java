@@ -21,7 +21,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -93,10 +92,16 @@ public class AdminEventOverviewCtrl {
             Button deleteButton = new Button("Delete");
             deleteButton.setOnAction(event -> {
                 Event selectedEvent = param.getValue();
-                server.deleteEvent(selectedEvent.getId());
-                events.remove(selectedEvent);
+                var alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText("Are you sure you want to delete this event?");
+                alert.showAndWait().ifPresent((response)->{
+                    if(response == ButtonType.OK){
+                        server.deleteEvent(selectedEvent.getId());
+                        events.remove(selectedEvent);
+                    }
+                });
                 refresh();
-                popup("event deleted");
             });
             return new SimpleObjectProperty<>(deleteButton);
         });
@@ -140,7 +145,7 @@ public class AdminEventOverviewCtrl {
             public void handle(MouseEvent event) {
                 if (event.getClickCount() == 2) {
                     Event selectedEvent = eventsTable.getSelectionModel().getSelectedItem();
-                    if(selectedEvent!=null) mainCtrl.showEventOverview(selectedEvent);
+                    if(selectedEvent!=null) mainCtrl.showEventOverviewFromAdmin(selectedEvent);
                 }
             }
         });
@@ -171,7 +176,11 @@ public class AdminEventOverviewCtrl {
         var alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setContentText(message);
-        alert.showAndWait();
+        alert.showAndWait().ifPresent((response)->{
+            if(response == ButtonType.OK){
+
+            }
+        });
     }
 
     /**

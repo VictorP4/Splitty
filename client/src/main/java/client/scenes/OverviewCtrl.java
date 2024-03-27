@@ -29,6 +29,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import commons.Expense;
 import javafx.collections.ObservableList;
+import javafx.stage.Modality;
 
 
 import java.io.*;
@@ -93,7 +94,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private Pane options;
     @FXML
     public AnchorPane ap;
+    private boolean admin;
     private final UserConfig userConfig = new UserConfig();
+
 
 
     /**
@@ -114,6 +117,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Initializes the controller.
      */
     public void initialize() {
+        admin=false;
         String lp = userConfig.getLanguageConfig();
         if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
             Image image = new Image("/client/misc/" + lp +  "_flag.png");
@@ -220,25 +224,33 @@ public class OverviewCtrl implements Main.UpdatableUI {
             label.setOnMouseClicked(mouseEvent -> {
                 if (mouseEvent.getClickCount() == 2) {
                     if (mouseEvent.getButton() == MouseButton.SECONDARY) {
-                        event.removeParticipant(contact);
-                        serverUtils.updateEvent(event);
-                        List<Expense> toDelete = new ArrayList<>();
-                        for(Expense expense : event.getExpenses()){
-                            if(expense.getPaidBy().equals(contact)) toDelete.add(expense);
-                            else if(expense.getInvolvedParticipants().contains(contact)){
-                                if(expense.getInvolvedParticipants().size()==1) toDelete.add(expense);
-                                else{
-                                    expense.getInvolvedParticipants().remove(contact);
-                                    serverUtils.updateExpense(event.getId(), expense);
+                        var alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.initModality(Modality.APPLICATION_MODAL);
+                        alert.setContentText("Are you sure you want to delete this participant?");
+                        alert.showAndWait().ifPresent((response)->{
+                            if(response == ButtonType.OK){
+                                event.removeParticipant(contact);
+                                serverUtils.updateEvent(event);
+                                List<Expense> toDelete = new ArrayList<>();
+                                for(Expense expense : event.getExpenses()){
+                                    if(expense.getPaidBy().equals(contact)) toDelete.add(expense);
+                                    else if(expense.getInvolvedParticipants().contains(contact)){
+                                        if(expense.getInvolvedParticipants().size()==1) toDelete.add(expense);
+                                        else{
+                                            expense.getInvolvedParticipants().remove(contact);
+                                            serverUtils.updateExpense(event.getId(), expense);
+                                        }
+                                    }
                                 }
+                                for(Expense expense1: toDelete){
+                                    serverUtils.deleteExpense(event.getId(), expense1);
+                                }
+                                serverUtils.deleteParticipant(contact);
+                                this.event = serverUtils.updateEvent(this.event);
+                                participantsDisplay();
                             }
-                        }
-                        for(Expense expense1: toDelete){
-                            serverUtils.deleteExpense(event.getId(), expense1);
-                        }
-                        serverUtils.deleteParticipant(contact);
-                        this.event = serverUtils.updateEvent(this.event);
-                        participantsDisplay();
+                        });
+
                     } else
                         addParticipant1(contact);
                 }
@@ -357,7 +369,10 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * want to
      */
     public void backToStartScreen() {
-        mainCtrl.showStartScreen();
+        if(admin){
+            mainCtrl.showAdminEventOverview();
+        }
+        else mainCtrl.showStartScreen();
     }
 
     /**
@@ -589,4 +604,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
         }
     }
 
+    /**
+     * marks that an admin is accessing the event overview
+     * @param b
+     */
+    public void setAdmin(boolean b) {
+        this.admin=true;
+    }
 }

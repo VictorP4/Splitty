@@ -53,9 +53,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     @FXML
     public Button add;
     @FXML
-    public Button overviewButton;
-
-    @FXML
     private CheckBox everybodyIn;
     @FXML
     private CheckBox someIn;
@@ -130,7 +127,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     @Override
     public void updateUI() {
-        overviewButton.setText(Main.getLocalizedString("overviewButton"));
         addEditText.setText(Main.getLocalizedString("AEExpense"));
         whoPaid.setText(Main.getLocalizedString("whoPaid"));
         whatFor.setText(Main.getLocalizedString("whatFor"));
@@ -199,8 +195,12 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         // Checks if all mandatory boxes have been filled in
         try {
             addExp = getExpense();
+
+        } catch (NumberFormatException e) {
+            errorPopup("Invalid amount");
+            return;
         } catch (Exception e) {
-            errorPopup("Missing title, amount or date");
+            errorPopup("Missing title or date");
             return;
         }
         if (addExp.getPaidBy() == null) {
@@ -272,13 +272,27 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 paidBy.getItems().add(p);
             }
         }
+        setAddOrEditButton();
         currency.setValue(userConfig.getCurrencyConfig());
+
         populateTagMenu();
     }
 
     /**
+<<<<<<< HEAD
+     * setting the edit or add button
+     */
+    public void setAddOrEditButton() {
+        if(this.expense==null) this.add.setText(Main.getLocalizedString("add"));
+        else this.add.setText(Main.getLocalizedString("edit"));
+    }
+
+    /**
+     * adds values to the currency picker combobox, separate method for "future use" in case of multiple currencies
+=======
      * adds values to the currency picker combobox, separate method for "future use"
      * in case of multiple currencies
+>>>>>>> main
      * being implemented, keeps refresh cleaner
      */
     private void addToCurrency() {
@@ -445,6 +459,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         refresh(event);
         addEditText.setText("Edit Expense");
         this.expense = expense;
+        setAddOrEditButton();
         this.title.setText(expense.getTitle());
         this.amount.setText(Double.toString(expense.getAmount()));
         LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

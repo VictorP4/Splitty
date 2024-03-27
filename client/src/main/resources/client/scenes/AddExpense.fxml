@@ -71,11 +71,6 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="overviewButton" layoutX="14.0" layoutY="25.0" mnemonicParsing="false" onAction="#cancel" text="Back">
-         <font>
-            <Font size="13.0" />
-         </font>
-      </Button>
       <HBox layoutX="-150.0" layoutY="-167.0" prefHeight="100.0" prefWidth="200.0" />
       <HBox layoutX="256.0" layoutY="316.0" prefHeight="27.0" prefWidth="183.0">
          <children>

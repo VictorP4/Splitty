@@ -143,6 +143,7 @@ public class MainCtrl {
         eventOverviewCtrl.refresh(event);
         primaryStage.setTitle("EventOverview");
         primaryStage.setScene(eventOverview);
+        eventOverviewCtrl.setAdmin(false);
     }
 
     public void refreshEventOverview(Event event) {
@@ -242,4 +243,14 @@ public class MainCtrl {
         return primaryStage.getTitle();
     }
 
+    /**
+     * Display the event overview when an admin accesses it
+     * @param selectedEvent
+     */
+    public void showEventOverviewFromAdmin(Event selectedEvent) {
+        eventOverviewCtrl.refresh(selectedEvent);
+        primaryStage.setTitle("EventOverview");
+        primaryStage.setScene(eventOverview);
+        eventOverviewCtrl.setAdmin(true);
+    }
 }

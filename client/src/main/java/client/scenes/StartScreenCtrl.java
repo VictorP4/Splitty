@@ -3,10 +3,12 @@ package client.scenes;
 import client.Main;
 import client.UserConfig;
 import client.utils.ServerUtils;
+import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -63,6 +65,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     private ListView<Event> recentlyAccessed;
     private ObservableList<Event> listViewItems;
     private static final String SELECTED_IMAGE_KEY = "selectedImage";
+    private WebSocketUtils webSocket;
 
     private Preferences prefs = Preferences.userNodeForPackage(StartScreenCtrl.class);;
     private final UserConfig userConfig = new UserConfig();
@@ -74,9 +77,10 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      * @param mainCtrl The main controller of the application.
      */
     @Inject
-    public StartScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public StartScreenCtrl(ServerUtils server, MainCtrl mainCtrl, WebSocketUtils webSocket) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.webSocket = webSocket;
     }
 
     /**
@@ -127,6 +131,12 @@ public class StartScreenCtrl implements Main.UpdatableUI {
             });
             return lc;
         });
+        webSocket.addServerListener(()->{
+            Platform.runLater(()->{
+                mainCtrl.showStartScreen();
+                errorPopup("Server not available");
+            });
+        });
     }
 
     /**
@@ -137,7 +147,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         Event createdEvent = new Event();
 
         if (eventTitle.getText().isBlank()) {
-            noValidEventError("Why no title? (>_<) <-- this is supposed to be mad");
+            errorPopup("Why no title? (>_<) <-- this is supposed to be mad");
             return;
         }
 
@@ -149,7 +159,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
             mainCtrl.showContactDetails(creator, createdEvent);
             updateMostRecent(createdEvent);
         } catch (WebApplicationException e) {
-            noValidEventError(e.getMessage());
+            errorPopup(e.getMessage());
         }
     }
 
@@ -164,10 +174,14 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         try {
             String inviteCode = eventCode.getText().trim();
             if (inviteCode.isBlank()) {
-                noValidEventError("This is not a valid event code :(");
+                errorPopup("This is not a valid event code :(");
                 return;
             }
             Event fetchedEvent = server.getEventByInviteCode(inviteCode);
+            if(fetchedEvent==null){
+                errorPopup("Invalid invite code");
+                return;
+            }
             mainCtrl.refreshEventOverview(fetchedEvent);
             if (newMember) {
                 Participant joined = new Participant();
@@ -177,21 +191,11 @@ public class StartScreenCtrl implements Main.UpdatableUI {
             }
             updateMostRecent(fetchedEvent);
         } catch (WebApplicationException e) {
-            noValidEventError(e.getMessage());
+            errorPopup(e.getMessage());
         }
     }
 
-    /**
-     * Creates an error if the user tries to access an event that isn't valid.
-     *
-     * @param message the message displayed to the user
-     */
-    public void noValidEventError(String message) {
-        var alert = new Alert(Alert.AlertType.ERROR);
-        alert.initModality(Modality.APPLICATION_MODAL);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+
 
     /**
      * updates the list with most recent events.
@@ -295,7 +299,11 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      * Updates all events in listviewItems to keep up with recent updates.
      */
     private void updateAllEvents() {
-        listViewItems.replaceAll(event -> server.getEvent(event.getId()));
+        try{
+            listViewItems.replaceAll(event -> server.getEvent(event.getId()));
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
@@ -323,4 +331,16 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     public void toSettings() {
         mainCtrl.showSettingsPage();
     }
+
+    /**
+     * Creates error for invalid action
+     * @param message
+     */
+    private void errorPopup(String message) {
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 }
