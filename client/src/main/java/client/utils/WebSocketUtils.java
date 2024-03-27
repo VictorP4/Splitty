@@ -21,6 +21,7 @@ public class WebSocketUtils {
     private List<Consumer<Event>> eventListener;
     private List<Consumer<Participant>> participantListener;
     private List<Consumer<Expense>> expenseListener;
+    private Runnable serverListener;
 
     /**
      * constructor for the webscoket utils
@@ -65,6 +66,11 @@ public class WebSocketUtils {
         stomp.setMessageConverter(new MappingJackson2MessageConverter());
         try{
             this.session = stomp.connect(url, new StompSessionHandlerAdapter() {
+                public void handleTransportError(StompSession session, Throwable exception) {
+                    if(!session.isConnected()){
+                        serverListener.run();
+                    }
+                }
             }).get();
             registerForUpdates("/topic/events",Event.class, event ->{
                 eventListener.forEach(listener ->listener.accept(event));
@@ -104,5 +110,8 @@ public class WebSocketUtils {
     }
     public void disconnect(){
         this.session.disconnect();
+    }
+    public void addServerListener(Runnable serverListener){
+        this.serverListener = serverListener;
     }
 }
