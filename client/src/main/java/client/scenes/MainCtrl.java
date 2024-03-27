@@ -243,6 +243,10 @@ public class MainCtrl {
         return primaryStage.getTitle();
     }
 
+    /**
+     * Display the event overview when an admin accesses it
+     * @param selectedEvent
+     */
     public void showEventOverviewFromAdmin(Event selectedEvent) {
         eventOverviewCtrl.refresh(selectedEvent);
         primaryStage.setTitle("EventOverview");
