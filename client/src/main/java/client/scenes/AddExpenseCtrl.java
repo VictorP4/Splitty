@@ -196,8 +196,11 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         // Checks if all mandatory boxes have been filled in
         try {
             addExp = getExpense();
+        } catch(NumberFormatException e){
+            errorPopup("Invalid amount");
+            return;
         } catch(Exception e) {
-            errorPopup("Missing title, amount or date");
+            errorPopup("Missing title or date");
             return;
         }
         if (addExp.getPaidBy() == null) {
@@ -268,7 +271,16 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 paidBy.getItems().add(p);
             }
         }
+        setAddOrEditButton();
         populateTagMenu();
+    }
+
+    /**
+     * setting the edit or add button
+     */
+    public void setAddOrEditButton() {
+        if(this.expense==null) this.add.setText(Main.getLocalizedString("add"));
+        else this.add.setText(Main.getLocalizedString("edit"));
     }
 
     /**
@@ -435,7 +447,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         this.event = event;
         refresh(event);
         this.expense = expense;
-
+        setAddOrEditButton();
         this.title.setText(expense.getTitle());
         this.amount.setText(Double.toString(expense.getAmount()));
         LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

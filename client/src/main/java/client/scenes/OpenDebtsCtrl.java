@@ -289,8 +289,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         tempBox.setSpacing(5);
         Text text = new Text();
 
-        if(this.lang.equals("en")) text.setText(debt.getPersonInDebt().getName()+" gives "+ debt.getAmount()+" euro to "+ debt.getPersonOwed().getName());
-        else text.setText(debt.getPersonInDebt().getName()+" geeft "+ debt.getAmount()+" euro ann "+ debt.getPersonOwed().getName());
+        text.setText(debt.getPersonInDebt().getName()+" "+Main.getLocalizedString("gives")+" "+ debt.getAmount()+" euros "+Main.getLocalizedString("to")+" "+ debt.getPersonOwed().getName());
         text.setWrappingWidth(275);
         text.setStrokeType(StrokeType.OUTSIDE);
         text.setStrokeWidth(0.0);
