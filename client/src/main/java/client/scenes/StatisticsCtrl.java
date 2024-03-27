@@ -6,8 +6,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import com.google.inject.Inject;
+import javafx.scene.Node;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import commons.Event;
@@ -120,6 +122,17 @@ public class StatisticsCtrl implements Main.UpdatableUI {
             String tagName = data.getName().split("\n")[0];
             Color color = tagColors.get(tagName);
             data.getNode().setStyle("-fx-pie-color: rgb(" + (int) (255 * color.getRed()) + "," + (int) (255 * color.getGreen()) + "," + (int) (255 * color.getBlue()) + ");");
+            for (Node node : pieChart.lookupAll("Label.chart-legend-item")) {
+                if (node instanceof Label) {
+                    Label label = (Label) node;
+                    if (label.getText().startsWith(tagName)) {
+                        Node legendSymbol = label.getGraphic();
+                        if (legendSymbol != null) {
+                            legendSymbol.setStyle("-fx-background-color: rgb(" + (int) (255 * color.getRed()) + "," + (int) (255 * color.getGreen()) + "," + (int) (255 * color.getBlue()) + ");");
+                        }
+                    }
+                }
+            }
         }
     }
 
