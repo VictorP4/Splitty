@@ -42,6 +42,8 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
     @FXML
     private Text openDebt;
     private WebSocketUtils webSocket;
+    @FXML
+    private Button back;
 
     /**
      * Constructs a new instance of an OpenDebtCtrl
@@ -75,7 +77,9 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
      */
     @Override
     public void updateUI() {
-        //translation takes place when the scene is refreshed
+        openDebt.setText(Main.getLocalizedString("openDebt"));
+        back.setText(Main.getLocalizedString("back"));
+
     }
 
     /**

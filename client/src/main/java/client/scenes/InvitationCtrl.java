@@ -40,6 +40,8 @@ public class InvitationCtrl implements Main.UpdatableUI {
     private String inviteCode;
     @FXML
     public AnchorPane ap;
+    @FXML
+    private Button overviewButton;
 
     /**
      * Constructs a new instance of InvitationCtrl.
@@ -137,6 +139,7 @@ public class InvitationCtrl implements Main.UpdatableUI {
 
     @Override
     public void updateUI() {
+        overviewButton.setText(Main.getLocalizedString("back"));
         title.setText(Main.getLocalizedString("OverviewTitle"));
         sendInv.setText(Main.getLocalizedString("sendInv"));
         invEmail.setText(Main.getLocalizedString("invEmail"));

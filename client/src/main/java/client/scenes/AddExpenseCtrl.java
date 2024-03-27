@@ -55,9 +55,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     @FXML
     public Button add;
     @FXML
-    public Button overviewButton;
-
-    @FXML
     private CheckBox everybodyIn;
     @FXML
     private CheckBox someIn;
@@ -129,7 +126,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     @Override
     public void updateUI() {
-        overviewButton.setText(Main.getLocalizedString("overviewButton"));
         addEditText.setText(Main.getLocalizedString("AEExpense"));
         whoPaid.setText(Main.getLocalizedString("whoPaid"));
         whatFor.setText(Main.getLocalizedString("whatFor"));

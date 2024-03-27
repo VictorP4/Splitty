@@ -131,6 +131,6 @@
             </TitledPane>
         </panes>
       </Accordion>
-      <Button layoutX="490.0" layoutY="35.0" mnemonicParsing="false" text="Back" onAction="#back" />
+      <Button fx:id="back" layoutX="490.0" layoutY="35.0" mnemonicParsing="false" text="Back" onAction="#back" />
    </children>
 </AnchorPane>
