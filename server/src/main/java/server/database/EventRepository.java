@@ -36,10 +36,4 @@ public interface EventRepository extends JpaRepository<Event, Long>{
      */
      Event getByInviteCode(@Param("inviteCode") String inviteCode);
 
-    /**
-     * Returns the requested event using id
-     * @param id must not be {@literal null}.
-     * @return event requested
-     */
-    Event getById(@Param("id") Long id);
 }
