@@ -53,12 +53,7 @@ public class Main extends Application {
      * @throws IOException If an error occurs while loading the FXML files.
      */
     @Override
-    public void start(Stage primaryStage) throws IOException, NotFoundException {
-//        prefs = Preferences.userNodeForPackage(Main.class);
-//        String savedLanguage = prefs.get(LANGUAGE_PREF_KEY, "en");
-//        loadLanguageBundle(savedLanguage);
-         loadLanguageBundle(userConfig.getLanguageConfig());
-
+    public void start(Stage primaryStage) throws IOException, NotFoundException, BackingStoreException {
         var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
         var addTag = FXML.load(AddTagCtrl.class, "client", "scenes", "AddTag.fxml");
         var contactDetails = FXML.load(ContactDetailsCtrl.class, "client", "scenes", "ContactDetails.fxml");
@@ -69,6 +64,8 @@ public class Main extends Application {
         var eventOverview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
         var adminEventOverview = FXML.load(AdminEventOverviewCtrl.class, "client", "scenes", "AdminEventOverview.fxml");
         var settingsPage = FXML.load(SettingsPageCtrl.class, "client", "scenes", "SettingsPage.fxml");
+
+        switchLocale("messages", userConfig.getLanguageConfig());
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, addExpense, contactDetails,
@@ -128,8 +125,6 @@ public class Main extends Application {
         if (languageCode != null) {
             UserConfig uc = new UserConfig();
             uc.setLanguageConfig(languageCode);
-//            prefs.put(LANGUAGE_PREF_KEY, languageCode);
-//            prefs.flush();
             Locale locale = new Locale(languageCode);
             resourceBundle = ResourceBundle.getBundle(baseName, locale);
         } else {

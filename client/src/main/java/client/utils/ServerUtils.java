@@ -5,6 +5,7 @@ package client.utils;
 
 import client.UserConfig;
 import commons.*;
+import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -23,12 +24,8 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
-	private static String server;
-	private final UserConfig userConfig = new UserConfig();
-
-	public ServerUtils() {
-		server = userConfig.getServerURLConfig();
-	}
+	private static  final UserConfig userConfig = new UserConfig();
+	private static String server = userConfig.getServerURLConfig();
 
 	/**
 	 * Sets the server URL.
@@ -46,13 +43,16 @@ public class ServerUtils {
 	 * @return The response from the server.
 	 */
 	public Response checkServer(String userUrl) {
-		this.server = "http://" + userUrl;
-		Response response = ClientBuilder.newClient(new ClientConfig())
-				.target(server).path("api/connection")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.get();
-
+		Response response = null;
+		try {
+			response = ClientBuilder.newClient(new ClientConfig())
+					.target(server).path("api/connection")
+					.request(APPLICATION_JSON)
+					.accept(APPLICATION_JSON)
+					.get();
+		} catch (ProcessingException e) {
+			response = Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
 		return response;
 	}
 

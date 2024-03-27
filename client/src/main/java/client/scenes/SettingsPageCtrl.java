@@ -6,8 +6,6 @@ import client.utils.ServerUtils;
 import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
 import commons.Event;
-import commons.Expense;
-import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -19,9 +17,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Properties;
 
 public class SettingsPageCtrl implements Main.UpdatableUI {
 
