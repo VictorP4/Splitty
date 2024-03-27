@@ -88,6 +88,7 @@ public class CurrencyService {
      * @return ResponseEntity containing the converted amount.
      */
     public ResponseEntity<Double> convertCurrency(double amount, String fromCurrency, String toCurrency, LocalDate date) {
+        fetchExchangeRates(date);
         String cacheFileName = "rates/" + date + ".txt";
 
         Map<String, Double> exchangeRates = readCachedRates(cacheFileName);

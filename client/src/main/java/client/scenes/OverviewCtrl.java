@@ -34,6 +34,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.Date;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -408,17 +409,28 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public List<Expense> convertCurrency(List<Expense> a){
         for(Expense b:a){
             if(!b.getCurrency().equals(event.getPreferredCurrency())){
-                b.setAmount(serverUtils.convertCurrency(b.getAmount(),b.getCurrency(),
-                        event.getPreferredCurrency(), b.getDate().toInstant()
-                        .atZone(ZoneId.systemDefault()).toLocalDate()));
+                int amn =(int)(serverUtils.convertCurrency(b.getAmount(),b.getCurrency(),
+                        event.getPreferredCurrency(), new Date(b.getDate().getTime()).toLocalDate())*10000);
+                b.setAmount((double)amn/10000);
                 b.setCurrency(event.getPreferredCurrency());
             }
         }
         return a;
     }
     @FXML
-    public void changePreferredCurrency(){
-
+    public void changeCurrencyEUR(){
+        event.setPreferredCurrency("EUR");
+        showAllExpenses();
+    }
+    @FXML
+    public void changeCurrencyUSD(){
+        event.setPreferredCurrency("USD");
+        showAllExpenses();
+    }
+    @FXML
+    public void changeCurrencyCHF(){
+        event.setPreferredCurrency("CHF");
+        showAllExpenses();
     }
     /**
      * Shows all expenses of the event

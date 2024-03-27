@@ -118,9 +118,9 @@
       </Pane>
       <MenuButton fx:id="currencyButton" layoutX="208.0" layoutY="402.0" mnemonicParsing="false" text="Currency">
          <items>
-            <MenuItem mnemonicParsing="false" onAction="#switchToEnglish" text="EUR" />
-            <MenuItem mnemonicParsing="false" onAction="#switchToDutch" text="USD" />
-            <MenuItem mnemonicParsing="false" onAction="#switchToSpanish" text="CHF" />
+            <MenuItem mnemonicParsing="false" onAction="#changeCurrencyEUR" text="EUR" />
+            <MenuItem mnemonicParsing="false" onAction="#changeCurrencyUSD" text="USD" />
+            <MenuItem mnemonicParsing="false" onAction="#changeCurrencyCHF" text="CHF" />
          </items>
       </MenuButton>
       </children>

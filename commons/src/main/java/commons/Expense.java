@@ -176,7 +176,7 @@ public class Expense {
     }
 
     /**
-     * Retrieves the title of the expense.
+     * Retrieves the currency type of the expense.
      *
      * @return the title of the expense
      */
@@ -185,9 +185,9 @@ public class Expense {
     }
 
     /**
-     * Sets the title of the expense.
+     * Sets the currency type of the expense.
      *
-     * @param title the title of the expense to set
+     * @param currency the currency type of the expense to set
      */
     public void setCurrency(String currency) {
         this.currency = currency;
