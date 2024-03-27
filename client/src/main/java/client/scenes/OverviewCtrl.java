@@ -114,9 +114,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Initializes the controller.
      */
     public void initialize() {
-        File imageFile = new File("/client/misc/" + userConfig.getLanguageConfig() +  "_flag.png");
-        if (imageFile.exists()) {
-            Image image = new Image(imageFile.getName());
+        String lp = userConfig.getLanguageConfig();
+        if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
+            Image image = new Image("/client/misc/" + lp +  "_flag.png");
             menuButtonView.setImage(image);
         }
 
@@ -478,6 +478,12 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     public void refresh(Event event) {
+        String lp = userConfig.getLanguageConfig();
+        if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
+            Image image = new Image("/client/misc/" + lp +  "_flag.png");
+            menuButtonView.setImage(image);
+        }
+
         this.event = serverUtils.getEvent(event.getId());
         options.setVisible(false);
         block.setVisible(false);

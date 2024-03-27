@@ -270,7 +270,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         }
 
         String newLangPath;
-        try (OutputStream output = new FileOutputStream("client/src/main/resources/client/misc/messages.properties")) {
+        try (OutputStream output = new FileOutputStream("src/main/resources/client/misc/messages.properties")) {
             newLang.store(output, "Add the name of your new language to the first line of this file as a comment\n" +
                     "Send the final translation version to ooppteam58@gmail.com");
 
@@ -302,6 +302,11 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      * Refreshes the startScreen
      */
     public void refresh() {
+        String lp = userConfig.getLanguageConfig();
+        if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
+            Image image = new Image("/client/misc/" + lp +  "_flag.png");
+            menuButtonView.setImage(image);
+        }
         eventTitle.clear();
         eventCode.clear();
         alreadyJoined.setDisable(true);
@@ -318,5 +323,4 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     public void toSettings() {
         mainCtrl.showSettingsPage();
     }
-
 }
