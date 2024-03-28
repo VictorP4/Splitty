@@ -55,3 +55,4 @@ localServer= Back to locally hosted server:
 setToLocalServer= Local Server
 AddExpense = Add Expense
 EditExpense = Edit Expense
+Undo = Undo

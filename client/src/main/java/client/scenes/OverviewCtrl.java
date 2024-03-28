@@ -611,12 +611,20 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public void setAdmin(boolean b) {
         this.admin=b;
     }
+    /**
+     * deletes the expense from the cached ones
+     * @param expense the expense to be deleted from the cache
+     */
     public void deletePrevExp(Expense expense){
         if(previousExpenses.get(expense.getId())!=null){
             previousExpenses.get(expense.getId()).remove(expense);
             if(previousExpenses.get(expense.getId()).size()==0) previousExpenses.remove(expense.getId());
         }
     }
+    /**
+     * add an expense to the cache
+     * @param expense the expense to be added
+     */
     public void addPrevExp(Expense expense){
         if(previousExpenses.get(expense.getId())==null){
             previousExpenses.put(expense.getId(),new ArrayList<>());
@@ -624,6 +632,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
         }
         else previousExpenses.get(expense.getId()).add(expense);
     }
+    /**
+     * Returning the previous version of the expense stored in the cache
+     * @param id the id of the expense
+     * @return the previous version of the expense
+     */
     public Expense getPrevExp(Long id){
         if(previousExpenses.get(id)==null) return null;
         return previousExpenses.get(id).get(previousExpenses.get(id).size()-1);

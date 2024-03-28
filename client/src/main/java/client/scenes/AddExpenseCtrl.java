@@ -141,6 +141,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         expenseType.setText(Main.getLocalizedString("expType"));
         abort.setText(Main.getLocalizedString("abort"));
         add.setText(Main.getLocalizedString("add"));
+        undo.setText(Main.getLocalizedString("Undo"));
     }
 
     /**
@@ -511,6 +512,10 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             }
         }
     }
+
+    /**
+     * Sets the scene according to the previous version of the same expense
+     */
     @FXML
     public void undo(){
         if(expense==null||mainCtrl.getPrevExp(expense.getId())==null) errorPopup("Undo unavailable");

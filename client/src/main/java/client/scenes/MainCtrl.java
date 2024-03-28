@@ -255,12 +255,28 @@ public class MainCtrl {
         primaryStage.setScene(eventOverview);
         eventOverviewCtrl.setAdmin(true);
     }
+
+    /**
+     * deletes the expense from the cached ones
+     * @param expense the expense to be deleted from the cache
+     */
     public void deletePrevExp(Expense expense){
         eventOverviewCtrl.deletePrevExp(expense);
     }
+
+    /**
+     * add an expense to the cache
+     * @param expense the expense to be added
+     */
     public void addPrevExp(Expense expense){
         eventOverviewCtrl.addPrevExp(expense);
     }
+
+    /**
+     * Returning the previous version of the expense stored in the cache
+     * @param id the id of the expense
+     * @return the previous version of the expense
+     */
     public Expense getPrevExp(Long id){
         return eventOverviewCtrl.getPrevExp(id);
     }
