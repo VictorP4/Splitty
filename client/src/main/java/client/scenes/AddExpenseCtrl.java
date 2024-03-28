@@ -26,6 +26,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AddExpenseCtrl implements Main.UpdatableUI {
     private final ServerUtils server;
@@ -465,10 +466,11 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         this.amount.setText(Double.toString(expense.getAmount()));
         LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         this.date.setValue(localDate);
-        paidBy.getSelectionModel().select(expense.getPaidBy());
+        paidBy.getSelectionModel().select(event.getParticipants().stream().filter(x->x.getId().equals(expense.getPaidBy().getId())).findFirst().get());
         currency.setValue(this.expense.getCurrency());
-
-        if (expense.getInvolvedParticipants().equals(event.getParticipants())) {
+        Set<Long> expenseParList = new HashSet<>(expense.getInvolvedParticipants().stream().map(x->x.getId()).collect(Collectors.toList()));
+        Set<Long> eventParList = new HashSet<>(this.event.getParticipants().stream().map(x->x.getId()).collect(Collectors.toList()));
+        if (expenseParList.equals(eventParList)) {
             everybodyIn.setSelected(true);
         } else {
             someIn.setSelected(true);
