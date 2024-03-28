@@ -155,6 +155,8 @@ public class MainCtrl {
     /**
      * Displays the add expense scene in the primary stage
      * Associates the key pressed event with the AddExpenseCtrl
+     *
+     * @param event The event for which the add expense are to be displayed.
      */
     public void showAddExpense(Event event) {
         addExpenseCtrl.refresh(event);
@@ -165,6 +167,8 @@ public class MainCtrl {
     /**
      * Shows addExpense screen as it was before adding a new tag,
      *  with the new tag in the tag menu
+     *
+     *  @param event The event for which the add expenses are to be displayed.
      */
     public void showAddExpenseFromTag(Event event) {
         addExpenseCtrl.populateTagMenu();
@@ -215,6 +219,8 @@ public class MainCtrl {
 
     /**
      * Displays the statistics scene in the primary stage.
+     *
+     * @param event The event for which the statistics are to be displayed.
      */
     public void showStatistics(Event event) {
         statisticsCtrl.refresh(event);
@@ -224,6 +230,8 @@ public class MainCtrl {
 
     /**
      * Displays the add tag scene in the primary stage.
+     *
+     * @param event The event for which the add tag page has to be displayed.
      */
     public void showAddTag(Event event) {
         addTagCtrl.refresh(event);
@@ -233,6 +241,7 @@ public class MainCtrl {
 
     /**
      * Displays an overview of an expense in the add/edit expense scene
+     *
      * @param event of the expense
      * @param expense displayed
      */
