@@ -97,8 +97,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private boolean admin;
     private final UserConfig userConfig = new UserConfig();
 
-
-
     /**
      * Constructs an OverviewCtrl object.
      *
@@ -321,26 +319,33 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * @param actionEvent
      */
     public void switchToDutch(ActionEvent actionEvent) throws BackingStoreException {
-//        userConfig.setLanguageConfig("nl");
+        userConfig.setLanguageConfig("nl");
         switchLocale("messages", "nl");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/nl_flag.png")).toExternalForm());
         menuButtonView.setImage(image);
     }
 
+    public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
+        userConfig.setLanguageConfig("es");
+        switchLocale("messages","es");
+        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
+        menuButtonView.setImage(image);
+    }
+
     public void addLang(ActionEvent actionEvent) throws BackingStoreException {
         Properties newLang = new Properties();
-        try (BufferedReader reader = new BufferedReader(new FileReader("client/src/main/resources/client/misc/langTemplate.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/client/misc/langTemplate.txt"))) {
             newLang.load(reader);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         String newLangPath;
-        try (OutputStream output = new FileOutputStream("client/src/main/resources/client/misc/messages.properties")) {
+        try (OutputStream output = new FileOutputStream("src/main/resources/client/misc/messages.properties")) {
             newLang.store(output, "Add the name of your new language to the first line of this file as a comment\n"+
                     "Send the final translation version to ooppteam58@gmail.com");
 
-            newLangPath = "client/src/main/resources/client/misc/messages.properties";
+            newLangPath = "src/main/resources/client/misc/messages.properties";
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -355,13 +360,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
             e.printStackTrace();
         }
 
-    }
-
-    public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
-        userConfig.setLanguageConfig("es");
-        switchLocale("messages","es");
-        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
-        menuButtonView.setImage(image);
     }
 
     /**
