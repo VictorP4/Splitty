@@ -276,10 +276,14 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * being implemented, keeps refresh cleaner
      */
     private void addToCurrency() {
-        currency.getItems().add("EUR");
-        currency.getItems().add("CHF");
-        currency.getItems().add("USD");
-        if(this.expense!=null) currency.setValue(expense.getCurrency());
+        if(this.expense==null){
+            currency.getItems().add("EUR");
+            currency.getItems().add("CHF");
+            currency.getItems().add("USD");
+        } else{
+            clearFields();
+            currency.getItems().add(expense.getCurrency());
+        }
     }
 
     /**
@@ -437,7 +441,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         this.event = event;
         refresh(event);
         this.expense = expense;
-
+        addToCurrency();
         this.title.setText(expense.getTitle());
         this.amount.setText(Double.toString(expense.getAmount()));
         LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

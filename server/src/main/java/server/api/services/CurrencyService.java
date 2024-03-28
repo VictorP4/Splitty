@@ -34,7 +34,7 @@ public class CurrencyService {
      * @param fileName The name of the file to cache the rates.
      * @param rates    The exchange rates to cache.
      */
-    private void cacheRates(String fileName, Map<String, Double> rates) {
+    public void cacheRates(String fileName, Map<String, Double> rates) {
         File directory = new File("rates");
         if (!directory.exists()) {
             directory.mkdirs();

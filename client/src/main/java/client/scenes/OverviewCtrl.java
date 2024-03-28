@@ -410,28 +410,47 @@ public class OverviewCtrl implements Main.UpdatableUI {
         for(Expense b:a){
             if(!b.getCurrency().equals(event.getPreferredCurrency())){
                 int amn =(int)(serverUtils.convertCurrency(b.getAmount(),b.getCurrency(),
-                        event.getPreferredCurrency(), new Date(b.getDate().getTime()).toLocalDate())*10000);
-                b.setAmount((double)amn/10000);
+                        event.getPreferredCurrency(), new Date(b.getDate().getTime()).toLocalDate())*1000);
+                b.setAmount((double)amn/1000);
                 b.setCurrency(event.getPreferredCurrency());
             }
         }
         return a;
     }
+
+    /**
+     * Changes the preferred currency of the event to Euro (EUR).
+     * Updates the event's preferred currency on the server and refreshes the displayed expenses accordingly.
+     */
     @FXML
     public void changeCurrencyEUR(){
         event.setPreferredCurrency("EUR");
+        serverUtils.updateEvent(event);
         showAllExpenses();
     }
+
+    /**
+     * Changes the preferred currency of the event to US Dollar (USD).
+     * Updates the event's preferred currency on the server and refreshes the displayed expenses accordingly.
+     */
     @FXML
     public void changeCurrencyUSD(){
         event.setPreferredCurrency("USD");
+        serverUtils.updateEvent(event);
         showAllExpenses();
     }
+
+    /**
+     * Changes the preferred currency of the event to Swiss Franc (CHF).
+     * Updates the event's preferred currency on the server and refreshes the displayed expenses accordingly.
+     */
     @FXML
     public void changeCurrencyCHF(){
         event.setPreferredCurrency("CHF");
+        serverUtils.updateEvent(event);
         showAllExpenses();
     }
+
     /**
      * Shows all expenses of the event
      */
