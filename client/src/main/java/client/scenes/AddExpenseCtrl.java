@@ -26,6 +26,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AddExpenseCtrl implements Main.UpdatableUI {
     private final ServerUtils server;
@@ -72,6 +73,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     private MenuButton tagMenu;
     @FXML
     public AnchorPane ap;
+    @FXML
+    private Button undo;
     private Expense expense;
     private WebSocketUtils webSocket;
     private final UserConfig userConfig = new UserConfig();
@@ -138,6 +141,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         expenseType.setText(Main.getLocalizedString("expType"));
         abort.setText(Main.getLocalizedString("abort"));
         add.setText(Main.getLocalizedString("add"));
+        undo.setText(Main.getLocalizedString("Undo"));
     }
 
     /**
@@ -146,6 +150,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     public void cancel() {
         mainCtrl.showEventOverview(event);
+        this.expense=null;
         this.event = null;
     }
 
@@ -228,9 +233,11 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             }
             if (ids.contains(addExp.getId())) {
                 updateExp(addExp);
-                server.updateExpense(event.getId(), addExp);
+                Expense newExp = server.updateExpense(event.getId(), addExp);
+                mainCtrl.addPrevExp(newExp);
             } else {
-                server.addExpense(addExp, event.getId());
+                Expense newExp = server.addExpense(addExp, event.getId());
+                mainCtrl.addPrevExp(newExp);
             }
             event = server.getEvent(event.getId());
         } catch (WebApplicationException e) {
@@ -261,7 +268,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     public void refresh(Event event) {
         this.event = event;
-        addEditText.setText("Add Expense");
+        addEditText.setText(Main.getLocalizedString("AddExpense"));
         clearFields();
         addToCurrency();
         for (Participant p : this.event.getParticipants()) {
@@ -279,7 +286,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
-<<<<<<< HEAD
      * setting the edit or add button
      */
     public void setAddOrEditButton() {
@@ -288,11 +294,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * adds values to the currency picker combobox, separate method for "future use" in case of multiple currencies
-=======
      * adds values to the currency picker combobox, separate method for "future use"
      * in case of multiple currencies
->>>>>>> main
      * being implemented, keeps refresh cleaner
      */
     private void addToCurrency() {
@@ -457,17 +460,18 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void refreshExp(Event event, Expense expense) {
         this.event = event;
         refresh(event);
-        addEditText.setText("Edit Expense");
+        addEditText.setText(Main.getLocalizedString("EditExpense"));
         this.expense = expense;
         setAddOrEditButton();
         this.title.setText(expense.getTitle());
         this.amount.setText(Double.toString(expense.getAmount()));
         LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         this.date.setValue(localDate);
-        paidBy.getSelectionModel().select(expense.getPaidBy());
+        paidBy.getSelectionModel().select(event.getParticipants().stream().filter(x->x.getId().equals(expense.getPaidBy().getId())).findFirst().get());
         currency.setValue(this.expense.getCurrency());
-
-        if (expense.getInvolvedParticipants().equals(event.getParticipants())) {
+        Set<Long> expenseParList = new HashSet<>(expense.getInvolvedParticipants().stream().map(x->x.getId()).collect(Collectors.toList()));
+        Set<Long> eventParList = new HashSet<>(this.event.getParticipants().stream().map(x->x.getId()).collect(Collectors.toList()));
+        if (expenseParList.equals(eventParList)) {
             everybodyIn.setSelected(true);
         } else {
             someIn.setSelected(true);
@@ -487,6 +491,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         }
         if (expense.getTag() != null) {
             this.tagMenu.setText(expense.getTag().getName());
+            this.selectedTag=expense.getTag();
         }
     }
 
@@ -506,6 +511,24 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 index++;
             }
         }
+    }
+
+    /**
+     * Sets the scene according to the previous version of the same expense
+     */
+    @FXML
+    public void undo(){
+        if(expense==null||mainCtrl.getPrevExp(expense.getId())==null) errorPopup("Undo unavailable");
+        else{
+            mainCtrl.deletePrevExp(this.expense);
+            if(mainCtrl.getPrevExp(this.expense.getId())==null){
+                errorPopup("Undo unavailable");
+                return;
+            }
+            clearFields();
+            refreshExp(this.event,mainCtrl.getPrevExp(expense.getId()));
+        }
+
     }
 
 }

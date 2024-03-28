@@ -36,10 +36,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
 import java.util.prefs.BackingStoreException;
 import static client.Main.switchLocale;
 
@@ -96,6 +93,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public AnchorPane ap;
     private boolean admin;
     private final UserConfig userConfig = new UserConfig();
+    private Map<Long,List<Expense>> previousExpenses;
 
     /**
      * Constructs an OverviewCtrl object.
@@ -491,6 +489,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     public void refresh(Event event) {
+        if(this.event==null||!this.event.getId().equals(event.getId())) previousExpenses = new HashMap<>();
         String lp = userConfig.getLanguageConfig();
         if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
             Image image = new Image("/client/misc/" + lp +  "_flag.png");
@@ -573,6 +572,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
             Response response = serverUtils.deleteExpense(this.event.getId(), expenseList.getSelectionModel().getSelectedItem());
             if(response.getStatus() == Response.Status.OK.getStatusCode()){
                 System.out.println("OK! good job " + response.getStatus() );
+                deletePrevExp(expenseList.getSelectionModel().getSelectedItem());
             }
             else{
                 System.out.println("Status code: " + response.getStatus());
@@ -607,6 +607,36 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * @param b
      */
     public void setAdmin(boolean b) {
-        this.admin=true;
+        this.admin=b;
+    }
+    /**
+     * deletes the expense from the cached ones
+     * @param expense the expense to be deleted from the cache
+     */
+    public void deletePrevExp(Expense expense){
+        if(previousExpenses.get(expense.getId())!=null){
+            previousExpenses.get(expense.getId()).remove(expense);
+            if(previousExpenses.get(expense.getId()).size()==0) previousExpenses.remove(expense.getId());
+        }
+    }
+    /**
+     * add an expense to the cache
+     * @param expense the expense to be added
+     */
+    public void addPrevExp(Expense expense){
+        if(previousExpenses.get(expense.getId())==null){
+            previousExpenses.put(expense.getId(),new ArrayList<>());
+            previousExpenses.get(expense.getId()).add(expense);
+        }
+        else previousExpenses.get(expense.getId()).add(expense);
+    }
+    /**
+     * Returning the previous version of the expense stored in the cache
+     * @param id the id of the expense
+     * @return the previous version of the expense
+     */
+    public Expense getPrevExp(Long id){
+        if(previousExpenses.get(id)==null) return null;
+        return previousExpenses.get(id).get(previousExpenses.get(id).size()-1);
     }
 }
