@@ -131,6 +131,10 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
      */
     @FXML
     public void save() {
+        if(nameField.getText().isEmpty()){
+            errorPopup("Invalid name");
+            return;
+        }
         participant.setName(nameField.getText());
         participant.setEmail(emailField.getText());
         participant.setBIC(bicField.getText());
@@ -146,6 +150,17 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
     public void back() {
         this.participant=null;
         mainCtrl.showEventOverview(event);
+    }
+
+    /**
+     * creates error for invalid action
+     * @param message
+     */
+    private void errorPopup(String message) {
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
 }

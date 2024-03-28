@@ -17,15 +17,15 @@
             <Font size="16.0" />
          </font>
       </Text>
-      <Text fx:id="adminPasswordText" layoutX="108.0" layoutY="206.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin password:">
+      <Text fx:id="adminPasswordText" layoutX="108.0" layoutY="194.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin password:">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
       <TextField fx:id="serverUrl" layoutX="108.0" layoutY="136.0" prefHeight="25.0" prefWidth="263.0" />
-      <Button fx:id="setServer" layoutX="388.0" layoutY="136.0" mnemonicParsing="false" text="Set server" />
-      <Button fx:id="login" layoutX="390.0" layoutY="213.0" mnemonicParsing="false" onAction="#login" text="Login" />
-      <PasswordField fx:id="adminPassword" layoutX="108.0" layoutY="213.0" prefHeight="25.0" prefWidth="263.0" />
+      <Button fx:id="setServer" layoutX="388.0" layoutY="136.0" mnemonicParsing="false" onAction="#setServer" text="Set server" />
+      <Button fx:id="login" layoutX="388.0" layoutY="201.0" mnemonicParsing="false" onAction="#login" text="Login" />
+      <PasswordField fx:id="adminPassword" layoutX="108.0" layoutY="201.0" onAction="#login" prefHeight="25.0" prefWidth="263.0" />
       <Button fx:id="home" layoutX="40.0" layoutY="39.0" mnemonicParsing="false" onAction="#toStartScreen">
          <graphic>
             <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
@@ -33,5 +33,11 @@
             </ImageView>
          </graphic>
       </Button>
+      <Text fx:id="localServer" layoutX="108.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Back to locally hosted server:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <Button fx:id="setToLocalServer" layoutX="388.0" layoutY="249.0" mnemonicParsing="false" text="Local Server" onAction="#setToLocalServer" />
    </children>
 </AnchorPane>

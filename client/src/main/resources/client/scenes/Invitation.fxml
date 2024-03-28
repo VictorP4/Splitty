@@ -32,7 +32,7 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Button id="overviewButton" layoutX="14.0" layoutY="19.0" mnemonicParsing="false" onAction="#backToOverview" text="Back">
+      <Button fx:id="overviewButton" layoutX="14.0" layoutY="19.0" mnemonicParsing="false" onAction="#backToOverview" text="Back">
          <font>
             <Font size="13.0" />
          </font>

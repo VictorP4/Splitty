@@ -1,6 +1,8 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.inject.Inject;
 import commons.Event;
 import javafx.beans.property.SimpleObjectProperty;
@@ -8,18 +10,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
-
+import javafx.stage.Stage;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
 
@@ -34,6 +37,12 @@ public class AdminEventOverviewCtrl {
     public VBox container;
     @FXML
     public AnchorPane ap;
+    @FXML
+    private FileChooser fc;
+    @FXML
+    private Button importJSON;
+    @FXML
+    private Button ok;
 
 
     @Inject
@@ -83,17 +92,23 @@ public class AdminEventOverviewCtrl {
             Button deleteButton = new Button("Delete");
             deleteButton.setOnAction(event -> {
                 Event selectedEvent = param.getValue();
-                server.deleteEvent(selectedEvent.getId());
-                events.remove(selectedEvent);
+                var alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText("Are you sure you want to delete this event?");
+                alert.showAndWait().ifPresent((response)->{
+                    if(response == ButtonType.OK){
+                        server.deleteEvent(selectedEvent.getId());
+                        events.remove(selectedEvent);
+                    }
+                });
                 refresh();
-                popup("event deleted");
             });
             return new SimpleObjectProperty<>(deleteButton);
         });
 
         TableColumn<Event, Button> backupColumn = new TableColumn<>("Backup");
         backupColumn.setCellValueFactory(param ->{
-            Button backupButton = new Button("create backup");
+            Button backupButton = new Button("Backup");
             backupButton.setOnAction(event -> {
                 Event selectedEvent = param.getValue();
                 try{
@@ -120,6 +135,7 @@ public class AdminEventOverviewCtrl {
                 .subtract(creationDateColumn.widthProperty())
                 .subtract(lastActivityColumn.widthProperty())
                 .subtract(deleteColumn.widthProperty())
+                .subtract(backupColumn.widthProperty())
         );
 
         container.setFillWidth(true);
@@ -129,7 +145,7 @@ public class AdminEventOverviewCtrl {
             public void handle(MouseEvent event) {
                 if (event.getClickCount() == 2) {
                     Event selectedEvent = eventsTable.getSelectionModel().getSelectedItem();
-                    if(selectedEvent!=null) mainCtrl.showEventOverview(selectedEvent);
+                    if(selectedEvent!=null) mainCtrl.showEventOverviewFromAdmin(selectedEvent);
                 }
             }
         });
@@ -160,7 +176,11 @@ public class AdminEventOverviewCtrl {
         var alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setContentText(message);
-        alert.showAndWait();
+        alert.showAndWait().ifPresent((response)->{
+            if(response == ButtonType.OK){
+
+            }
+        });
     }
 
     /**
@@ -171,4 +191,52 @@ public class AdminEventOverviewCtrl {
     }
 
 
+    /**
+     * creates a FileChooser window for an admin to be able to pick a file to import
+     *  (a json version of an event), imports the event
+     */
+    public void importJSON(){
+
+        ObjectMapper map = new ObjectMapper();
+        map.registerModule(new JavaTimeModule());
+
+        Stage stage = new Stage();
+        stage.setTitle("FileChooser");
+        Label label = new Label("nothing selected");
+        fc = new FileChooser();
+        fc.setInitialDirectory(new File("C:\\"));
+        fc.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("JSON", "*.json")
+                , new FileChooser.ExtensionFilter("All files", "*.*")
+        );
+        Button button = new Button("Select file");
+        this.ok = new Button("Import");
+        ok.setVisible(false);
+        button.setOnAction(actionEvent -> {
+            File file = fc.showOpenDialog(stage);
+            label.setText(file.getAbsolutePath() + " selected");
+
+            ok.setVisible(true);
+            ok.setOnAction(action -> {
+                Event event = null;
+                try {
+                    event = map.readValue(file, Event.class);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                    errorPopup(e.getMessage());
+                }
+                if(event != null){
+                    server.addEventJSON(event);
+                }
+                stage.close();
+            });
+        });
+
+        VBox vbox = new VBox(30, label, button, ok);
+        vbox.setAlignment(Pos.CENTER);
+        Scene scene = new Scene(vbox, 400, 300);
+        stage.setScene(scene);
+        stage.show();
+    }
 }

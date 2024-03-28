@@ -1,10 +1,11 @@
 package commons;
 
 import jakarta.persistence.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 public class Expense {
@@ -25,16 +26,18 @@ public class Expense {
     private String currency;
 
     /**
-     * Constructs an Expense with the specified title, amount, payer, involved participants, and date.
+     * Constructs an Expense with the specified title, amount, payer, involved
+     * participants, and date.
      *
-     * @param title              the title of the expense
-     * @param amount             the amount of the expense
-     * @param paidBy             the participant who paid for the expense
+     * @param title                the title of the expense
+     * @param amount               the amount of the expense
+     * @param paidBy               the participant who paid for the expense
      * @param involvedParticipants the list of participants involved in the expense
-     * @param date               the date of the expense
-     * @param currency           the currency of the event
+     * @param date                 the date of the expense
+     * @param currency             the currency of the event
      */
-    public Expense(String title, double amount, Participant paidBy, List<Participant> involvedParticipants, Date date, Tag tag, String currency) {
+    public Expense(String title, double amount, Participant paidBy, List<Participant> involvedParticipants, Date date,
+            Tag tag, String currency) {
         this.title = title;
         this.amount = amount;
         this.paidBy = paidBy;
@@ -135,7 +138,8 @@ public class Expense {
     /**
      * Sets the list of participants involved in the expense.
      *
-     * @param involvedParticipants the list of participants involved in the expense to set
+     * @param involvedParticipants the list of participants involved in the expense
+     *                             to set
      */
     public void setInvolvedParticipants(List<Participant> involvedParticipants) {
         this.involvedParticipants = involvedParticipants;
@@ -161,6 +165,7 @@ public class Expense {
 
     /**
      * gets the tag of the expense
+     *
      * @return tag of the expense
      */
     public Tag getTag() {
@@ -169,6 +174,7 @@ public class Expense {
 
     /**
      * sets the tag of the expense
+     *
      * @param tag the tag of the expense to set
      */
     public void setTag(Tag tag) {
@@ -176,18 +182,18 @@ public class Expense {
     }
 
     /**
-     * Retrieves the currency type of the expense.
+     * Retrieves the currency of the expense.
      *
-     * @return the title of the expense
+     * @return the currency of the expense
      */
     public String getCurrency() {
         return currency;
     }
 
     /**
-     * Sets the currency type of the expense.
+     * Sets the currency of the expense.
      *
-     * @param currency the currency type of the expense to set
+     * @param currency the currency of the expense to set
      */
     public void setCurrency(String currency) {
         this.currency = currency;
@@ -201,17 +207,7 @@ public class Expense {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Expense expense = (Expense) o;
-        return Double.compare(expense.amount, amount) == 0 &&
-                Objects.equals(id, expense.id) &&
-                Objects.equals(title, expense.title) &&
-                Objects.equals(paidBy, expense.paidBy) &&
-                Objects.equals(involvedParticipants, expense.involvedParticipants) &&
-                Objects.equals(date, expense.date) &&
-                Objects.equals(tag, expense.tag) &&
-                Objects.equals(currency, expense.currency);
+        return EqualsBuilder.reflectionEquals(this, o);
     }
 
     /**
@@ -221,16 +217,16 @@ public class Expense {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, amount, paidBy, involvedParticipants, date, tag, currency);
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     /**
      * to string method for an expense
+     *
      * @return string version of object expense
      */
     @Override
     public String toString() {
-        return title + " " + amount + " " + currency +  ", " + (tag == null ? "no tag" : tag.getName());
+        return title + " " + amount + " " + currency + ", " + (tag == null ? "no tag" : tag.getName());
     }
 }
-

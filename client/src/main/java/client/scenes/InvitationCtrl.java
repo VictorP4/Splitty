@@ -40,6 +40,8 @@ public class InvitationCtrl implements Main.UpdatableUI {
     private String inviteCode;
     @FXML
     public AnchorPane ap;
+    @FXML
+    private Button overviewButton;
 
     /**
      * Constructs a new instance of InvitationCtrl.
@@ -128,15 +130,22 @@ public class InvitationCtrl implements Main.UpdatableUI {
         }
     }
 
-
-
+    /**
+     * Refreshed the invitationCtrl scene by setting the invite code the the one corresponding to the current event.
+     *
+     * @param event The event we want to send invites for.
+     */
     public void refresh(Event event) {
         this.event=event;
         setInviteCode();
     }
 
+    /**
+     * Sets the text based on the language chosen by the user.
+     */
     @Override
     public void updateUI() {
+        overviewButton.setText(Main.getLocalizedString("back"));
         title.setText(Main.getLocalizedString("OverviewTitle"));
         sendInv.setText(Main.getLocalizedString("sendInv"));
         invEmail.setText(Main.getLocalizedString("invEmail"));

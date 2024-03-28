@@ -1,10 +1,12 @@
 package client.scenes;
 
 import client.Main;
+import client.UserConfig;
 import client.utils.ServerUtils;
 import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -16,7 +18,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 
 import java.util.List;
-
 
 public class SettingsPageCtrl implements Main.UpdatableUI {
 
@@ -38,7 +39,12 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     public Button login;
     @FXML
     public AnchorPane ap;
-    private WebSocketUtils webSocket;
+    @FXML
+    public Button setToLocalServer;
+    @FXML
+    public Text localServer;
+    private final WebSocketUtils webSocket;
+    private final UserConfig userConfig = new UserConfig();
 
     /**
      * Constructs a new instance of StartingPageCtrl.
@@ -75,30 +81,35 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Sets the server for the session according to the users choice. If no server is chosen, a default server will
-     * be selected (http://localhost:8080)
+     * Sets the server for the session according to the users choice. If no server
+     * is chosen, the server in the user_config file will be selected.
      */
     public void setServer() {
-        String serverUrlString = serverUrl.getText();
+        String userInput = serverUrl.getText();
+        String url = "http://" + userInput;
         try {
-            if (serverUrlString.isBlank()) {
-                server.setSERVER("http://localhost:8080");
+            if (!userInput.isBlank() && server.checkServer(url).getStatus() == 200) {
+                server.setSERVER(url);
+                webSocket.disconnect();
+                webSocket.connect("ws://" + userInput + "/websocket");
+                errorPopup("Succesfully connected to the new server!");
             }
             else {
-                server.checkServer(serverUrlString);
-                server.setSERVER("http://" + serverUrlString);
-                webSocket.disconnect();
-                webSocket.connect("ws://"+serverUrlString+"/websocket");
+                errorPopup("Server not found. Changing to default: localhost:8080");
+                server.setSERVER(userConfig.getServerURLConfig());
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            errorPopup(e.getMessage());
+            errorPopup("Server not found. Changing to default: localhost:8080");
+            server.setSERVER(userConfig.getServerURLConfig());
         }
+        refresh();
     }
 
     /**
-     * Lets the admin give a password and login. If the admin did not fill in a server, the server is set to the default
-     * server (http://localhost:8080).
+     * Lets the admin give a password and login. If no server is chosen, the server
+     * in the
+     * user_config file will be selected
      */
     public void login() {
         String password = adminPassword.getText().trim();
@@ -107,14 +118,37 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
         }
         try {
             setServer();
-            List<Event> events = server.adminLogin(password);   // return null
+            List<Event> events = server.adminLogin(password); // return null
             mainCtrl.showAdminEventOverview();
-        } catch(Exception e) {
-             e.printStackTrace();
-             errorPopup(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            errorPopup(e.getMessage());
         }
     }
 
+    /**
+     * Sets the server back to the server specified in the config file.
+     * This is always "http://localhost:8080"
+     */
+    public void setToLocalServer() {
+        try {
+            Response response = server.checkServer(userConfig.getServerURLConfig());
+            if (response.getStatus() == 200) {
+                server.setSERVER(userConfig.getServerURLConfig());
+                errorPopup("Server succesfull changed to default");
+            }
+        } catch (Exception e) {
+            errorPopup(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * A general method to create a popup error on the application, with custom
+     * message.
+     *
+     * @param message The message passed in.
+     */
     private void errorPopup(String message) {
         var alert = new Alert(Alert.AlertType.ERROR);
         alert.initModality(Modality.APPLICATION_MODAL);
@@ -123,7 +157,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Refreshes the starting page.
+     * Refreshes the settings page.
      */
     public void refresh() {
         serverUrl.clear();
@@ -140,8 +174,14 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
         adminPasswordText.setText(Main.getLocalizedString("adminPassword"));
         setServer.setText(Main.getLocalizedString("setServer"));
         login.setText(Main.getLocalizedString("login"));
+        localServer.setText(Main.getLocalizedString("localServer"));
+        setToLocalServer.setText(Main.getLocalizedString("setToLocalServer"));
     }
 
+    /**
+     * Takes the user back to the startscreen.
+     */
+    @FXML
     public void toStartScreen() {
         mainCtrl.showStartScreen();
     }

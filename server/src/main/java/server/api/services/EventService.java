@@ -45,12 +45,41 @@ public class EventService {
         return repo.findById(id).get();
     }
 
+    /**
+     * saves the event to the repository
+     * @param event event to add
+     * @return saved event
+     */
     public Event add(Event event){
         if (event == null || event.getTitle() == null) {
             return null;
         }
         Event saved = repo.save(event);
         return saved;
+    }
+
+    /**
+     * adds an imported event to the repository
+     * by first adding its tags, participants and expenses to their repositories
+     * @param event event to add
+     * @return saved event
+     */
+    public Event importJSON(Event event){
+
+        if (event == null || event.getTitle() == null) {
+            return null;
+        }
+
+        try{
+            participantRepository.saveAll(event.getParticipants());
+            tagRepository.saveAll(event.getTags());
+            expensesRepository.saveAll(event.getExpenses());
+            return repo.save(event);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public Event put(long id, Event event){
@@ -107,10 +136,11 @@ public class EventService {
      */
     public String getEventById(Long id) {
         try{
-            return map.writeValueAsString(repo.getById(id));
+            return map.writeValueAsString(repo.findById(id).get());
         }
         catch (JsonProcessingException jpe){
             return "error" + jpe.getMessage();
         }
     }
+
 }

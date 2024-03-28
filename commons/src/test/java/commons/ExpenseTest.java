@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ExpenseTest {
 
@@ -137,8 +136,8 @@ public class ExpenseTest {
     }
 
     /**
-     * Tests if the hashcode of 2 expenses will be equal if the
-     * expenses are equal
+     * Tests if the hashcode of two expenses will be equal if the
+     * expenses are equal.
      */
     @Test
     public void testHashCodeEquals() {
@@ -153,6 +152,10 @@ public class ExpenseTest {
         assertEquals(expense1.hashCode(), expense2.hashCode());
     }
 
+    /**
+     * Tests whether the hashcode creates is unique, and thus if the expenses are different,
+     * if the hashcode is different to.
+     */
     @Test
     public void testHashCodeNotEquals() {
         Expense expense1 = new Expense();
@@ -164,5 +167,15 @@ public class ExpenseTest {
 
         assertNotEquals(expense1, expense2);
         assertNotEquals(expense1.hashCode(), expense2.hashCode());
+    }
+
+    /**
+     * Tests the toString method of the Expense class.
+     */
+    @Test
+    public void testToString() {
+        var actual = new Expense("Groceries", 50.0, new Participant(), new ArrayList<>(), new Date(),
+                null, "EUR").toString();
+        assertEquals("Groceries 50.0 EUR, no tag", actual);
     }
 }

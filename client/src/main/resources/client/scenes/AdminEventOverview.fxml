@@ -4,18 +4,19 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="ap" prefHeight="457.0" prefWidth="616.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminEventOverviewCtrl">
+<AnchorPane fx:id="ap" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="457.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminEventOverviewCtrl">
    <children>
-      <Text layoutX="221.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Overview">
+      <Text layoutX="242.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Overview">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Text>
-      <Button layoutX="525.0" layoutY="27.0" mnemonicParsing="false" onAction="#showStartScreen" text="Home" />
-      <VBox fx:id="container" layoutX="42.0" layoutY="78.0" prefHeight="346.0" prefWidth="532.0">
+      <Button layoutX="568.0" layoutY="28.0" mnemonicParsing="false" onAction="#showStartScreen" text="Home" />
+      <VBox fx:id="container" layoutX="42.0" layoutY="78.0" prefHeight="346.0" prefWidth="575.0">
          <children>
-            <TableView fx:id="eventsTable" prefHeight="346.0" prefWidth="481.0" />
+            <TableView fx:id="eventsTable" maxWidth="1.7976931348623157E308" prefHeight="346.0" prefWidth="600.0" />
          </children>
       </VBox>
+      <Button fx:id="importJSON" layoutX="42.0" layoutY="28.0" mnemonicParsing="false" onAction="#importJSON" text="Import backup" />
    </children>
 </AnchorPane>

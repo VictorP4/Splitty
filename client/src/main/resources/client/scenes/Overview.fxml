@@ -42,8 +42,8 @@
             <items>
                 <MenuItem mnemonicParsing="false" onAction="#switchToEnglish" text="English">
                     <graphic>
-                        <ImageView fitHeight="12" fitWidth="16">
-                            <Image url="@/client/misc/uk_flag.png" />
+                        <ImageView fitWidth="16" fitHeight="12">
+                            <Image url="@/client/misc/en_flag.png" />
                         </ImageView>
                     </graphic>
                 </MenuItem>
@@ -56,7 +56,7 @@
                 </MenuItem>
                 <MenuItem mnemonicParsing="false" onAction="#switchToSpanish" text="Spanish">
                     <graphic>
-                        <ImageView fitHeight="12" fitWidth="16">
+                        <ImageView fitWidth="16" fitHeight="12">
                             <Image url="@/client/misc/es_flag.png" />
                         </ImageView>
                     </graphic>
