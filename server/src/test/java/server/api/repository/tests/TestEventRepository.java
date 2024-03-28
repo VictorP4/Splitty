@@ -3,7 +3,7 @@ import java.util.*;
 import java.util.function.Function;
 
 
-
+import commons.Expense;
 import commons.Participant;
 import commons.Tag;
 import org.springframework.data.domain.Example;
@@ -175,6 +175,9 @@ public class TestEventRepository implements EventRepository {
      */
     @Override
     public Optional<Event> findById(Long aLong) {
+        for(Event exp : events){
+            if(exp.getId()==aLong) return Optional.of(exp);
+        };
         return Optional.empty();
     }
 
