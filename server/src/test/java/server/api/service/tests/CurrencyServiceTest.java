@@ -35,11 +35,12 @@ class CurrencyServiceTest {
      * Test for successful fetching of exchange rates.
      */
     @Test
-    void fetchExchangeRates_Success() {
+    void fetchExchangeRatesGood() {
         LocalDate date = LocalDate.now();
         Map<String, Double> expectedRates = new HashMap<>();
         expectedRates.put("USD", 1.0);
-        ResponseEntity<Map> responseEntity = new ResponseEntity<>(new HashMap<>(){{put("rates", expectedRates);}}, HttpStatus.OK);
+
+        ResponseEntity<Map> responseEntity = new ResponseEntity<>(new HashMap<>(), HttpStatus.OK);
         when(restTemplate.exchange(anyString(), eq(org.springframework.http.HttpMethod.GET), any(), eq(Map.class)))
                 .thenReturn(responseEntity);
 
@@ -49,11 +50,13 @@ class CurrencyServiceTest {
         assertEquals(expectedRates, result.getBody());
     }
 
+
+
     /**
      * Test for successful fetching of cached exchange rates.
      */
     @Test
-    void fetchExchangeRates_Cached_Success() {
+    void fetchExchangeRatesCachedSuccess() {
         LocalDate date = LocalDate.now();
         Map<String, Double> expectedRates = new HashMap<>();
         expectedRates.put("USD", 1.0);
@@ -70,7 +73,7 @@ class CurrencyServiceTest {
      * Test for successful currency conversion.
      */
     @Test
-    void convertCurrency_Success() {
+    void convertCurrencySuccess() {
         LocalDate date = LocalDate.now();
         double amount = 100.0;
         String fromCurrency = "USD";
@@ -93,7 +96,7 @@ class CurrencyServiceTest {
      * Test for handling missing exchange rates while currency conversion.
      */
     @Test
-    void convertCurrency_MissingExchangeRates() {
+    void convertCurrencyMissingExchangeRates() {
         LocalDate date = LocalDate.now();
         double amount = 100.0;
         String fromCurrency = "USD";
@@ -109,7 +112,7 @@ class CurrencyServiceTest {
      * Test for handling invalid currency codes while currency conversion.
      */
     @Test
-    void convertCurrency_InvalidCurrencyCodes() {
+    void convertCurrencyInvalidCurrencyCodes() {
         LocalDate date = LocalDate.now();
         double amount = 100.0;
         String fromCurrency = "AAA";
