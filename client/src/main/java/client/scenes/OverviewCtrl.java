@@ -38,6 +38,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
+
 import static client.Main.switchLocale;
 
 /**
@@ -92,6 +94,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     @FXML
     public AnchorPane ap;
     private boolean admin;
+    private Preferences prefs = Preferences.userNodeForPackage(OverviewCtrl.class);;
     private final UserConfig userConfig = new UserConfig();
     private Map<Long,List<Expense>> previousExpenses;
 
@@ -114,9 +117,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void initialize() {
         admin=false;
+        userConfig.reloadLanguageFile();
         String lp = userConfig.getLanguageConfig();
         if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
-            Image image = new Image("/client/misc/" + lp +  "_flag.png");
+            Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
+            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/"+lp+"_flag.png");
             menuButtonView.setImage(image);
         }
 
@@ -307,6 +312,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void switchToEnglish(ActionEvent actionEvent) throws BackingStoreException {
         userConfig.setLanguageConfig("en");
+        userConfig.reloadLanguageFile();
         switchLocale("messages", "en");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/en_flag.png")).toExternalForm());
         menuButtonView.setImage(image);
@@ -318,6 +324,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void switchToDutch(ActionEvent actionEvent) throws BackingStoreException {
         userConfig.setLanguageConfig("nl");
+        userConfig.reloadLanguageFile();
         switchLocale("messages", "nl");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/nl_flag.png")).toExternalForm());
         menuButtonView.setImage(image);
@@ -325,6 +332,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
     public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
         userConfig.setLanguageConfig("es");
+        userConfig.reloadLanguageFile();
         switchLocale("messages","es");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
         menuButtonView.setImage(image);
@@ -489,10 +497,14 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     public void refresh(Event event) {
+
         if(this.event==null||!this.event.getId().equals(event.getId())) previousExpenses = new HashMap<>();
+
+        userConfig.reloadLanguageFile();
         String lp = userConfig.getLanguageConfig();
         if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
-            Image image = new Image("/client/misc/" + lp +  "_flag.png");
+            Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
+            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/"+lp+"_flag.png");
             menuButtonView.setImage(image);
         }
 

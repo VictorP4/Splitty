@@ -44,7 +44,7 @@ public class ExpensesService {
      */
     public Expense addNew(long id, Expense expense){
         Event event = eventRepo.getReferenceById((id));
-        if (event == null || event.getTitle() == null || expense == null || expense.getTitle() == null) {
+        if (event.getTitle() == null || expense == null || expense.getTitle() == null) {
             return null;
         }
         // forcing the decimal format to be '.', since depending on ont the user location, the DecimalFormat works differently

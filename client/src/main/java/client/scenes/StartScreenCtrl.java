@@ -90,9 +90,11 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      */
     public void initialize() {
         listViewItems = FXCollections.observableArrayList();
+        userConfig.reloadLanguageFile();
         String lp = userConfig.getLanguageConfig();
         if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
-            Image image = new Image("/client/misc/" + lp +  "_flag.png");
+            Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
+            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/"+lp+"_flag.png");
             menuButtonView.setImage(image);
         }
 
@@ -252,6 +254,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     }
 
     public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
+        userConfig.setLanguageConfig("es");
         switchLocale("messages", "es");
         Image image = new Image(
                 Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
@@ -310,9 +313,11 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      * Refreshes the startScreen
      */
     public void refresh() {
+        userConfig.reloadLanguageFile();
         String lp = userConfig.getLanguageConfig();
         if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
-            Image image = new Image("/client/misc/" + lp +  "_flag.png");
+            Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
+            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/"+lp+"_flag.png");
             menuButtonView.setImage(image);
         }
         eventTitle.clear();
