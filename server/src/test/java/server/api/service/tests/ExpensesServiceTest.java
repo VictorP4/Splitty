@@ -14,17 +14,14 @@ import server.api.repository.tests.TestEventRepository;
 import server.api.repository.tests.TestExpenseRepository;
 import server.api.services.EventService;
 import server.api.services.ExpensesService;
-import server.database.EventRepository;
-import server.database.ExpensesRepository;
 import server.database.ParticipantRepository;
 import server.database.TagRepository;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ExpensesServiceTest {
     @Mock
@@ -74,7 +71,6 @@ public class ExpensesServiceTest {
         evRepo.save(event);
         evCont.add(event);
        Expense exp = new Expense();
-       when(repo.save(exp)).thenReturn(exp);
        assertNotNull(exp);
     }
 

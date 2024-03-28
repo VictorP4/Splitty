@@ -1,6 +1,5 @@
 package server.api.repository.tests;
 
-import commons.Event;
 import commons.Expense;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
