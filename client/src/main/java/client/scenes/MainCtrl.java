@@ -24,6 +24,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.List;
+
 
 public class MainCtrl {
 
@@ -252,5 +254,14 @@ public class MainCtrl {
         primaryStage.setTitle("EventOverview");
         primaryStage.setScene(eventOverview);
         eventOverviewCtrl.setAdmin(true);
+    }
+    public void deletePrevExp(Expense expense){
+        eventOverviewCtrl.deletePrevExp(expense);
+    }
+    public void addPrevExp(Expense expense){
+        eventOverviewCtrl.addPrevExp(expense);
+    }
+    public Expense getPrevExp(Long id){
+        return eventOverviewCtrl.getPrevExp(id);
     }
 }

@@ -72,6 +72,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     private MenuButton tagMenu;
     @FXML
     public AnchorPane ap;
+    @FXML
+    private Button undo;
     private Expense expense;
     private WebSocketUtils webSocket;
     private final UserConfig userConfig = new UserConfig();
@@ -228,9 +230,11 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             }
             if (ids.contains(addExp.getId())) {
                 updateExp(addExp);
-                server.updateExpense(event.getId(), addExp);
+                Expense newExp = server.updateExpense(event.getId(), addExp);
+                mainCtrl.addPrevExp(newExp);
             } else {
-                server.addExpense(addExp, event.getId());
+                Expense newExp = server.addExpense(addExp, event.getId());
+                mainCtrl.addPrevExp(newExp);
             }
             event = server.getEvent(event.getId());
         } catch (WebApplicationException e) {
@@ -279,7 +283,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
-<<<<<<< HEAD
      * setting the edit or add button
      */
     public void setAddOrEditButton() {
@@ -288,11 +291,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * adds values to the currency picker combobox, separate method for "future use" in case of multiple currencies
-=======
      * adds values to the currency picker combobox, separate method for "future use"
      * in case of multiple currencies
->>>>>>> main
      * being implemented, keeps refresh cleaner
      */
     private void addToCurrency() {
@@ -487,6 +487,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         }
         if (expense.getTag() != null) {
             this.tagMenu.setText(expense.getTag().getName());
+            this.selectedTag=expense.getTag();
         }
     }
 
@@ -506,6 +507,20 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 index++;
             }
         }
+    }
+    @FXML
+    public void undo(){
+        if(expense==null||mainCtrl.getPrevExp(expense.getId())==null) errorPopup("Undo unavailable");
+        else{
+            mainCtrl.deletePrevExp(this.expense);
+            if(mainCtrl.getPrevExp(this.expense.getId())==null){
+                errorPopup("Undo unavailable");
+                return;
+            }
+            clearFields();
+            refreshExp(this.event,mainCtrl.getPrevExp(expense.getId()));
+        }
+
     }
 
 }
