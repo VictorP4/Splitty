@@ -11,7 +11,7 @@ import java.util.Properties;
 @Configuration
 public class UserConfig {
 
-    private final String configPath = "src\\main\\resources\\user_configs.properties";
+    private final String configPath = "src/main/resources/user_configs.properties";
     private final Properties properties = new Properties();
 
 
@@ -115,12 +115,12 @@ public class UserConfig {
         try {
             String language = properties.getProperty("language");
             if (language == null || language.isBlank()) {
-                return "english";
+                return "en";
             }
             return language;
         } catch (Error e) {
             System.out.println("Something went wrong. Language changed to default: english");
-            return "english";
+            return "en";
         }
     }
 

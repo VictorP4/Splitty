@@ -24,6 +24,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.List;
+
 
 public class MainCtrl {
 
@@ -153,6 +155,8 @@ public class MainCtrl {
     /**
      * Displays the add expense scene in the primary stage
      * Associates the key pressed event with the AddExpenseCtrl
+     *
+     * @param event The event for which the add expense are to be displayed.
      */
     public void showAddExpense(Event event) {
         addExpenseCtrl.refresh(event);
@@ -163,6 +167,8 @@ public class MainCtrl {
     /**
      * Shows addExpense screen as it was before adding a new tag,
      *  with the new tag in the tag menu
+     *
+     *  @param event The event for which the add expenses are to be displayed.
      */
     public void showAddExpenseFromTag(Event event) {
         addExpenseCtrl.populateTagMenu();
@@ -213,6 +219,8 @@ public class MainCtrl {
 
     /**
      * Displays the statistics scene in the primary stage.
+     *
+     * @param event The event for which the statistics are to be displayed.
      */
     public void showStatistics(Event event) {
         statisticsCtrl.refresh(event);
@@ -222,6 +230,8 @@ public class MainCtrl {
 
     /**
      * Displays the add tag scene in the primary stage.
+     *
+     * @param event The event for which the add tag page has to be displayed.
      */
     public void showAddTag(Event event) {
         addTagCtrl.refresh(event);
@@ -231,6 +241,7 @@ public class MainCtrl {
 
     /**
      * Displays an overview of an expense in the add/edit expense scene
+     *
      * @param event of the expense
      * @param expense displayed
      */
@@ -252,5 +263,30 @@ public class MainCtrl {
         primaryStage.setTitle("EventOverview");
         primaryStage.setScene(eventOverview);
         eventOverviewCtrl.setAdmin(true);
+    }
+
+    /**
+     * deletes the expense from the cached ones
+     * @param expense the expense to be deleted from the cache
+     */
+    public void deletePrevExp(Expense expense){
+        eventOverviewCtrl.deletePrevExp(expense);
+    }
+
+    /**
+     * add an expense to the cache
+     * @param expense the expense to be added
+     */
+    public void addPrevExp(Expense expense){
+        eventOverviewCtrl.addPrevExp(expense);
+    }
+
+    /**
+     * Returning the previous version of the expense stored in the cache
+     * @param id the id of the expense
+     * @return the previous version of the expense
+     */
+    public Expense getPrevExp(Long id){
+        return eventOverviewCtrl.getPrevExp(id);
     }
 }
