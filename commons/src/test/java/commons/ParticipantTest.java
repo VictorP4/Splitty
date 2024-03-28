@@ -51,12 +51,37 @@ public class ParticipantTest {
     }
 
     /**
-     * Tests the getBankAccount method of the Participant class.
-     * It should return the bank account of the participant.
+     * Tests the getIban method of the Participant class.
+     * It should return the iban of the participant.
      */
+    @Test
+    public void getIban() {
+        Participant p = new Participant();
+        p.setIBAN("This is my IBAN");
+        assertEquals("This is my IBAN", p.getIban());
+    }
 
+    /**
+     * Tests the getBIC method of the Participant class.
+     * It should return the BIC of the participant.
+     */
+    @Test
+    public void getBic() {
+        Participant p = new Participant();
+        p.setBIC("This is my BIC");
+        assertEquals("This is my BIC", p.getBic());
+    }
 
-    
+    /**
+     * Tests the setDebt and getDebt method of the Participant class.
+     * It should set and return the debt of the participant.
+     */
+    @Test
+    public void setDebt() {
+        Participant p = new Participant();
+        p.setDebt(66.6);
+        assertEquals(66.6, p.getDebt());
+    }
 
     /**
      * Tests the equals method of the Participant class.
@@ -75,6 +100,10 @@ public class ParticipantTest {
         assertEquals(participant1, participant2);
     }
 
+    /**
+     * Tests the hashcode method of the Participant class.
+     * It should create a new unique hashcode for different participants.
+     */
     @Test
     public void testHashCodeEquals() {
         Participant participant1 = new Participant();
@@ -87,6 +116,10 @@ public class ParticipantTest {
         assertEquals(participant1.hashCode(), participant2.hashCode());
     }
 
+    /**
+     * Tests the hashcode method of the Participant class.
+     * It should create a new unique hashcode for different participants.
+     */
     @Test
     public void testHashCodeNotEquals() {
         Participant participant1 = new Participant();
@@ -113,7 +146,6 @@ public class ParticipantTest {
         participant.setBIC("123456");
 
         String expected = "John Doe";
-        //String expected = "Participant{id=1, name='John Doe', email='john.doe@example.com', debt=0.0, IBAN='1234567890', BIC='123456', eventFollowed=null}";
         assertEquals(expected, participant.toString());
     }
 }

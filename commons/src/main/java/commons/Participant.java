@@ -1,8 +1,8 @@
 package commons;
 
 import jakarta.persistence.*;
-
-import java.util.Objects;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @Entity
 public class Participant {
@@ -142,19 +142,25 @@ public class Participant {
         this.bic = bic;
     }
 
+    /**
+     * Checks if this event is equal to another object.
+     *
+     * @param o the object to compare
+     * @return true if this expense is equal to the other object, false otherwise
+     */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Participant that = (Participant) o;
-        return Double.compare(that.debt, debt) == 0 && Objects.equals(id, that.id) &&
-                Objects.equals(name, that.name) && Objects.equals(email, that.email) &&
-                Objects.equals(iban, that.iban) && Objects.equals(bic, that.bic);
+        return EqualsBuilder.reflectionEquals(this, o);
     }
 
+    /**
+     * Generates a hash code for this event.
+     *
+     * @return the hash code for this event
+     */
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, debt, iban, bic);
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     /**
@@ -164,6 +170,6 @@ public class Participant {
      */
     @Override
     public String toString() {
-        return  name ;
+        return  name;
     }
 }

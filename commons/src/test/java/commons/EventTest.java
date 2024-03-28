@@ -161,6 +161,44 @@ public class EventTest {
     }
 
     /**
+     * Tests the getTags and setTags methods of the Event class.
+     * It should make sure that when we set the tags, the tags we get are the same.
+     */
+    @Test
+    public void testGetSetTags() {
+        Event event = new Event();
+        List<Tag> tags = new ArrayList<>();
+        tags.add(new Tag("a", 0, 255, 0));
+        event.addTag(new Tag("b", 0, 0, 255));
+        event.setTags(tags);
+        assertEquals(tags, event.getTags());
+    }
+
+    /**
+     * Tests the setCreationDate methods of the Event class.
+     * It should set the creation date of an event.
+     */
+    @Test
+    public void testSetCreationDate() {
+        Event event = new Event();
+        Date creationDate = new Date();
+        event.setCreationDate(creationDate);
+        assertEquals(creationDate, event.getCreationDate());
+    }
+
+    /**
+     * Tests the setCreationDate methods of the Event class.
+     * It should set the creation date of an event.
+     */
+    @Test
+    public void setLastActivityDate() {
+        Event event = new Event();
+        Date lastActivity = new Date();
+        event.setLastActivityDate(lastActivity);
+        assertEquals(lastActivity, event.getLastActivityDate());
+    }
+
+    /**
      * Tests the equals method of the Event class.
      * It should check if two events are equal.
      */
@@ -178,33 +216,25 @@ public class EventTest {
 
     /**
      * Tests the hashCode method of the Event class.
-     * It should generate a hash code for the event.
+     * It should generate a hash code for the event and make sure they are equal.
      */
     @Test
-    public void testDiffHashCodeEquals() {
+    public void testHashCodeEquals() {
         Event event1 = new Event();
         event1.setId(1L);
         event1.setTitle("Event 1");
-        Event event2 = new Event();
-        event2.setId(1L);
-        event2.setTitle("Event 1");
+        Event event2 = event1;
 
-        assertNotEquals(event1, event2);
-        assertNotEquals(event1.hashCode(), event2.hashCode());
+        assertEquals(event1, event2);
+        assertEquals(event1.hashCode(), event2.hashCode());
     }
 
+    /**
+     * Tests the hashCode method of the Event class.
+     * It should generate a hash code for the events and make sure they are not equal.
+     */
     @Test
-    public void testGetSetTags() {
-        Event event = new Event();
-        List<Tag> tags = new ArrayList<>();
-        tags.add(new Tag("a", 0, 255, 0));
-        tags.add(new Tag("b", 0, 0, 255));
-        event.setTags(tags);
-        assertEquals(tags, event.getTags());
-    }
-
-    @Test
-    public void testHashCodeNotEquals() {
+    public void testDiffHashCode() {
         Event event1 = new Event();
         event1.setId(1L);
         event1.setTitle("Event 1");

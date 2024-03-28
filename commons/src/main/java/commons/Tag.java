@@ -4,8 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
-import java.util.Objects;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * Represents a tag for categorizing expenses.
@@ -36,8 +36,9 @@ public class Tag {
         this.blue = blue;
     }
 
-
-
+    /**
+     * Default constructor for the Tag class for object mapper.
+     */
     public Tag(){
         //for object mapper
     }
@@ -158,14 +159,7 @@ public class Tag {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tag tag = (Tag) o;
-        return red == tag.red &&
-                green == tag.green &&
-                blue == tag.blue &&
-                Objects.equals(id, tag.id) &&
-                Objects.equals(name, tag.name);
+        return EqualsBuilder.reflectionEquals(this, o);
     }
 
     /**
@@ -175,7 +169,7 @@ public class Tag {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, red, green, blue);
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     /**
