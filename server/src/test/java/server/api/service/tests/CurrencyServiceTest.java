@@ -8,15 +8,15 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import server.api.services.CurrencyService;
 
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-import server.api.services.CurrencyService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 class CurrencyServiceTest {
 
@@ -34,23 +34,24 @@ class CurrencyServiceTest {
     /**
      * Test for successful fetching of exchange rates.
      */
+    /**
+     * Test for successful fetching of exchange rates.
+     */
     @Test
     void fetchExchangeRatesGood() {
         LocalDate date = LocalDate.now();
         Map<String, Double> expectedRates = new HashMap<>();
         expectedRates.put("USD", 1.0);
 
-        ResponseEntity<Map> responseEntity = new ResponseEntity<>(new HashMap<>(), HttpStatus.OK);
-        when(restTemplate.exchange(anyString(), eq(org.springframework.http.HttpMethod.GET), any(), eq(Map.class)))
-                .thenReturn(responseEntity);
+        ResponseEntity<Map<String, Double>> responseEntity = new ResponseEntity<>(expectedRates, HttpStatus.OK);
+        when(restTemplate.exchange(anyString(), eq(org.springframework.http.HttpMethod.GET), any(),
+                any(Class.class))).thenReturn(responseEntity);
 
         ResponseEntity<Map<String, Double>> result = currencyService.fetchExchangeRates(date);
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals(expectedRates, result.getBody());
     }
-
-
 
     /**
      * Test for successful fetching of cached exchange rates.
@@ -125,4 +126,3 @@ class CurrencyServiceTest {
     }
 
 }
-
