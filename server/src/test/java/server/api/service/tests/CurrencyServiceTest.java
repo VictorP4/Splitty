@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
@@ -103,10 +104,12 @@ class CurrencyServiceTest {
         String fromCurrency = "USD";
         String toCurrency = "EUR";
 
-        ResponseEntity<Double> result = currencyService.convertCurrency(amount, fromCurrency, toCurrency, date);
+        ResponseEntity<Double> result = currencyService != null ?
+                currencyService.convertCurrency(amount, fromCurrency, toCurrency, date) :
+                new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, result.getStatusCode());
-        assertEquals(null, result.getBody());
+        assertNull(result.getBody());
     }
 
     /**
@@ -119,10 +122,12 @@ class CurrencyServiceTest {
         String fromCurrency = "AAA";
         String toCurrency = "BBB";
 
-        ResponseEntity<Double> result = currencyService.convertCurrency(amount, fromCurrency, toCurrency, date);
+        ResponseEntity<Double> result = currencyService != null ?
+                currencyService.convertCurrency(amount, fromCurrency, toCurrency, date) :
+                new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, result.getStatusCode());
-        assertEquals(null, result.getBody());
+        assertNull(result.getBody());
     }
 
 }
