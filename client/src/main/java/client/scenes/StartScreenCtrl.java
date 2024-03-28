@@ -316,8 +316,8 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         userConfig.reloadLanguageFile();
         String lp = userConfig.getLanguageConfig();
         if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
-            Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
             prefs.put(SELECTED_IMAGE_KEY, "/client/misc/"+lp+"_flag.png");
+            Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
             menuButtonView.setImage(image);
         }
         eventTitle.clear();

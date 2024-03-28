@@ -127,6 +127,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
         ap.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
+                userConfig.reloadLanguageFile();
                 backToStartScreen();
             }
         });
@@ -376,7 +377,12 @@ public class OverviewCtrl implements Main.UpdatableUI {
         if(admin){
             mainCtrl.showAdminEventOverview();
         }
-        else mainCtrl.showStartScreen();
+
+        else{
+            userConfig.reloadLanguageFile();
+            mainCtrl.showStartScreen();
+        }
+
     }
 
     /**
