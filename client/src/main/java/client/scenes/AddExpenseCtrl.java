@@ -148,6 +148,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     public void cancel() {
         mainCtrl.showEventOverview(event);
+        this.expense=null;
         this.event = null;
     }
 
@@ -265,7 +266,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     public void refresh(Event event) {
         this.event = event;
-        addEditText.setText("Add Expense");
+        addEditText.setText(Main.getLocalizedString("AddExpense"));
         clearFields();
         addToCurrency();
         for (Participant p : this.event.getParticipants()) {
@@ -457,7 +458,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void refreshExp(Event event, Expense expense) {
         this.event = event;
         refresh(event);
-        addEditText.setText("Edit Expense");
+        addEditText.setText(Main.getLocalizedString("EditExpense"));
         this.expense = expense;
         setAddOrEditButton();
         this.title.setText(expense.getTitle());
