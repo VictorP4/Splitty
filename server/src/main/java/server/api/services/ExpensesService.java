@@ -53,7 +53,10 @@ public class ExpensesService {
         DecimalFormat df = new DecimalFormat("##.00", otherSymbols);
         otherSymbols.setDecimalSeparator('.');
         df.setDecimalFormatSymbols(otherSymbols);
-
+        if(expense.getInvolvedParticipants().contains(expense.getPaidBy())){
+            expense.getInvolvedParticipants().remove(expense.getPaidBy());
+            expense.getInvolvedParticipants().add(expense.getPaidBy());
+        }
         Expense newExp = expRepo.save(expense);
         //updating debts
         Participant p = newExp.getPaidBy();

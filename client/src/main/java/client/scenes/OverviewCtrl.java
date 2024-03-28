@@ -609,7 +609,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * @param b
      */
     public void setAdmin(boolean b) {
-        this.admin=true;
+        this.admin=b;
     }
     public void deletePrevExp(Expense expense){
         if(previousExpenses.get(expense.getId())!=null){
