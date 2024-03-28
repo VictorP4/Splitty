@@ -232,7 +232,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         userConfig.setLanguageConfig("nl");
         switchLocale("messages", "nl");
         Image image = new Image(
-                Objects.requireNonNull(getClass().getResource("/client/misc/nl_flag.png")).toExternalForm());
+                Objects.requireNonNull(getClass().getResource( "/client/misc/nl_flag.png")).toExternalForm());
         prefs.put(SELECTED_IMAGE_KEY, "/client/misc/nl_flag.png");
         menuButtonView.setImage(image);
     }
@@ -267,7 +267,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     public void addLang(ActionEvent actionEvent) throws BackingStoreException {
         Properties newLang = new Properties();
         try (BufferedReader reader = new BufferedReader(
-                new FileReader("client/src/main/resources/client/misc/langTemplate.txt"))) {
+                new FileReader("src/main/resources/client/misc/langTemplate.txt"))) {
             newLang.load(reader);
         } catch (IOException e) {
             e.printStackTrace();
@@ -278,7 +278,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
             newLang.store(output, "Add the name of your new language to the first line of this file as a comment\n" +
                     "Send the final translation version to ooppteam58@gmail.com");
 
-            newLangPath = "client/src/main/resources/client/misc/messages.properties";
+            newLangPath = "src/main/resources/client/misc/messages.properties";
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
