@@ -135,7 +135,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
             Response response = server.checkServer(userConfig.getServerURLConfig());
             if (response.getStatus() == 200) {
                 server.setSERVER(userConfig.getServerURLConfig());
-                errorPopup("Server succesfull changed to default");
+                errorPopup("Server succesfully changed to default");
             }
         } catch (Exception e) {
             errorPopup(e.getMessage());
