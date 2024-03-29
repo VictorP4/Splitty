@@ -106,8 +106,8 @@ public class Main extends Application {
     /**
      * Looks at those properties files and fetches the appropriate thing
      * 
-     * @param key
-     * @return
+     * @param key key of an element of the bundle
+     * @return appropriate string
      */
     public static String getLocalizedString(String key) {
         if (resourceBundle != null && resourceBundle.containsKey(key)) {

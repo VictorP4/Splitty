@@ -51,11 +51,17 @@ public class AdminEventOverviewCtrl {
         this.server = server;
     }
 
+    /**
+     * Refreshes the scene
+     */
     public void refresh(){
         events = FXCollections.observableList(server.getAllEvents());
         displayEvents();
     }
 
+    /**
+     * Initializes the scene
+     */
     public void initialize() {
         ap.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
@@ -74,6 +80,9 @@ public class AdminEventOverviewCtrl {
         });
     }
 
+    /**
+     * Creates the table that displays all events from the db, with the backup & delete buttons
+     */
     public void displayEvents(){
         eventsTable.getItems().clear();
         eventsTable.getColumns().clear();

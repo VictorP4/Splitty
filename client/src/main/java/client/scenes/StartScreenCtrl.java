@@ -262,6 +262,11 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         menuButtonView.setImage(image);
     }
 
+    /**
+     * Allows the used to switch to Spanish
+     *
+     * @param actionEvent The event that caused this method to be called
+     */
     public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
         switchLocale("messages", "es");
         Image image = new Image(
@@ -345,7 +350,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
 
     /**
      * Creates error for invalid action
-     * @param message
+     * @param message for the popup
      */
     private void errorPopup(String message) {
         var alert = new Alert(Alert.AlertType.ERROR);

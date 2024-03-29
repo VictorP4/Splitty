@@ -98,7 +98,9 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
     }
 
 
-
+    /**
+     * Changes the language of the scene
+      */
     @Override
     public void updateUI() {
         aeParticipant.setText(Main.getLocalizedString("AEParticipant"));

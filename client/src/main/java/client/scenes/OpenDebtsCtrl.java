@@ -1,4 +1,5 @@
 package client.scenes;
+
 import client.Main;
 import client.models.Debt;
 import client.utils.ServerUtils;

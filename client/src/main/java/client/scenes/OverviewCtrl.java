@@ -133,7 +133,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
             if(event.isControlDown() && event.getCode() == KeyCode.A){
                 toAddExpense();
             }
-            if(event.isShiftDown() && event.isControlDown()){
+            if(event.isControlDown() && event.getCode() == KeyCode.D){
                 mainCtrl.showOpenDebts(this.event);
             }
         });
@@ -314,8 +314,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
+     * Switches the language of the app to english
      *
-     * @param actionEvent
+     * @param actionEvent picking english in language menu button
      */
     public void switchToEnglish(ActionEvent actionEvent) throws BackingStoreException {
         userConfig.setLanguageConfig("en");
@@ -325,8 +326,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
+     * Switches the language of the app to dutch
      *
-     * @param actionEvent
+     * @param actionEvent picking dutch in language menu button
      */
     public void switchToDutch(ActionEvent actionEvent) throws BackingStoreException {
         userConfig.setLanguageConfig("nl");
@@ -335,6 +337,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
         menuButtonView.setImage(image);
     }
 
+    /**
+     * Switches the language of the app to spanish
+     *
+     * @param actionEvent picking spanish in language menu button
+     */
     public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
         userConfig.setLanguageConfig("es");
         switchLocale("messages","es");
@@ -342,6 +349,10 @@ public class OverviewCtrl implements Main.UpdatableUI {
         menuButtonView.setImage(image);
     }
 
+    /**
+     *
+     * @param actionEvent
+    */
     public void addLang(ActionEvent actionEvent) throws BackingStoreException {
         Properties newLang = new Properties();
         try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/client/misc/langTemplate.txt"))) {
@@ -500,6 +511,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
     }
 
+    /**
+     * Refreshes the scene.
+     *
+     * @param event which overview to load
+     */
     public void refresh(Event event) {
         if(this.event==null||!this.event.getId().equals(event.getId())) previousExpenses = new HashMap<>();
         String lp = userConfig.getLanguageConfig();
