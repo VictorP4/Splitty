@@ -10,6 +10,8 @@ import javafx.scene.Node;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import commons.Event;
@@ -22,6 +24,8 @@ import java.util.Map;
 public class StatisticsCtrl implements Main.UpdatableUI {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    @FXML
+    public AnchorPane anchor;
     private Event event;
     @FXML
     public Text stats;
@@ -46,6 +50,17 @@ public class StatisticsCtrl implements Main.UpdatableUI {
     public StatisticsCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+    }
+
+    /**
+     * initializes the scene
+     */
+    public void initialize(){
+        anchor.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.ESCAPE){
+                back();
+            }
+        });
     }
 
     /**
