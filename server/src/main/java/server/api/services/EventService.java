@@ -142,4 +142,11 @@ public class EventService {
         }
     }
 
+    /**
+     * find all events
+     * @return
+     */
+    public List<Event> findAll() {
+        return repo.findAll();
+    }
 }
