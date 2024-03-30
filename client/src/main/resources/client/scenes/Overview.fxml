@@ -127,11 +127,21 @@
             <Button layoutX="220.0" layoutY="45.0" mnemonicParsing="false" onAction="#delete" text="delete" />
          </children>
       </Pane>
+
       <ScrollPane layoutX="88.0" layoutY="88.0" prefHeight="60.0" prefWidth="377.0">
          <content>
               <FlowPane fx:id="participantsField" prefWidth="354.0" />
          </content>
       </ScrollPane>
+
+      <MenuButton fx:id="currencyButton" layoutX="208.0" layoutY="402.0" mnemonicParsing="false" text="Currency">
+         <items>
+            <MenuItem mnemonicParsing="false" onAction="#changeCurrencyEUR" text="EUR" />
+            <MenuItem mnemonicParsing="false" onAction="#changeCurrencyUSD" text="USD" />
+            <MenuItem mnemonicParsing="false" onAction="#changeCurrencyCHF" text="CHF" />
+         </items>
+      </MenuButton>
+
       </children>
     <cursor>
         <Cursor fx:constant="DEFAULT" />
