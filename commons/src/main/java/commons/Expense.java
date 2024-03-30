@@ -165,7 +165,7 @@ public class Expense {
 
     /**
      * gets the tag of the expense
-     * 
+     *
      * @return tag of the expense
      */
     public Tag getTag() {
@@ -174,7 +174,7 @@ public class Expense {
 
     /**
      * sets the tag of the expense
-     * 
+     *
      * @param tag the tag of the expense to set
      */
     public void setTag(Tag tag) {
@@ -222,7 +222,7 @@ public class Expense {
 
     /**
      * to string method for an expense
-     * 
+     *
      * @return string version of object expense
      */
     @Override
