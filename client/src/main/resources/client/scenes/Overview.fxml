@@ -79,7 +79,7 @@
         </MenuButton>
         <TabPane layoutX="87.0" layoutY="206.0" prefHeight="179.0" prefWidth="354.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
-                <Tab fx:id="all" text="All">
+                <Tab fx:id="all" text="All" onSelectionChanged="#showAllExpenses">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>

@@ -488,6 +488,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         }
         expenseList.setItems(original);
         fromSelected.setContent(expenseList);
+        selectExpense();
     }
 
     /**
@@ -644,7 +645,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void deletePrevExp(Expense expense){
         if(previousExpenses.get(expense.getId())!=null){
-            previousExpenses.get(expense.getId()).remove(expense);
+            previousExpenses.get(expense.getId()).removeLast();
             if(previousExpenses.get(expense.getId()).size()==0) previousExpenses.remove(expense.getId());
         }
     }
