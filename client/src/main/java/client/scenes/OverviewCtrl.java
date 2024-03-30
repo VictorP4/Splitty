@@ -13,6 +13,7 @@ import javafx.application.Platform;
 import jakarta.ws.rs.core.Response;
 
 import commons.Tag;
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -25,11 +26,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import commons.Expense;
 import javafx.collections.ObservableList;
 import javafx.stage.Modality;
+import javafx.stage.Popup;
 
 
 import java.io.*;
@@ -135,7 +138,21 @@ public class OverviewCtrl implements Main.UpdatableUI {
                 });
             }
         });
+        setParticipantsPopup();
+    }
 
+    private void setParticipantsPopup() {
+        Label pop = new Label("Double right click for delete,\n and double left click for edit");
+        pop.setStyle(" -fx-background-color: white; -fx-border-color: black;");
+        pop.setMinSize(100,50);
+        Popup popup = new Popup();
+        popup.getContent().add(pop);
+        participants.setOnMouseEntered(event ->{
+            popup.show(mainCtrl.getPrimaryStage(),event.getScreenX(), event.getScreenY()+5);
+        });
+        participants.setOnMouseExited(event ->{
+            popup.hide();
+        });
     }
 
     /**

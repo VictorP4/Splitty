@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="534.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
+<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="534.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
     <children>
         <TextField fx:id="titleField" layoutX="88.0" layoutY="13.0" prefHeight="51.0" prefWidth="182.0">
             <font>
@@ -37,26 +49,26 @@
         </Text>
         <MenuButton fx:id="langButton" layoutX="87.0" layoutY="402.0" mnemonicParsing="false" text="Language">
             <graphic>
-                <ImageView fx:id="menuButtonView" fitWidth="16" fitHeight="12" preserveRatio="true"/>
+                <ImageView fx:id="menuButtonView" fitHeight="12" fitWidth="16" preserveRatio="true" />
             </graphic>
             <items>
                 <MenuItem mnemonicParsing="false" onAction="#switchToEnglish" text="English">
                     <graphic>
-                        <ImageView fitWidth="16" fitHeight="12">
+                        <ImageView fitHeight="12" fitWidth="16">
                             <Image url="@/client/misc/en_flag.png" />
                         </ImageView>
                     </graphic>
                 </MenuItem>
                 <MenuItem mnemonicParsing="false" onAction="#switchToDutch" text="Dutch">
                     <graphic>
-                        <ImageView fitWidth="16" fitHeight="12">
+                        <ImageView fitHeight="12" fitWidth="16">
                             <Image url="@/client/misc/nl_flag.png" />
                         </ImageView>
                     </graphic>
                 </MenuItem>
                 <MenuItem mnemonicParsing="false" onAction="#switchToSpanish" text="Spanish">
                     <graphic>
-                        <ImageView fitWidth="16" fitHeight="12">
+                        <ImageView fitHeight="12" fitWidth="16">
                             <Image url="@/client/misc/es_flag.png" />
                         </ImageView>
                     </graphic>
@@ -105,7 +117,6 @@
                 </ImageView>
             </graphic>
         </Button>
-        <FlowPane fx:id="participantsField" layoutX="87.0" layoutY="92.0" prefHeight="58.0" prefWidth="354.0" />
         <Button fx:id="sendInvites" layoutX="218.0" layoutY="60.0" mnemonicParsing="false" onAction="#showInvites" text="Send Invites" />
       <Button fx:id="statistics" layoutX="361.0" layoutY="171.0" mnemonicParsing="false" onAction="#showStatistics" prefHeight="26.0" prefWidth="80.0" text="Statistics" />
       <Pane fx:id="block" opacity="0.37" prefHeight="446.0" prefWidth="534.0" style="-fx-background-color: black;" visible="false" />
@@ -116,6 +127,11 @@
             <Button layoutX="220.0" layoutY="45.0" mnemonicParsing="false" onAction="#delete" text="delete" />
          </children>
       </Pane>
+      <ScrollPane layoutX="88.0" layoutY="88.0" prefHeight="60.0" prefWidth="377.0">
+         <content>
+              <FlowPane fx:id="participantsField" prefWidth="354.0" />
+         </content>
+      </ScrollPane>
       </children>
     <cursor>
         <Cursor fx:constant="DEFAULT" />
