@@ -35,9 +35,6 @@ class CurrencyServiceTest {
     /**
      * Test for successful fetching of exchange rates.
      */
-    /**
-     * Test for successful fetching of exchange rates.
-     */
     @Test
     void fetchExchangeRatesGood() {
         LocalDate date = LocalDate.now();

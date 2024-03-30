@@ -92,7 +92,6 @@ public class EventService {
         update.setLastActivityDate(new Date());
         update.setInviteCode(event.getInviteCode());
         update.setTags(event.getTags());
-        update.setPreferredCurrency(event.getPreferredCurrency());
 
         Event finalUpdate = repo.save(update);
         return finalUpdate;

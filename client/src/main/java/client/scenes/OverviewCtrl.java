@@ -172,6 +172,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         inclSelected.setText(Main.getLocalizedString("ovInclSelected"));
         participants.setText(Main.getLocalizedString("ovParticipants"));
         statistics.setText(Main.getLocalizedString("ovStatistics"));
+        currencyButton.setText(Main.getLocalizedString("currency"));
     }
 
     /**
@@ -438,12 +439,13 @@ public class OverviewCtrl implements Main.UpdatableUI {
         return expenseList;
     }
     public List<Expense> convertCurrency(List<Expense> a){
+        String c = userConfig.getCurrencyConfig();
         for(Expense b:a){
-            if(!b.getCurrency().equals(event.getPreferredCurrency())){
+            if(!b.getCurrency().equals(c)){
                 int amn =(int)(serverUtils.convertCurrency(b.getAmount(),b.getCurrency(),
-                        event.getPreferredCurrency(), new Date(b.getDate().getTime()).toLocalDate())*1000);
+                        c, new Date(b.getDate().getTime()).toLocalDate())*1000);
                 b.setAmount((double)amn/1000);
-                b.setCurrency(event.getPreferredCurrency());
+                b.setCurrency(c);
             }
         }
         return a;
@@ -455,8 +457,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     @FXML
     public void changeCurrencyEUR(){
-        event.setPreferredCurrency("EUR");
-        serverUtils.updateEvent(event);
+        userConfig.setCurrencyConfig("EUR");
         showAllExpenses();
     }
 
@@ -466,8 +467,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     @FXML
     public void changeCurrencyUSD(){
-        event.setPreferredCurrency("USD");
-        serverUtils.updateEvent(event);
+        userConfig.setCurrencyConfig("USD");
         showAllExpenses();
     }
 
@@ -477,8 +477,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     @FXML
     public void changeCurrencyCHF(){
-        event.setPreferredCurrency("CHF");
-        serverUtils.updateEvent(event);
+        userConfig.setCurrencyConfig("CHF");
         showAllExpenses();
     }
 
