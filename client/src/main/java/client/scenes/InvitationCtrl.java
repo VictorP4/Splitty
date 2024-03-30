@@ -65,6 +65,9 @@ public class InvitationCtrl implements Main.UpdatableUI {
             if (event.getCode() == KeyCode.ESCAPE) {
                 backToOverview();
             }
+            if(event.isControlDown() && event.getCode()==KeyCode.ENTER){
+                sendInvites(); //enter by itself goes to new line in email box
+            }
         });
 
         setInviteCode();

@@ -11,6 +11,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
@@ -22,6 +24,8 @@ import javafx.scene.text.Text;
 public class AddTagCtrl implements Main.UpdatableUI {
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
+    @FXML
+    public AnchorPane anchor;
     private Event event;
     private String tagName;
     @FXML
@@ -63,6 +67,17 @@ public class AddTagCtrl implements Main.UpdatableUI {
         tagName = nameTextField.getText();
         nameTextField.textProperty().addListener((observable, oldValue, newValue) -> updateTagName(newValue));
         removeButton.setVisible(false);
+        anchor.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.ENTER){
+                add();
+            }
+            if(event.getCode() == KeyCode.ESCAPE){
+                back();
+            }
+            if(event.isControlDown() && event.isAltDown() && event.getCode() == KeyCode.C){
+                abort(); //TODO
+            }
+        });
     }
 
     /**
