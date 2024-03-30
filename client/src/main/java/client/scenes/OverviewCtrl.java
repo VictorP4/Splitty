@@ -127,6 +127,18 @@ public class OverviewCtrl implements Main.UpdatableUI {
             if (event.getCode() == KeyCode.ESCAPE) {
                 backToStartScreen();
             }
+            if(event.isControlDown() && event.getCode() == KeyCode.S){
+                showStatistics();
+            }
+            if(event.isControlDown() && event.getCode() == KeyCode.L){
+                langButton.fire();
+            }
+            if(event.isControlDown() && event.getCode() == KeyCode.A){
+                toAddExpense();
+            }
+            if(event.isShiftDown() && event.isControlDown()){
+                mainCtrl.showOpenDebts(this.event);
+            }
         });
         expenseList = new ListView<>();
         webSocket.connect("ws://localhost:8080/websocket");

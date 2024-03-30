@@ -88,7 +88,10 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
         String userInput = serverUrl.getText();
         String url = "http://" + userInput;
         try {
-            if (!userInput.isBlank() && server.checkServer(url).getStatus() == 200) {
+            if(userInput.isBlank()){
+                return;
+            }
+            else if (!userInput.isBlank() && server.checkServer(url).getStatus() == 200) {
                 server.setSERVER(url);
                 webSocket.disconnect();
                 webSocket.connect("ws://" + userInput + "/websocket");
@@ -135,7 +138,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
             Response response = server.checkServer(userConfig.getServerURLConfig());
             if (response.getStatus() == 200) {
                 server.setSERVER(userConfig.getServerURLConfig());
-                errorPopup("Server succesfull changed to default");
+                errorPopup("Server succesfully changed to default");
             }
         } catch (Exception e) {
             errorPopup(e.getMessage());

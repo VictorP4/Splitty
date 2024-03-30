@@ -22,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
@@ -35,6 +36,8 @@ import java.util.List;
 public class OpenDebtsCtrl implements Main.UpdatableUI {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    @FXML
+    public AnchorPane anchor;
     private ObservableList<Debt> debts;
     @FXML
     private Accordion debtsOverview;
@@ -62,6 +65,12 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
      * Initializes the open debt scene
      */
     public void initialize(){
+
+        anchor.setOnKeyPressed(keyEvent -> {
+            if(keyEvent.getCode() == KeyCode.ESCAPE){
+                back();
+            }
+        });
 
         webSocket.addEventListener((event)->{
             if(this.event==null||!this.event.getId().equals(event.getId())) return;

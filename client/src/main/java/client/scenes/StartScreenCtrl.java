@@ -18,6 +18,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 
@@ -55,6 +56,8 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     public ImageView menuButtonView;
     @FXML
     public Menu customLangs;
+    @FXML
+    public AnchorPane anchor;
     @FXML
     private TextField eventTitle;
     @FXML
@@ -113,6 +116,14 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         eventTitle.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 createEvent();
+            }
+        });
+        anchor.setOnKeyPressed(event ->{
+            if(event.getCode() == KeyCode.L){
+                langButton.fire();
+            }
+            if(event.getCode() == KeyCode.S){
+                toSettings();
             }
         });
 
