@@ -103,6 +103,9 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             if (keyEvent.getCode() == KeyCode.ENTER) {
                 ok();
             }
+            if(keyEvent.isControlDown() && keyEvent.getCode() == KeyCode.U){
+                undo();
+            }
         });
         webSocket.addExpenseListener((expense -> {
             if (this.expense == null || !Objects.equals(expense.getId(), this.expense.getId()))
