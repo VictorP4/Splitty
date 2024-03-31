@@ -30,6 +30,7 @@ import javafx.scene.text.Text;
 import commons.Expense;
 import javafx.collections.ObservableList;
 import javafx.stage.Modality;
+import javafx.stage.Popup;
 
 
 import java.io.*;
@@ -161,7 +162,21 @@ public class OverviewCtrl implements Main.UpdatableUI {
                 });
             }
         });
+        setParticipantsPopup();
+    }
 
+    private void setParticipantsPopup() {
+        Label pop = new Label("Double right click for delete,\n and double left click for edit");
+        pop.setStyle(" -fx-background-color: white; -fx-border-color: black;");
+        pop.setMinSize(100,50);
+        Popup popup = new Popup();
+        popup.getContent().add(pop);
+        participants.setOnMouseEntered(event ->{
+            popup.show(mainCtrl.getPrimaryStage(),event.getScreenX(), event.getScreenY()+5);
+        });
+        participants.setOnMouseExited(event ->{
+            popup.hide();
+        });
     }
 
     /**
@@ -533,6 +548,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         original = (ObservableList<Expense>) convertCurrency(original);
         expenseList.setItems(original);
         fromSelected.setContent(expenseList);
+        selectExpense();
     }
 
     /**
@@ -689,7 +705,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void deletePrevExp(Expense expense){
         if(previousExpenses.get(expense.getId())!=null){
-            previousExpenses.get(expense.getId()).remove(expense);
+            previousExpenses.get(expense.getId()).removeLast();
             if(previousExpenses.get(expense.getId()).size()==0) previousExpenses.remove(expense.getId());
         }
     }

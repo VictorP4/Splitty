@@ -37,6 +37,7 @@ public class MyModule implements Module {
                 binder.bind(StartScreenCtrl.class).in(Scopes.SINGLETON);
                 binder.bind(StatisticsCtrl.class).in(Scopes.SINGLETON);
                 binder.bind(SettingsPageCtrl.class).in(Scopes.SINGLETON);
+                binder.bind(AdminEventOverviewCtrl.class).in(Scopes.SINGLETON);
                 binder.bind(WebSocketUtils.class).in(Scopes.SINGLETON);
                 binder.bind(AdminEventOverviewCtrl.class).in(Scopes.SINGLETON);
         }

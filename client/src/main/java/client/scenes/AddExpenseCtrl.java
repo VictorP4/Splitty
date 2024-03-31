@@ -536,6 +536,14 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 errorPopup("Undo unavailable");
                 return;
             }
+            Expense  expense1 = mainCtrl.getPrevExp(expense.getId());
+            final Boolean[] b = {true};
+            expense1.getInvolvedParticipants().forEach((p)-> b[0] = b[0] &&this.event.getParticipants().contains(p));
+            b[0] = b[0] && this.event.getParticipants().contains(expense1.getPaidBy()) && this.event.getTags().contains(expense1.getTag());
+            if(!b[0]){
+                undo();
+                return;
+            }
             clearFields();
             refreshExp(this.event,mainCtrl.getPrevExp(expense.getId()));
         }

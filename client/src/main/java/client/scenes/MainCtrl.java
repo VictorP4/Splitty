@@ -289,4 +289,7 @@ public class MainCtrl {
     public Expense getPrevExp(Long id){
         return eventOverviewCtrl.getPrevExp(id);
     }
+    public Stage getPrimaryStage(){
+        return primaryStage;
+    }
 }
