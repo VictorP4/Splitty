@@ -38,11 +38,11 @@ public class AdminEventOverviewCtrl {
     @FXML
     public AnchorPane ap;
     @FXML
-    private FileChooser fc;
+    public FileChooser fc;
     @FXML
-    private Button importJSON;
+    public Button importJSON;
     @FXML
-    private Button ok;
+    public Button ok;
 
 
     @Inject

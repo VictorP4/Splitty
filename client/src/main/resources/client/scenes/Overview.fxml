@@ -37,7 +37,7 @@
         </Text>
         <MenuButton fx:id="langButton" layoutX="87.0" layoutY="402.0" mnemonicParsing="false" text="Language">
             <graphic>
-                <ImageView fx:id="menuButtonView" fitWidth="16" fitHeight="12" preserveRatio="true"/>
+                <ImageView fx:id="menuButtonView" fitHeight="12" fitWidth="16" preserveRatio="true" />
             </graphic>
             <items>
                 <MenuItem mnemonicParsing="false" onAction="#switchToEnglish" text="English">
@@ -49,7 +49,7 @@
                 </MenuItem>
                 <MenuItem mnemonicParsing="false" onAction="#switchToDutch" text="Dutch">
                     <graphic>
-                        <ImageView fitWidth="16" fitHeight="12">
+                        <ImageView fitHeight="12" fitWidth="16">
                             <Image url="@/client/misc/nl_flag.png" />
                         </ImageView>
                     </graphic>
@@ -116,6 +116,13 @@
             <Button layoutX="220.0" layoutY="45.0" mnemonicParsing="false" onAction="#delete" text="delete" />
          </children>
       </Pane>
+      <MenuButton fx:id="currencyButton" layoutX="208.0" layoutY="402.0" mnemonicParsing="false" text="Currency">
+         <items>
+            <MenuItem mnemonicParsing="false" onAction="#changeCurrencyEUR" text="EUR" />
+            <MenuItem mnemonicParsing="false" onAction="#changeCurrencyUSD" text="USD" />
+            <MenuItem mnemonicParsing="false" onAction="#changeCurrencyCHF" text="CHF" />
+         </items>
+      </MenuButton>
       </children>
     <cursor>
         <Cursor fx:constant="DEFAULT" />
