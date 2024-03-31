@@ -103,6 +103,12 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private boolean admin;
     private final UserConfig userConfig = new UserConfig();
     private Map<Long,List<Expense>> previousExpenses;
+    @FXML
+    private Button cancel;
+    @FXML
+    private Button delete;
+    @FXML
+    private Button edit;
 
     /**
      * Constructs an OverviewCtrl object.
@@ -188,6 +194,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
         participants.setText(Main.getLocalizedString("ovParticipants"));
         statistics.setText(Main.getLocalizedString("ovStatistics"));
         currencyButton.setText(Main.getLocalizedString("currency"));
+        delete.setText(Main.getLocalizedString("delete"));
+        edit.setText(Main.getLocalizedString("edit"));
+        cancel.setText(Main.getLocalizedString("cancel"));
     }
 
     /**

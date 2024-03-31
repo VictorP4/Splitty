@@ -147,7 +147,8 @@ public class Main extends Application {
                 INJECTOR.getInstance(OverviewCtrl.class),
                 INJECTOR.getInstance(StartScreenCtrl.class),
                 INJECTOR.getInstance(StatisticsCtrl.class),
-                INJECTOR.getInstance(SettingsPageCtrl.class));
+                INJECTOR.getInstance(SettingsPageCtrl.class),
+                INJECTOR.getInstance(AdminEventOverviewCtrl.class));
         for (UpdatableUI controller : controllers) {
             controller.updateUI();
         }

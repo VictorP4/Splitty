@@ -39,5 +39,6 @@ public class MyModule implements Module {
                 binder.bind(SettingsPageCtrl.class).in(Scopes.SINGLETON);
                 binder.bind(AdminEventOverviewCtrl.class).in(Scopes.SINGLETON);
                 binder.bind(WebSocketUtils.class).in(Scopes.SINGLETON);
+                binder.bind(AdminEventOverviewCtrl.class).in(Scopes.SINGLETON);
         }
 }
