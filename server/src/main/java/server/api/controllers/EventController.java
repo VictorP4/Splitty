@@ -12,7 +12,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import server.api.services.EventService;
-import server.database.EventRepository;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,17 +21,14 @@ import java.util.function.Consumer;
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
-    private final EventRepository repo;
     private final EventService evServ;
     private final SimpMessagingTemplate smt;
 
     /**
-     * @param repo   the event repository
      * @param evServ event service
      * @param smt
      */
-    public EventController(EventRepository repo, EventService evServ, SimpMessagingTemplate smt) {
-        this.repo = repo;
+    public EventController(EventService evServ, SimpMessagingTemplate smt) {
         this.evServ = evServ;
         this.smt = smt;
     }
@@ -64,7 +60,7 @@ public class EventController {
 //        if (request.getSession().getAttribute("adminLogged") == null) {
 //            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ArrayList<>());
 //        }
-        return ResponseEntity.ok(repo.findAll());
+        return ResponseEntity.ok(evServ.findAll());
     }
 
     /**
