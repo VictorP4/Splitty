@@ -46,7 +46,7 @@ public class ExpensesServiceTest {
         servMock = new ExpensesService(repo,evRepo,partRepo);
         cont = new ExpensesController(servMock,null);
         evServ  = new EventService(evRepo,partRepo, repo,tagRepo);
-        evCont = new EventController(evRepo,evServ,null);
+        evCont = new EventController(evServ,null);
     }
 
     @Test
