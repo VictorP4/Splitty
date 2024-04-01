@@ -748,6 +748,10 @@ public class OverviewCtrl implements Main.UpdatableUI {
         return previousExpenses.get(id).get(previousExpenses.get(id).size()-1);
     }
 
+    /**
+     * Get the currency
+     * @return the currency
+     */
     public String getCurrency() {
         return userConfig.getCurrencyConfig();
     }

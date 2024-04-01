@@ -289,9 +289,19 @@ public class MainCtrl {
     public Expense getPrevExp(Long id){
         return eventOverviewCtrl.getPrevExp(id);
     }
+
+    /**
+     * Get the primary stage
+     * @return
+     */
     public Stage getPrimaryStage(){
         return primaryStage;
     }
+
+    /**
+     * Get the currency
+     * @return
+     */
     public String getCurrency(){
        return eventOverviewCtrl.getCurrency();
     }
