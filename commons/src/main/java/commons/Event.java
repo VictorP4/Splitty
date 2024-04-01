@@ -252,6 +252,7 @@ public class Event {
      * @param o the object to compare
      * @return true if this event is equal to the other object, false otherwise
      */
+
     @Override
     public boolean equals(Object o) {
         return EqualsBuilder.reflectionEquals(this, o);

@@ -289,6 +289,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
+<<<<<<< HEAD
      * setting the edit or add button
      */
     public void setAddOrEditButton() {
@@ -302,14 +303,20 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * being implemented, keeps refresh cleaner
      */
     private void addToCurrency() {
-        currency.getItems().add("EUR");
-        currency.getItems().add("HRK");
+        if(this.expense==null){
+            currency.getItems().add("EUR");
+            currency.getItems().add("CHF");
+            currency.getItems().add("USD");
+        } else{
+            clearFields();
+            currency.getItems().add(expense.getCurrency());
+        }
     }
 
     /**
      * checks to see if a participant checkbox already exists,
      * if it does it won't be added again when refresh is called
-     * 
+     *
      * @param p participant we want to have as a checkbox option
      * @return true/false is the participant already there
      */
@@ -326,7 +333,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
     /**
      * adds the participants involved in an expense to a list
-     * 
+     *
      * @return list of participants in debt in an expense
      */
     public List<Participant> add() {
@@ -342,7 +349,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
     /**
      * adds all the participants of an expense to the list in
-     * 
+     *
      * @param in list with all the participants of the expense
      */
     private void ticked(List<Participant> in) {
@@ -364,7 +371,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     /**
      * adds all checkboxes, all possible participants to be picked for an expense to
      * a list
-     * 
+     *
      * @param checkBoxes list of all checkboxes
      */
     private void listOf(List<CheckBox> checkBoxes) {
@@ -466,6 +473,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         addEditText.setText(Main.getLocalizedString("EditExpense"));
         this.expense = expense;
         setAddOrEditButton();
+        addToCurrency();
         this.title.setText(expense.getTitle());
         this.amount.setText(Double.toString(expense.getAmount()));
         LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -500,7 +508,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
     /**
      * updates the expanse in the event
-     * 
+     *
      * @param expense the updated expense
      */
     public void updateExp(Expense expense) {
@@ -526,6 +534,14 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             mainCtrl.deletePrevExp(this.expense);
             if(mainCtrl.getPrevExp(this.expense.getId())==null){
                 errorPopup("Undo unavailable");
+                return;
+            }
+            Expense  expense1 = mainCtrl.getPrevExp(expense.getId());
+            final Boolean[] b = {true};
+            expense1.getInvolvedParticipants().forEach((p)-> b[0] = b[0] &&this.event.getParticipants().contains(p));
+            b[0] = b[0] && this.event.getParticipants().contains(expense1.getPaidBy()) && this.event.getTags().contains(expense1.getTag());
+            if(!b[0]){
+                undo();
                 return;
             }
             clearFields();

@@ -30,13 +30,20 @@ import javafx.scene.text.Text;
 import commons.Expense;
 import javafx.collections.ObservableList;
 import javafx.stage.Modality;
+import javafx.stage.Popup;
 
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.*;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Properties;
 import java.util.prefs.BackingStoreException;
 import static client.Main.switchLocale;
 
@@ -70,6 +77,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
     @FXML
     public MenuButton langButton;
     @FXML
+    public MenuButton currencyButton;
+    @FXML
     private Tab fromSelected;
     @FXML
     private Tab inclSelected;
@@ -94,6 +103,12 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private boolean admin;
     private final UserConfig userConfig = new UserConfig();
     private Map<Long,List<Expense>> previousExpenses;
+    @FXML
+    private Button cancel;
+    @FXML
+    private Button delete;
+    @FXML
+    private Button edit;
 
     /**
      * Constructs an OverviewCtrl object.
@@ -147,7 +162,21 @@ public class OverviewCtrl implements Main.UpdatableUI {
                 });
             }
         });
+        setParticipantsPopup();
+    }
 
+    private void setParticipantsPopup() {
+        Label pop = new Label("Double right click for delete,\n and double left click for edit");
+        pop.setStyle(" -fx-background-color: white; -fx-border-color: black;");
+        pop.setMinSize(100,50);
+        Popup popup = new Popup();
+        popup.getContent().add(pop);
+        participants.setOnMouseEntered(event ->{
+            popup.show(mainCtrl.getPrimaryStage(),event.getScreenX(), event.getScreenY()+5);
+        });
+        participants.setOnMouseExited(event ->{
+            popup.hide();
+        });
     }
 
     /**
@@ -164,6 +193,10 @@ public class OverviewCtrl implements Main.UpdatableUI {
         inclSelected.setText(Main.getLocalizedString("ovInclSelected"));
         participants.setText(Main.getLocalizedString("ovParticipants"));
         statistics.setText(Main.getLocalizedString("ovStatistics"));
+        currencyButton.setText(Main.getLocalizedString("currency"));
+        delete.setText(Main.getLocalizedString("delete"));
+        edit.setText(Main.getLocalizedString("edit"));
+        cancel.setText(Main.getLocalizedString("cancel"));
     }
 
     /**
@@ -366,7 +399,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
             newLang.store(output, "Add the name of your new language to the first line of this file as a comment\n"+
                     "Send the final translation version to ooppteam58@gmail.com");
 
-            newLangPath = "src/main/resources/client/misc/messages.properties";
+            newLangPath = "client/src/main/resources/client/misc/messages.properties";
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -440,6 +473,48 @@ public class OverviewCtrl implements Main.UpdatableUI {
         });
         return expenseList;
     }
+    public List<Expense> convertCurrency(List<Expense> a){
+        String c = userConfig.getCurrencyConfig();
+        for(Expense b:a){
+            if(!b.getCurrency().equals(c)){
+                int amn =(int)(serverUtils.convertCurrency(b.getAmount(),b.getCurrency(),
+                        c, new Date(b.getDate().getTime()).toLocalDate())*1000);
+                b.setAmount((double)amn/1000);
+                b.setCurrency(c);
+            }
+        }
+        return a;
+    }
+
+    /**
+     * Changes the preferred currency of the event to Euro (EUR).
+     * Updates the event's preferred currency on the server and refreshes the displayed expenses accordingly.
+     */
+    @FXML
+    public void changeCurrencyEUR(){
+        userConfig.setCurrencyConfig("EUR");
+        showAllExpenses();
+    }
+
+    /**
+     * Changes the preferred currency of the event to US Dollar (USD).
+     * Updates the event's preferred currency on the server and refreshes the displayed expenses accordingly.
+     */
+    @FXML
+    public void changeCurrencyUSD(){
+        userConfig.setCurrencyConfig("USD");
+        showAllExpenses();
+    }
+
+    /**
+     * Changes the preferred currency of the event to Swiss Franc (CHF).
+     * Updates the event's preferred currency on the server and refreshes the displayed expenses accordingly.
+     */
+    @FXML
+    public void changeCurrencyCHF(){
+        userConfig.setCurrencyConfig("CHF");
+        showAllExpenses();
+    }
 
     /**
      * Shows all expenses of the event
@@ -457,6 +532,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
             }
             original.add(e);
         }
+        original = (ObservableList<Expense>) convertCurrency(original);
         expenseList.setItems(original);
         all.setContent(expenseList);
         selectExpense();
@@ -480,8 +556,10 @@ public class OverviewCtrl implements Main.UpdatableUI {
                 original.add(e);
             }
         }
+        original = (ObservableList<Expense>) convertCurrency(original);
         expenseList.setItems(original);
         fromSelected.setContent(expenseList);
+        selectExpense();
     }
 
     /**
@@ -503,7 +581,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
                 original.add(e);
             }
         }
-
+        original = (ObservableList<Expense>) convertCurrency(original);
         expenseList.setItems(original);
 
         inclSelected.setContent(expenseList);
@@ -643,7 +721,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void deletePrevExp(Expense expense){
         if(previousExpenses.get(expense.getId())!=null){
-            previousExpenses.get(expense.getId()).remove(expense);
+            previousExpenses.get(expense.getId()).removeLast();
             if(previousExpenses.get(expense.getId()).size()==0) previousExpenses.remove(expense.getId());
         }
     }
