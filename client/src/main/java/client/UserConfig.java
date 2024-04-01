@@ -124,6 +124,16 @@ public class UserConfig {
         }
     }
 
+    public void reloadLanguageFile() {
+        try {
+            FileInputStream fileInputStream = new FileInputStream(configPath);
+            properties.load(fileInputStream);
+            fileInputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Changes the configuration of the language.
      *
