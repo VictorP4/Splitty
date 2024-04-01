@@ -292,4 +292,7 @@ public class MainCtrl {
     public Stage getPrimaryStage(){
         return primaryStage;
     }
+    public String getCurrency(){
+       return eventOverviewCtrl.getCurrency();
+    }
 }

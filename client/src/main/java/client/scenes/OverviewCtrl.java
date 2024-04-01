@@ -481,8 +481,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
         for(Expense b:a){
             if(!b.getCurrency().equals(c)){
                 int amn =(int)(serverUtils.convertCurrency(b.getAmount(),b.getCurrency(),
-                        c, new Date(b.getDate().getTime()).toLocalDate())*1000);
-                b.setAmount((double)amn/1000);
+                        c, new Date(b.getDate().getTime()).toLocalDate())*100);
+                b.setAmount((double)amn/100);
                 b.setCurrency(c);
             }
         }
@@ -746,5 +746,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public Expense getPrevExp(Long id){
         if(previousExpenses.get(id)==null) return null;
         return previousExpenses.get(id).get(previousExpenses.get(id).size()-1);
+    }
+
+    public String getCurrency() {
+        return userConfig.getCurrencyConfig();
     }
 }

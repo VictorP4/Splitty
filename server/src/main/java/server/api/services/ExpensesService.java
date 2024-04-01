@@ -61,7 +61,8 @@ public class ExpensesService {
             expense.getInvolvedParticipants().add(expense.getPaidBy());
         }
         Expense newExp = expRepo.save(expense);
-        double amount = newExp.getCurrency().equals("EUR") ? newExp.getAmount() : currencyService.convertCurrency(newExp.getAmount(), newExp.getCurrency(), "EUR",new Date(newExp.getDate().getTime()).toLocalDate()).getBody();
+        double amount = newExp.getCurrency().equals("EUR") ? newExp.getAmount() :
+                currencyService.convertCurrency(newExp.getAmount(), newExp.getCurrency(), "EUR",new Date(newExp.getDate().getTime()).toLocalDate()).getBody();
         //updating debts
         Participant p = newExp.getPaidBy();
 
@@ -106,7 +107,8 @@ public class ExpensesService {
         otherSymbols.setDecimalSeparator('.');
         df.setDecimalFormatSymbols(otherSymbols);
         Expense oldExp = expRepo.findById(expId).get();
-        double amount1 = oldExp.getCurrency().equals("EUR") ? oldExp.getAmount() : currencyService.convertCurrency(oldExp.getAmount(), oldExp.getCurrency(),"EUR" ,new Date(oldExp.getDate().getTime()).toLocalDate()).getBody();
+        double amount1 = oldExp.getCurrency().equals("EUR") ? oldExp.getAmount() :
+                currencyService.convertCurrency(oldExp.getAmount(), oldExp.getCurrency(),"EUR" ,new Date(oldExp.getDate().getTime()).toLocalDate()).getBody();
         //resetting debts
         Participant p1 = oldExp.getPaidBy();
         double oldDebt = p1.getDebt()-Double.parseDouble(df.format(amount1));
@@ -127,7 +129,8 @@ public class ExpensesService {
         oldExp.setDate(expense.getDate());
         oldExp.setTag(expense.getTag());
         oldExp.setCurrency(expense.getCurrency());
-        double amount = expense.getCurrency().equals("EUR") ? expense.getAmount() : currencyService.convertCurrency(expense.getAmount(), expense.getCurrency(),"EUR" ,new Date(expense.getDate().getTime()).toLocalDate()).getBody();
+        double amount = expense.getCurrency().equals("EUR") ? expense.getAmount() :
+                currencyService.convertCurrency(expense.getAmount(), expense.getCurrency(),"EUR" ,new Date(expense.getDate().getTime()).toLocalDate()).getBody();
         //updating debts
         oldExp.setPaidBy(participantRepo.getById(oldExp.getPaidBy().getId()));
         Participant p = oldExp.getPaidBy();
@@ -171,7 +174,8 @@ public class ExpensesService {
         otherSymbols.setDecimalSeparator('.');
         df.setDecimalFormatSymbols(otherSymbols);
         Expense expense = expRepo.findById(expId).get();
-        double amount = expense.getCurrency().equals("EUR") ? expense.getAmount() : currencyService.convertCurrency(expense.getAmount(), expense.getCurrency(), "EUR",new Date(expense.getDate().getTime()).toLocalDate()).getBody();
+        double amount = expense.getCurrency().equals("EUR") ? expense.getAmount() :
+                currencyService.convertCurrency(expense.getAmount(), expense.getCurrency(), "EUR",new Date(expense.getDate().getTime()).toLocalDate()).getBody();
         //resetting debts
         Participant p1 = expense.getPaidBy();
         double oldDebt = p1.getDebt()-Double.parseDouble(df.format(amount));
