@@ -119,10 +119,10 @@ public class StartScreenCtrl implements Main.UpdatableUI {
             }
         });
         anchor.setOnKeyPressed(event ->{
-            if(event.getCode() == KeyCode.L){
+            if(event.isControlDown() && event.getCode() == KeyCode.L){
                 langButton.fire();
             }
-            if(event.getCode() == KeyCode.S){
+            if(event.isControlDown() && event.getCode() == KeyCode.S){
                 toSettings();
             }
         });
@@ -148,6 +148,8 @@ public class StartScreenCtrl implements Main.UpdatableUI {
                 errorPopup("Server not available");
             });
         });
+
+        setInstructions();
     }
 
     /**
@@ -357,6 +359,16 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    /**
+     * Sets the instruction popups for shortcuts.
+     */
+    public void setInstructions(){
+        mainCtrl.instructionsPopup(new Label(" press ENTER to create event "), this.createButton);
+        mainCtrl.instructionsPopup(new Label(" press ENTER to join event "), this.joinButton);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + S \n to go to settings "), this.settingsPage);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + L to \n open language menu "), this.langButton);
     }
 
 }

@@ -163,10 +163,12 @@ public class OverviewCtrl implements Main.UpdatableUI {
             }
         });
         setParticipantsPopup();
+        setParticipantBoxPopup();
+        setInstructions();
     }
 
     private void setParticipantsPopup() {
-        Label pop = new Label("Double right click for delete,\n and double left click for edit");
+        Label pop = new Label(" Double right click for delete, \n and double left click for edit ");
         pop.setStyle(" -fx-background-color: white; -fx-border-color: black;");
         pop.setMinSize(100,50);
         Popup popup = new Popup();
@@ -745,4 +747,33 @@ public class OverviewCtrl implements Main.UpdatableUI {
         if(previousExpenses.get(id)==null) return null;
         return previousExpenses.get(id).get(previousExpenses.get(id).size()-1);
     }
+
+    /**
+     * Sets the popup for participant box explanation.
+     */
+    public void setParticipantBoxPopup(){
+        Label pop = new Label(" Pick the participant ");
+        pop.setStyle("-fx-background-color: white; -fx-border-color: black"); //lightPink
+        pop.setMinSize(50, 25);
+        Popup popup = new Popup();
+        popup.getContent().add(pop);
+        participantBox.setOnMouseEntered( mouseEvent -> {
+            popup.show(mainCtrl.getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY() + 5);
+        });
+        participantBox.setOnMouseExited( mouseEvent -> {
+            popup.hide();
+        });
+    }
+
+    /**
+     * Sets the instruction popups for shortcuts
+     */
+    public void setInstructions(){
+        mainCtrl.instructionsPopup(new Label(" press ESC to go to start screen "), this.home);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + S to go \n to the statistics page "), this.statistics);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + A to \n go to add expense "), this.addExpense);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + D to \n show open debts "), this.settleDebts);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + L to \n open language menu "), this.langButton);
+    }
+
 }

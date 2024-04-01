@@ -7,10 +7,7 @@ import commons.Event;
 import commons.Expense;
 import commons.Tag;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -78,6 +75,8 @@ public class AddTagCtrl implements Main.UpdatableUI {
                 abort(); //TODO
             }
         });
+
+        setInstructions();
     }
 
     /**
@@ -251,4 +250,14 @@ public class AddTagCtrl implements Main.UpdatableUI {
         addButton.setText(Main.getLocalizedString("add"));
         backButton.setText(Main.getLocalizedString("back"));
     }
+
+    /**
+     * Sets the instruction popups for shortcuts.
+     */
+    public void setInstructions(){
+        mainCtrl.instructionsPopup(new Label(" press ESC to go back "), this.backButton);
+        mainCtrl.instructionsPopup(new Label(" press ENTER \n add the tag "), this.addButton);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + ALT + C \n to clear fields "), this.abortButton);
+    }
+
 }

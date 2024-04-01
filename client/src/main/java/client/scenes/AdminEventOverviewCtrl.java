@@ -85,6 +85,7 @@ public class AdminEventOverviewCtrl implements Main.UpdatableUI {
             }
 
         });
+        setInstructions();
     }
 
     /**
@@ -264,5 +265,12 @@ public class AdminEventOverviewCtrl implements Main.UpdatableUI {
         importJSON.setText(Main.getLocalizedString("importBackup"));
         home.setText(Main.getLocalizedString("home"));
         eventOverview.setText(Main.getLocalizedString("eventOverview"));
+    }
+
+    /**
+     * Sets the instruction popups for shortcuts.
+     */
+    public void setInstructions() {
+        mainCtrl.instructionsPopup(new Label(" press ESC to go \n to start screen "), this.home);
     }
 }
