@@ -1,6 +1,5 @@
 package server.api.controller.tests;
 
-import commons.Event;
 import commons.Expense;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -109,5 +108,15 @@ class ExpensesControllerTest {
         assertEquals(debts, response.getBody());
     }
 
+    @Test
+    void share() {
+        long eventId = 1L;
+        Map<String, List<Double>> shares = Collections.singletonMap("Ax", Collections.singletonList(50.0));
+        when(expensesService.share(eventId)).thenReturn(shares);
 
+        ResponseEntity<Map<String, List<Double>>> response = expensesController.share(eventId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(shares, response.getBody());
+    }
 }
