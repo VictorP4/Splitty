@@ -15,6 +15,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.effect.Bloom;
+import javafx.scene.effect.Effect;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -352,6 +355,34 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public void highlight(){
+        joinButton.setEffect(new InnerShadow());
+    }
+    public void noHighlight(){
+        joinButton.setEffect(null);
+    }
+
+    public void highlightCreate(){
+        createButton.setEffect(new InnerShadow());
+    }
+    public void noHighlightCrete(){
+        createButton.setEffect(null);
+    }
+
+    public void highlightSettings(){
+        settingsPage.setEffect(new InnerShadow());
+    }
+    public void noHighlightSettings(){
+        settingsPage.setEffect(null);
+    }
+
+    public void highlightLang(){
+        langButton.setEffect(new InnerShadow());
+    }
+    public void noHighlightLang(){
+        langButton.setEffect(null);
     }
 
 }
