@@ -469,11 +469,11 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     public void refreshExp(Event event, Expense expense) {
         this.event = event;
+        this.expense = expense;
+        addToCurrency();
         refresh(event);
         addEditText.setText(Main.getLocalizedString("EditExpense"));
-        this.expense = expense;
         setAddOrEditButton();
-        addToCurrency();
         this.title.setText(expense.getTitle());
         this.amount.setText(Double.toString(expense.getAmount()));
         LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -490,11 +490,11 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             for (Node n : box.getChildren()) {
                 if (n instanceof CheckBox) {
                     CheckBox c = (CheckBox) n;
-                    List<String> names = new ArrayList<>();
+                    List<Long> names = new ArrayList<>();
                     for (Participant p : expense.getInvolvedParticipants()) {
-                        names.add(p.getName());
+                        names.add(p.getId());
                     }
-                    if (names.contains(c.getText())) {
+                    if (names.contains(this.event.getParticipants().stream().filter(x->x.getName().equals(c.getText())).findFirst().get().getId())) {
                         c.setSelected(true);
                     }
                 }
