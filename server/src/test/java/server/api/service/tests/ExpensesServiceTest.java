@@ -12,6 +12,7 @@ import server.api.controllers.EventController;
 import server.api.controllers.ExpensesController;
 import server.api.repository.tests.TestEventRepository;
 import server.api.repository.tests.TestExpenseRepository;
+import server.api.services.CurrencyService;
 import server.api.services.EventService;
 import server.api.services.ExpensesService;
 import server.database.ParticipantRepository;
@@ -24,6 +25,8 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ExpensesServiceTest {
+    @Mock
+    private CurrencyService currencyService;
     @Mock
     private TestEventRepository evRepo;
     @Mock
@@ -43,7 +46,7 @@ public class ExpensesServiceTest {
         cont = new ExpensesController(servMock,null);
         repo = new TestExpenseRepository();
         evRepo = new TestEventRepository();
-        servMock = new ExpensesService(repo,evRepo,partRepo);
+        servMock = new ExpensesService(repo,evRepo,partRepo,currencyService);
         cont = new ExpensesController(servMock,null);
         evServ  = new EventService(evRepo,partRepo, repo,tagRepo);
         evCont = new EventController(evServ,null);
@@ -98,6 +101,7 @@ public class ExpensesServiceTest {
         Expense exp = new Expense();
         exp.setInvolvedParticipants(ps);
         exp.setPaidBy(p1);
+        exp.setCurrency("EUR");
         repo.save(exp);
         Expense exp2 = servMock.delete(res.getId(), exp.getId());
         assertEquals(exp,exp2);

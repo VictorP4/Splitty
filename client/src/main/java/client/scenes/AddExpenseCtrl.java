@@ -10,8 +10,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import commons.Event;
 import commons.Expense;
@@ -126,6 +124,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 });
             }
         });
+
+        setInstructions();
     }
 
     /**
@@ -152,6 +152,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * returning to the overview screen
      */
     public void cancel() {
+        clearFields();
         mainCtrl.showEventOverview(event);
         this.expense=null;
         this.event = null;
@@ -188,9 +189,9 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         Participant paidBy = this.paidBy.getSelectionModel().getSelectedItem();
         List<Participant> partIn = add();
         Tag tag = selectedTag;
-        String selectedCurrecy = currency.getValue();
+        String selectedCurrency = currency.getValue();
 
-        return new Expense(title, amount, paidBy, partIn, date, selectedTag, selectedCurrecy);
+        return new Expense(title, amount, paidBy, partIn, date, selectedTag, selectedCurrency);
     }
 
     /**
@@ -205,22 +206,28 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             addExp = getExpense();
 
         } catch (NumberFormatException e) {
-            errorPopup("Invalid amount");
+            errorPopup(Main.getLocalizedString("invalidAmount"));
             return;
         } catch (Exception e) {
-            errorPopup("Missing title or date");
+            errorPopup(Main.getLocalizedString("missingDateOrTitle"));
             return;
         }
         if (addExp.getPaidBy() == null) {
-            errorPopup("No paid by found.");
+            errorPopup(Main.getLocalizedString("noPaidBy"));
             return;
         }
         if (addExp.getAmount() < 0) {
-            errorPopup("Invalid amount.");
+            errorPopup(Main.getLocalizedString("invalidAmount"));
             return;
         }
         if (addExp.getInvolvedParticipants().equals(new ArrayList<>())) {
-            errorPopup("No involved participants selected.");
+            errorPopup(Main.getLocalizedString("noParticipants"));
+            return;
+        }
+        LocalDate currentDate = LocalDate.now();
+        LocalDate selectedDate = addExp.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        if (selectedDate.isAfter(currentDate)) {
+            errorPopup(Main.getLocalizedString("futureDate"));
             return;
         }
 
@@ -289,7 +296,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
-<<<<<<< HEAD
      * setting the edit or add button
      */
     public void setAddOrEditButton() {
@@ -457,7 +463,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * Initializes the scene for adding or editing tags.
      */
     public void goToAddTags() {
-        mainCtrl.showAddTag(event);
+        mainCtrl.showAddTag(event, selectedTag);
     }
 
     /**
@@ -469,11 +475,11 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     public void refreshExp(Event event, Expense expense) {
         this.event = event;
+        this.expense = expense;
+        addToCurrency();
         refresh(event);
         addEditText.setText(Main.getLocalizedString("EditExpense"));
-        this.expense = expense;
         setAddOrEditButton();
-        addToCurrency();
         this.title.setText(expense.getTitle());
         this.amount.setText(Double.toString(expense.getAmount()));
         LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -490,11 +496,11 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             for (Node n : box.getChildren()) {
                 if (n instanceof CheckBox) {
                     CheckBox c = (CheckBox) n;
-                    List<String> names = new ArrayList<>();
+                    List<Long> participantIDs = new ArrayList<>();
                     for (Participant p : expense.getInvolvedParticipants()) {
-                        names.add(p.getName());
+                        participantIDs.add(p.getId());
                     }
-                    if (names.contains(c.getText())) {
+                    if (participantIDs.contains(this.event.getParticipants().stream().filter(x->x.getName().equals(c.getText())).findFirst().get().getId())) {
                         c.setSelected(true);
                     }
                 }
@@ -538,8 +544,9 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             }
             Expense  expense1 = mainCtrl.getPrevExp(expense.getId());
             final Boolean[] b = {true};
-            expense1.getInvolvedParticipants().forEach((p)-> b[0] = b[0] &&this.event.getParticipants().contains(p));
-            b[0] = b[0] && this.event.getParticipants().contains(expense1.getPaidBy()) && this.event.getTags().contains(expense1.getTag());
+            List<Long> participantsIDs = this.event.getParticipants().stream().map(x->x.getId()).toList();
+            expense1.getInvolvedParticipants().forEach((p)-> b[0] = b[0] &&participantsIDs.contains(p.getId()));
+            b[0] = b[0] && participantsIDs.contains(expense1.getPaidBy().getId()) && this.event.getTags().stream().map(x->x.getId()).toList().contains(expense1.getTag().getId());
             if(!b[0]){
                 undo();
                 return;
@@ -550,4 +557,12 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
     }
 
+    /**
+     * Sets the instruction popups for all shortcuts
+     */
+    public void setInstructions(){
+        mainCtrl.instructionsPopup(new Label(" press ENTER \n to add an expense "), this.add);
+        mainCtrl.instructionsPopup(new Label(" press ESC to go \n back to event overview "), this.abort);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + U \n to undo changes "), this.undo);
+    }
 }

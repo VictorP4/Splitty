@@ -8,6 +8,7 @@ import server.database.EventRepository;
 import server.database.ExpensesRepository;
 import server.database.ParticipantRepository;
 
+import java.sql.Date;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
@@ -17,11 +18,13 @@ public class ExpensesService {
     private final ExpensesRepository expRepo;
     private final EventRepository eventRepo;
     private final ParticipantRepository participantRepo;
+    private final CurrencyService currencyService;
     public ExpensesService(ExpensesRepository expRepo, EventRepository eventRepo,
-                           ParticipantRepository participantRepo) {
+                           ParticipantRepository participantRepo, CurrencyService currencyService) {
         this.expRepo = expRepo;
         this.eventRepo = eventRepo;
         this.participantRepo = participantRepo;
+        this.currencyService = currencyService;
     }
 
     /**
@@ -58,10 +61,12 @@ public class ExpensesService {
             expense.getInvolvedParticipants().add(expense.getPaidBy());
         }
         Expense newExp = expRepo.save(expense);
+        double amount = newExp.getCurrency().equals("EUR") ? newExp.getAmount() :
+                currencyService.convertCurrency(newExp.getAmount(), newExp.getCurrency(), "EUR",new Date(newExp.getDate().getTime()).toLocalDate()).getBody();
         //updating debts
         Participant p = newExp.getPaidBy();
 
-        double newDebt = p.getDebt()+Double.parseDouble(df.format(newExp.getAmount()));
+        double newDebt = p.getDebt()+Double.parseDouble(df.format(amount));
         p.setDebt(newDebt);
         participantRepo.save(p);
         for(int i=0; i<expense.getInvolvedParticipants().size();i++){
@@ -71,7 +76,7 @@ public class ExpensesService {
                 expense.getInvolvedParticipants().add(i,p);
                 people = expense.getInvolvedParticipants().get(i);
             }
-            newDebt = people.getDebt()-Double.parseDouble(df.format(((double)newExp.getAmount())/newExp.getInvolvedParticipants().size()));
+            newDebt = people.getDebt()-Double.parseDouble(df.format(((double)amount)/newExp.getInvolvedParticipants().size()));
             people.setDebt(newDebt);
             participantRepo.save(people);
         }
@@ -102,14 +107,16 @@ public class ExpensesService {
         otherSymbols.setDecimalSeparator('.');
         df.setDecimalFormatSymbols(otherSymbols);
         Expense oldExp = expRepo.findById(expId).get();
+        double amount1 = oldExp.getCurrency().equals("EUR") ? oldExp.getAmount() :
+                currencyService.convertCurrency(oldExp.getAmount(), oldExp.getCurrency(),"EUR" ,new Date(oldExp.getDate().getTime()).toLocalDate()).getBody();
         //resetting debts
         Participant p1 = oldExp.getPaidBy();
-        double oldDebt = p1.getDebt()-Double.parseDouble(df.format(oldExp.getAmount()));
+        double oldDebt = p1.getDebt()-Double.parseDouble(df.format(amount1));
         p1.setDebt(oldDebt);
         participantRepo.save(p1);
         for(Participant people : oldExp.getInvolvedParticipants()){
             if(people.getId().equals(p1.getId())) people.setDebt(p1.getDebt());
-            oldDebt = people.getDebt()+Double.parseDouble(df.format(((double)oldExp.getAmount())/oldExp.getInvolvedParticipants().size()));
+            oldDebt = people.getDebt()+Double.parseDouble(df.format(((double)amount1)/oldExp.getInvolvedParticipants().size()));
             people.setDebt(oldDebt);
             participantRepo.save(people);
         }
@@ -122,11 +129,12 @@ public class ExpensesService {
         oldExp.setDate(expense.getDate());
         oldExp.setTag(expense.getTag());
         oldExp.setCurrency(expense.getCurrency());
-        
+        double amount = expense.getCurrency().equals("EUR") ? expense.getAmount() :
+                currencyService.convertCurrency(expense.getAmount(), expense.getCurrency(),"EUR" ,new Date(expense.getDate().getTime()).toLocalDate()).getBody();
         //updating debts
         oldExp.setPaidBy(participantRepo.getById(oldExp.getPaidBy().getId()));
         Participant p = oldExp.getPaidBy();
-        double newDebt = p.getDebt()+Double.parseDouble(df.format(oldExp.getAmount()));
+        double newDebt = p.getDebt()+Double.parseDouble(df.format(amount));
         p.setDebt(newDebt);
         participantRepo.save(p);
         for(int i=0; i<oldExp.getInvolvedParticipants().size();i++){
@@ -141,7 +149,7 @@ public class ExpensesService {
                 oldExp.getInvolvedParticipants().add(i,participantRepo.findById(people.getId()).get());
                 people = oldExp.getInvolvedParticipants().get(i);
             }
-            newDebt = people.getDebt()-Double.parseDouble(df.format(((double)oldExp.getAmount())/oldExp.getInvolvedParticipants().size()));
+            newDebt = people.getDebt()-Double.parseDouble(df.format(((double)amount)/oldExp.getInvolvedParticipants().size()));
             people.setDebt(newDebt);
             participantRepo.save(people);
         }
@@ -166,14 +174,16 @@ public class ExpensesService {
         otherSymbols.setDecimalSeparator('.');
         df.setDecimalFormatSymbols(otherSymbols);
         Expense expense = expRepo.findById(expId).get();
+        double amount = expense.getCurrency().equals("EUR") ? expense.getAmount() :
+                currencyService.convertCurrency(expense.getAmount(), expense.getCurrency(), "EUR",new Date(expense.getDate().getTime()).toLocalDate()).getBody();
         //resetting debts
         Participant p1 = expense.getPaidBy();
-        double oldDebt = p1.getDebt()-Double.parseDouble(df.format(expense.getAmount()));
+        double oldDebt = p1.getDebt()-Double.parseDouble(df.format(amount));
         p1.setDebt(oldDebt);
         participantRepo.save(p1);
         for(Participant people : expense.getInvolvedParticipants()){
             if(people.getId().equals(p1.getId())) people.setDebt(p1.getDebt());
-            oldDebt = people.getDebt()+Double.parseDouble(df.format(((double)expense.getAmount())/expense.getInvolvedParticipants().size()));
+            oldDebt = people.getDebt()+Double.parseDouble(df.format(((double)amount)/expense.getInvolvedParticipants().size()));
             people.setDebt(oldDebt);
             participantRepo.save(people);
         }
