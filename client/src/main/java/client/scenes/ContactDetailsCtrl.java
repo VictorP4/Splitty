@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
@@ -95,10 +96,14 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
                 });
             }
         });
+
+        setInstructions();
     }
 
 
-
+    /**
+     * Changes the language of the scene
+      */
     @Override
     public void updateUI() {
         aeParticipant.setText(Main.getLocalizedString("AEParticipant"));
@@ -161,6 +166,14 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    /**
+     * Sets the instructions popups for shortcuts.
+     */
+    public void setInstructions(){
+        mainCtrl.instructionsPopup(new Label(" press ENTER to add participant"), this.okButton);
+        mainCtrl.instructionsPopup(new Label(" press ESC to discard changes "), this.abort);
     }
 
 }

@@ -38,6 +38,12 @@ public class EventService {
         this.tagRepository = tagRepository;
     }
 
+    /**
+     * Gets the event by its id
+     *
+     * @param id of the event to get
+     * @return event
+     */
     public Event getById(long id){
         if (id < 0 || !repo.existsById(id)) {
             return null;
@@ -82,6 +88,13 @@ public class EventService {
         }
     }
 
+    /**
+     * Updates the event
+     *
+     * @param id of the event to update
+     * @param event updated version
+     * @return updated event
+     */
     public Event put(long id, Event event){
         if (id < 0 || !repo.existsById(id)) {
             return null;
@@ -97,6 +110,12 @@ public class EventService {
         return finalUpdate;
     }
 
+    /**
+     * Deletes the event
+     *
+     * @param id id of the event to delete
+     * @return event
+     */
     public Event delete(long id){
         if (id < 0 || !repo.existsById(id)) {
             return null;
@@ -122,6 +141,12 @@ public class EventService {
         return event;
     }
 
+    /**
+     * Gets an event by its invite code
+     *
+     * @param inviteCode of the event
+     * @return the requested event
+     */
     public Event getByInviteCode(String inviteCode){
         Event e = repo.getByInviteCode(inviteCode);
         if(e==null) return null;
@@ -142,4 +167,11 @@ public class EventService {
         }
     }
 
+    /**
+     * find all events
+     * @return
+     */
+    public List<Event> findAll() {
+        return repo.findAll();
+    }
 }

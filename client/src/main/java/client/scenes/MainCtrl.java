@@ -19,12 +19,15 @@ package client.scenes;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-
-import java.util.List;
 
 
 public class MainCtrl {
@@ -231,10 +234,12 @@ public class MainCtrl {
     /**
      * Displays the add tag scene in the primary stage.
      *
-     * @param event The event for which the add tag page has to be displayed.
+     * @param event       The event for which the add tag page has to be displayed.
+     * @param selectedTag
      */
-    public void showAddTag(Event event) {
+    public void showAddTag(Event event, Tag selectedTag) {
         addTagCtrl.refresh(event);
+        addTagCtrl.setSelectedTag(selectedTag);
         primaryStage.setTitle("AddTag");
         primaryStage.setScene(addTag);
     }
@@ -246,9 +251,9 @@ public class MainCtrl {
      * @param expense displayed
      */
     public void showExpense(Event event, Expense expense){
-        addExpenseCtrl.refreshExp(event, expense);
         primaryStage.setTitle("EditExpense");
         primaryStage.setScene(addExpense);
+        addExpenseCtrl.refreshExp(event, expense);
     }
     public String getSceneTitle(){
         return primaryStage.getTitle();
@@ -288,5 +293,59 @@ public class MainCtrl {
      */
     public Expense getPrevExp(Long id){
         return eventOverviewCtrl.getPrevExp(id);
+    }
+
+    /**
+     * Get the primary stage
+     * @return
+     */
+    public Stage getPrimaryStage(){
+        return primaryStage;
+    }
+
+    /**
+     * Get the currency
+     * @return
+     */
+    public String getCurrency() {
+        return eventOverviewCtrl.getCurrency();
+    }
+    /**
+     * Creates a popup for a button.
+     *
+     * @param info text for display
+     * @param button button to show the popup on
+     */
+    public void instructionsPopup(Label info, Button button){
+        info.setStyle("-fx-background-color: white; -fx-border-color: black"); //lightPink
+        info.setMinSize(50, 25);
+        Popup infoPop = new Popup();
+        infoPop.getContent().add(info);
+        button.setOnMouseEntered(mouseEvent -> {
+            infoPop.show(getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY() + 5);
+        });
+        button.setOnMouseExited(mouseEvent -> {
+            infoPop.hide();
+        });
+    }
+
+    /**
+     * Creates a popup for a menu button.
+     *
+     * @param info text for display
+     * @param button button to show the popup on
+     */
+    public void instructionsPopup(Label info, MenuButton button){
+        info.setStyle("-fx-background-color: white; -fx-border-color: black"); //lightPink
+        info.setMinSize(50, 25);
+        Popup infoPop = new Popup();
+        infoPop.getContent().add(info);
+        button.setOnMouseEntered(mouseEvent -> {
+            infoPop.show(getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY() + 5);
+        });
+        button.setOnMouseExited(mouseEvent -> {
+            infoPop.hide();
+        });
+
     }
 }

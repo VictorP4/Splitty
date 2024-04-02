@@ -18,7 +18,7 @@ public class ParticipantService {
 
     /**
      * Creates new participant
-     * @param participant
+     * @param participant new participant
      * @return saved participant
      */
     public Participant add(Participant participant){
@@ -28,7 +28,7 @@ public class ParticipantService {
     /**
      * Updates existing participant
      * @param id id of participant to modify
-     * @param participant
+     * @param participant updated version
      * @return the modified participant
      */
     public Participant put(long id, Participant participant){
@@ -38,7 +38,7 @@ public class ParticipantService {
 
     /**
      * Deleting given participant
-     * @param id
+     * @param id of participant
      * @return the deleted participant
      */
     public Participant delete(long id){

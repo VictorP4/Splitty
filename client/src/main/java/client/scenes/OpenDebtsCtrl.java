@@ -1,4 +1,5 @@
 package client.scenes;
+
 import client.Main;
 import client.models.Debt;
 import client.utils.ServerUtils;
@@ -19,6 +20,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -30,7 +32,9 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class OpenDebtsCtrl implements Main.UpdatableUI {
@@ -47,6 +51,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
     private WebSocketUtils webSocket;
     @FXML
     private Button back;
+    private ServerUtils serverUtils;
 
     /**
      * Constructs a new instance of an OpenDebtCtrl
@@ -55,10 +60,11 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
      * @param mainCtrl The main controller of the application.
      */
     @Inject
-    public OpenDebtsCtrl(ServerUtils server, MainCtrl mainCtrl, WebSocketUtils webSocket) {
+    public OpenDebtsCtrl(ServerUtils server, MainCtrl mainCtrl, WebSocketUtils webSocket, ServerUtils serverUtils) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.webSocket= webSocket;
+        this.serverUtils = serverUtils;
     }
 
     /**
@@ -80,6 +86,8 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
                 });
             }
         });
+
+        setInstructions();
     }
     /**
      * updates the UI
@@ -274,8 +282,14 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         tempBox.setPrefWidth(422.0);
         tempBox.setSpacing(5);
         Text text = new Text();
-
-        text.setText(debt.getPersonInDebt().getName()+" "+Main.getLocalizedString("gives")+" "+ debt.getAmount()+" euros "+Main.getLocalizedString("to")+" "+ debt.getPersonOwed().getName());
+        int amn =  (int)(serverUtils.convertCurrency(debt.getAmount(),"EUR",
+                mainCtrl.getCurrency(), LocalDate.now())*100);
+        double amount = mainCtrl.getCurrency().equals("EUR") ? debt.getAmount() : (double)amn/100;
+        String currency;
+        if(mainCtrl.getCurrency().equals("CHF")) currency = "swiss francs";
+        else if(mainCtrl.getCurrency().equals("EUR")) currency = "euros";
+        else currency = "dollars";
+        text.setText(debt.getPersonInDebt().getName()+" "+Main.getLocalizedString("gives")+" "+ amount +" "+currency+" "+Main.getLocalizedString("to")+" "+ debt.getPersonOwed().getName());
         text.setWrappingWidth(275);
         text.setStrokeType(StrokeType.OUTSIDE);
         text.setStrokeWidth(0.0);
@@ -298,6 +312,8 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
                 ObservableList<Node> list = parent.getChildren();
                 Expense expense = new Expense();
                 expense.setPaidBy(debt.getPersonInDebt());
+                expense.setDate(new Date());
+                expense.setCurrency("EUR");
                 expense.setInvolvedParticipants(new ArrayList<>(List.of(debt.getPersonOwed())));
                 expense.setAmount(debt.getAmount());
                 expense.setTitle("Debt repayment");
@@ -312,5 +328,12 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         markReceived.setAlignment(Pos.CENTER_RIGHT);
         //TODO see if insets are necessary for markReceived
         tempBox.getChildren().addAll(text,imgMail,imgBank,markReceived);
+    }
+
+    /**
+     * Sets the instruction popups for shortcuts.
+     */
+    public void setInstructions(){
+        mainCtrl.instructionsPopup(new Label(" press ESC to go back "), this.back);
     }
 }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
@@ -71,6 +72,7 @@ public class InvitationCtrl implements Main.UpdatableUI {
         });
 
         setInviteCode();
+        setInstructions();
     }
 
     /**
@@ -153,5 +155,13 @@ public class InvitationCtrl implements Main.UpdatableUI {
         sendInv.setText(Main.getLocalizedString("sendInv"));
         invEmail.setText(Main.getLocalizedString("invEmail"));
         invCode.setText(Main.getLocalizedString("invCode"));
+    }
+
+    /**
+     * Sets the instruction popups for shortcuts
+     */
+    public void setInstructions(){
+        mainCtrl.instructionsPopup(new Label(" press ESC to go \n back to event overview "), this.overviewButton);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + ENTER \n to send invite emails "), this.sendInv);
     }
 }

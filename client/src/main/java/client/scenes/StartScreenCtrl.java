@@ -98,9 +98,11 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      */
     public void initialize() {
         listViewItems = FXCollections.observableArrayList();
+        userConfig.reloadLanguageFile();
         String lp = userConfig.getLanguageConfig();
         if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
-            Image image = new Image("/client/misc/" + lp +  "_flag.png");
+            Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
+            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/"+lp+"_flag.png");
             menuButtonView.setImage(image);
         }
 
@@ -124,10 +126,10 @@ public class StartScreenCtrl implements Main.UpdatableUI {
             }
         });
         anchor.setOnKeyPressed(event ->{
-            if(event.getCode() == KeyCode.L){
+            if(event.isControlDown() && event.getCode() == KeyCode.L){
                 langButton.fire();
             }
-            if(event.getCode() == KeyCode.S){
+            if(event.isControlDown() && event.getCode() == KeyCode.S){
                 toSettings();
             }
         });
@@ -153,6 +155,8 @@ public class StartScreenCtrl implements Main.UpdatableUI {
                 errorPopup("Server not available");
             });
         });
+
+        setInstructions();
 
         buttonSetup();
     }
@@ -269,7 +273,13 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         menuButtonView.setImage(image);
     }
 
+    /**
+     * Allows the used to switch to Spanish
+     *
+     * @param actionEvent The event that caused this method to be called
+     */
     public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
+        userConfig.setLanguageConfig("es");
         switchLocale("messages", "es");
         Image image = new Image(
                 Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
@@ -328,9 +338,11 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      * Refreshes the startScreen
      */
     public void refresh() {
+        userConfig.reloadLanguageFile();
         String lp = userConfig.getLanguageConfig();
         if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
-            Image image = new Image("/client/misc/" + lp +  "_flag.png");
+            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/"+lp+"_flag.png");
+            Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
             menuButtonView.setImage(image);
         }
         eventTitle.clear();
@@ -352,13 +364,23 @@ public class StartScreenCtrl implements Main.UpdatableUI {
 
     /**
      * Creates error for invalid action
-     * @param message
+     * @param message for the popup
      */
     private void errorPopup(String message) {
         var alert = new Alert(Alert.AlertType.ERROR);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    /**
+     * Sets the instruction popups for shortcuts.
+     */
+    public void setInstructions(){
+        mainCtrl.instructionsPopup(new Label(" press ENTER to create event "), this.createButton);
+        mainCtrl.instructionsPopup(new Label(" press ENTER to join event "), this.joinButton);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + S \n to go to settings "), this.settingsPage);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + L to \n open language menu "), this.langButton);
     }
 
 
