@@ -28,11 +28,11 @@
          </font>
       </Text>
       <TextField fx:id="eventCode" layoutX="87.0" layoutY="147.0" prefHeight="25.0" prefWidth="301.0" style="-fx-border-color: 000000; -fx-border-style: solid; -fx-border-width: 1px; -fx-border-radius: 4;" />
-      <Button fx:id="createButton" layoutX="402.0" layoutY="84.0" mnemonicParsing="false" onAction="#createEvent" onMouseEntered="#highlightCreate" onMouseExited="#noHighlightCrete" prefHeight="24.0" prefWidth="63.0" style="-fx-border-color: black; -fx-border-radius: 4; -fx-background-color: #485a5c;" text="Create" textFill="WHITE">
+      <Button fx:id="createButton" layoutX="402.0" layoutY="84.0" mnemonicParsing="false" onAction="#createEvent" prefHeight="24.0" prefWidth="63.0" style="-fx-border-color: black; -fx-border-radius: 4; -fx-background-color: #485a5c; -fx-border-width: 1;" text="Create" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
-      <Button fx:id="joinButton" layoutX="402.0" layoutY="147.0" mnemonicParsing="false" onAction="#joinEvent" onMouseEntered="#highlight" onMouseExited="#noHighlight" prefHeight="12.0" prefWidth="63.0" style="-fx-border-color: black; -fx-border-radius: 4; -fx-background-color: #485a5c;" text="Join" textFill="WHITE">
+      <Button fx:id="joinButton" layoutX="402.0" layoutY="147.0" mnemonicParsing="false" onAction="#joinEvent" prefHeight="12.0" prefWidth="63.0" style="-fx-border-color: black; -fx-border-radius: 4; -fx-background-color: #485a5c;" text="Join" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
@@ -41,7 +41,7 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Text>
-      <MenuButton fx:id="langButton" layoutX="45.0" layoutY="349.0" mnemonicParsing="false" onMouseEntered="#highlightLang" onMouseExited="#noHighlightLang" style="-fx-border-color: black; -fx-border-radius: 4; -fx-background-color: #485a5c;" text="Language" textFill="WHITE">
+      <MenuButton fx:id="langButton" layoutX="45.0" layoutY="349.0" mnemonicParsing="false" style="-fx-border-color: black; -fx-border-radius: 4; -fx-background-color: #485a5c;" text="Language" textFill="WHITE">
          <graphic>
             <ImageView fx:id="menuButtonView" fitHeight="12" fitWidth="16" preserveRatio="true" />
          </graphic>
@@ -76,7 +76,7 @@
       </MenuButton>
       <CheckBox fx:id="alreadyJoined" layoutX="87.0" layoutY="175.0" mnemonicParsing="false" style="-fx-border-color: balck;" text="Already joined" />
       <ListView fx:id="recentlyAccessed" layoutX="87.0" layoutY="227.0" prefHeight="117.0" prefWidth="301.0" style="-fx-border-color: black; -fx-border-radius: 4; -fx-background-radius: 4;" />
-      <Button fx:id="settingsPage" layoutX="465.0" layoutY="33.0" mnemonicParsing="false" onAction="#toSettings" onMouseEntered="#highlightSettings" onMouseExited="#noHighlightSettings" prefHeight="25.0" prefWidth="77.0" style="-fx-border-color: black; -fx-border-radius: 4; -fx-effect: DropShadow; -fx-background-color: #485a5c;" text="settings" textFill="WHITE">
+      <Button fx:id="settingsPage" layoutX="465.0" layoutY="33.0" mnemonicParsing="false" onAction="#toSettings" prefHeight="25.0" prefWidth="77.0" style="-fx-border-color: black; -fx-border-radius: 4; -fx-effect: DropShadow; -fx-background-color: #485a5c;" text="settings" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>

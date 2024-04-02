@@ -16,6 +16,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.effect.Bloom;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
@@ -151,6 +152,8 @@ public class StartScreenCtrl implements Main.UpdatableUI {
                 errorPopup("Server not available");
             });
         });
+
+        buttonSetup();
     }
 
     /**
@@ -357,32 +360,40 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         alert.showAndWait();
     }
 
-    public void highlight(){
-        joinButton.setEffect(new InnerShadow());
-    }
-    public void noHighlight(){
-        joinButton.setEffect(null);
+
+    public void buttonEffects(Button button){
+        button.setOnMouseEntered(event -> button.setEffect(new InnerShadow()));
+        button.setOnMouseExited(event -> button.setEffect(null));
+        button.focusedProperty().addListener( (obs, old, newV) -> {
+            if(newV){
+                button.setEffect(new DropShadow());
+            }
+            else {
+                button.setEffect(null);
+            }
+
+        });
     }
 
-    public void highlightCreate(){
-        createButton.setEffect(new InnerShadow());
-    }
-    public void noHighlightCrete(){
-        createButton.setEffect(null);
+    public void langMenuSet(){
+        langButton.setOnMouseEntered(event -> langButton.setEffect(new InnerShadow()));
+        langButton.setOnMouseExited(event -> langButton.setEffect(null));
+        langButton.focusedProperty().addListener( (obs, old, newV) -> {
+            if(newV){
+                langButton.setEffect(new DropShadow());
+            }
+            else {
+                langButton.setEffect(null);
+            }
+
+        });
+
     }
 
-    public void highlightSettings(){
-        settingsPage.setEffect(new InnerShadow());
+    public void buttonSetup(){
+        buttonEffects(settingsPage);
+        buttonEffects(createButton);
+        buttonEffects(joinButton);
+        langMenuSet();
     }
-    public void noHighlightSettings(){
-        settingsPage.setEffect(null);
-    }
-
-    public void highlightLang(){
-        langButton.setEffect(new InnerShadow());
-    }
-    public void noHighlightLang(){
-        langButton.setEffect(null);
-    }
-
 }
