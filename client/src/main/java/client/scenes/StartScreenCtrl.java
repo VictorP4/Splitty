@@ -23,6 +23,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 
@@ -366,8 +367,10 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         button.setOnMouseExited(event -> button.setEffect(null));
         button.focusedProperty().addListener( (obs, old, newV) -> {
             if(newV){
-                button.setEffect(new DropShadow());
+                Color b = Color.rgb(80, 133, 230);
+                button.setEffect(new DropShadow(10, b));
             }
+            //173, g: 216, b: 230
             else {
                 button.setEffect(null);
             }
@@ -380,7 +383,8 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         langButton.setOnMouseExited(event -> langButton.setEffect(null));
         langButton.focusedProperty().addListener( (obs, old, newV) -> {
             if(newV){
-                langButton.setEffect(new DropShadow());
+                Color b = Color.rgb(80, 133, 230);
+                langButton.setEffect(new DropShadow(10, b));
             }
             else {
                 langButton.setEffect(null);
