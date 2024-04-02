@@ -509,6 +509,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     @FXML
     public void changeCurrencyEUR(){
         userConfig.setCurrencyConfig("EUR");
+        refresh(this.event);
         showAllExpenses();
     }
 
@@ -519,6 +520,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     @FXML
     public void changeCurrencyUSD(){
         userConfig.setCurrencyConfig("USD");
+        refresh(this.event);
         showAllExpenses();
     }
 
@@ -529,6 +531,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     @FXML
     public void changeCurrencyCHF(){
         userConfig.setCurrencyConfig("CHF");
+        refresh(this.event);
         showAllExpenses();
     }
 

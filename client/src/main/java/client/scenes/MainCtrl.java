@@ -250,9 +250,9 @@ public class MainCtrl {
      * @param expense displayed
      */
     public void showExpense(Event event, Expense expense){
-        addExpenseCtrl.refreshExp(event, expense);
         primaryStage.setTitle("EditExpense");
         primaryStage.setScene(addExpense);
+        addExpenseCtrl.refreshExp(event, expense);
     }
     public String getSceneTitle(){
         return primaryStage.getTitle();

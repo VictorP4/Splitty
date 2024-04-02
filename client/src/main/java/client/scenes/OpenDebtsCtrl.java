@@ -34,6 +34,7 @@ import javafx.scene.text.Text;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class OpenDebtsCtrl implements Main.UpdatableUI {
@@ -311,6 +312,8 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
                 ObservableList<Node> list = parent.getChildren();
                 Expense expense = new Expense();
                 expense.setPaidBy(debt.getPersonInDebt());
+                expense.setDate(new Date());
+                expense.setCurrency("EUR");
                 expense.setInvolvedParticipants(new ArrayList<>(List.of(debt.getPersonOwed())));
                 expense.setAmount(debt.getAmount());
                 expense.setTitle("Debt repayment");
