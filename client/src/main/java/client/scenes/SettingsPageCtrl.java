@@ -8,10 +8,7 @@ import com.google.inject.Inject;
 import commons.Event;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
@@ -45,6 +42,8 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     public Text localServer;
     private final WebSocketUtils webSocket;
     private final UserConfig userConfig = new UserConfig();
+    @FXML
+    public Button home;
 
     /**
      * Constructs a new instance of StartingPageCtrl.
@@ -78,6 +77,8 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
                 mainCtrl.showStartScreen();
             }
         });
+
+        setInstructions();
     }
 
     /**
@@ -187,5 +188,14 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     @FXML
     public void toStartScreen() {
         mainCtrl.showStartScreen();
+    }
+
+    /**
+     * Sets the instruction popups for shortcuts.
+     */
+    public void setInstructions(){
+        mainCtrl.instructionsPopup(new Label(" press ESC to go \n back to start screen "), this.home);
+        mainCtrl.instructionsPopup(new Label(" press ENTER to login "), this.login);
+        mainCtrl.instructionsPopup(new Label(" press ENTER to set server "), this.setServer);
     }
 }

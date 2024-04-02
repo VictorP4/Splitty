@@ -24,7 +24,7 @@ public class WebSocketUtils {
     private Runnable serverListener;
 
     /**
-     * constructor for the webscoket utils
+     * constructor for the websocket utils
      */
     public WebSocketUtils() {
         eventListener = new ArrayList<>();

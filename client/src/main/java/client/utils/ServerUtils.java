@@ -269,6 +269,12 @@ public class ServerUtils {
 				.post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
 	}
 
+	/**
+	 * Removes  a tag.
+	 *
+	 * @param tag tag to remove
+	 * @return server response
+	 */
 	public Response removeTag(Tag tag) {
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(server).path("api/tags/" + tag.getId())
@@ -419,7 +425,3 @@ public class ServerUtils {
 	}
 
 }
-
-//Path path = Paths.get(event.getAbsolutePath());
-//byte[] data = Files.readAllBytes(path);
-//Entity<byte[]> entity = Entity.entity(data, MediaType.MULTIPART_FORM_DATA_TYPE);
