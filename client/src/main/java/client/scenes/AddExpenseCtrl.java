@@ -152,6 +152,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * returning to the overview screen
      */
     public void cancel() {
+        clearFields();
         mainCtrl.showEventOverview(event);
         this.expense=null;
         this.event = null;
@@ -537,8 +538,9 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             }
             Expense  expense1 = mainCtrl.getPrevExp(expense.getId());
             final Boolean[] b = {true};
-            expense1.getInvolvedParticipants().forEach((p)-> b[0] = b[0] &&this.event.getParticipants().contains(p));
-            b[0] = b[0] && this.event.getParticipants().contains(expense1.getPaidBy()) && this.event.getTags().contains(expense1.getTag());
+            List<Long> participantsIDs = this.event.getParticipants().stream().map(x->x.getId()).toList();
+            expense1.getInvolvedParticipants().forEach((p)-> b[0] = b[0] &&participantsIDs.contains(p.getId()));
+            b[0] = b[0] && participantsIDs.contains(expense1.getPaidBy().getId()) && this.event.getTags().stream().map(x->x.getId()).toList().contains(expense1.getTag().getId());
             if(!b[0]){
                 undo();
                 return;
