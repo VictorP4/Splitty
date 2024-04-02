@@ -83,6 +83,11 @@ public class AddTagCtrl implements Main.UpdatableUI {
         setInstructions();
     }
 
+    /**
+     * Sets the selected tag.
+     *
+     * @param tag The tag to set.
+     */
     public void setSelectedTag(Tag tag){
         if (tag != null) {
             this.selectedTag = tag;
@@ -90,6 +95,9 @@ public class AddTagCtrl implements Main.UpdatableUI {
         modeChanger();
     }
 
+    /**
+     * Changes the mode of the scene between edit and add.
+     */
     public void modeChanger() {
         if (selectedTag != null) {
             nameTextField.setText(selectedTag.getName());
@@ -104,6 +112,9 @@ public class AddTagCtrl implements Main.UpdatableUI {
         }
     }
 
+    /**
+     * Adds a new tag.
+     */
     public void add() {
         String name = nameTextField.getText().trim();
         if (name.isEmpty()) {
@@ -138,6 +149,9 @@ public class AddTagCtrl implements Main.UpdatableUI {
         mainCtrl.showAddExpenseFromTag(event);
     }
 
+    /**
+     * Edits the selected tag.
+     */
     public void edit() {
         String name = nameTextField.getText().trim();
         if (name.isEmpty()) {
@@ -165,6 +179,12 @@ public class AddTagCtrl implements Main.UpdatableUI {
         mainCtrl.showAddExpenseFromTag(event);
     }
 
+    /**
+     * Checks if the tag name already exists.
+     *
+     * @param tagName The name of the tag to check.
+     * @return True if the tag name already exists, false otherwise.
+     */
     private boolean doesTagNameExist(String tagName) {
         for (Tag tag : event.getTags()) {
             if (tag.getName().equals(tagName)) {
