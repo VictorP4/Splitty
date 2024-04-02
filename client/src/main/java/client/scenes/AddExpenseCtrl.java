@@ -206,22 +206,28 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             addExp = getExpense();
 
         } catch (NumberFormatException e) {
-            errorPopup("Invalid amount");
+            errorPopup(Main.getLocalizedString("invalidAmount"));
             return;
         } catch (Exception e) {
-            errorPopup("Missing title or date");
+            errorPopup(Main.getLocalizedString("missingDateOrTitle"));
             return;
         }
         if (addExp.getPaidBy() == null) {
-            errorPopup("No paid by found.");
+            errorPopup(Main.getLocalizedString("noPaidBy"));
             return;
         }
         if (addExp.getAmount() < 0) {
-            errorPopup("Invalid amount.");
+            errorPopup(Main.getLocalizedString("invalidAmount"));
             return;
         }
         if (addExp.getInvolvedParticipants().equals(new ArrayList<>())) {
-            errorPopup("No involved participants selected.");
+            errorPopup(Main.getLocalizedString("noParticipants"));
+            return;
+        }
+        LocalDate currentDate = LocalDate.now();
+        LocalDate selectedDate = addExp.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        if (selectedDate.isAfter(currentDate)) {
+            errorPopup(Main.getLocalizedString("futureDate"));
             return;
         }
 
