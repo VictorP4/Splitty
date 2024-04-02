@@ -19,6 +19,7 @@ package client.scenes;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -27,8 +28,6 @@ import javafx.scene.control.MenuButton;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-
-import java.util.List;
 
 
 public class MainCtrl {
@@ -235,10 +234,12 @@ public class MainCtrl {
     /**
      * Displays the add tag scene in the primary stage.
      *
-     * @param event The event for which the add tag page has to be displayed.
+     * @param event       The event for which the add tag page has to be displayed.
+     * @param selectedTag
      */
-    public void showAddTag(Event event) {
+    public void showAddTag(Event event, Tag selectedTag) {
         addTagCtrl.refresh(event);
+        addTagCtrl.setSelectedTag(selectedTag);
         primaryStage.setTitle("AddTag");
         primaryStage.setScene(addTag);
     }
