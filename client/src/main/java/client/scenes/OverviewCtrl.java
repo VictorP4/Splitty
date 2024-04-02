@@ -494,8 +494,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
         for(Expense b:a){
             if(!b.getCurrency().equals(c)){
                 int amn =(int)(serverUtils.convertCurrency(b.getAmount(),b.getCurrency(),
-                        c, new Date(b.getDate().getTime()).toLocalDate())*1000);
-                b.setAmount((double)amn/1000);
+                        c, new Date(b.getDate().getTime()).toLocalDate())*100);
+                b.setAmount((double)amn/100);
                 b.setCurrency(c);
             }
         }
@@ -767,6 +767,13 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
+     * Get the currency
+     * @return the currency
+     */
+    public String getCurrency() {
+        return userConfig.getCurrencyConfig();
+    }
+    /**
      * Sets the popup for participant box explanation.
      */
     public void setParticipantBoxPopup(){
@@ -793,5 +800,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
         mainCtrl.instructionsPopup(new Label(" press CTRL + D to \n show open debts "), this.settleDebts);
         mainCtrl.instructionsPopup(new Label(" press CTRL + L to \n open language menu "), this.langButton);
     }
+
 
 }
