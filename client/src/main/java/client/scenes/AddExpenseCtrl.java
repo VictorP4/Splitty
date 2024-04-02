@@ -10,8 +10,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import commons.Event;
 import commons.Expense;
@@ -126,6 +124,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 });
             }
         });
+
+        setInstructions();
     }
 
     /**
@@ -188,9 +188,9 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         Participant paidBy = this.paidBy.getSelectionModel().getSelectedItem();
         List<Participant> partIn = add();
         Tag tag = selectedTag;
-        String selectedCurrecy = currency.getValue();
+        String selectedCurrency = currency.getValue();
 
-        return new Expense(title, amount, paidBy, partIn, date, selectedTag, selectedCurrecy);
+        return new Expense(title, amount, paidBy, partIn, date, selectedTag, selectedCurrency);
     }
 
     /**
@@ -289,7 +289,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
-<<<<<<< HEAD
      * setting the edit or add button
      */
     public void setAddOrEditButton() {
@@ -550,4 +549,12 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
     }
 
+    /**
+     * Sets the instruction popups for all shortcuts
+     */
+    public void setInstructions(){
+        mainCtrl.instructionsPopup(new Label(" press ENTER \n to add an expense "), this.add);
+        mainCtrl.instructionsPopup(new Label(" press ESC to go \n back to event overview "), this.abort);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + U \n to undo changes "), this.undo);
+    }
 }

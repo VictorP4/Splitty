@@ -21,6 +21,10 @@ import commons.Expense;
 import commons.Participant;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -291,5 +295,43 @@ public class MainCtrl {
     }
     public Stage getPrimaryStage(){
         return primaryStage;
+    }
+
+    /**
+     * Creates a popup for a button.
+     *
+     * @param info text for display
+     * @param button button to show the popup on
+     */
+    public void instructionsPopup(Label info, Button button){
+        info.setStyle("-fx-background-color: white; -fx-border-color: black"); //lightPink
+        info.setMinSize(50, 25);
+        Popup infoPop = new Popup();
+        infoPop.getContent().add(info);
+        button.setOnMouseEntered(mouseEvent -> {
+            infoPop.show(getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY() + 5);
+        });
+        button.setOnMouseExited(mouseEvent -> {
+            infoPop.hide();
+        });
+    }
+
+    /**
+     * Creates a popup for a menu button.
+     *
+     * @param info text for display
+     * @param button button to show the popup on
+     */
+    public void instructionsPopup(Label info, MenuButton button){
+        info.setStyle("-fx-background-color: white; -fx-border-color: black"); //lightPink
+        info.setMinSize(50, 25);
+        Popup infoPop = new Popup();
+        infoPop.getContent().add(info);
+        button.setOnMouseEntered(mouseEvent -> {
+            infoPop.show(getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY() + 5);
+        });
+        button.setOnMouseExited(mouseEvent -> {
+            infoPop.hide();
+        });
     }
 }

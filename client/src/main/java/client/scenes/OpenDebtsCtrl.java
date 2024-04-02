@@ -1,4 +1,5 @@
 package client.scenes;
+
 import client.Main;
 import client.models.Debt;
 import client.utils.ServerUtils;
@@ -19,6 +20,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -80,6 +82,8 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
                 });
             }
         });
+
+        setInstructions();
     }
     /**
      * updates the UI
@@ -312,5 +316,12 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         markReceived.setAlignment(Pos.CENTER_RIGHT);
         //TODO see if insets are necessary for markReceived
         tempBox.getChildren().addAll(text,imgMail,imgBank,markReceived);
+    }
+
+    /**
+     * Sets the instruction popups for shortcuts.
+     */
+    public void setInstructions(){
+        mainCtrl.instructionsPopup(new Label(" press ESC to go back "), this.back);
     }
 }
