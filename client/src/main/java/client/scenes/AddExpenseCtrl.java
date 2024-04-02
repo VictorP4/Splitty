@@ -489,11 +489,11 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             for (Node n : box.getChildren()) {
                 if (n instanceof CheckBox) {
                     CheckBox c = (CheckBox) n;
-                    List<Long> names = new ArrayList<>();
+                    List<Long> participantIDs = new ArrayList<>();
                     for (Participant p : expense.getInvolvedParticipants()) {
-                        names.add(p.getId());
+                        participantIDs.add(p.getId());
                     }
-                    if (names.contains(this.event.getParticipants().stream().filter(x->x.getName().equals(c.getText())).findFirst().get().getId())) {
+                    if (participantIDs.contains(this.event.getParticipants().stream().filter(x->x.getName().equals(c.getText())).findFirst().get().getId())) {
                         c.setSelected(true);
                     }
                 }
