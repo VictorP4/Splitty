@@ -105,10 +105,12 @@ public class AddTagCtrl implements Main.UpdatableUI {
             editButton.setVisible(true);
             removeButton.setVisible(true);
             addButton.setVisible(false);
+            addEditText.setText(Main.getLocalizedString("EditTag"));
         } else {
             editButton.setVisible(false);
             removeButton.setVisible(false);
             addButton.setVisible(true);
+            addEditText.setText(Main.getLocalizedString("AddTag"));
         }
     }
 
