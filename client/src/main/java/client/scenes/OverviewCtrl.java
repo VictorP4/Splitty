@@ -30,6 +30,7 @@ import javafx.scene.text.Text;
 import commons.Expense;
 import javafx.collections.ObservableList;
 import javafx.stage.Modality;
+import javafx.stage.Popup;
 
 
 import java.io.*;
@@ -44,6 +45,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
+
 import static client.Main.switchLocale;
 
 /**
@@ -100,8 +103,15 @@ public class OverviewCtrl implements Main.UpdatableUI {
     @FXML
     public AnchorPane ap;
     private boolean admin;
+    private Preferences prefs = Preferences.userNodeForPackage(OverviewCtrl.class);;
     private final UserConfig userConfig = new UserConfig();
     private Map<Long,List<Expense>> previousExpenses;
+    @FXML
+    private Button cancel;
+    @FXML
+    private Button delete;
+    @FXML
+    private Button edit;
 
     /**
      * Constructs an OverviewCtrl object.
@@ -122,14 +132,17 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void initialize() {
         admin=false;
+        userConfig.reloadLanguageFile();
         String lp = userConfig.getLanguageConfig();
         if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
-            Image image = new Image("/client/misc/" + lp +  "_flag.png");
+            Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
+            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/"+lp+"_flag.png");
             menuButtonView.setImage(image);
         }
 
         ap.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
+                userConfig.reloadLanguageFile();
                 backToStartScreen();
             }
             if(event.isControlDown() && event.getCode() == KeyCode.S){
@@ -155,7 +168,21 @@ public class OverviewCtrl implements Main.UpdatableUI {
                 });
             }
         });
+        setParticipantsPopup();
+    }
 
+    private void setParticipantsPopup() {
+        Label pop = new Label("Double right click for delete,\n and double left click for edit");
+        pop.setStyle(" -fx-background-color: white; -fx-border-color: black;");
+        pop.setMinSize(100,50);
+        Popup popup = new Popup();
+        popup.getContent().add(pop);
+        participants.setOnMouseEntered(event ->{
+            popup.show(mainCtrl.getPrimaryStage(),event.getScreenX(), event.getScreenY()+5);
+        });
+        participants.setOnMouseExited(event ->{
+            popup.hide();
+        });
     }
 
     /**
@@ -173,6 +200,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
         participants.setText(Main.getLocalizedString("ovParticipants"));
         statistics.setText(Main.getLocalizedString("ovStatistics"));
         currencyButton.setText(Main.getLocalizedString("currency"));
+        delete.setText(Main.getLocalizedString("delete"));
+        edit.setText(Main.getLocalizedString("edit"));
+        cancel.setText(Main.getLocalizedString("cancel"));
     }
 
     /**
@@ -328,6 +358,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void switchToEnglish(ActionEvent actionEvent) throws BackingStoreException {
         userConfig.setLanguageConfig("en");
+        userConfig.reloadLanguageFile();
         switchLocale("messages", "en");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/en_flag.png")).toExternalForm());
         menuButtonView.setImage(image);
@@ -339,6 +370,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void switchToDutch(ActionEvent actionEvent) throws BackingStoreException {
         userConfig.setLanguageConfig("nl");
+        userConfig.reloadLanguageFile();
         switchLocale("messages", "nl");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/nl_flag.png")).toExternalForm());
         menuButtonView.setImage(image);
@@ -346,6 +378,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
     public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
         userConfig.setLanguageConfig("es");
+        userConfig.reloadLanguageFile();
         switchLocale("messages","es");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
         menuButtonView.setImage(image);
@@ -389,7 +422,12 @@ public class OverviewCtrl implements Main.UpdatableUI {
         if(admin){
             mainCtrl.showAdminEventOverview();
         }
-        else mainCtrl.showStartScreen();
+
+        else{
+            userConfig.reloadLanguageFile();
+            mainCtrl.showStartScreen();
+        }
+
     }
 
     /**
@@ -524,6 +562,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         original = (ObservableList<Expense>) convertCurrency(original);
         expenseList.setItems(original);
         fromSelected.setContent(expenseList);
+        selectExpense();
     }
 
     /**
@@ -554,10 +593,14 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     public void refresh(Event event) {
+
         if(this.event==null||!this.event.getId().equals(event.getId())) previousExpenses = new HashMap<>();
+
+        userConfig.reloadLanguageFile();
         String lp = userConfig.getLanguageConfig();
         if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
-            Image image = new Image("/client/misc/" + lp +  "_flag.png");
+            Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
+            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/"+lp+"_flag.png");
             menuButtonView.setImage(image);
         }
 
@@ -680,7 +723,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void deletePrevExp(Expense expense){
         if(previousExpenses.get(expense.getId())!=null){
-            previousExpenses.get(expense.getId()).remove(expense);
+            previousExpenses.get(expense.getId()).removeLast();
             if(previousExpenses.get(expense.getId()).size()==0) previousExpenses.remove(expense.getId());
         }
     }
