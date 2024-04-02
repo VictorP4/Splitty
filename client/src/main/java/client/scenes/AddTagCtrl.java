@@ -24,7 +24,6 @@ public class AddTagCtrl implements Main.UpdatableUI {
     @FXML
     public AnchorPane anchor;
     private Event event;
-    private String tagName;
     @FXML
     private Text colorText;
     @FXML
@@ -38,11 +37,14 @@ public class AddTagCtrl implements Main.UpdatableUI {
     @FXML
     private Button addButton;
     @FXML
+    private Button editButton;
+    @FXML
     private Button abortButton;
     @FXML
     private Button backButton;
     @FXML
     private Button removeButton;
+    private Tag selectedTag;
 
     /**
      * Constructs a new instance of AddTagCtrl.
@@ -61,12 +63,14 @@ public class AddTagCtrl implements Main.UpdatableUI {
      */
     @FXML
     public void initialize() {
-        tagName = nameTextField.getText();
-        nameTextField.textProperty().addListener((observable, oldValue, newValue) -> updateTagName(newValue));
-        removeButton.setVisible(false);
+        modeChanger();
         anchor.setOnKeyPressed(event -> {
             if(event.getCode() == KeyCode.ENTER){
-                add();
+                if (selectedTag == null) {
+                    add();
+                } else {
+                    edit();
+                }
             }
             if(event.getCode() == KeyCode.ESCAPE){
                 back();
@@ -79,70 +83,62 @@ public class AddTagCtrl implements Main.UpdatableUI {
         setInstructions();
     }
 
-    /**
-     * Updates the tag name.
-     *
-     * @param newValue The new value of the tag name.
-     */
-    private void updateTagName(String newValue) {
-        tagName = newValue;
-        colorFiller();
-        updateRemoveButtonVisibility(newValue);
-        updateAddButtonName(newValue);
+    public void setSelectedTag(Tag tag){
+        if (tag != null) {
+            this.selectedTag = tag;
+        }
+        modeChanger();
     }
 
-    /**
-     * Fills the RGB text fields with values based on the selected tag.
-     */
-    private void colorFiller() {
-        for (Tag tag : event.getTags()) {
-            if (tag.getName().equals(tagName)) {
-                colorPicker.setValue(Color.rgb(tag.getRed(), tag.getGreen(), tag.getBlue()));
-                removeButton.setVisible(true);
-                break;
-            }
+    public void modeChanger() {
+        if (selectedTag != null) {
+            nameTextField.setText(selectedTag.getName());
+            colorPicker.setValue(Color.rgb(selectedTag.getRed(), selectedTag.getGreen(), selectedTag.getBlue()));
+            editButton.setVisible(true);
+            removeButton.setVisible(true);
+            addButton.setVisible(false);
+        } else {
+            editButton.setVisible(false);
+            removeButton.setVisible(false);
+            addButton.setVisible(true);
         }
     }
 
-    /**
-     * Checks if the tag name exists.
-     *
-     * @param tagName The tag name to check.
-     * @return True if the tag name exists, false otherwise.
-     */
-    private boolean doesTagNameExist(String tagName) {
-        for (Tag tag : event.getTags()) {
-            if (tag.getName().equals(tagName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Updates the visibility of the remove button.
-     *
-     * @param newTagName The new tag name.
-     */
-    private void updateRemoveButtonVisibility(String newTagName) {
-        boolean isValidTagName = doesTagNameExist(newTagName);
-        removeButton.setVisible(isValidTagName);
-    }
-
-    /**
-     * Updates the name of the add button.
-     *
-     * @param newTagName The new tag name.
-     */
-    private void updateAddButtonName(String newTagName) {
-        boolean isValidTagName = doesTagNameExist(newTagName);
-        addButton.setText(isValidTagName ? Main.getLocalizedString("edit") : Main.getLocalizedString("add"));
-    }
-
-    /**
-     * Adds or updates the tag.
-     */
     public void add() {
+        String name = nameTextField.getText().trim();
+        if (name.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(Main.getLocalizedString("Error"));
+            alert.setHeaderText(Main.getLocalizedString("Error"));
+            alert.setContentText(Main.getLocalizedString("NameCannotBeEmpty"));
+            alert.showAndWait();
+            return;
+        }
+
+        if (doesTagNameExist(name)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(Main.getLocalizedString("Error"));
+            alert.setHeaderText(Main.getLocalizedString("Error"));
+            alert.setContentText(Main.getLocalizedString("TagNameExists"));
+            alert.showAndWait();
+            return;
+        }
+
+        Color color = colorPicker.getValue();
+        int red = (int) (color.getRed() * 255);
+        int green = (int) (color.getGreen() * 255);
+        int blue = (int) (color.getBlue() * 255);
+
+        Tag tag = new Tag(name, red, green, blue);
+        Tag saved = server.addTag(tag);
+        event.getTags().add(saved);
+        this.event = server.updateEvent(event);
+
+        clearFields();
+        mainCtrl.showAddExpenseFromTag(event);
+    }
+
+    public void edit() {
         String name = nameTextField.getText().trim();
         if (name.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -158,27 +154,24 @@ public class AddTagCtrl implements Main.UpdatableUI {
         int green = (int) (color.getGreen() * 255);
         int blue = (int) (color.getBlue() * 255);
 
-        if (event.getTags().stream()
-                .map(Tag::getName)
-                .toList().contains(name)) {
-            for (Tag tag : event.getTags()) {
-                if (tag.getName().equals(name)) {
-                    tag.setRed(red);
-                    tag.setGreen(green);
-                    tag.setBlue(blue);
-                    server.updateTag(tag);
-                    this.event=server.updateEvent(event);
-                }
-            }
-        } else {
-            Tag tag = new Tag(name,red,green,blue);
-            Tag saved = server.addTag(tag);
-            event.getTags().add(saved);
-            this.event=server.updateEvent(event);
+        selectedTag.setName(name);
+        selectedTag.setRed(red);
+        selectedTag.setGreen(green);
+        selectedTag.setBlue(blue);
+        server.updateTag(selectedTag);
+        this.event = server.updateEvent(event);
 
-        }
         clearFields();
         mainCtrl.showAddExpenseFromTag(event);
+    }
+
+    private boolean doesTagNameExist(String tagName) {
+        for (Tag tag : event.getTags()) {
+            if (tag.getName().equals(tagName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -236,6 +229,9 @@ public class AddTagCtrl implements Main.UpdatableUI {
     public void clearFields() {
         nameTextField.clear();
         colorPicker.setValue(Color.WHITE);
+        addButton.setText(Main.getLocalizedString("add"));
+        removeButton.setVisible(false);
+        selectedTag = null;
     }
 
     /**
