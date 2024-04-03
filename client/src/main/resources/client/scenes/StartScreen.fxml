@@ -74,7 +74,7 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </MenuButton>
-      <CheckBox fx:id="alreadyJoined" layoutX="87.0" layoutY="175.0" mnemonicParsing="false" style="-fx-border-color: balck;" text="Already joined" />
+      <CheckBox fx:id="alreadyJoined" layoutX="87.0" layoutY="175.0" mnemonicParsing="false" text="Already joined" />
       <ListView fx:id="recentlyAccessed" layoutX="87.0" layoutY="227.0" prefHeight="117.0" prefWidth="301.0" style="-fx-border-color: black; -fx-border-radius: 4; -fx-background-radius: 4;" />
       <Button fx:id="settingsPage" layoutX="465.0" layoutY="33.0" mnemonicParsing="false" onAction="#toSettings" prefHeight="25.0" prefWidth="77.0" style="-fx-border-color: black; -fx-border-radius: 4; -fx-effect: DropShadow; -fx-background-color: #485a5c;" text="settings" textFill="WHITE">
          <font>
