@@ -8,6 +8,7 @@ import commons.Expense;
 import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -81,6 +82,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
         });
 
         setInstructions();
+        buttonSetup();
     }
 
     /**
@@ -276,6 +278,29 @@ public class AddTagCtrl implements Main.UpdatableUI {
         mainCtrl.instructionsPopup(new Label(" press ESC to go back "), this.backButton);
         mainCtrl.instructionsPopup(new Label(" press ENTER \n add the tag "), this.addButton);
         mainCtrl.instructionsPopup(new Label(" press CTRL + ALT + C \n to clear fields "), this.abortButton);
+    }
+
+    /**
+     * Sets the hover over and focus 'look' of the buttons.
+     */
+    public void buttonSetup(){
+        mainCtrl.buttonFocus(this.abortButton);
+        mainCtrl.buttonFocus(this.addButton);
+        mainCtrl.buttonFocus(this.backButton);
+        mainCtrl.buttonFocus(this.removeButton);
+        mainCtrl.buttonFocus(this.editButton);
+        mainCtrl.buttonShadow(this.removeButton);
+        mainCtrl.buttonShadow(this.editButton);
+
+        this.colorPicker.focusedProperty().addListener( (obs, old, newV) -> {
+            if(newV){
+                Color b = Color.rgb(0, 150, 230);
+                this.colorPicker.setEffect(new DropShadow(10, b));
+            }
+            else {
+                this.colorPicker.setEffect(null);
+            }
+        });
     }
 
 }

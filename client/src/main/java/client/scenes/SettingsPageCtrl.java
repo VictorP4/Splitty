@@ -79,6 +79,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
         });
 
         setInstructions();
+        buttonSetup();
     }
 
     /**
@@ -197,5 +198,16 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
         mainCtrl.instructionsPopup(new Label(" press ESC to go \n back to start screen "), this.home);
         mainCtrl.instructionsPopup(new Label(" press ENTER to login "), this.login);
         mainCtrl.instructionsPopup(new Label(" press ENTER to set server "), this.setServer);
+    }
+
+    /**
+     * Sets the focus and hover over look for the buttons.
+     */
+    public void buttonSetup(){
+        mainCtrl.buttonFocus(this.login);
+        mainCtrl.buttonFocus(this.setServer);
+        mainCtrl.buttonFocus(this.home);
+        mainCtrl.buttonFocus(this.setToLocalServer);
+        mainCtrl.buttonShadow(this.setToLocalServer);
     }
 }

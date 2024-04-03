@@ -25,6 +25,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.InnerShadow;
+import javafx.scene.paint.Color;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -323,8 +326,10 @@ public class MainCtrl {
         infoPop.getContent().add(info);
         button.setOnMouseEntered(mouseEvent -> {
             infoPop.show(getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY() + 5);
+            button.setEffect(new InnerShadow());
         });
         button.setOnMouseExited(mouseEvent -> {
+            button.setEffect(null);
             infoPop.hide();
         });
     }
@@ -342,10 +347,58 @@ public class MainCtrl {
         infoPop.getContent().add(info);
         button.setOnMouseEntered(mouseEvent -> {
             infoPop.show(getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY() + 5);
+            button.setEffect(new InnerShadow());
+
         });
         button.setOnMouseExited(mouseEvent -> {
+            button.setEffect(null);
             infoPop.hide();
         });
+    }
 
+    /**
+     * Creates a listener to highlight the button when in focus
+     * @param button button to apply the listener to
+     */
+    public void buttonFocus(Button button){
+        button.focusedProperty().addListener( (obs, old, newV) -> {
+            if(newV){
+                Color b = Color.rgb(0, 150, 230);
+                button.setEffect(new DropShadow(10, b));
+            }
+            else {
+                button.setEffect(null);
+            }
+        });
+    }
+
+    /**
+     *  Adds a shadow to a button when the mouse hovers over it
+     * @param button to apply the shadow to
+     */
+    public void buttonShadow(Button button){
+        button.setOnMouseEntered(mouseEvent -> {
+            button.setEffect(new InnerShadow());
+
+        });
+        button.setOnMouseExited(mouseEvent -> {
+            button.setEffect(null);
+        });
+    }
+
+    /**
+     * Creates a listener to highlight the button when in focus
+     * @param m menu button to apply the listener to
+     */
+    public void menuButtonFocus(MenuButton m){
+        m.focusedProperty().addListener( (obs, old, newV) -> {
+            if(newV){
+                Color b = Color.rgb(0, 150, 230);
+                m.setEffect(new DropShadow(10, b));
+            }
+            else {
+                m.setEffect(null);
+            }
+        });
     }
 }

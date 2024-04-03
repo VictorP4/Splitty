@@ -98,6 +98,7 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
         });
 
         setInstructions();
+        buttonSetup();
     }
 
 
@@ -174,6 +175,14 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
     public void setInstructions(){
         mainCtrl.instructionsPopup(new Label(" press ENTER to add participant"), this.okButton);
         mainCtrl.instructionsPopup(new Label(" press ESC to discard changes "), this.abort);
+    }
+
+    /**
+     * Sets the focus 'look' for the buttons.
+     */
+    public void buttonSetup(){
+        mainCtrl.buttonFocus(this.okButton);
+        mainCtrl.buttonFocus(this.abort);
     }
 
 }

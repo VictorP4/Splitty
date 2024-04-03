@@ -86,6 +86,7 @@ public class AdminEventOverviewCtrl implements Main.UpdatableUI {
 
         });
         setInstructions();
+        buttonSetup();
     }
 
     /**
@@ -97,6 +98,7 @@ public class AdminEventOverviewCtrl implements Main.UpdatableUI {
 
         TableColumn<Event, String> titleColumn = new TableColumn<>(Main.getLocalizedString("title"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        //titleColumn.setStyle("-fx-border-color: #485a5c; -fx-background-color: ffeaed");
 
         TableColumn<Event, String> creationDateColumn = new TableColumn<>(Main.getLocalizedString("creationDate"));
         creationDateColumn.setCellValueFactory(new PropertyValueFactory<>("creationDate"));
@@ -107,6 +109,10 @@ public class AdminEventOverviewCtrl implements Main.UpdatableUI {
         TableColumn<Event, Button> deleteColumn = new TableColumn<>(Main.getLocalizedString("delete"));
         deleteColumn.setCellValueFactory(param -> {
             Button deleteButton = new Button(Main.getLocalizedString("delete"));
+            deleteButton.setStyle("-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-radius: 4; " +
+                    "-fx-border-style: solid; -fx-text-fill: white; -fx-font-style: bold");
+            mainCtrl.buttonShadow(deleteButton);
+            mainCtrl.buttonFocus(deleteButton);
             deleteButton.setOnAction(event -> {
                 Event selectedEvent = param.getValue();
                 var alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -126,6 +132,10 @@ public class AdminEventOverviewCtrl implements Main.UpdatableUI {
         TableColumn<Event, Button> backupColumn = new TableColumn<>(Main.getLocalizedString("backup"));
         backupColumn.setCellValueFactory(param ->{
             Button backupButton = new Button(Main.getLocalizedString("backup"));
+            backupButton.setStyle("-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-radius: 4; " +
+                    "-fx-border-style: solid; -fx-text-fill: white; -fx-font-style: bold");
+            mainCtrl.buttonShadow(backupButton);
+            mainCtrl.buttonFocus(backupButton);
             backupButton.setOnAction(event -> {
                 Event selectedEvent = param.getValue();
                 try{
@@ -272,5 +282,14 @@ public class AdminEventOverviewCtrl implements Main.UpdatableUI {
      */
     public void setInstructions() {
         mainCtrl.instructionsPopup(new Label(" press ESC to go \n to start screen "), this.home);
+    }
+
+    /**
+     * Sets the hover over and focus 'look' of the buttons.
+     */
+    public void buttonSetup(){
+        mainCtrl.buttonShadow(this.importJSON);
+        mainCtrl.buttonFocus(this.importJSON);
+        mainCtrl.buttonFocus(this.home);
     }
 }
