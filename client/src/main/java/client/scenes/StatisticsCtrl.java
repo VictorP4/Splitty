@@ -61,6 +61,8 @@ public class StatisticsCtrl implements Main.UpdatableUI {
                 back();
             }
         });
+
+        setInstructions();
     }
 
     /**
@@ -157,6 +159,13 @@ public class StatisticsCtrl implements Main.UpdatableUI {
      */
     public void back() {
         mainCtrl.showEventOverview(event);
+    }
+
+    /**
+     * Sets the instruction popups for shortcuts.
+     */
+    public void setInstructions(){
+        mainCtrl.instructionsPopup(new Label(" press ESC to go back "), this.backButton);
     }
 }
 

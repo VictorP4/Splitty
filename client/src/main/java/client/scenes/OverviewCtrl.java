@@ -154,7 +154,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
             if(event.isControlDown() && event.getCode() == KeyCode.A){
                 toAddExpense();
             }
-            if(event.isShiftDown() && event.isControlDown()){
+            if(event.isControlDown() && event.getCode() == KeyCode.D){
                 mainCtrl.showOpenDebts(this.event);
             }
         });
@@ -169,10 +169,12 @@ public class OverviewCtrl implements Main.UpdatableUI {
             }
         });
         setParticipantsPopup();
+        setParticipantBoxPopup();
+        setInstructions();
     }
 
     private void setParticipantsPopup() {
-        Label pop = new Label("Double right click for delete,\n and double left click for edit");
+        Label pop = new Label(" Double right click for delete, \n and double left click for edit ");
         pop.setStyle(" -fx-background-color: white; -fx-border-color: black;");
         pop.setMinSize(100,50);
         Popup popup = new Popup();
@@ -353,8 +355,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
+     * Switches the language of the app to english
      *
-     * @param actionEvent
+     * @param actionEvent picking english in language menu button
      */
     public void switchToEnglish(ActionEvent actionEvent) throws BackingStoreException {
         userConfig.setLanguageConfig("en");
@@ -365,8 +368,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
+     * Switches the language of the app to dutch
      *
-     * @param actionEvent
+     * @param actionEvent picking dutch in language menu button
      */
     public void switchToDutch(ActionEvent actionEvent) throws BackingStoreException {
         userConfig.setLanguageConfig("nl");
@@ -376,6 +380,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
         menuButtonView.setImage(image);
     }
 
+    /**
+     * Switches the language of the app to spanish
+     *
+     * @param actionEvent picking spanish in language menu button
+     */
     public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
         userConfig.setLanguageConfig("es");
         userConfig.reloadLanguageFile();
@@ -384,6 +393,10 @@ public class OverviewCtrl implements Main.UpdatableUI {
         menuButtonView.setImage(image);
     }
 
+    /**
+     *
+     * @param actionEvent
+    */
     public void addLang(ActionEvent actionEvent) throws BackingStoreException {
         Properties newLang = new Properties();
         try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/client/misc/langTemplate.txt"))) {
@@ -481,8 +494,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
         for(Expense b:a){
             if(!b.getCurrency().equals(c)){
                 int amn =(int)(serverUtils.convertCurrency(b.getAmount(),b.getCurrency(),
-                        c, new Date(b.getDate().getTime()).toLocalDate())*1000);
-                b.setAmount((double)amn/1000);
+                        c, new Date(b.getDate().getTime()).toLocalDate())*100);
+                b.setAmount((double)amn/100);
                 b.setCurrency(c);
             }
         }
@@ -496,6 +509,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     @FXML
     public void changeCurrencyEUR(){
         userConfig.setCurrencyConfig("EUR");
+        refresh(this.event);
         showAllExpenses();
     }
 
@@ -506,6 +520,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     @FXML
     public void changeCurrencyUSD(){
         userConfig.setCurrencyConfig("USD");
+        refresh(this.event);
         showAllExpenses();
     }
 
@@ -516,6 +531,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     @FXML
     public void changeCurrencyCHF(){
         userConfig.setCurrencyConfig("CHF");
+        refresh(this.event);
         showAllExpenses();
     }
 
@@ -592,6 +608,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
     }
 
+    /**
+     * Refreshes the scene.
+     *
+     * @param event which overview to load
+     */
     public void refresh(Event event) {
 
         if(this.event==null||!this.event.getId().equals(event.getId())) previousExpenses = new HashMap<>();
@@ -747,4 +768,41 @@ public class OverviewCtrl implements Main.UpdatableUI {
         if(previousExpenses.get(id)==null) return null;
         return previousExpenses.get(id).get(previousExpenses.get(id).size()-1);
     }
+
+    /**
+     * Get the currency
+     * @return the currency
+     */
+    public String getCurrency() {
+        return userConfig.getCurrencyConfig();
+    }
+    /**
+     * Sets the popup for participant box explanation.
+     */
+    public void setParticipantBoxPopup(){
+        Label pop = new Label(" Pick the participant ");
+        pop.setStyle("-fx-background-color: white; -fx-border-color: black"); //lightPink
+        pop.setMinSize(50, 25);
+        Popup popup = new Popup();
+        popup.getContent().add(pop);
+        participantBox.setOnMouseEntered( mouseEvent -> {
+            popup.show(mainCtrl.getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY() + 5);
+        });
+        participantBox.setOnMouseExited( mouseEvent -> {
+            popup.hide();
+        });
+    }
+
+    /**
+     * Sets the instruction popups for shortcuts
+     */
+    public void setInstructions(){
+        mainCtrl.instructionsPopup(new Label(" press ESC to go to start screen "), this.home);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + S to go \n to the statistics page "), this.statistics);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + A to \n go to add expense "), this.addExpense);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + D to \n show open debts "), this.settleDebts);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + L to \n open language menu "), this.langButton);
+    }
+
+
 }

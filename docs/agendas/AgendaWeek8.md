@@ -17,8 +17,9 @@ Agenda Items:
 - Talking Points: (Inform/ brainstorm/ decision making/ discuss)
 - Approaching deadlines (1 min)
   - self reflection (draft) -> friday week 8
-  - self reflection, buddy check (again), code freze -> friday week 9
+  - self reflection, buddy check (again), code freeze -> friday week 9
 - What did everyone do last week, problems they ran into, what do they have left? (5 min)
+- Checking Feedback
 - Check requirements (10 min)
   - Email notifications (email in client?)
   - Foreign currency (this is the last one we were adding, how is it doing)
@@ -28,7 +29,6 @@ Agenda Items:
   - Dividing the work between ourselves.
 - Plan a meeting for next week (4 min)
 
-- Feedback round: What went well and what can be improved next time? (2 min)
+- Meeting Next Week (2 min)
 - Question round: Does anyone have anything to add before the meeting closes? (2 min)
 - Closure (1 min)
-
