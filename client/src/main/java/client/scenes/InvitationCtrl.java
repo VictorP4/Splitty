@@ -73,6 +73,7 @@ public class InvitationCtrl implements Main.UpdatableUI {
 
         setInviteCode();
         setInstructions();
+        buttonSetup();
     }
 
     /**
@@ -163,5 +164,13 @@ public class InvitationCtrl implements Main.UpdatableUI {
     public void setInstructions(){
         mainCtrl.instructionsPopup(new Label(" press ESC to go \n back to event overview "), this.overviewButton);
         mainCtrl.instructionsPopup(new Label(" press CTRL + ENTER \n to send invite emails "), this.sendInv);
+    }
+
+    /**
+     * Sets the focus look for the buttons
+     */
+    public void buttonSetup(){
+        mainCtrl.buttonFocus(this.overviewButton);
+        mainCtrl.buttonFocus(this.sendInv);
     }
 }

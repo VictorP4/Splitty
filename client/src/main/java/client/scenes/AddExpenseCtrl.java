@@ -8,8 +8,11 @@ import com.google.inject.Inject;
 import commons.Tag;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import commons.Event;
 import commons.Expense;
@@ -31,6 +34,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     private final MainCtrl mainCtrl;
     @FXML
     public AnchorPane anchor;
+    @FXML
+    public Button addTag;
     private Event event;
     private Tag selectedTag;
     @FXML
@@ -126,6 +131,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         });
 
         setInstructions();
+        buttonSetup();
     }
 
     /**
@@ -564,5 +570,67 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         mainCtrl.instructionsPopup(new Label(" press ENTER \n to add an expense "), this.add);
         mainCtrl.instructionsPopup(new Label(" press ESC to go \n back to event overview "), this.abort);
         mainCtrl.instructionsPopup(new Label(" press CTRL + U \n to undo changes "), this.undo);
+    }
+
+    /**
+     * Sets the hover over and focus 'look' of the buttons.
+     */
+    public void buttonSetup(){
+        mainCtrl.buttonShadow(this.addTag);
+        mainCtrl.menuButtonFocus(this.tagMenu);
+        mainCtrl.buttonFocus(this.add);
+        mainCtrl.buttonFocus(this.abort);
+        mainCtrl.buttonFocus(this.undo);
+        mainCtrl.buttonFocus(this.addTag);
+
+        tagMenu.setOnMouseEntered(mouseEvent -> {
+            tagMenu.setEffect(new InnerShadow());
+
+        });
+        tagMenu.setOnMouseExited(mouseEvent -> {
+            tagMenu.setEffect(null);
+        });
+
+        this.date.focusedProperty().addListener( (obs, old, newV) -> {
+            if(newV){
+                Color b = Color.rgb(0, 150, 230);
+                this.date.setEffect(new DropShadow(10, b));
+            }
+            else {
+                this.date.setEffect(null);
+            }
+        });
+
+        this.paidBy.focusedProperty().addListener( (obs, old, newV) -> {
+            if(newV){
+                Color b = Color.rgb(0, 150, 230);
+                this.paidBy.setEffect(new DropShadow(10, b));
+            }
+            else {
+                this.paidBy.setEffect(null);
+            }
+        });
+
+        this.amount.focusedProperty().addListener( (obs, old, newV) -> {
+            if(newV){
+                Color b = Color.rgb(0, 150, 230);
+                this.amount.setEffect(new DropShadow(10, b));
+            }
+            else {
+                this.amount.setEffect(null);
+            }
+        });
+
+        this.currency.focusedProperty().addListener( (obs, old, newV) -> {
+            if(newV){
+                Color b = Color.rgb(0, 150, 230);
+                this.currency.setEffect(new DropShadow(10, b));
+            }
+            else {
+                this.currency.setEffect(null);
+            }
+        });
+
+
     }
 }

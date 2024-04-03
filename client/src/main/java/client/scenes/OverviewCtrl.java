@@ -19,6 +19,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -54,7 +56,7 @@ import static client.Main.switchLocale;
  */
 public class OverviewCtrl implements Main.UpdatableUI {
 
-    private static final String SELECTED_IMAGE_KEY =  "selectedImage";
+    private static final String SELECTED_IMAGE_KEY = "selectedImage";
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     @FXML
@@ -63,6 +65,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public Button home;
     @FXML
     public ImageView menuButtonView;
+    @FXML
+    public ImageView participantImage;
     @FXML
     private Pane block;
     @FXML
@@ -123,7 +127,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private boolean admin;
     private Preferences prefs = Preferences.userNodeForPackage(OverviewCtrl.class);;
     private final UserConfig userConfig = new UserConfig();
-    private Map<Long,List<Expense>> previousExpenses;
+    private Map<Long, List<Expense>> previousExpenses;
 
     /**
      * Constructs an OverviewCtrl object.
@@ -145,12 +149,12 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public void initialize() {
         expenseTable = new TableView<>();
 
-        admin=false;
+        admin = false;
         userConfig.reloadLanguageFile();
         String lp = userConfig.getLanguageConfig();
         if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
             Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
-            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/"+lp+"_flag.png");
+            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/" + lp + "_flag.png");
             menuButtonView.setImage(image);
         }
 
@@ -172,24 +176,25 @@ public class OverviewCtrl implements Main.UpdatableUI {
                 userConfig.reloadLanguageFile();
                 backToStartScreen();
             }
-            if(event.isControlDown() && event.getCode() == KeyCode.S){
+            if (event.isControlDown() && event.getCode() == KeyCode.S) {
                 showStatistics();
             }
-            if(event.isControlDown() && event.getCode() == KeyCode.L){
+            if (event.isControlDown() && event.getCode() == KeyCode.L) {
                 langButton.fire();
             }
-            if(event.isControlDown() && event.getCode() == KeyCode.A){
+            if (event.isControlDown() && event.getCode() == KeyCode.A) {
                 toAddExpense();
             }
-            if(event.isControlDown() && event.getCode() == KeyCode.D){
+            if (event.isControlDown() && event.getCode() == KeyCode.D) {
                 mainCtrl.showOpenDebts(this.event);
             }
         });
         webSocket.connect("ws://localhost:8080/websocket");
-        webSocket.addEventListener((event)->{
-            if(this.event==null||!this.event.getId().equals(event.getId())) return;
-            else{
-                Platform.runLater(()->{
+        webSocket.addEventListener((event) -> {
+            if (this.event == null || !this.event.getId().equals(event.getId()))
+                return;
+            else {
+                Platform.runLater(() -> {
                     refresh(event);
                 });
             }
@@ -197,9 +202,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
         setParticipantsPopup();
         setParticipantBoxPopup();
         setInstructions();
+        buttonSetup();
         displayExpenses();
     }
-
 
     private TableView<Expense> displayExpenses() {
         expenseTable.getItems().clear();
@@ -224,7 +229,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
             List<Participant> involvedParticipants = e.getValue().getInvolvedParticipants();
             for (int i = 0; i < involvedParticipants.size(); i++) {
                 participantString += involvedParticipants.get(i).getName();
-                if (i < involvedParticipants.size()-1) {
+                if (i < involvedParticipants.size() - 1) {
                     participantString += ", ";
                 }
             }
@@ -232,7 +237,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         });
 
         tagsColumn = new TableColumn<>(Main.getLocalizedString("tag"));
-        tagsColumn.setCellValueFactory(e ->  new SimpleObjectProperty<>(e.getValue().getTag()));
+        tagsColumn.setCellValueFactory(e -> new SimpleObjectProperty<>(e.getValue().getTag()));
         tagsColumn.setCellFactory(column -> new TableCell<>() {
             {
                 itemProperty().addListener((obs, oldTag, newTag) -> {
@@ -242,10 +247,12 @@ public class OverviewCtrl implements Main.UpdatableUI {
                     } else {
                         setText(newTag.getName());
 
-                        String colorStyle = String.format("-fx-background-color: rgba(%d, %d, %d, 1);", newTag.getRed(), newTag.getGreen(), newTag.getBlue());
+                        String colorStyle = String.format("-fx-background-color: rgba(%d, %d, %d, 1);", newTag.getRed(),
+                                newTag.getGreen(), newTag.getBlue());
                         setStyle(colorStyle);
 
-                        double brightness = (newTag.getRed() * 0.299 + newTag.getGreen() * 0.587 + newTag.getBlue() * 0.114) / 255;
+                        double brightness = (newTag.getRed() * 0.299 + newTag.getGreen() * 0.587
+                                + newTag.getBlue() * 0.114) / 255;
                         String textColor = brightness < 0.5 ? "white" : "black";
                         setTextFill(Color.web(textColor));
                     }
@@ -260,13 +267,13 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private void setParticipantsPopup() {
         Label pop = new Label(" Double right click for delete, \n and double left click for edit ");
         pop.setStyle(" -fx-background-color: white; -fx-border-color: black;");
-        pop.setMinSize(100,50);
+        pop.setMinSize(100, 50);
         Popup popup = new Popup();
         popup.getContent().add(pop);
-        participants.setOnMouseEntered(event ->{
-            popup.show(mainCtrl.getPrimaryStage(),event.getScreenX(), event.getScreenY()+5);
+        participants.setOnMouseEntered(event -> {
+            popup.show(mainCtrl.getPrimaryStage(), event.getScreenX(), event.getScreenY() + 5);
         });
-        participants.setOnMouseExited(event ->{
+        participants.setOnMouseExited(event -> {
             popup.hide();
         });
     }
@@ -360,8 +367,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
                         var alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.initModality(Modality.APPLICATION_MODAL);
                         alert.setContentText("Are you sure you want to delete this participant?");
-                        alert.showAndWait().ifPresent((response)->{
-                            if(response == ButtonType.OK){
+                        alert.showAndWait().ifPresent((response) -> {
+                            if (response == ButtonType.OK) {
                                 removeParticipantFromEvent(contact);
                             }
                         });
@@ -375,7 +382,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Removes a participant from the event. It also removed the participant from any related expenses or removed
+     * Removes a participant from the event. It also removed the participant from
+     * any related expenses or removed
      * the expense all together if they are the only involved participant.
      * Then it updates the participant display.
      *
@@ -385,17 +393,19 @@ public class OverviewCtrl implements Main.UpdatableUI {
         event.removeParticipant(contact);
         serverUtils.updateEvent(event);
         List<Expense> toDelete = new ArrayList<>();
-        for(Expense expense : event.getExpenses()){
-            if(expense.getPaidBy().equals(contact)) toDelete.add(expense);
-            else if(expense.getInvolvedParticipants().contains(contact)){
-                if(expense.getInvolvedParticipants().size()==1) toDelete.add(expense);
-                else{
+        for (Expense expense : event.getExpenses()) {
+            if (expense.getPaidBy().equals(contact))
+                toDelete.add(expense);
+            else if (expense.getInvolvedParticipants().contains(contact)) {
+                if (expense.getInvolvedParticipants().size() == 1)
+                    toDelete.add(expense);
+                else {
                     expense.getInvolvedParticipants().remove(contact);
                     serverUtils.updateExpense(event.getId(), expense);
                 }
             }
         }
-        for(Expense expense1: toDelete){
+        for (Expense expense1 : toDelete) {
             serverUtils.deleteExpense(event.getId(), expense1);
         }
         serverUtils.deleteParticipant(contact);
@@ -422,8 +432,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         if (!participantExists) {
             Participant newPart = serverUtils.addParticipant(participant);
             this.event.getParticipants().add(newPart);
-        }
-        else{
+        } else {
             serverUtils.updateParticipant(participant);
             this.event.getParticipants().set(index, participant);
         }
@@ -458,7 +467,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
         userConfig.setLanguageConfig("en");
         userConfig.reloadLanguageFile();
         switchLocale("messages", "en");
-        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/en_flag.png")).toExternalForm());
+        Image image = new Image(
+                Objects.requireNonNull(getClass().getResource("/client/misc/en_flag.png")).toExternalForm());
         menuButtonView.setImage(image);
         refresh(event);
     }
@@ -472,7 +482,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
         userConfig.setLanguageConfig("nl");
         userConfig.reloadLanguageFile();
         switchLocale("messages", "nl");
-        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/nl_flag.png")).toExternalForm());
+        Image image = new Image(
+                Objects.requireNonNull(getClass().getResource("/client/misc/nl_flag.png")).toExternalForm());
         menuButtonView.setImage(image);
         refresh(event);
     }
@@ -485,8 +496,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
         userConfig.setLanguageConfig("es");
         userConfig.reloadLanguageFile();
-        switchLocale("messages","es");
-        Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
+        switchLocale("messages", "es");
+        Image image = new Image(
+                Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
         menuButtonView.setImage(image);
         refresh(event);
     }
@@ -494,10 +506,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
     /**
      *
      * @param actionEvent
-    */
+     */
     public void addLang(ActionEvent actionEvent) throws BackingStoreException {
         Properties newLang = new Properties();
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/client/misc/langTemplate.txt"))) {
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader("src/main/resources/client/misc/langTemplate.txt"))) {
             newLang.load(reader);
         } catch (IOException e) {
             e.printStackTrace();
@@ -505,7 +518,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
         String newLangPath;
         try (OutputStream output = new FileOutputStream("src/main/resources/client/misc/messages.properties")) {
-            newLang.store(output, "Add the name of your new language to the first line of this file as a comment\n"+
+            newLang.store(output, "Add the name of your new language to the first line of this file as a comment\n" +
                     "Send the final translation version to ooppteam58@gmail.com");
 
             newLangPath = "client/src/main/resources/client/misc/messages.properties";
@@ -530,11 +543,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * want to
      */
     public void backToStartScreen() {
-        if(admin){
+        if (admin) {
             mainCtrl.showAdminEventOverview();
         }
 
-        else{
+        else {
             userConfig.reloadLanguageFile();
             mainCtrl.showStartScreen();
         }
@@ -557,13 +570,13 @@ public class OverviewCtrl implements Main.UpdatableUI {
         mainCtrl.showContactDetails(new Participant(), event);
     }
 
-    public List<Expense> convertCurrency(List<Expense> a){
+    public List<Expense> convertCurrency(List<Expense> a) {
         String c = userConfig.getCurrencyConfig();
-        for(Expense b:a){
-            if(!b.getCurrency().equals(c)){
-                int amn =(int)(serverUtils.convertCurrency(b.getAmount(),b.getCurrency(),
-                        c, new Date(b.getDate().getTime()).toLocalDate())*100);
-                b.setAmount((double)amn/100);
+        for (Expense b : a) {
+            if (!b.getCurrency().equals(c)) {
+                int amn = (int) (serverUtils.convertCurrency(b.getAmount(), b.getCurrency(),
+                        c, new Date(b.getDate().getTime()).toLocalDate()) * 100);
+                b.setAmount((double) amn / 100);
                 b.setCurrency(c);
             }
         }
@@ -572,10 +585,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
     /**
      * Changes the preferred currency of the event to Euro (EUR).
-     * Updates the event's preferred currency on the server and refreshes the displayed expenses accordingly.
+     * Updates the event's preferred currency on the server and refreshes the
+     * displayed expenses accordingly.
      */
     @FXML
-    public void changeCurrencyEUR(){
+    public void changeCurrencyEUR() {
         userConfig.setCurrencyConfig("EUR");
         refresh(this.event);
         showAllExpenses();
@@ -583,10 +597,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
     /**
      * Changes the preferred currency of the event to US Dollar (USD).
-     * Updates the event's preferred currency on the server and refreshes the displayed expenses accordingly.
+     * Updates the event's preferred currency on the server and refreshes the
+     * displayed expenses accordingly.
      */
     @FXML
-    public void changeCurrencyUSD(){
+    public void changeCurrencyUSD() {
         userConfig.setCurrencyConfig("USD");
         refresh(this.event);
         showAllExpenses();
@@ -594,10 +609,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
     /**
      * Changes the preferred currency of the event to Swiss Franc (CHF).
-     * Updates the event's preferred currency on the server and refreshes the displayed expenses accordingly.
+     * Updates the event's preferred currency on the server and refreshes the
+     * displayed expenses accordingly.
      */
     @FXML
-    public void changeCurrencyCHF(){
+    public void changeCurrencyCHF() {
         userConfig.setCurrencyConfig("CHF");
         refresh(this.event);
         showAllExpenses();
@@ -611,8 +627,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
         displayExpenses();
         original = FXCollections.observableArrayList();
 
-        for (Expense e : event.getExpenses()){
-            if (e.getTitle().equalsIgnoreCase("debt repayment")){
+        for (Expense e : event.getExpenses()) {
+            if (e.getTitle().equalsIgnoreCase("debt repayment")) {
                 continue;
             }
             original.add(e);
@@ -676,13 +692,14 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * @param event which overview to load
      */
     public void refresh(Event event) {
-        if(this.event==null||!this.event.getId().equals(event.getId())) previousExpenses = new HashMap<>();
+        if (this.event == null || !this.event.getId().equals(event.getId()))
+            previousExpenses = new HashMap<>();
 
         userConfig.reloadLanguageFile();
         String lp = userConfig.getLanguageConfig();
         if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
             Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
-            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/"+lp+"_flag.png");
+            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/" + lp + "_flag.png");
             menuButtonView.setImage(image);
         }
 
@@ -698,6 +715,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
     /**
      * switches to the Open Debt scene
+     * 
      * @param actionEvent event that calls the method, click on the button
      */
     public void settleDebts(ActionEvent actionEvent) {
@@ -708,10 +726,10 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * sets up the choice box "participant box", clears all options,
      * then adds all current participant of the event
      */
-    public void setUpParticipantBox(){
+    public void setUpParticipantBox() {
         participantBox.getItems().removeAll(participantBox.getItems());
-        for(Participant p : this.event.getParticipants()){
-                participantBox.getItems().add(p);
+        for (Participant p : this.event.getParticipants()) {
+            participantBox.getItems().add(p);
         }
     }
 
@@ -726,7 +744,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Calls methods showFromSelected & showIncludingSelected
      * when a participant is picked in the choice box
      */
-    public void selected(){
+    public void selected() {
         showFromSelected();
         showIncludingSelected();
     }
@@ -734,10 +752,10 @@ public class OverviewCtrl implements Main.UpdatableUI {
     /**
      * When an expense is clicked on / selected an options pop-up pops-up
      */
-    public void selectExpense(){
+    public void selectExpense() {
         this.expenseTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         this.expenseTable.setOnMouseClicked((MouseEvent event) -> {
-            if(event.getClickCount() == 2){
+            if (event.getClickCount() == 2) {
                 options.setVisible(true);
                 block.setVisible(true);
             }
@@ -747,7 +765,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     /**
      * Closes the options popup without any changes to the expense
      */
-    public void cancel(){
+    public void cancel() {
         options.setVisible(false);
         block.setVisible(false);
     }
@@ -755,19 +773,18 @@ public class OverviewCtrl implements Main.UpdatableUI {
     /**
      * Deletes the selected expense
      */
-    public void delete(){
-        try{
-            Response response = serverUtils.deleteExpense(this.event.getId(), expenseTable.getSelectionModel().getSelectedItem());
-            if(response.getStatus() == Response.Status.OK.getStatusCode()){
-                System.out.println("OK! good job " + response.getStatus() );
+    public void delete() {
+        try {
+            Response response = serverUtils.deleteExpense(this.event.getId(),
+                    expenseTable.getSelectionModel().getSelectedItem());
+            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+                System.out.println("OK! good job " + response.getStatus());
                 deletePrevExp(expenseTable.getSelectionModel().getSelectedItem());
-            }
-            else{
+            } else {
                 System.out.println("Status code: " + response.getStatus());
             }
             this.event = serverUtils.getEvent(this.event.getId());
-        }
-        finally {
+        } finally {
             options.setVisible(false);
             block.setVisible(false);
             mainCtrl.showEventOverview(event);
@@ -775,76 +792,87 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Shows add/edit expense overview with the selected expense so the user can edit it
+     * Shows add/edit expense overview with the selected expense so the user can
+     * edit it
      */
-    public void edit(){
+    public void edit() {
         Expense toEdit = expenseTable.getSelectionModel().getSelectedItem();
-        if(toEdit == null) {
+        if (toEdit == null) {
             System.out.println("nothing selected");
-        }
-        else {
+        } else {
             mainCtrl.showExpense(this.event, toEdit);
         }
     }
 
     /**
      * marks that an admin is accessing the event overview
+     * 
      * @param b
      */
     public void setAdmin(boolean b) {
-        this.admin=b;
+        this.admin = b;
     }
+
     /**
      * deletes the expense from the cached ones
+     * 
      * @param expense the expense to be deleted from the cache
      */
-    public void deletePrevExp(Expense expense){
-        if(previousExpenses.get(expense.getId())!=null){
+    public void deletePrevExp(Expense expense) {
+        if (previousExpenses.get(expense.getId()) != null) {
             previousExpenses.get(expense.getId()).removeLast();
-            if(previousExpenses.get(expense.getId()).isEmpty()) previousExpenses.remove(expense.getId());
+            if (previousExpenses.get(expense.getId()).isEmpty())
+                previousExpenses.remove(expense.getId());
         }
     }
+
     /**
      * add an expense to the cache
+     * 
      * @param expense the expense to be added
      */
-    public void addPrevExp(Expense expense){
-        if(previousExpenses.get(expense.getId())==null){
-            previousExpenses.put(expense.getId(),new ArrayList<>());
+    public void addPrevExp(Expense expense) {
+        if (previousExpenses.get(expense.getId()) == null) {
+            previousExpenses.put(expense.getId(), new ArrayList<>());
             previousExpenses.get(expense.getId()).add(expense);
-        }
-        else previousExpenses.get(expense.getId()).add(expense);
+        } else
+            previousExpenses.get(expense.getId()).add(expense);
     }
+
     /**
      * Returning the previous version of the expense stored in the cache
+     * 
      * @param id the id of the expense
      * @return the previous version of the expense
      */
-    public Expense getPrevExp(Long id){
-        if(previousExpenses.get(id)==null) return null;
+    public Expense getPrevExp(Long id) {
+        if (previousExpenses.get(id) == null)
+            return null;
         return previousExpenses.get(id).getLast();
     }
 
     /**
      * Get the currency
+     * 
      * @return the currency
      */
     public String getCurrency() {
         return userConfig.getCurrencyConfig();
     }
+
     /**
      * Sets the popup for participant box explanation.
      */
-    public void setParticipantBoxPopup(){
+    public void setParticipantBoxPopup() {
         Label pop = new Label(" Pick the participant ");
-        pop.setStyle("-fx-background-color: white; -fx-border-color: black"); //lightPink
+        pop.setStyle("-fx-background-color: white; -fx-border-color: black"); // lightPink
         pop.setMinSize(50, 25);
         Popup popup = new Popup();
         popup.getContent().add(pop);
-        participantBox.setOnMouseEntered( mouseEvent -> {
+        participantBox.setOnMouseEntered(mouseEvent -> {
             popup.show(mainCtrl.getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY() + 5);
         });
-        participantBox.setOnMouseExited( mouseEvent -> {
+        participantBox.setOnMouseExited(mouseEvent -> {
             popup.hide();
         });
     }
@@ -852,7 +880,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     /**
      * Sets the instruction popups for shortcuts
      */
-    public void setInstructions(){
+    public void setInstructions() {
         mainCtrl.instructionsPopup(new Label(" press ESC to go to start screen "), this.home);
         mainCtrl.instructionsPopup(new Label(" press CTRL + S to go \n to the statistics page "), this.statistics);
         mainCtrl.instructionsPopup(new Label(" press CTRL + A to \n go to add expense "), this.addExpense);
@@ -860,5 +888,45 @@ public class OverviewCtrl implements Main.UpdatableUI {
         mainCtrl.instructionsPopup(new Label(" press CTRL + L to \n open language menu "), this.langButton);
     }
 
+    /**
+     * Sets the focus and hover over look for the elements on the scene.
+     */
+    public void buttonSetup() {
+        mainCtrl.buttonFocus(this.home);
+        mainCtrl.buttonFocus(this.settleDebts);
+        mainCtrl.buttonFocus(this.statistics);
+        mainCtrl.buttonFocus(this.sendInvites);
+        mainCtrl.buttonFocus(this.addExpense);
+        mainCtrl.buttonShadow(this.sendInvites);
+        mainCtrl.menuButtonFocus(this.langButton);
+        mainCtrl.menuButtonFocus(this.currencyButton);
+
+        this.participantImage.focusedProperty().addListener((obs, old, newV) -> {
+            if (newV) {
+                Color b = Color.rgb(0, 150, 230);
+                this.participantImage.setEffect(new DropShadow(10, b));
+            } else {
+                this.participantImage.setEffect(null);
+            }
+        });
+
+        this.participantBox.focusedProperty().addListener((obs, old, newV) -> {
+            if (newV) {
+                Color b = Color.rgb(0, 150, 230);
+                this.participantBox.setEffect(new DropShadow(10, b));
+            } else {
+                this.participantBox.setEffect(null);
+            }
+        });
+
+        this.currencyButton.setOnMouseEntered(mouseEvent -> {
+            this.currencyButton.setEffect(new InnerShadow());
+
+        });
+        this.currencyButton.setOnMouseExited(mouseEvent -> {
+            this.currencyButton.setEffect(null);
+        });
+
+    }
 
 }

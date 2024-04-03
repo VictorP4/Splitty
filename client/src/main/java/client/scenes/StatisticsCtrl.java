@@ -63,6 +63,7 @@ public class StatisticsCtrl implements Main.UpdatableUI {
         });
 
         setInstructions();
+        mainCtrl.buttonFocus(this.backButton);
     }
 
     /**
