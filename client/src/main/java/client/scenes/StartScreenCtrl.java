@@ -156,9 +156,8 @@ public class StartScreenCtrl implements Main.UpdatableUI {
             });
         });
 
-        setInstructions();
-
         buttonSetup();
+        setInstructions();
     }
 
     /**
@@ -383,43 +382,22 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         mainCtrl.instructionsPopup(new Label(" press CTRL + L to \n open language menu "), this.langButton);
     }
 
-
-    public void buttonEffects(Button button){
-        button.setOnMouseEntered(event -> button.setEffect(new InnerShadow()));
-        button.setOnMouseExited(event -> button.setEffect(null));
-        button.focusedProperty().addListener( (obs, old, newV) -> {
-            if(newV){
-                Color b = Color.rgb(80, 133, 230);
-                button.setEffect(new DropShadow(10, b));
-            }
-            //173, g: 216, b: 230
-            else {
-                button.setEffect(null);
-            }
-
-        });
-    }
-
-    public void langMenuSet(){
-        langButton.setOnMouseEntered(event -> langButton.setEffect(new InnerShadow()));
-        langButton.setOnMouseExited(event -> langButton.setEffect(null));
+    public void langMenuFocus(){
         langButton.focusedProperty().addListener( (obs, old, newV) -> {
             if(newV){
-                Color b = Color.rgb(80, 133, 230);
+                Color b = Color.rgb(0, 150, 230);
                 langButton.setEffect(new DropShadow(10, b));
             }
             else {
                 langButton.setEffect(null);
             }
-
         });
-
     }
 
     public void buttonSetup(){
-        buttonEffects(settingsPage);
-        buttonEffects(createButton);
-        buttonEffects(joinButton);
-        langMenuSet();
+        mainCtrl.buttonFocus(settingsPage);
+        mainCtrl.buttonFocus(createButton);
+        mainCtrl.buttonFocus(joinButton);
+        langMenuFocus();
     }
 }

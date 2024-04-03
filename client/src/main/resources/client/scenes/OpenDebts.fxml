@@ -12,21 +12,24 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="anchor" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OpenDebtsCtrl">
+<AnchorPane fx:id="anchor" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: efd6da; -fx-border-color: 000000; -fx-border-style: solid; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OpenDebtsCtrl">
    <children>
       <Text fx:id="openDebt" layoutX="58.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Open Debts">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Text>
-      <Button fx:id="back" layoutX="490.0" layoutY="35.0" mnemonicParsing="false" onAction="#back" text="Back" />
-      <ScrollPane layoutX="61.0" layoutY="78.0" prefHeight="288.0" prefWidth="501.0">
+      <Button fx:id="back" layoutX="490.0" layoutY="35.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Back" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+      <ScrollPane layoutX="61.0" layoutY="78.0" prefHeight="288.0" prefWidth="501.0" style="-fx-background-color: efd6da;">
          <content>
             <Accordion fx:id="debtsOverview" prefWidth="484.0">
               <panes>
                 <TitledPane animated="false" prefWidth="454.0">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="205.0" prefWidth="367.0">
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="205.0" prefWidth="367.0" style="-fx-background-color: efd6df; -fx-border-color: grey;">
                            <children>
                               <Text fx:id="transferTo" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bank information available, transfer the money to:" />
                               <Text fx:id="accHolder" layoutX="14.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Account Holder:" />
@@ -36,7 +39,10 @@
                               <Text layoutX="14.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BIC:" />
                               <Text layoutX="42.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bic1" />
                               <Text fx:id="odEmail" layoutX="14.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email Configured:" />
-                              <Button fx:id="reminderButton" layoutX="124.0" layoutY="91.0" mnemonicParsing="false" text="send reminder" />
+                              <Button fx:id="reminderButton" layoutX="124.0" layoutY="91.0" mnemonicParsing="false" style="-fx-background-color: #456a5c; -fx-border-color: black; -fx-border-radius: 4;" text="send reminder" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font></Button>
                            </children>
                         </AnchorPane>
                   </content>

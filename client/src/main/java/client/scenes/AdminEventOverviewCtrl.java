@@ -97,6 +97,7 @@ public class AdminEventOverviewCtrl implements Main.UpdatableUI {
 
         TableColumn<Event, String> titleColumn = new TableColumn<>(Main.getLocalizedString("title"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        //titleColumn.setStyle("-fx-border-color: #485a5c; -fx-background-color: ffeaed");
 
         TableColumn<Event, String> creationDateColumn = new TableColumn<>(Main.getLocalizedString("creationDate"));
         creationDateColumn.setCellValueFactory(new PropertyValueFactory<>("creationDate"));
@@ -107,6 +108,8 @@ public class AdminEventOverviewCtrl implements Main.UpdatableUI {
         TableColumn<Event, Button> deleteColumn = new TableColumn<>(Main.getLocalizedString("delete"));
         deleteColumn.setCellValueFactory(param -> {
             Button deleteButton = new Button(Main.getLocalizedString("delete"));
+            deleteButton.setStyle("-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-radius: 4; " +
+                    "-fx-border-style: solid; -fx-text-fill: white; -fx-font-style: bold");
             deleteButton.setOnAction(event -> {
                 Event selectedEvent = param.getValue();
                 var alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -126,6 +129,8 @@ public class AdminEventOverviewCtrl implements Main.UpdatableUI {
         TableColumn<Event, Button> backupColumn = new TableColumn<>(Main.getLocalizedString("backup"));
         backupColumn.setCellValueFactory(param ->{
             Button backupButton = new Button(Main.getLocalizedString("backup"));
+            backupButton.setStyle("-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-radius: 4; " +
+                    "-fx-border-style: solid; -fx-text-fill: white; -fx-font-style: bold");
             backupButton.setOnAction(event -> {
                 Event selectedEvent = param.getValue();
                 try{

@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="anchor" prefHeight="320.0" prefWidth="413.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddTagCtrl">
+<AnchorPane fx:id="anchor" prefHeight="320.0" prefWidth="413.0" style="-fx-background-color: EFD6DA; -fx-border-color: black; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddTagCtrl">
 
     <children>
         <Text fx:id="addEditText" layoutX="121.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Edit Tag">
@@ -22,31 +26,31 @@
                 <Font name="System Bold" size="18.0" />
             </font>
         </Text>
-        <TextField fx:id="nameTextField" layoutX="121.0" layoutY="63.0" prefHeight="26.0" prefWidth="219.0" />
-        <ColorPicker fx:id="colorPicker" layoutX="121.0" layoutY="120.0" />
-        <Button fx:id="abortButton" layoutX="51.0" layoutY="268.0" mnemonicParsing="false" onAction="#abort" text="Clear">
+        <TextField fx:id="nameTextField" layoutX="121.0" layoutY="63.0" prefHeight="26.0" prefWidth="219.0" style="-fx-border-color: 000000; -fx-border-style: solid; -fx-border-radius: 4;" />
+        <ColorPicker fx:id="colorPicker" layoutX="121.0" layoutY="120.0" style="-fx-border-color: 000000; -fx-border-style: solid; -fx-border-radius: 4; -fx-background-color: white;" />
+        <Button fx:id="abortButton" layoutX="51.0" layoutY="268.0" mnemonicParsing="false" onAction="#abort" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Clear" textFill="WHITE">
             <font>
-                <Font size="14.0" />
+                <Font name="System Bold" size="13.0" />
             </font>
         </Button>
-        <Button fx:id="addButton" layoutX="312.0" layoutY="268.0" mnemonicParsing="false" onAction="#add" text="Add">
+        <Button fx:id="addButton" layoutX="312.0" layoutY="268.0" mnemonicParsing="false" onAction="#add" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-radius: 4; -fx-border-style: solid;" text="Add" textFill="WHITE">
             <font>
-                <Font size="14.0" />
+                <Font name="System Bold" size="13.0" />
             </font>
         </Button>
-        <Button fx:id="editButton" layoutX="312.0" layoutY="268.0" mnemonicParsing="false" onAction="#edit" text="Edit">
+        <Button fx:id="editButton" layoutX="312.0" layoutY="268.0" mnemonicParsing="false" onAction="#edit" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-radius: 4; -fx-border-style: solid;" text="Edit" textFill="WHITE">
             <font>
-                <Font size="14.0" />
+                <Font name="System Bold" size="13.0" />
             </font>
         </Button>
-        <Button fx:id="removeButton" layoutX="231.0" layoutY="268.0" mnemonicParsing="false" onAction="#remove" text="Remove">
+        <Button fx:id="removeButton" layoutX="231.0" layoutY="268.0" mnemonicParsing="false" onAction="#remove" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-radius: 4; -fx-border-style: solid;" text="Remove" textFill="WHITE">
             <font>
-                <Font size="14.0" />
+                <Font name="System Bold" size="13.0" />
             </font>
         </Button>
-        <Button fx:id="backButton" layoutX="14.0" layoutY="25.0" mnemonicParsing="false" onAction="#back" text="Back">
+        <Button fx:id="backButton" layoutX="14.0" layoutY="25.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #485a5c; -fx-border-radius: 4; -fx-border-color: black;" text="Back" textFill="WHITE">
             <font>
-                <Font size="13.0" />
+                <Font name="System Bold" size="13.0" />
             </font>
         </Button>
         <HBox prefHeight="12.0" prefWidth="7.0" />

@@ -18,13 +18,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="534.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
+<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="534.0" style="-fx-background-color: efd6da; -fx-border-color: black; -fx-border-style: solid; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
     <children>
         <TextField fx:id="titleField" layoutX="88.0" layoutY="13.0" prefHeight="51.0" prefWidth="182.0">
             <font>
                 <Font name="System Bold" size="24.0" />
             </font></TextField>
-        <ImageView fitHeight="21.0" fitWidth="19.0" layoutX="187.0" layoutY="64.0" onMouseClicked="#addParticipant" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="21.0" fitWidth="19.0" layoutX="212.0" layoutY="64.0" onMouseClicked="#addParticipant" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@/client/misc/AddParticipant.png" />
             </image>
@@ -34,20 +34,26 @@
                 <Font name="System Bold" size="24.0" />
             </font>
         </Text>
-        <Button fx:id="addExpense" layoutX="258.0" layoutY="170.0" mnemonicParsing="false" onAction="#toAddExpense" prefHeight="27.0" prefWidth="89.0" text="Add Expense" />
-        <Text fx:id="participants" layoutX="88.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
+        <Button fx:id="addExpense" layoutX="258.0" layoutY="170.0" mnemonicParsing="false" onAction="#toAddExpense" prefHeight="27.0" prefWidth="90.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Add Expense" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+        <Text fx:id="participants" layoutX="80.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
             <font>
                 <Font name="System Bold" size="16.0" />
             </font>
         </Text>
-        <ChoiceBox fx:id="participantBox" layoutX="86.0" layoutY="171.0" onAction="#selected" prefHeight="26.0" prefWidth="167.0" />
-        <Button fx:id="settleDebts" layoutX="361.0" layoutY="402.0" mnemonicParsing="false" onAction="#settleDebts" text="Settle Debts" />
+        <ChoiceBox fx:id="participantBox" layoutX="86.0" layoutY="171.0" onAction="#selected" prefHeight="26.0" prefWidth="167.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 4;" />
+        <Button fx:id="settleDebts" layoutX="346.0" layoutY="401.0" mnemonicParsing="false" onAction="#settleDebts" style="-fx-background-color: #485A5C; -fx-border-color: black; -fx-border-radius: 4;" text="Settle Debts" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
         <Text fx:id="expense" layoutX="88.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense">
             <font>
                 <Font name="System Bold" size="16.0" />
             </font>
         </Text>
-        <MenuButton fx:id="langButton" layoutX="87.0" layoutY="402.0" mnemonicParsing="false" text="Language">
+        <MenuButton fx:id="langButton" layoutX="87.0" layoutY="402.0" mnemonicParsing="false" style="-fx-background-color: #485a5c; -fx-border-radius: 4; -fx-border-style: solid; -fx-border-color: 000000;" text="Language" textFill="WHITE">
             <graphic>
                 <ImageView fx:id="menuButtonView" fitHeight="12" fitWidth="16" preserveRatio="true" />
             </graphic>
@@ -76,10 +82,13 @@
                 <MenuItem mnemonicParsing="false" onAction="#addLang" text="Add Language">
                 </MenuItem>
             </items>
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
         </MenuButton>
-        <TabPane layoutX="87.0" layoutY="206.0" prefHeight="179.0" prefWidth="354.0" tabClosingPolicy="UNAVAILABLE">
+        <TabPane layoutX="87.0" layoutY="206.0" prefHeight="179.0" prefWidth="354.0" style="-fx-border-color: black; -fx-border-radius: 4;" tabClosingPolicy="UNAVAILABLE">
             <tabs>
-                <Tab fx:id="all" text="All" onSelectionChanged="#showAllExpenses">
+                <Tab fx:id="all" onSelectionChanged="#showAllExpenses" text="All">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -92,7 +101,7 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <ListView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                <ListView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" style="-fx-border-radius: 4;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                             </children>
                         </AnchorPane>
                     </content>
@@ -108,7 +117,7 @@
                 </Tab>
             </tabs>
         </TabPane>
-        <Button fx:id="home" layoutX="14.0" layoutY="21.0" mnemonicParsing="false" onAction="#backToStartScreen" text="">
+        <Button fx:id="home" layoutX="14.0" layoutY="21.0" mnemonicParsing="false" onAction="#backToStartScreen" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-style: solid; -fx-border-radius: 4;" text="" textFill="WHITE">
             <graphic>
                 <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -116,15 +125,38 @@
                     </image>
                 </ImageView>
             </graphic>
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
         </Button>
-        <Button fx:id="sendInvites" layoutX="218.0" layoutY="60.0" mnemonicParsing="false" onAction="#showInvites" text="Send Invites" />
-      <Button fx:id="statistics" layoutX="361.0" layoutY="171.0" mnemonicParsing="false" onAction="#showStatistics" prefHeight="26.0" prefWidth="80.0" text="Statistics" />
-      <MenuButton fx:id="currencyButton" layoutX="208.0" layoutY="402.0" mnemonicParsing="false" text="Currency">
+        <Button fx:id="sendInvites" layoutX="359.0" layoutY="56.0" mnemonicParsing="false" onAction="#showInvites" prefHeight="27.0" prefWidth="90.0" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-style: solid; -fx-border-radius: 4;" text="Send Invites" textFill="WHITE" />
+      <Button fx:id="statistics" layoutX="361.0" layoutY="171.0" mnemonicParsing="false" onAction="#showStatistics" prefHeight="26.0" prefWidth="80.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Statistics" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+      <MenuButton fx:id="currencyButton" layoutX="217.0" layoutY="403.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" text="Currency">
          <items>
             <MenuItem mnemonicParsing="false" onAction="#changeCurrencyEUR" text="EUR" />
             <MenuItem mnemonicParsing="false" onAction="#changeCurrencyUSD" text="USD" />
             <MenuItem mnemonicParsing="false" onAction="#changeCurrencyCHF" text="CHF" />
          </items>
+      </MenuButton>
+
+            <ScrollPane layoutX="77.0" layoutY="88.0" prefHeight="60.0" prefWidth="372.0" style="-fx-border-color: black; -fx-border-radius: 4;">
+         <content>
+              <FlowPane fx:id="participantsField" prefWidth="354.0" />
+         </content>
+      </ScrollPane>
+
+      <MenuButton fx:id="currencyButton" layoutX="215.0" layoutY="401.0" mnemonicParsing="false" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Currency" textFill="WHITE">
+         <items>
+            <MenuItem mnemonicParsing="false" onAction="#changeCurrencyEUR" text="EUR" />
+            <MenuItem mnemonicParsing="false" onAction="#changeCurrencyUSD" text="USD" />
+            <MenuItem mnemonicParsing="false" onAction="#changeCurrencyCHF" text="CHF" />
+         </items>
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
       </MenuButton>
       <Pane fx:id="block" opacity="0.37" prefHeight="446.0" prefWidth="534.0" style="-fx-background-color: black;" visible="false" />
       <Pane fx:id="options" layoutX="120.0" layoutY="250.0" opacity="0.72" prefHeight="116.0" prefWidth="285.0" style="-fx-background-color: white;" visible="false">
@@ -134,20 +166,6 @@
             <Button fx:id="delete" layoutX="220.0" layoutY="45.0" mnemonicParsing="false" onAction="#delete" text="Delete" />
          </children>
       </Pane>
-
-      <ScrollPane layoutX="88.0" layoutY="88.0" prefHeight="60.0" prefWidth="377.0">
-         <content>
-              <FlowPane fx:id="participantsField" prefWidth="354.0" />
-         </content>
-      </ScrollPane>
-
-      <MenuButton fx:id="currencyButton" layoutX="208.0" layoutY="402.0" mnemonicParsing="false" text="Currency">
-         <items>
-            <MenuItem mnemonicParsing="false" onAction="#changeCurrencyEUR" text="EUR" />
-            <MenuItem mnemonicParsing="false" onAction="#changeCurrencyUSD" text="USD" />
-            <MenuItem mnemonicParsing="false" onAction="#changeCurrencyCHF" text="CHF" />
-         </items>
-      </MenuButton>
 
       </children>
     <cursor>

@@ -25,6 +25,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.InnerShadow;
+import javafx.scene.paint.Color;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -323,8 +326,10 @@ public class MainCtrl {
         infoPop.getContent().add(info);
         button.setOnMouseEntered(mouseEvent -> {
             infoPop.show(getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY() + 5);
+            button.setEffect(new InnerShadow());
         });
         button.setOnMouseExited(mouseEvent -> {
+            button.setEffect(null);
             infoPop.hide();
         });
     }
@@ -342,10 +347,24 @@ public class MainCtrl {
         infoPop.getContent().add(info);
         button.setOnMouseEntered(mouseEvent -> {
             infoPop.show(getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY() + 5);
+            button.setEffect(new InnerShadow());
+
         });
         button.setOnMouseExited(mouseEvent -> {
+            button.setEffect(null);
             infoPop.hide();
         });
+    }
 
+    public void buttonFocus(Button button){
+        button.focusedProperty().addListener( (obs, old, newV) -> {
+            if(newV){
+                Color b = Color.rgb(0, 150, 230);
+                button.setEffect(new DropShadow(10, b));
+            }
+            else {
+                button.setEffect(null);
+            }
+        });
     }
 }
