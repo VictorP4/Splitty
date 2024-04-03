@@ -13,6 +13,8 @@ import javafx.application.Platform;
 import jakarta.ws.rs.core.Response;
 
 import commons.Tag;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -35,6 +37,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -194,6 +197,64 @@ public class OverviewCtrl implements Main.UpdatableUI {
         setParticipantsPopup();
         setParticipantBoxPopup();
         setInstructions();
+        displayExpenses();
+    }
+
+
+    private TableView<Expense> displayExpenses() {
+        expenseTable.getItems().clear();
+        expenseTable.getColumns().clear();
+
+        dateColumn = new TableColumn<>(Main.getLocalizedString("date"));
+        dateColumn.setCellValueFactory(e -> {
+            Date date = new Date(e.getValue().getDate().getTime());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d, yyyy");
+            return new SimpleStringProperty(dateFormat.format(date));
+        });
+
+        whoPaidColumn = new TableColumn<>(Main.getLocalizedString("whoPaid"));
+        whoPaidColumn.setCellValueFactory(e -> new SimpleObjectProperty<>(e.getValue().getPaidBy().getName()));
+
+        howMuchColumn = new TableColumn<>(Main.getLocalizedString("howMuch"));
+        howMuchColumn.setCellValueFactory(e -> new SimpleObjectProperty<>(Double.toString(e.getValue().getAmount())));
+
+        inclParticipantsColumn = new TableColumn<>(Main.getLocalizedString("involvedParticipants"));
+        inclParticipantsColumn.setCellValueFactory(e -> {
+            String participantString = "";
+            List<Participant> involvedParticipants = e.getValue().getInvolvedParticipants();
+            for (int i = 0; i < involvedParticipants.size(); i++) {
+                participantString += involvedParticipants.get(i).getName();
+                if (i < involvedParticipants.size()-1) {
+                    participantString += ", ";
+                }
+            }
+            return new SimpleObjectProperty<>(participantString);
+        });
+
+        tagsColumn = new TableColumn<>(Main.getLocalizedString("tag"));
+        tagsColumn.setCellValueFactory(e ->  new SimpleObjectProperty<>(e.getValue().getTag()));
+        tagsColumn.setCellFactory(column -> new TableCell<>() {
+            {
+                itemProperty().addListener((obs, oldTag, newTag) -> {
+                    if (newTag == null) {
+                        setText(null);
+                        setStyle(null);
+                    } else {
+                        setText(newTag.getName());
+
+                        String colorStyle = String.format("-fx-background-color: rgba(%d, %d, %d, 1);", newTag.getRed(), newTag.getGreen(), newTag.getBlue());
+                        setStyle(colorStyle);
+
+                        double brightness = (newTag.getRed() * 0.299 + newTag.getGreen() * 0.587 + newTag.getBlue() * 0.114) / 255;
+                        String textColor = brightness < 0.5 ? "white" : "black";
+                        setTextFill(Color.web(textColor));
+                    }
+                });
+            }
+        });
+
+        expenseTable.getColumns().addAll(dateColumn, whoPaidColumn, howMuchColumn, inclParticipantsColumn, tagsColumn);
+        return expenseTable;
     }
 
     private void setParticipantsPopup() {
@@ -301,25 +362,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
                         alert.setContentText("Are you sure you want to delete this participant?");
                         alert.showAndWait().ifPresent((response)->{
                             if(response == ButtonType.OK){
-                                event.removeParticipant(contact);
-                                serverUtils.updateEvent(event);
-                                List<Expense> toDelete = new ArrayList<>();
-                                for(Expense expense : event.getExpenses()){
-                                    if(expense.getPaidBy().equals(contact)) toDelete.add(expense);
-                                    else if(expense.getInvolvedParticipants().contains(contact)){
-                                        if(expense.getInvolvedParticipants().size()==1) toDelete.add(expense);
-                                        else{
-                                            expense.getInvolvedParticipants().remove(contact);
-                                            serverUtils.updateExpense(event.getId(), expense);
-                                        }
-                                    }
-                                }
-                                for(Expense expense1: toDelete){
-                                    serverUtils.deleteExpense(event.getId(), expense1);
-                                }
-                                serverUtils.deleteParticipant(contact);
-                                this.event = serverUtils.updateEvent(this.event);
-                                participantsDisplay();
+                                removeParticipantFromEvent(contact);
                             }
                         });
 
@@ -329,6 +372,35 @@ public class OverviewCtrl implements Main.UpdatableUI {
             });
             participantsField.getChildren().add(label);
         }
+    }
+
+    /**
+     * Removes a participant from the event. It also removed the participant from any related expenses or removed
+     * the expense all together if they are the only involved participant.
+     * Then it updates the participant display.
+     *
+     * @param contact the participant to be removed from the event and expenses
+     */
+    private void removeParticipantFromEvent(Participant contact) {
+        event.removeParticipant(contact);
+        serverUtils.updateEvent(event);
+        List<Expense> toDelete = new ArrayList<>();
+        for(Expense expense : event.getExpenses()){
+            if(expense.getPaidBy().equals(contact)) toDelete.add(expense);
+            else if(expense.getInvolvedParticipants().contains(contact)){
+                if(expense.getInvolvedParticipants().size()==1) toDelete.add(expense);
+                else{
+                    expense.getInvolvedParticipants().remove(contact);
+                    serverUtils.updateExpense(event.getId(), expense);
+                }
+            }
+        }
+        for(Expense expense1: toDelete){
+            serverUtils.deleteExpense(event.getId(), expense1);
+        }
+        serverUtils.deleteParticipant(contact);
+        this.event = serverUtils.updateEvent(this.event);
+        participantsDisplay();
     }
 
     /**
@@ -388,6 +460,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         switchLocale("messages", "en");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/en_flag.png")).toExternalForm());
         menuButtonView.setImage(image);
+        refresh(event);
     }
 
     /**
@@ -401,6 +474,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         switchLocale("messages", "nl");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/nl_flag.png")).toExternalForm());
         menuButtonView.setImage(image);
+        refresh(event);
     }
 
     /**
@@ -414,6 +488,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         switchLocale("messages","es");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
         menuButtonView.setImage(image);
+        refresh(event);
     }
 
     /**
@@ -482,36 +557,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
         mainCtrl.showContactDetails(new Participant(), event);
     }
 
-    /**
-     * Fills the expense list with the expenses of the event
-     * @return the list of expenses
-     */
-    public ListView<Expense> expenseFiller() {
-        expenseList.setCellFactory(listView -> new ListCell<Expense>() {
-            @Override
-            protected void updateItem(Expense expense, boolean empty) {
-                super.updateItem(expense, empty);
-                if (empty || expense == null) {
-                    setText(null);
-                    setStyle(null);
-                } else {
-                    setText(expense.toString());
-
-                    Tag tag = expense.getTag();
-                    if (tag != null) {
-                        String colorStyle = String.format("-fx-background-color: rgba(%d, %d, %d, 1);", tag.getRed(), tag.getGreen(), tag.getBlue());
-                        setStyle(colorStyle);
-
-                        double brightness = (tag.getRed() * 0.299 + tag.getGreen() * 0.587 + tag.getBlue() * 0.114) / 255;
-
-                        String textColor = brightness < 0.5 ? "white" : "black";
-                        setTextFill(Color.web(textColor));
-                    }
-                }
-            }
-        });
-        return expenseList;
-    }
     public List<Expense> convertCurrency(List<Expense> a){
         String c = userConfig.getCurrencyConfig();
         for(Expense b:a){
@@ -562,11 +607,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Shows all expenses of the event
      */
     public void showAllExpenses() {
-
-        expenseList = new ListView<>();
+        expenseTable = new TableView<>();
+        displayExpenses();
         original = FXCollections.observableArrayList();
-
-        expenseList = expenseFiller();
 
         for (Expense e : event.getExpenses()){
             if (e.getTitle().equalsIgnoreCase("debt repayment")){
@@ -575,8 +618,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
             original.add(e);
         }
         original = (ObservableList<Expense>) convertCurrency(original);
-        expenseList.setItems(original);
-        all.setContent(expenseList);
+        expenseTable.setItems(original);
+        all.setContent(expenseTable);
         selectExpense();
     }
 
@@ -585,10 +628,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * selected participant in the box
      */
     public void showFromSelected() {
-        expenseList =  new ListView<>();
+        expenseTable = new TableView<>();
+        displayExpenses();
         original = FXCollections.observableArrayList();
-
-        expenseList = expenseFiller();
 
         for (Expense e : event.getExpenses()) {
             if (e.getTitle().equalsIgnoreCase("debt repayment")) {
@@ -599,8 +641,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
             }
         }
         original = (ObservableList<Expense>) convertCurrency(original);
-        expenseList.setItems(original);
-        fromSelected.setContent(expenseList);
+        expenseTable.setItems(original);
+        fromSelected.setContent(expenseTable);
         selectExpense();
     }
 
@@ -609,10 +651,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * then selected participant in the box
      */
     public void showIncludingSelected() {
-        expenseList = new ListView<>();
+        expenseTable = new TableView<>();
+        displayExpenses();
         original = FXCollections.observableArrayList();
-
-        expenseList = expenseFiller();
 
         for (Expense e : event.getExpenses()) {
             if (e.getTitle().equalsIgnoreCase("debt repayment")) {
@@ -624,11 +665,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
             }
         }
         original = (ObservableList<Expense>) convertCurrency(original);
-        expenseList.setItems(original);
-
-        inclSelected.setContent(expenseList);
+        expenseTable.setItems(original);
+        inclSelected.setContent(expenseTable);
         selectExpense();
-
     }
 
     /**
@@ -637,7 +676,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * @param event which overview to load
      */
     public void refresh(Event event) {
-
         if(this.event==null||!this.event.getId().equals(event.getId())) previousExpenses = new HashMap<>();
 
         userConfig.reloadLanguageFile();
@@ -697,15 +735,12 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * When an expense is clicked on / selected an options pop-up pops-up
      */
     public void selectExpense(){
-
-        this.expenseList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        this.expenseList.setOnMouseClicked((MouseEvent event) -> {
-
+        this.expenseTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        this.expenseTable.setOnMouseClicked((MouseEvent event) -> {
             if(event.getClickCount() == 2){
                 options.setVisible(true);
                 block.setVisible(true);
             }
-
         });
     }
 
@@ -722,16 +757,14 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void delete(){
         try{
-            Response response = serverUtils.deleteExpense(this.event.getId(), expenseList.getSelectionModel().getSelectedItem());
+            Response response = serverUtils.deleteExpense(this.event.getId(), expenseTable.getSelectionModel().getSelectedItem());
             if(response.getStatus() == Response.Status.OK.getStatusCode()){
                 System.out.println("OK! good job " + response.getStatus() );
-                deletePrevExp(expenseList.getSelectionModel().getSelectedItem());
+                deletePrevExp(expenseTable.getSelectionModel().getSelectedItem());
             }
             else{
                 System.out.println("Status code: " + response.getStatus());
             }
-
-//            event.removeExpense(expenseList.getSelectionModel().getSelectedItem());
             this.event = serverUtils.getEvent(this.event.getId());
         }
         finally {
@@ -745,8 +778,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Shows add/edit expense overview with the selected expense so the user can edit it
      */
     public void edit(){
-        Expense toEdit = expenseList.getSelectionModel().getSelectedItem();
-
+        Expense toEdit = expenseTable.getSelectionModel().getSelectedItem();
         if(toEdit == null) {
             System.out.println("nothing selected");
         }
@@ -769,7 +801,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public void deletePrevExp(Expense expense){
         if(previousExpenses.get(expense.getId())!=null){
             previousExpenses.get(expense.getId()).removeLast();
-            if(previousExpenses.get(expense.getId()).size()==0) previousExpenses.remove(expense.getId());
+            if(previousExpenses.get(expense.getId()).isEmpty()) previousExpenses.remove(expense.getId());
         }
     }
     /**
@@ -790,7 +822,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public Expense getPrevExp(Long id){
         if(previousExpenses.get(id)==null) return null;
-        return previousExpenses.get(id).get(previousExpenses.get(id).size()-1);
+        return previousExpenses.get(id).getLast();
     }
 
     /**
