@@ -88,6 +88,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         });
 
         setInstructions();
+        mainCtrl.buttonFocus(this.back);
     }
     /**
      * updates the UI
@@ -197,6 +198,9 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         tempAP.setMinHeight(0.0);
         tempAP.setMinWidth(0.0);
         tempAP.setPrefSize(367,205);
+
+        tempAP.setStyle("-fx-background-color: efd6da; -fx-border-style: solid; -fx-border-radius: 4;-fx-border-color: black");
+
         Text text1 = null;
         if(debt.getPersonOwed().getIban()!=null&&debt.getPersonOwed().getBic()!=null&&!debt.getPersonOwed().getIban().isEmpty()) {
             text1 = new Text(Main.getLocalizedString("transferTo"));
@@ -230,6 +234,10 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
             text5.setStrokeWidth(0.0);
 
             Button emailB = new Button(Main.getLocalizedString("reminder"));
+            emailB.setStyle("-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-radius: 4; " +
+                    "-fx-border-style: solid; -fx-text-fill: white; -fx-font-style: Bold");
+            mainCtrl.buttonShadow(emailB);
+            mainCtrl.buttonFocus(emailB);
             emailB.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -302,6 +310,10 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         imgBank.setFitHeight(16);
         imgBank.setFitWidth(16);
         Button markReceived = new Button(Main.getLocalizedString("markReceived"));
+        markReceived.setStyle("-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-radius: 4; " +
+                "-fx-border-style: solid; -fx-text-fill: white; -fx-font-style: Bold");
+        mainCtrl.buttonShadow(markReceived);
+        mainCtrl.buttonFocus(markReceived);
         Event event1 = this.event;
         markReceived.setOnAction(new EventHandler<ActionEvent>() {
             @Override

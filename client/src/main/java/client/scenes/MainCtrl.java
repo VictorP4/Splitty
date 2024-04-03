@@ -356,6 +356,10 @@ public class MainCtrl {
         });
     }
 
+    /**
+     * Creates a listener to highlight the button when in focus
+     * @param button button to apply the listener to
+     */
     public void buttonFocus(Button button){
         button.focusedProperty().addListener( (obs, old, newV) -> {
             if(newV){
@@ -364,6 +368,36 @@ public class MainCtrl {
             }
             else {
                 button.setEffect(null);
+            }
+        });
+    }
+
+    /**
+     *  Adds a shadow to a button when the mouse hovers over it
+     * @param button to apply the shadow to
+     */
+    public void buttonShadow(Button button){
+        button.setOnMouseEntered(mouseEvent -> {
+            button.setEffect(new InnerShadow());
+
+        });
+        button.setOnMouseExited(mouseEvent -> {
+            button.setEffect(null);
+        });
+    }
+
+    /**
+     * Creates a listener to highlight the button when in focus
+     * @param m menu button to apply the listener to
+     */
+    public void menuButtonFocus(MenuButton m){
+        m.focusedProperty().addListener( (obs, old, newV) -> {
+            if(newV){
+                Color b = Color.rgb(0, 150, 230);
+                m.setEffect(new DropShadow(10, b));
+            }
+            else {
+                m.setEffect(null);
             }
         });
     }

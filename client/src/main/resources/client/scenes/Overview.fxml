@@ -24,7 +24,7 @@
             <font>
                 <Font name="System Bold" size="24.0" />
             </font></TextField>
-        <ImageView fitHeight="21.0" fitWidth="19.0" layoutX="212.0" layoutY="64.0" onMouseClicked="#addParticipant" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="participantImage" fitHeight="21.0" fitWidth="19.0" layoutX="212.0" layoutY="64.0" onMouseClicked="#addParticipant" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@/client/misc/AddParticipant.png" />
             </image>
@@ -134,15 +134,7 @@
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
-      <MenuButton fx:id="currencyButton" layoutX="217.0" layoutY="403.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" text="Currency">
-         <items>
-            <MenuItem mnemonicParsing="false" onAction="#changeCurrencyEUR" text="EUR" />
-            <MenuItem mnemonicParsing="false" onAction="#changeCurrencyUSD" text="USD" />
-            <MenuItem mnemonicParsing="false" onAction="#changeCurrencyCHF" text="CHF" />
-         </items>
-      </MenuButton>
-
-            <ScrollPane layoutX="77.0" layoutY="88.0" prefHeight="60.0" prefWidth="372.0" style="-fx-border-color: black; -fx-border-radius: 4;">
+        <ScrollPane layoutX="77.0" layoutY="88.0" prefHeight="60.0" prefWidth="372.0" style="-fx-border-color: black; -fx-border-radius: 4;">
          <content>
               <FlowPane fx:id="participantsField" prefWidth="354.0" />
          </content>

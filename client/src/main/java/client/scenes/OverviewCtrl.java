@@ -17,6 +17,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -63,6 +65,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public Button home;
     @FXML
     public ImageView menuButtonView;
+    @FXML
+    public ImageView participantImage;
     @FXML
     private Pane block;
     @FXML
@@ -171,6 +175,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         setParticipantsPopup();
         setParticipantBoxPopup();
         setInstructions();
+        buttonSetup();
     }
 
     private void setParticipantsPopup() {
@@ -802,6 +807,50 @@ public class OverviewCtrl implements Main.UpdatableUI {
         mainCtrl.instructionsPopup(new Label(" press CTRL + A to \n go to add expense "), this.addExpense);
         mainCtrl.instructionsPopup(new Label(" press CTRL + D to \n show open debts "), this.settleDebts);
         mainCtrl.instructionsPopup(new Label(" press CTRL + L to \n open language menu "), this.langButton);
+    }
+
+
+    /**
+     * Sets the focus and hover over look for the elements on the scene.
+     */
+    public void buttonSetup(){
+        mainCtrl.buttonFocus(this.home);
+        mainCtrl.buttonFocus(this.settleDebts);
+        mainCtrl.buttonFocus(this.statistics);
+        mainCtrl.buttonFocus(this.sendInvites);
+        mainCtrl.buttonFocus(this.addExpense);
+        mainCtrl.buttonShadow(this.sendInvites);
+        mainCtrl.menuButtonFocus(this.langButton);
+        mainCtrl.menuButtonFocus(this.currencyButton);
+
+        this.participantImage.focusedProperty().addListener( (obs, old, newV) -> {
+            if(newV){
+                Color b = Color.rgb(0, 150, 230);
+                this.participantImage.setEffect(new DropShadow(10, b));
+            }
+            else {
+                this.participantImage.setEffect(null);
+            }
+        });
+
+        this.participantBox.focusedProperty().addListener( (obs, old, newV) -> {
+            if(newV){
+                Color b = Color.rgb(0, 150, 230);
+                this.participantBox.setEffect(new DropShadow(10, b));
+            }
+            else {
+                this.participantBox.setEffect(null);
+            }
+        });
+
+        this.currencyButton.setOnMouseEntered(mouseEvent -> {
+            this.currencyButton.setEffect(new InnerShadow());
+
+        });
+        this.currencyButton.setOnMouseExited(mouseEvent -> {
+            this.currencyButton.setEffect(null);
+        });
+
     }
 
 

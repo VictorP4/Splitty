@@ -36,6 +36,7 @@ import java.util.Properties;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
+import static client.Main.main;
 import static client.Main.switchLocale;
 
 /**
@@ -382,22 +383,13 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         mainCtrl.instructionsPopup(new Label(" press CTRL + L to \n open language menu "), this.langButton);
     }
 
-    public void langMenuFocus(){
-        langButton.focusedProperty().addListener( (obs, old, newV) -> {
-            if(newV){
-                Color b = Color.rgb(0, 150, 230);
-                langButton.setEffect(new DropShadow(10, b));
-            }
-            else {
-                langButton.setEffect(null);
-            }
-        });
-    }
-
+    /**
+     * Sets the buttons focus look.
+     */
     public void buttonSetup(){
         mainCtrl.buttonFocus(settingsPage);
         mainCtrl.buttonFocus(createButton);
         mainCtrl.buttonFocus(joinButton);
-        langMenuFocus();
+        mainCtrl.menuButtonFocus(this.langButton);
     }
 }

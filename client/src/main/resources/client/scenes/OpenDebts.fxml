@@ -23,9 +23,9 @@
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
-      <ScrollPane layoutX="61.0" layoutY="78.0" prefHeight="288.0" prefWidth="501.0" style="-fx-background-color: efd6da;">
+      <ScrollPane layoutX="51.0" layoutY="78.0" prefHeight="288.0" prefWidth="501.0" style="-fx-background-color: efd6da;">
          <content>
-            <Accordion fx:id="debtsOverview" prefWidth="484.0">
+            <Accordion fx:id="debtsOverview" prefWidth="484.0" style="-fx-background-color: efd6da;">
               <panes>
                 <TitledPane animated="false" prefWidth="454.0">
                   <content>
