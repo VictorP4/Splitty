@@ -19,9 +19,7 @@ import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -31,7 +29,6 @@ import commons.Expense;
 import javafx.collections.ObservableList;
 import javafx.stage.Modality;
 import javafx.stage.Popup;
-
 
 import java.io.*;
 import java.nio.file.Files;
@@ -91,9 +88,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
     @FXML
     private ChoiceBox<Participant> participantBox;
     @FXML
-    private ListView<Expense> expenseList;
-    private ObservableList<Expense> original;
-    @FXML
     private FlowPane participantsField;
     @FXML
     private Button statistics;
@@ -101,17 +95,32 @@ public class OverviewCtrl implements Main.UpdatableUI {
     @FXML
     private Pane options;
     @FXML
-    public AnchorPane ap;
-    private boolean admin;
-    private Preferences prefs = Preferences.userNodeForPackage(OverviewCtrl.class);;
-    private final UserConfig userConfig = new UserConfig();
-    private Map<Long,List<Expense>> previousExpenses;
-    @FXML
     private Button cancel;
     @FXML
     private Button delete;
     @FXML
     private Button edit;
+    @FXML
+    public Text inviteCode;
+    private ObservableList<Expense> original;
+    @FXML
+    private TableView<Expense> expenseTable;
+    @FXML
+    private TableColumn<Expense, String> dateColumn;
+    @FXML
+    private TableColumn<Expense, String> whoPaidColumn;
+    @FXML
+    private TableColumn<Expense, String> howMuchColumn;
+    @FXML
+    private TableColumn<Expense, String> inclParticipantsColumn;
+    @FXML
+    private TableColumn<Expense, Tag> tagsColumn;
+    @FXML
+    public AnchorPane ap;
+    private boolean admin;
+    private Preferences prefs = Preferences.userNodeForPackage(OverviewCtrl.class);;
+    private final UserConfig userConfig = new UserConfig();
+    private Map<Long,List<Expense>> previousExpenses;
 
     /**
      * Constructs an OverviewCtrl object.
@@ -131,6 +140,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Initializes the controller.
      */
     public void initialize() {
+        expenseTable = new TableView<>();
+
         admin=false;
         userConfig.reloadLanguageFile();
         String lp = userConfig.getLanguageConfig();
@@ -139,6 +150,19 @@ public class OverviewCtrl implements Main.UpdatableUI {
             prefs.put(SELECTED_IMAGE_KEY, "/client/misc/"+lp+"_flag.png");
             menuButtonView.setImage(image);
         }
+
+        inviteCode.setOnMouseEntered(colorSwitch -> {
+            inviteCode.setStyle("-fx-text-fill: #de6161;");
+        });
+        inviteCode.setOnMouseExited(colorSwitch -> {
+            inviteCode.setStyle("-fx-text-fill: black;");
+        });
+        inviteCode.setOnMouseClicked(codeCopyEvent -> {
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            ClipboardContent content = new ClipboardContent();
+            content.putString(event.getInviteCode());
+            clipboard.setContent(content);
+        });
 
         ap.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
@@ -158,7 +182,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
                 mainCtrl.showOpenDebts(this.event);
             }
         });
-        expenseList = new ListView<>();
         webSocket.connect("ws://localhost:8080/websocket");
         webSocket.addEventListener((event)->{
             if(this.event==null||!this.event.getId().equals(event.getId())) return;
@@ -626,6 +649,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         }
 
         this.event = serverUtils.getEvent(event.getId());
+        inviteCode.setText(event.getInviteCode());
         options.setVisible(false);
         block.setVisible(false);
         titlePrepare();

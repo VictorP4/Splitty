@@ -1,24 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="534.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
+<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="534.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
     <children>
         <TextField fx:id="titleField" layoutX="88.0" layoutY="13.0" prefHeight="51.0" prefWidth="182.0">
             <font>
@@ -34,20 +22,20 @@
                 <Font name="System Bold" size="24.0" />
             </font>
         </Text>
-        <Button fx:id="addExpense" layoutX="258.0" layoutY="170.0" mnemonicParsing="false" onAction="#toAddExpense" prefHeight="27.0" prefWidth="89.0" text="Add Expense" />
+        <Button fx:id="addExpense" layoutX="258.0" layoutY="170.0" mnemonicParsing="false" onAction="#toAddExpense" prefHeight="27.0" prefWidth="89.0" text="Add Expense" textAlignment="CENTER" />
         <Text fx:id="participants" layoutX="88.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
             <font>
                 <Font name="System Bold" size="16.0" />
             </font>
         </Text>
         <ChoiceBox fx:id="participantBox" layoutX="86.0" layoutY="171.0" onAction="#selected" prefHeight="26.0" prefWidth="167.0" />
-        <Button fx:id="settleDebts" layoutX="361.0" layoutY="402.0" mnemonicParsing="false" onAction="#settleDebts" text="Settle Debts" />
+        <Button fx:id="settleDebts" layoutX="361.0" layoutY="402.0" mnemonicParsing="false" onAction="#settleDebts" text="Settle Debts" textAlignment="CENTER" />
         <Text fx:id="expense" layoutX="88.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense">
             <font>
                 <Font name="System Bold" size="16.0" />
             </font>
         </Text>
-        <MenuButton fx:id="langButton" layoutX="87.0" layoutY="402.0" mnemonicParsing="false" text="Language">
+        <MenuButton fx:id="langButton" layoutX="87.0" layoutY="402.0" mnemonicParsing="false" text="Language" textAlignment="CENTER">
             <graphic>
                 <ImageView fx:id="menuButtonView" fitHeight="12" fitWidth="16" preserveRatio="true" />
             </graphic>
@@ -79,11 +67,11 @@
         </MenuButton>
         <TabPane layoutX="87.0" layoutY="206.0" prefHeight="179.0" prefWidth="354.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
-                <Tab fx:id="all" text="All" onSelectionChanged="#showAllExpenses">
+                <Tab fx:id="all" onSelectionChanged="#showAllExpenses" text="All">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <ListView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                <TableView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                             </children>
                         </AnchorPane>
                     </content>
@@ -92,7 +80,7 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <ListView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                <TableView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                             </children>
                         </AnchorPane>
                     </content>
@@ -101,7 +89,7 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <ListView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                <TableView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                             </children>
                         </AnchorPane>
                     </content>
@@ -117,8 +105,8 @@
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="sendInvites" layoutX="218.0" layoutY="60.0" mnemonicParsing="false" onAction="#showInvites" text="Send Invites" />
-      <Button fx:id="statistics" layoutX="361.0" layoutY="171.0" mnemonicParsing="false" onAction="#showStatistics" prefHeight="26.0" prefWidth="80.0" text="Statistics" />
+        <Button fx:id="sendInvites" layoutX="218.0" layoutY="60.0" mnemonicParsing="false" onAction="#showInvites" text="Send Invites" textAlignment="CENTER" />
+      <Button fx:id="statistics" layoutX="361.0" layoutY="171.0" mnemonicParsing="false" onAction="#showStatistics" prefHeight="26.0" prefWidth="80.0" text="Statistics" textAlignment="CENTER" />
       <Pane fx:id="block" opacity="0.37" prefHeight="446.0" prefWidth="534.0" style="-fx-background-color: black;" visible="false" />
       <Pane fx:id="options" layoutX="120.0" layoutY="250.0" opacity="0.72" prefHeight="116.0" prefWidth="285.0" style="-fx-background-color: white;" visible="false">
          <children>
@@ -141,7 +129,13 @@
             <MenuItem mnemonicParsing="false" onAction="#changeCurrencyCHF" text="CHF" />
          </items>
       </MenuButton>
-
+      <Text fx:id="inviteCode" layoutX="367.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" underline="true" wrappingWidth="104.0">
+         <font>
+            <Font name="Segoe Print Bold" size="14.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor></Text>
       </children>
     <cursor>
         <Cursor fx:constant="DEFAULT" />
