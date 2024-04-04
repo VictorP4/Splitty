@@ -40,12 +40,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -203,38 +198,30 @@ public class OverviewCtrl implements Main.UpdatableUI {
         setParticipantBoxPopup();
         setInstructions();
         buttonSetup();
-        displayExpenses();
+        refreshExpenseTable();
     }
 
-    private TableView<Expense> displayExpenses() {
+    /**
+     * Refreshes the expenseTable to show the expenses.
+     */
+    private void refreshExpenseTable() {
         expenseTable.getItems().clear();
         expenseTable.getColumns().clear();
 
         dateColumn = new TableColumn<>(Main.getLocalizedString("date"));
-        dateColumn.setCellValueFactory(e -> {
-            Date date = new Date(e.getValue().getDate().getTime());
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d, yyyy");
-            return new SimpleStringProperty(dateFormat.format(date));
-        });
+        dateColumn.setCellValueFactory(e -> new SimpleStringProperty(formattedDate(e.getValue().getDate())));
 
         whoPaidColumn = new TableColumn<>(Main.getLocalizedString("whoPaid"));
-        whoPaidColumn.setCellValueFactory(e -> new SimpleObjectProperty<>(e.getValue().getPaidBy().getName()));
+        whoPaidColumn.setCellValueFactory(e -> new SimpleStringProperty(
+                 Currency.getInstance(userConfig.getCurrencyConfig()).getSymbol()
+                         + " " + Double.toString(e.getValue().getAmount())));
 
         howMuchColumn = new TableColumn<>(Main.getLocalizedString("howMuch"));
-        howMuchColumn.setCellValueFactory(e -> new SimpleObjectProperty<>(Double.toString(e.getValue().getAmount())));
+        howMuchColumn.setCellValueFactory(e -> new SimpleStringProperty(Double.toString(e.getValue().getAmount())));
 
         inclParticipantsColumn = new TableColumn<>(Main.getLocalizedString("involvedParticipants"));
-        inclParticipantsColumn.setCellValueFactory(e -> {
-            String participantString = "";
-            List<Participant> involvedParticipants = e.getValue().getInvolvedParticipants();
-            for (int i = 0; i < involvedParticipants.size(); i++) {
-                participantString += involvedParticipants.get(i).getName();
-                if (i < involvedParticipants.size() - 1) {
-                    participantString += ", ";
-                }
-            }
-            return new SimpleObjectProperty<>(participantString);
-        });
+        inclParticipantsColumn.setCellValueFactory(e ->  new SimpleStringProperty(
+                setParticipantsString(e.getValue().getInvolvedParticipants())));
 
         tagsColumn = new TableColumn<>(Main.getLocalizedString("tag"));
         tagsColumn.setCellValueFactory(e -> new SimpleObjectProperty<>(e.getValue().getTag()));
@@ -246,24 +233,63 @@ public class OverviewCtrl implements Main.UpdatableUI {
                         setStyle(null);
                     } else {
                         setText(newTag.getName());
-
-                        String colorStyle = String.format("-fx-background-color: rgba(%d, %d, %d, 1);", newTag.getRed(),
-                                newTag.getGreen(), newTag.getBlue());
-                        setStyle(colorStyle);
-
-                        double brightness = (newTag.getRed() * 0.299 + newTag.getGreen() * 0.587
-                                + newTag.getBlue() * 0.114) / 255;
-                        String textColor = brightness < 0.5 ? "white" : "black";
-                        setTextFill(Color.web(textColor));
+                        setCellColor(this, newTag);
                     }
                 });
             }
         });
 
-        expenseTable.getColumns().addAll(dateColumn, whoPaidColumn, howMuchColumn, inclParticipantsColumn, tagsColumn);
-        return expenseTable;
+        expenseTable.getColumns().addAll(tagsColumn, dateColumn, whoPaidColumn, howMuchColumn, inclParticipantsColumn);
     }
 
+    /**
+     * Formats the date and returns a string version of it.
+     *
+     * @param date The date to be formatted.
+     * @return the string of the formatted date.
+     */
+    private String formattedDate(java.util.Date date) {
+        Date sqldate = new Date(date.getTime());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d, yyyy");
+        return dateFormat.format(sqldate);
+    }
+
+    /**
+     * Creates and returns a string of the involvedParticipants list.
+     *
+     * @return a string of the involvedParticipants list.
+     */
+    private String setParticipantsString(List<Participant> involvedParticipants) {
+        StringBuilder participantString = new StringBuilder();
+        for (int i = 0; i < involvedParticipants.size(); i++) {
+            participantString.append(involvedParticipants.get(i).getName());
+            if (i < involvedParticipants.size() - 1) {
+                participantString.append(", ");
+            }
+        }
+        return participantString.toString();
+    }
+
+    /**
+     * Sets the color of a cell to the color of the tag added.
+     *
+     * @param cell The cell of which the color should be set.
+     * @param tag The tag of which we will set the cell color to.
+     */
+    private void setCellColor(TableCell<Expense, Tag> cell, Tag tag) {
+        String colorStyle = String.format("-fx-background-color: rgba(%d, %d, %d, 1);", tag.getRed(),
+                tag.getGreen(), tag.getBlue());
+        cell.setStyle(colorStyle);
+
+        double brightness = (tag.getRed() * 0.299 + tag.getGreen() * 0.587
+                + tag.getBlue() * 0.114) / 255;
+        String textColor = brightness < 0.5 ? "white" : "black";
+        cell.setTextFill(Color.web(textColor));
+    }
+
+    /**
+     * Creates the participant pop-up and sets the styling for it.
+     */
     private void setParticipantsPopup() {
         Label pop = new Label(" Double right click for delete, \n and double left click for edit ");
         pop.setStyle(" -fx-background-color: white; -fx-border-color: black;");
@@ -459,11 +485,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Switches the language of the app to english
-     *
-     * @param actionEvent picking english in language menu button
+     * Switches the language of the app to English
      */
-    public void switchToEnglish(ActionEvent actionEvent) throws BackingStoreException {
+    public void switchToEnglish() throws BackingStoreException {
         userConfig.setLanguageConfig("en");
         userConfig.reloadLanguageFile();
         switchLocale("messages", "en");
@@ -474,11 +498,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Switches the language of the app to dutch
-     *
-     * @param actionEvent picking dutch in language menu button
+     * Switches the language of the app to Dutch.
      */
-    public void switchToDutch(ActionEvent actionEvent) throws BackingStoreException {
+    public void switchToDutch() throws BackingStoreException {
         userConfig.setLanguageConfig("nl");
         userConfig.reloadLanguageFile();
         switchLocale("messages", "nl");
@@ -489,11 +511,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Switches the language of the app to spanish
-     *
-     * @param actionEvent picking spanish in language menu button
+     * Switches the language of the app to Spanish
      */
-    public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
+    public void switchToSpanish() throws BackingStoreException {
         userConfig.setLanguageConfig("es");
         userConfig.reloadLanguageFile();
         switchLocale("messages", "es");
@@ -504,10 +524,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
-     *
-     * @param actionEvent
+     * Creates a new messages.properties file and downloads it to a users Downloads directory.
      */
-    public void addLang(ActionEvent actionEvent) throws BackingStoreException {
+    public void addLang() throws BackingStoreException {
         Properties newLang = new Properties();
         try (BufferedReader reader = new BufferedReader(
                 new FileReader("src/main/resources/client/misc/langTemplate.txt"))) {
@@ -522,8 +541,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
                     "Send the final translation version to ooppteam58@gmail.com");
 
             newLangPath = "client/src/main/resources/client/misc/messages.properties";
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -540,7 +557,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
     /**
      * Directs user back to the startScreen. Here they can join other events if they
-     * want to
+     * want to.
      */
     public void backToStartScreen() {
         if (admin) {
@@ -551,7 +568,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
             userConfig.reloadLanguageFile();
             mainCtrl.showStartScreen();
         }
-
     }
 
     /**
@@ -570,6 +586,12 @@ public class OverviewCtrl implements Main.UpdatableUI {
         mainCtrl.showContactDetails(new Participant(), event);
     }
 
+    /**
+     * Converts the currency of all the expenses.
+     *
+     * @param a The list with expenses to be converted.
+     * @return a new list of expenses with the converted currencies.
+     */
     public List<Expense> convertCurrency(List<Expense> a) {
         String c = userConfig.getCurrencyConfig();
         for (Expense b : a) {
@@ -624,7 +646,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void showAllExpenses() {
         expenseTable = new TableView<>();
-        displayExpenses();
+        refreshExpenseTable();
         original = FXCollections.observableArrayList();
 
         for (Expense e : event.getExpenses()) {
@@ -645,7 +667,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void showFromSelected() {
         expenseTable = new TableView<>();
-        displayExpenses();
+        refreshExpenseTable();
         original = FXCollections.observableArrayList();
 
         for (Expense e : event.getExpenses()) {
@@ -668,7 +690,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void showIncludingSelected() {
         expenseTable = new TableView<>();
-        displayExpenses();
+        refreshExpenseTable();
         original = FXCollections.observableArrayList();
 
         for (Expense e : event.getExpenses()) {
@@ -805,9 +827,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * marks that an admin is accessing the event overview
+     * marks if an admin is accessing the event overview (true), or not (false)
      * 
-     * @param b
+     * @param b the boolean that describes whether the admin is accessing an event overview.
      */
     public void setAdmin(boolean b) {
         this.admin = b;
