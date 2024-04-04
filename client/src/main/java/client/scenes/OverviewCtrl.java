@@ -300,6 +300,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
                                     serverUtils.deleteExpense(event.getId(), expense1);
                                 }
                                 serverUtils.deleteParticipant(contact);
+                                this.event.setParticipants(serverUtils.getEvent(event.getId()).getParticipants());
                                 this.event = serverUtils.updateEvent(this.event);
                                 participantsDisplay();
                             }
