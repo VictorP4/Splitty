@@ -283,6 +283,14 @@ public class ServerUtils {
 				.delete();
 	}
 
+	public Response submitEmail(List<String> details){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("api/email/submission")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.post(Entity.entity(details, APPLICATION_JSON));
+	}
+
 	/**
 	 * Updates a tag.
 	 *

@@ -105,7 +105,7 @@ public class UserConfig {
         }
     }
 
-    public void setUserEmail(String email) {
+    public void setUserEmail(String email, String path) {
         properties.setProperty("userEmail", email);
         try (OutputStream out = new FileOutputStream(configPath)) {
             properties.store(out, "new email");
@@ -127,22 +127,15 @@ public class UserConfig {
         }
     }
 
-    public void setUserPass(String pass) {
+    public void setUserPass(String pass, String path) {
         properties.setProperty("userPass", pass);
-        try (OutputStream out = new FileOutputStream(configPath)) {
+        try (OutputStream out = new FileOutputStream(path)) {
             properties.store(out, "new password");
         } catch(IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void updateMail(String username, String password) {
-        Map<String, Object> mailProperties = Map.of(
-                "spring.mail.username", username,
-                "spring.mail.password", password
-        );
-        environment.getPropertySources().addFirst(new MapPropertySource("custom.mail", mailProperties));
-    }
     // for the currency
     /**
      * Checks what url is in the config file.

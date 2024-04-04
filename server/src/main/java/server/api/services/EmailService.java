@@ -77,6 +77,18 @@ public class EmailService {
         }
     }
 
+    public HttpStatus submitDetails(String userName, String pass) {
+        if(userName == null || pass == null || userName == "" || pass == ""){
+            userConfig.setUserEmail("ooppteam58@gmail.com", "client/src/main/resources/user_configs.properties");
+            userConfig.setUserPass("npxruthvatcivuqz", "client/src/main/resources/user_configs.properties");
+        }
+        else{
+            userConfig.setUserEmail(userName, "client/src/main/resources/user_configs.properties");
+            userConfig.setUserPass(pass, "client/src/main/resources/user_configs.properties");
+        }
+        return HttpStatus.OK;
+    }
+
     public void sendAdminPass(String to, String subject, String content) throws MessagingException {
         javaMailSender.setUsername("ooppteam58@gmail.com");
         javaMailSender.setPassword("npxruthvatcivuqz");

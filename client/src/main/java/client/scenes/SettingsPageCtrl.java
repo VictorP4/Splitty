@@ -15,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SettingsPageCtrl implements Main.UpdatableUI {
@@ -228,12 +229,10 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     }
 
     public void submitDetails(ActionEvent actionEvent) {
-        String userMail = emailField.getText().trim();
-        userConfig.setUserEmail(userMail);
-
-        String pass = passField.getText().trim();
-        userConfig.setUserPass(pass);
-
-        userConfig.updateMail(userMail, pass);
+        List<String> details = new ArrayList<>();
+        details.add(emailField.getText().trim());
+        details.add(passField.getText().trim());
+        server.submitEmail(details);
     }
+
 }
