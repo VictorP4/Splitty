@@ -70,7 +70,6 @@ public class InvitationCtrl implements Main.UpdatableUI {
                 sendInvites(); //enter by itself goes to new line in email box
             }
         });
-
         setInviteCode();
         setInstructions();
         buttonSetup();
@@ -143,6 +142,7 @@ public class InvitationCtrl implements Main.UpdatableUI {
      */
     public void refresh(Event event) {
         this.event=event;
+        title.setText(this.event.getTitle());
         setInviteCode();
     }
 
@@ -152,7 +152,6 @@ public class InvitationCtrl implements Main.UpdatableUI {
     @Override
     public void updateUI() {
         overviewButton.setText(Main.getLocalizedString("back"));
-        title.setText(Main.getLocalizedString("OverviewTitle"));
         sendInv.setText(Main.getLocalizedString("sendInv"));
         invEmail.setText(Main.getLocalizedString("invEmail"));
         invCode.setText(Main.getLocalizedString("invCode"));
