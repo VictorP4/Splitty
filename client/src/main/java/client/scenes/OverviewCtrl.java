@@ -393,6 +393,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
                         var alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.initModality(Modality.APPLICATION_MODAL);
                         alert.setContentText("Are you sure you want to delete this participant?");
+
                         alert.showAndWait().ifPresent((response) -> {
                             if (response == ButtonType.OK) {
                                 removeParticipantFromEvent(contact);
@@ -435,6 +436,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
             serverUtils.deleteExpense(event.getId(), expense1);
         }
         serverUtils.deleteParticipant(contact);
+        this.event.setParticipants(serverUtils.getEvent(event.getId()).getParticipants());
         this.event = serverUtils.updateEvent(this.event);
         participantsDisplay();
     }

@@ -218,9 +218,9 @@ public class MainCtrl {
      * @param event The event for which open debts are to be displayed.
      */
     public void showOpenDebts(Event event) {
-        openDebtsCtrl.refresh(event);
         primaryStage.setTitle("OpenDebts");
         primaryStage.setScene(openDebts);
+        openDebtsCtrl.refresh(event);
     }
 
     /**
