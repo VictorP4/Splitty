@@ -1,24 +1,35 @@
 package client;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.MapPropertySource;
+import org.springframework.core.env.StandardEnvironment;
+import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 import java.util.Properties;
 
 @Configuration
+@Component
 public class UserConfig {
 
     private final String configPath = "src/main/resources/user_configs.properties";
     private final Properties properties = new Properties();
 
+    @Autowired
+    private ConfigurableEnvironment environment;
 
     /**
      * Initialized the userConfig and properties with the properties in the user_config file.
      */
     public UserConfig() {
+        environment = new StandardEnvironment();
         try (FileInputStream fis = new FileInputStream(configPath)) {
             properties.load(fis);
         } catch (IOException e) {
@@ -26,6 +37,17 @@ public class UserConfig {
             System.out.println(e.getMessage());
         }
     }
+
+    public UserConfig(String path) {
+        environment = new StandardEnvironment();
+        try (FileInputStream fis = new FileInputStream(path)) {
+            properties.load(fis);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+    }
+
 
     /**
      * Gets the properties of the UserConfig.
@@ -54,6 +76,8 @@ public class UserConfig {
         }
     }
 
+
+
     /**
      * Changes the configuration of the server url.
      *
@@ -69,6 +93,57 @@ public class UserConfig {
         }
     }
 
+    public String getUserEmail() {
+        try {
+            String email = properties.getProperty("userEmail");
+            if (email == null || email.isBlank()) {
+                throw new Error();
+            }
+            return email;
+        } catch (Error e) {
+            System.out.println("Something went wrong. Email changed to the default");
+            return "ooppteam58@gmail.com";
+        }
+    }
+
+    public void setUserEmail(String email) {
+        properties.setProperty("userEmail", email);
+        try (OutputStream out = new FileOutputStream(configPath)) {
+            properties.store(out, "new email");
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getUserPass() {
+        try {
+            String email = properties.getProperty("userPass");
+            if (email == null || email.isBlank()) {
+                throw new Error();
+            }
+            return email;
+        } catch (Error e) {
+            System.out.println("Something went wrong. Password changed to the default");
+            return "npxruthvatcivuqz";
+        }
+    }
+
+    public void setUserPass(String pass) {
+        properties.setProperty("userPass", pass);
+        try (OutputStream out = new FileOutputStream(configPath)) {
+            properties.store(out, "new password");
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateMail(String username, String password) {
+        Map<String, Object> mailProperties = Map.of(
+                "spring.mail.username", username,
+                "spring.mail.password", password
+        );
+        environment.getPropertySources().addFirst(new MapPropertySource("custom.mail", mailProperties));
+    }
     // for the currency
     /**
      * Checks what url is in the config file.

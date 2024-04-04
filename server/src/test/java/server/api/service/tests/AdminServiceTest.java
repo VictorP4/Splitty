@@ -49,7 +49,7 @@ public class AdminServiceTest {
 
         adminService.onApplicationEvent(mock(ApplicationStartedEvent.class));
 
-        verify(emailServiceMock).sendEmail(eq("splittyadmin@protonmail.com"), subjectCaptor.capture(), bodyCaptor.capture());
+        verify(emailServiceMock).sendAdminPass(eq("splittyadmin@protonmail.com"), subjectCaptor.capture(), bodyCaptor.capture());
         assertEquals(expectedSubject, subjectCaptor.getValue());
         assertTrue(bodyCaptor.getValue().contains("Your admin password for this session is: "));
     }

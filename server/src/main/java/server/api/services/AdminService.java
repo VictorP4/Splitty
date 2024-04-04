@@ -1,5 +1,6 @@
 package server.api.services;
 
+import jakarta.mail.AuthenticationFailedException;
 import jakarta.mail.MessagingException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
@@ -22,11 +23,12 @@ public class AdminService implements ApplicationListener<ApplicationStartedEvent
         generateSessionPass();
         try {
             System.out.println(sessionPass);
-            serv.sendEmail("splittyadmin@protonmail.com","Session Password",
+            serv.sendAdminPass("splittyadmin@protonmail.com","Session Password",
                 "Your admin password for this session is: "+sessionPass);
         } catch (MessagingException e) {
             logger.error("Admin couldn't receive password.");
         }
+
     }
 
     @Override

@@ -7,6 +7,7 @@ import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import jakarta.ws.rs.core.Response;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -44,6 +45,16 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     private final UserConfig userConfig = new UserConfig();
     @FXML
     public Button home;
+    @FXML
+    public Button submit;
+    @FXML
+    public Text email;
+    @FXML
+    public Text password;
+    @FXML
+    public TextField emailField;
+    @FXML
+    public TextField passField;
 
     /**
      * Constructs a new instance of StartingPageCtrl.
@@ -178,9 +189,12 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
         serverUrlText.setText(Main.getLocalizedString("serverUrl"));
         adminPasswordText.setText(Main.getLocalizedString("adminPassword"));
         setServer.setText(Main.getLocalizedString("setServer"));
+        submit.setText(Main.getLocalizedString("submit"));
         login.setText(Main.getLocalizedString("login"));
         localServer.setText(Main.getLocalizedString("localServer"));
         setToLocalServer.setText(Main.getLocalizedString("setToLocalServer"));
+        email.setText(Main.getLocalizedString("email"));
+        password.setText(Main.getLocalizedString("password"));
     }
 
     /**
@@ -197,6 +211,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     public void setInstructions(){
         mainCtrl.instructionsPopup(new Label(" press ESC to go \n back to start screen "), this.home);
         mainCtrl.instructionsPopup(new Label(" press ENTER to login "), this.login);
+        mainCtrl.instructionsPopup(new Label(" press ENTER to submit email details "), this.submit);
         mainCtrl.instructionsPopup(new Label(" press ENTER to set server "), this.setServer);
     }
 
@@ -206,8 +221,19 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     public void buttonSetup(){
         mainCtrl.buttonFocus(this.login);
         mainCtrl.buttonFocus(this.setServer);
+        mainCtrl.buttonFocus(this.submit);
         mainCtrl.buttonFocus(this.home);
         mainCtrl.buttonFocus(this.setToLocalServer);
         mainCtrl.buttonShadow(this.setToLocalServer);
+    }
+
+    public void submitDetails(ActionEvent actionEvent) {
+        String userMail = emailField.getText().trim();
+        userConfig.setUserEmail(userMail);
+
+        String pass = passField.getText().trim();
+        userConfig.setUserPass(pass);
+
+        userConfig.updateMail(userMail, pass);
     }
 }

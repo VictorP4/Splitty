@@ -1,10 +1,12 @@
 package server.api.services;
 
+import client.UserConfig;
 import commons.EmailRequestBody;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -20,8 +22,8 @@ import java.util.List;
 public class EmailService {
 
     @Autowired
-    private JavaMailSender javaMailSender;
-
+    private JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+    private final UserConfig userConfig = new UserConfig("client/src/main/resources/user_configs.properties");
     private String serverURL = "http://localhost:8080/StartScreen/";
 
     private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
@@ -36,6 +38,8 @@ public class EmailService {
      */
     public HttpStatus sendInvites(List<String> recipients, String code) {
         try {
+            javaMailSender.setUsername(userConfig.getUserEmail());
+            javaMailSender.setPassword(userConfig.getUserPass());
             for (String recipient : recipients) {
                 sendEmail(recipient, "You have been invited to join a new Splitty event!",
                         "\nServer URL: "+ serverURL + "\nHere's the invite code: " + code);
@@ -62,6 +66,7 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
             helper.setTo(to);
+
             helper.setSubject(subject);
             helper.setText(content);
 
@@ -72,6 +77,12 @@ public class EmailService {
         }
     }
 
+    public void sendAdminPass(String to, String subject, String content) throws MessagingException {
+        javaMailSender.setUsername("ooppteam58@gmail.com");
+        javaMailSender.setPassword("npxruthvatcivuqz");
+        sendEmail(to,subject,content);
+    }
+
     /**
      * Send reminder to the respective person
      *
@@ -80,6 +91,8 @@ public class EmailService {
      */
     public HttpStatus sendReminder(EmailRequestBody emailRequest) {
         try{
+            javaMailSender.setUsername(userConfig.getUserEmail());
+            javaMailSender.setPassword(userConfig.getUserPass());
             sendEmail(emailRequest.getEmailAddresses().get(1),"Debt Reminder","Hello "+
                     emailRequest.getEmailAddresses().get(0)+"\n The debt you owe to "+
                     emailRequest.getEmailAddresses().get(2)+" is "+emailRequest.getCode()+" euros\nBank details:\n"+
