@@ -7,19 +7,25 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="ap" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="457.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminEventOverviewCtrl">
+<AnchorPane fx:id="ap" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="457.0" prefWidth="650.0" style="-fx-background-color: efd6da; -fx-border-color: black; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminEventOverviewCtrl">
    <children>
       <Text fx:id="eventOverview" layoutX="242.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Overview">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Text>
-      <Button fx:id="home" layoutX="568.0" layoutY="28.0" mnemonicParsing="false" onAction="#showStartScreen" text="Home" />
-      <VBox fx:id="container" layoutX="42.0" layoutY="78.0" prefHeight="346.0" prefWidth="575.0">
+      <Button fx:id="home" layoutX="568.0" layoutY="28.0" mnemonicParsing="false" onAction="#showStartScreen" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4; -fx-border-style: solid;" text="Home" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+      <VBox fx:id="container" layoutX="42.0" layoutY="78.0" prefHeight="346.0" prefWidth="575.0" style="-fx-background-color: #485a5c; -fx-border-radius: 4;">
          <children>
-            <TableView fx:id="eventsTable" maxWidth="1.7976931348623157E308" prefHeight="346.0" prefWidth="600.0" />
+            <TableView fx:id="eventsTable" maxWidth="1.7976931348623157E308" prefHeight="346.0" prefWidth="600.0" style="-fx-background-color: efd6da; -fx-border-radius: 4;" />
          </children>
       </VBox>
-      <Button fx:id="importJSON" layoutX="42.0" layoutY="28.0" mnemonicParsing="false" onAction="#importJSON" text="Import backup" />
+      <Button fx:id="importJSON" layoutX="42.0" layoutY="28.0" mnemonicParsing="false" onAction="#importJSON" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Import backup" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
    </children>
 </AnchorPane>

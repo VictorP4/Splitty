@@ -151,6 +151,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
             });
         });
 
+        buttonSetup();
         setInstructions();
     }
 
@@ -376,4 +377,13 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         mainCtrl.instructionsPopup(new Label(" press CTRL + L to \n open language menu "), this.langButton);
     }
 
+    /**
+     * Sets the buttons focus look.
+     */
+    public void buttonSetup(){
+        mainCtrl.buttonFocus(settingsPage);
+        mainCtrl.buttonFocus(createButton);
+        mainCtrl.buttonFocus(joinButton);
+        mainCtrl.menuButtonFocus(this.langButton);
+    }
 }
