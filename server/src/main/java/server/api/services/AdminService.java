@@ -1,6 +1,5 @@
 package server.api.services;
 
-import jakarta.mail.AuthenticationFailedException;
 import jakarta.mail.MessagingException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
