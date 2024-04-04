@@ -291,7 +291,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         tempBox.setSpacing(5);
         Text text = new Text();
         int amn =  (int)(serverUtils.convertCurrency(debt.getAmount(),"EUR",
-                mainCtrl.getCurrency(), LocalDate.now())*100);
+                mainCtrl.getCurrency(), LocalDate.now().minusDays(1))*100);
         double amount = mainCtrl.getCurrency().equals("EUR") ? debt.getAmount() : (double)amn/100;
         String currency;
         if(mainCtrl.getCurrency().equals("CHF")) currency = "swiss francs";
