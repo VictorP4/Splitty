@@ -9,49 +9,49 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: EFD6DA; -fx-border-color: black; -fx-border-style: solid; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SettingsPageCtrl">
+<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="255.0" prefWidth="497.0" style="-fx-background-color: EFD6DA; -fx-border-color: black; -fx-border-style: solid; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SettingsPageCtrl">
    <children>
-      <Text fx:id="settings" fontSmoothingType="LCD" layoutX="229.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings">
+      <Text fx:id="settings" fontSmoothingType="LCD" layoutX="202.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Text>
-      <Text fx:id="serverUrlText" layoutX="108.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server url:">
+      <Text fx:id="serverUrlText" layoutX="73.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server url:">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Text fx:id="adminPasswordText" layoutX="108.0" layoutY="194.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin password:">
+      <Text fx:id="adminPasswordText" layoutX="73.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin password:">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <TextField fx:id="serverUrl" layoutX="108.0" layoutY="136.0" prefHeight="25.0" prefWidth="263.0" />
-      <Button fx:id="setServer" layoutX="388.0" layoutY="136.0" mnemonicParsing="false" onAction="#setServer" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-radius: 4; -fx-border-style: solid;" text="Set server" textFill="WHITE">
+      <TextField fx:id="serverUrl" layoutX="73.0" layoutY="82.0" prefHeight="25.0" prefWidth="263.0" />
+      <Button fx:id="setServer" layoutX="349.0" layoutY="81.0" mnemonicParsing="false" onAction="#setServer" prefHeight="21.0" prefWidth="74.0" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-radius: 4; -fx-border-style: solid;" text="Set server" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
-      <Button fx:id="login" layoutX="388.0" layoutY="201.0" mnemonicParsing="false" onAction="#login" style="-fx-background-color: #485a5c; -fx-border-radius: 4; -fx-border-color: black;" text="Login" textFill="WHITE">
+      <Button fx:id="login" layoutX="349.0" layoutY="141.0" mnemonicParsing="false" onAction="#login" style="-fx-background-color: #485a5c; -fx-border-radius: 4; -fx-border-color: black;" text="Login" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
-      <PasswordField fx:id="adminPassword" layoutX="108.0" layoutY="201.0" onAction="#login" prefHeight="25.0" prefWidth="263.0" />
-      <Button fx:id="home" layoutX="40.0" layoutY="39.0" mnemonicParsing="false" onAction="#toStartScreen" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-radius: 4; -fx-border-style: solid;" textFill="WHITE">
+      <PasswordField fx:id="adminPassword" layoutX="73.0" layoutY="142.0" onAction="#login" prefHeight="25.0" prefWidth="263.0" />
+      <Button fx:id="home" layoutX="22.0" layoutY="22.0" mnemonicParsing="false" onAction="#toStartScreen" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-radius: 4; -fx-border-style: solid;" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
-               <Image url="@/client/misc/HomeActive.png" />
+               <Image url="@/client/misc/HomeLight.png" />
             </ImageView>
          </graphic>
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Text fx:id="localServer" layoutX="108.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Back to locally hosted server:">
+      <Text fx:id="localServer" layoutX="77.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Back to locally hosted server:">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Button fx:id="setToLocalServer" layoutX="388.0" layoutY="249.0" mnemonicParsing="false" onAction="#setToLocalServer" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Local Server" textFill="WHITE">
+      <Button fx:id="setToLocalServer" layoutX="349.0" layoutY="200.0" mnemonicParsing="false" onAction="#setToLocalServer" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Local Server" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
