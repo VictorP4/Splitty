@@ -20,6 +20,12 @@ public class ExpensesController {
     private final ExpensesService expService;
     private final SimpMessagingTemplate smt;
 
+    /**
+     * Initialized the expense controller.
+     *
+     * @param expService the expense service
+     * @param smt the simple messaging template
+     */
     public ExpensesController(ExpensesService expService, SimpMessagingTemplate smt) {
         this.expService = expService;
         this.smt = smt;
@@ -40,9 +46,9 @@ public class ExpensesController {
 
     /**
      * Create a new expense, apply it to the relevant event, add it to the database of expenses
-     * @param id
-     * @param expense
-     * @return
+     * @param id the id of the event
+     * @param expense the expense to be added
+     * @return the newly added expense
      */
     @PostMapping(path = {"/{id}/expenses"})
     public ResponseEntity<Expense> addNew(@PathVariable("id") long id, @RequestBody Expense expense){
@@ -55,10 +61,10 @@ public class ExpensesController {
 
     /**
      * Changes an expense's data
-     * @param id
-     * @param expId
-     * @param expense
-     * @return
+     * @param id the id of the event
+     * @param expId the id of the expense
+     * @param expense the expense to be updated
+     * @return the updated version of the event
      */
     @PutMapping(path = "/{id}/expenses/{expId}")
     public ResponseEntity<Expense> update(@PathVariable("id") long id, @PathVariable("expId") long expId,
@@ -86,8 +92,8 @@ public class ExpensesController {
 
     /**
      * Returns the total expenses for an event
-     * @param id
-     * @return
+     * @param id event id
+     * @return the found event
      */
     @GetMapping(path = "/{id}/expenses/total")
     public ResponseEntity<Double> total(@PathVariable("id") long id){
@@ -97,11 +103,11 @@ public class ExpensesController {
     }
 
     /**
-     * See how much you owe for the event, notably also can tell you you owe a debt to yourself,
+     * See how much you owe for the event, notably also can tell you owe a debt to yourself,
      * would need access to the user's profile to add a check which would exclude yourself from
      * what you owe, it's also why I can't currently make the thing to see how much you're owed.
-     * @param id
-     * @return
+     * @param id the id of the event
+     * @return A map with information about how much you owe for the event
      */
     @GetMapping(path = "/{id}/expenses/debts")
     public ResponseEntity<Map<String,List<Double>>> debt(@PathVariable("id") long id){
@@ -112,8 +118,8 @@ public class ExpensesController {
 
     /**
      * More or less the same thing as above, lists each person and their respective share.
-     * @param id
-     * @return
+     * @param id the id of the event
+     * @return A map with information about your share for the event
      */
     @GetMapping(path = "/{id}/expenses/shares")
     public ResponseEntity<Map<String,List<Double>>> share(@PathVariable("id") long id) {

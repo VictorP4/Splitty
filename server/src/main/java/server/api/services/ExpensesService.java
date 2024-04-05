@@ -19,6 +19,14 @@ public class ExpensesService {
     private final EventRepository eventRepo;
     private final ParticipantRepository participantRepo;
     private final CurrencyService currencyService;
+
+    /**
+     * Initialized the expense service
+     * @param expRepo the expense repository
+     * @param eventRepo the event repository
+     * @param participantRepo the participant repository
+     * @param currencyService the currency service
+     */
     public ExpensesService(ExpensesRepository expRepo, EventRepository eventRepo,
                            ParticipantRepository participantRepo, CurrencyService currencyService) {
         this.expRepo = expRepo;
@@ -41,9 +49,9 @@ public class ExpensesService {
 
     /**
      * Create a new expense, apply it to the relevant event, add it to the database of expenses
-     * @param id
-     * @param expense
-     * @return
+     * @param id the id of the event
+     * @param expense the expense itself
+     * @return The newly created expense
      */
     public Expense addNew(long id, Expense expense){
         Event event = eventRepo.getReferenceById((id));
@@ -91,10 +99,10 @@ public class ExpensesService {
 
     /**
      * Changes an expense's data
-     * @param id
-     * @param expId
-     * @param expense
-     * @return
+     * @param id the if of the event
+     * @param expId the id of the expense
+     * @param expense the expense itself
+     * @return an updates version of the expense.
      */
     public Expense update(long id,long expId, Expense expense){
         if (id < 0 || !eventRepo.existsById(id) || expId < 0 || !expRepo.existsById(expId)) {
@@ -205,10 +213,9 @@ public class ExpensesService {
      * See how much you owe for the event, notably also can tell you you owe a debt to yourself,
      * would need access to the user's profile to add a check which would exclude yourself from
      * what you owe, it's also why I can't currently make the thing to see how much you're owed.
-     * @param id
-     * @return
+     * @param id the id of the event
+     * @return A map with information about how much you owe for the event
      */
-
     public Map<String,List<Double>> debt(long id){
         if (id < 0 || !eventRepo.existsById(id)) {
             return null;
@@ -229,8 +236,8 @@ public class ExpensesService {
 
     /**
      * More or less the same thing as above, lists each person and their respective share.
-     * @param id
-     * @return
+     * @param id the id of the event
+     * @return A map with information about your share for the event
      */
     public Map<String,List<Double>> share(long id){
         if (id < 0 || !eventRepo.existsById(id)) {
@@ -253,8 +260,8 @@ public class ExpensesService {
 
     /**
      * Returns the total expenses for an event
-     * @param id
-     * @return
+     * @param id the id of the event
+     * @return the sum of the expenses in the event
      */
     public Double total(long id) {
         if (id < 0 || !eventRepo.existsById(id)) {
@@ -271,7 +278,6 @@ public class ExpensesService {
      * Used for the updates handling for the websockets
      * @param id event id
      * @return the found event
-     *
      */
     public Event getEvent(Long id){
         return eventRepo.findById(id).get();
