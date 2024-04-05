@@ -17,7 +17,6 @@ import server.api.services.EventService;
 import server.api.services.ExpensesService;
 import server.database.ParticipantRepository;
 import server.database.TagRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
