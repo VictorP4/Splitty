@@ -219,12 +219,13 @@ public class OverviewCtrl implements Main.UpdatableUI {
         dateColumn.setCellValueFactory(e -> new SimpleStringProperty(formattedDate(e.getValue().getDate())));
 
         whoPaidColumn = new TableColumn<>(Main.getLocalizedString("whoPaid"));
-        whoPaidColumn.setCellValueFactory(e -> new SimpleStringProperty(
-                 Currency.getInstance(userConfig.getCurrencyConfig()).getSymbol()
-                         + " " + Double.toString(e.getValue().getAmount())));
+        whoPaidColumn.setCellValueFactory(e -> new SimpleStringProperty(e.getValue().getPaidBy().getName()));
 
         howMuchColumn = new TableColumn<>(Main.getLocalizedString("howMuch"));
-        howMuchColumn.setCellValueFactory(e -> new SimpleStringProperty(Double.toString(e.getValue().getAmount())));
+        howMuchColumn.setCellValueFactory(e -> new SimpleStringProperty(
+                        Currency.getInstance(userConfig.getCurrencyConfig()).getSymbol()
+                                + " " + e.getValue().getAmount()
+        ));
 
         inclParticipantsColumn = new TableColumn<>(Main.getLocalizedString("involvedParticipants"));
         inclParticipantsColumn.setCellValueFactory(e ->  new SimpleStringProperty(
@@ -247,6 +248,15 @@ public class OverviewCtrl implements Main.UpdatableUI {
         });
 
         expenseTable.getColumns().addAll(tagsColumn, dateColumn, whoPaidColumn, howMuchColumn, inclParticipantsColumn);
+
+        expenseTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+        dateColumn.setPrefWidth(80);
+        inclParticipantsColumn.prefWidthProperty().bind(expenseTable.widthProperty()
+                .subtract(tagsColumn.widthProperty())
+                .subtract(whoPaidColumn.widthProperty())
+                .subtract(howMuchColumn.widthProperty())
+                .subtract(dateColumn.widthProperty())
+        );
     }
 
     /**
