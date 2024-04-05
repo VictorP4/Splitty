@@ -12,7 +12,7 @@
             <font>
                 <Font name="System Bold" size="24.0" />
             </font></TextField>
-        <ImageView fx:id="participantImage" fitHeight="21.0" fitWidth="19.0" layoutX="111.0" layoutY="63.0" onMouseClicked="#addParticipant" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="participantImage" fitHeight="21.0" fitWidth="19.0" layoutX="111.0" layoutY="66.0" onMouseClicked="#addParticipant" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@/client/misc/AddParticipant.png" />
             </image>
@@ -26,7 +26,7 @@
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
-        <Text fx:id="participants" layoutX="137.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
+        <Text fx:id="participants" layoutX="137.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
             <font>
                 <Font name="System Bold" size="16.0" />
             </font>
@@ -149,14 +149,14 @@
                 <Button fx:id="delete" layoutX="220.0" layoutY="45.0" mnemonicParsing="false" onAction="#delete" text="Delete" />
             </children>
         </Pane>
-      <Text fx:id="inviteCode" layoutX="382.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" underline="true" wrappingWidth="97.0">
+      <Text fx:id="inviteCode" layoutX="382.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" underline="true" wrappingWidth="97.0">
          <font>
             <Font name="Segoe Print Bold" size="14.0" />
          </font>
          <cursor>
             <Cursor fx:constant="CLOSED_HAND" />
          </cursor></Text>
-      <Button fx:id="statistics1" layoutX="386.0" layoutY="184.0" mnemonicParsing="false" onAction="#showStatistics" prefHeight="27.0" prefWidth="109.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Money Transfer" textFill="WHITE">
+      <Button fx:id="moneyTransfer" layoutX="386.0" layoutY="184.0" mnemonicParsing="false" onAction="#toMoneyTransfer" prefHeight="27.0" prefWidth="109.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Money Transfer" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>

@@ -82,3 +82,6 @@ futureDate = The date selected is in the future
 date=Date
 involvedParticipants=Involved particpants
 tag=Tag
+transfer=Transfer
+toWho= To whom?
+invalidTransfer=Can't transfer money to yourself.
