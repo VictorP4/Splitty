@@ -118,6 +118,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
     @FXML
     private TableColumn<Expense, Tag> tagsColumn;
     @FXML
+    public Button moneyTransfer;
+    @FXML
     public AnchorPane ap;
     private boolean admin;
     private Preferences prefs = Preferences.userNodeForPackage(OverviewCtrl.class);;
@@ -585,6 +587,13 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
+     * Directs user towards the money transfer scene
+     */
+    public void toMoneyTransfer() {
+        mainCtrl.showMoneyTransfer(event);
+    }
+
+    /**
      * Adds a new participant.
      * This method opens the contact details scene to add a new participant.
      */
@@ -915,6 +924,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         mainCtrl.instructionsPopup(new Label(" press CTRL + A to \n go to add expense "), this.addExpense);
         mainCtrl.instructionsPopup(new Label(" press CTRL + D to \n show open debts "), this.settleDebts);
         mainCtrl.instructionsPopup(new Label(" press CTRL + L to \n open language menu "), this.langButton);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + T to \n transfer money"), this.moneyTransfer);
     }
 
     /**

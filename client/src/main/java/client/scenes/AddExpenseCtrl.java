@@ -78,6 +78,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public AnchorPane ap;
     @FXML
     private Button undo;
+    @FXML
+    public VBox transferBox;
     private Expense expense;
     private WebSocketUtils webSocket;
     private final UserConfig userConfig = new UserConfig();
@@ -131,7 +133,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         });
 
         setInstructions();
-        buttonSetup();
+        hoverSetup();
     }
 
     /**
@@ -179,6 +181,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         paidBy.getItems().removeAll(paidBy.getItems());
         currency.getItems().removeAll(currency.getItems());
         box.getChildren().removeAll(box.getChildren());
+        transferBox.getChildren().removeAll(transferBox.getChildren());
         selectedTag = null;
     }
 
@@ -473,6 +476,35 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
+     * Refreshes the AddExpense page corresponding with the new event.
+     */
+    public void refresh(Event event) {
+        this.event = event;
+        addEditText.setText(Main.getLocalizedString("AddExpense"));
+        clearFields();
+        addToCurrency();
+        createParticipantBoxes();
+        setAddOrEditButton();
+        currency.setValue(userConfig.getCurrencyConfig());
+
+        populateTagMenu();
+    }
+
+    /**
+     * Adds all the participant to the expense page.
+     */
+    private void createParticipantBoxes() {
+        for (Participant p : this.event.getParticipants()) {
+            if (check(p)) {
+                CheckBox cb = new CheckBox(p.getName());
+                cb.setDisable(true);
+                box.getChildren().add(cb);
+                paidBy.getItems().add(p);
+            }
+        }
+    }
+
+    /**
      * Populates the add/edit expense scene with information about the (already
      * existing) selected expense.
      *
@@ -516,6 +548,78 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             this.tagMenu.setText(expense.getTag().getName());
             this.selectedTag=expense.getTag();
         }
+    }
+
+    /**
+     * Sets the participant boxes of an already existing expense when loading the edit expense page of an expense.
+     */
+    private void setParticipantBoxes() {
+        Set<Long> expenseParList = new HashSet<>(expense.getInvolvedParticipants().stream()
+                        .map(x->x.getId()).collect(Collectors.toList()));
+        Set<Long> eventParList = new HashSet<>(this.event.getParticipants().stream()
+                        .map(x->x.getId()).collect(Collectors.toList()));
+        if (expenseParList.equals(eventParList)) {
+            everybodyIn.setSelected(true);
+        } else {
+            someIn.setSelected(true);
+            deSelAll();
+            for (Node n : box.getChildren()) {
+                if (n instanceof CheckBox) {
+                    CheckBox c = (CheckBox) n;
+                    List<Long> participantIDs = new ArrayList<>();
+                    for (Participant p : expense.getInvolvedParticipants()) {
+                        participantIDs.add(p.getId());
+                    }
+                    if (participantIDs.contains(this.event.getParticipants().stream()
+                                    .filter(x->x.getName().equals(c.getText())).findFirst().get().getId())) {
+                        c.setSelected(true);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Refreshes the transfer scene to allow transfers between two participants.
+     *
+     * @param event The event for which the transfer takes place.
+     */
+    public void refreshTransfer(Event event) {
+        this.event = event;
+        clearFields();
+        addToCurrency();
+        add.setText(Main.getLocalizedString("transfer"));
+        tagMenu.setVisible(false);
+        addTag.setVisible(false);
+        expenseType.setVisible(false);
+        everybodyIn.setVisible(false);
+        someIn.setVisible(false);
+        howToSplit.setText(Main.getLocalizedString("toWho"));
+
+        // set hardcoded date & what for that the user cannot change
+        date.setDisable(true);
+        date.setValue(LocalDate.now().minusDays(1));
+        title.setText("Debt Repayment");
+        title.setDisable(true);
+
+        //set currency and add all the participants
+        currency.setValue(userConfig.getCurrencyConfig());
+        paidBy.getItems().addAll(event.getParticipants());
+
+        //create new choice box with all the participants
+        setTransferBox();
+    }
+
+    /**
+     * Creates and sets up the choice box for the money transfer.
+     */
+    private void setTransferBox() {
+        ChoiceBox<Participant> toWho = new ChoiceBox<>();
+        toWho.setStyle(paidBy.getStyle());
+        toWho.setPrefWidth(paidBy.getPrefWidth());
+        toWho.setPrefHeight(paidBy.getPrefHeight());
+        toWho.getItems().addAll(event.getParticipants());
+        transferBox.getChildren().add(toWho);
     }
 
     /**
@@ -573,9 +677,9 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Sets the hover over and focus 'look' of the buttons.
+     * Sets the hover over and focus 'look' of the elements.
      */
-    public void buttonSetup(){
+    public void hoverSetup(){
         mainCtrl.buttonShadow(this.addTag);
         mainCtrl.menuButtonFocus(this.tagMenu);
         mainCtrl.buttonFocus(this.add);
@@ -630,7 +734,5 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 this.currency.setEffect(null);
             }
         });
-
-
     }
 }
