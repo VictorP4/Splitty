@@ -154,12 +154,14 @@ public class OverviewCtrl implements Main.UpdatableUI {
         }
 
         inviteCode.setOnMouseEntered(colorSwitch -> {
-            inviteCode.setStyle("-fx-text-fill: #de6161;");
+            inviteCode.setFill(Color.rgb(32,178,170));
         });
         inviteCode.setOnMouseExited(colorSwitch -> {
-            inviteCode.setStyle("-fx-text-fill: black;");
+            inviteCode.setFill(Color.BLACK);
+            inviteCode.setEffect(null);
         });
         inviteCode.setOnMouseClicked(codeCopyEvent -> {
+            inviteCode.setEffect(new DropShadow(5.0, Color.rgb(32,178,170)));
             Clipboard clipboard = Clipboard.getSystemClipboard();
             ClipboardContent content = new ClipboardContent();
             content.putString(event.getInviteCode());
@@ -179,6 +181,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
             }
             if (event.isControlDown() && event.getCode() == KeyCode.A) {
                 toAddExpense();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.T) {
+                toMoneyTransfer();
             }
             if (event.isControlDown() && event.getCode() == KeyCode.D) {
                 mainCtrl.showOpenDebts(this.event);
