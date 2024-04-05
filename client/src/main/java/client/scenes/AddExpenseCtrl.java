@@ -200,7 +200,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         Tag tag = selectedTag;
         String selectedCurrency = currency.getValue();
 
-        return new Expense(title, amount, paidBy, partIn, date, selectedTag, selectedCurrency);
+        return new Expense(title, amount, paidBy, partIn, date, tag, selectedCurrency);
     }
 
     /**
@@ -208,12 +208,15 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * overview scene
      */
     public void ok() {
+        if (add.getText().equals(Main.getLocalizedString("transfer"))) {
+            transfer();
+            return;
+        }
         Expense addExp = null;
 
         // Checks if all mandatory boxes have been filled in
         try {
             addExp = getExpense();
-
         } catch (NumberFormatException e) {
             errorPopup(Main.getLocalizedString("invalidAmount"));
             return;
@@ -221,24 +224,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             errorPopup(Main.getLocalizedString("missingDateOrTitle"));
             return;
         }
-        if (addExp.getPaidBy() == null) {
-            errorPopup(Main.getLocalizedString("noPaidBy"));
-            return;
-        }
-        if (addExp.getAmount() < 0) {
-            errorPopup(Main.getLocalizedString("invalidAmount"));
-            return;
-        }
-        if (addExp.getInvolvedParticipants().equals(new ArrayList<>())) {
-            errorPopup(Main.getLocalizedString("noParticipants"));
-            return;
-        }
-        LocalDate currentDate = LocalDate.now();
-        LocalDate selectedDate = addExp.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        if (selectedDate.isAfter(currentDate)) {
-            errorPopup(Main.getLocalizedString("futureDate"));
-            return;
-        }
+        checkExpenseRequirements(addExp);
 
         // Checks for any other related errors
         try {
@@ -263,10 +249,117 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             errorPopup(e.getMessage());
             return;
         }
-        clearFields();
-        this.expense = null;
-        mainCtrl.showEventOverview(event);
 
+        this.expense = null;
+        backToOverview();
+    }
+
+    /**
+     * Checks if the user has filled in all needed fields for the expense.
+     *
+     * @param checkExp The expense that has to be
+     */
+    private void checkExpenseRequirements(Expense checkExp) {
+        if (checkExp.getPaidBy() == null) {
+            errorPopup(Main.getLocalizedString("noPaidBy"));
+            return;
+        }
+        if (checkExp.getAmount() < 0) {
+            errorPopup(Main.getLocalizedString("invalidAmount"));
+            return;
+        }
+        if (checkExp.getInvolvedParticipants().equals(new ArrayList<>())) {
+            errorPopup(Main.getLocalizedString("noParticipants"));
+            return;
+        }
+        LocalDate currentDate = LocalDate.now();
+        LocalDate selectedDate = checkExp.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        if (selectedDate.isAfter(currentDate)) {
+            errorPopup(Main.getLocalizedString("futureDate"));
+        }
+    }
+
+    /**
+     * Allows for money transfer between users.
+     */
+    private void transfer() {
+        Expense transfer = null;
+
+        try {
+            transfer = getTransfer();
+        } catch (NumberFormatException e) {
+            errorPopup(Main.getLocalizedString("invalidAmount"));
+            return;
+        } catch (Exception e) {
+            errorPopup(Main.getLocalizedString("missingDateOrTitle"));
+            return;
+        }
+        checkTransferRequirements(transfer);
+
+        // Checks for any other related errors
+        try {
+            userConfig.setCurrencyConfig(currency.getValue());
+            if (this.expense != null) {
+                transfer.setId(this.expense.getId());
+            }
+            server.addExpense(transfer, this.event.getId());
+        } catch (WebApplicationException e) {
+            errorPopup(e.getMessage());
+            return;
+        }
+
+        this.expense = null;
+        backToOverview();
+    }
+
+    /**
+     * Gets the transfer the user wants to make.
+     *
+     * @return the transfer the user wants to make
+     */
+    private Expense getTransfer() {
+        String title = this.title.getText();
+        double amount = Double.parseDouble(this.amount.getText());
+        Date date = java.sql.Date.valueOf(this.date.getValue());
+        Participant paidBy = this.paidBy.getSelectionModel().getSelectedItem();
+        String selectedCurrency = currency.getValue();
+        return new Expense(title, amount, paidBy, transferTo(), date, null, selectedCurrency);
+    }
+
+    /**
+     * Get the participant the user wants to transfer money to.
+     *
+     * @return the participant the user wants to tranfer money to.
+     */
+    private List<Participant> transferTo() {
+        List<Participant> transferTo = new ArrayList<>();
+        Node node = transferBox.getChildren().getFirst();
+        Participant toWho = null;
+
+        if (node instanceof ChoiceBox<?>) {
+            ChoiceBox<?> cb = (ChoiceBox<?>) node;
+            toWho = (Participant) cb.getSelectionModel().getSelectedItem();
+        }
+
+        transferTo.add(toWho);
+        return transferTo;
+    }
+
+    /**
+     * Checks if all the transfer requirements are filled in correctly.
+     *
+     * @param transfer the transfer that needs to be checked
+     */
+    private void checkTransferRequirements(Expense transfer){
+        if (transfer.getPaidBy() == null) {
+            errorPopup(Main.getLocalizedString("noPaidBy"));
+        }
+        if (transfer.getAmount() < 0) {
+            errorPopup(Main.getLocalizedString("invalidAmount"));
+        }
+        if (transfer.getInvolvedParticipants().getFirst().equals(transfer.getPaidBy())) {
+            errorPopup(Main.getLocalizedString("invalidTransfer"));
+        }
     }
 
     /**
@@ -280,28 +373,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    /**
-     * Refreshes the AddExpense page corresponding with the new event.
-     */
-    public void refresh(Event event) {
-        this.event = event;
-        addEditText.setText(Main.getLocalizedString("AddExpense"));
-        clearFields();
-        addToCurrency();
-        for (Participant p : this.event.getParticipants()) {
-            if (check(p)) {
-                CheckBox cb = new CheckBox(p.getName());
-                cb.setDisable(true);
-                box.getChildren().add(cb);
-                paidBy.getItems().add(p);
-            }
-        }
-        setAddOrEditButton();
-        currency.setValue(userConfig.getCurrencyConfig());
-
-        populateTagMenu();
     }
 
     /**
@@ -522,28 +593,10 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         this.amount.setText(Double.toString(expense.getAmount()));
         LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         this.date.setValue(localDate);
-        paidBy.getSelectionModel().select(event.getParticipants().stream().filter(x->x.getId().equals(expense.getPaidBy().getId())).findFirst().get());
+        paidBy.getSelectionModel().select(event.getParticipants().stream()
+                        .filter(x->x.getId().equals(expense.getPaidBy().getId())).findFirst().get());
         currency.setValue(this.expense.getCurrency());
-        Set<Long> expenseParList = new HashSet<>(expense.getInvolvedParticipants().stream().map(x->x.getId()).collect(Collectors.toList()));
-        Set<Long> eventParList = new HashSet<>(this.event.getParticipants().stream().map(x->x.getId()).collect(Collectors.toList()));
-        if (expenseParList.equals(eventParList)) {
-            everybodyIn.setSelected(true);
-        } else {
-            someIn.setSelected(true);
-            deSelAll();
-            for (Node n : box.getChildren()) {
-                if (n instanceof CheckBox) {
-                    CheckBox c = (CheckBox) n;
-                    List<Long> participantIDs = new ArrayList<>();
-                    for (Participant p : expense.getInvolvedParticipants()) {
-                        participantIDs.add(p.getId());
-                    }
-                    if (participantIDs.contains(this.event.getParticipants().stream().filter(x->x.getName().equals(c.getText())).findFirst().get().getId())) {
-                        c.setSelected(true);
-                    }
-                }
-            }
-        }
+        setParticipantBoxes();
         if (expense.getTag() != null) {
             this.tagMenu.setText(expense.getTag().getName());
             this.selectedTag=expense.getTag();
@@ -656,7 +709,9 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             final Boolean[] b = {true};
             List<Long> participantsIDs = this.event.getParticipants().stream().map(x->x.getId()).toList();
             expense1.getInvolvedParticipants().forEach((p)-> b[0] = b[0] &&participantsIDs.contains(p.getId()));
-            b[0] = b[0] && participantsIDs.contains(expense1.getPaidBy().getId()) && this.event.getTags().stream().map(x->x.getId()).toList().contains(expense1.getTag().getId());
+            b[0] = b[0] && participantsIDs.contains(expense1.getPaidBy().getId())
+                    && this.event.getTags().stream()
+                                    .map(x->x.getId()).toList().contains(expense1.getTag().getId());
             if(!b[0]){
                 undo();
                 return;

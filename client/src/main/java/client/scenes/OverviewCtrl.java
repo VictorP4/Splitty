@@ -676,7 +676,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         original = FXCollections.observableArrayList();
 
         for (Expense e : event.getExpenses()) {
-            if (e.getTitle().equalsIgnoreCase("debt repayment")) {
+            if (e.getTitle().equalsIgnoreCase("Debt Repayment")) {
                 continue;
             }
             original.add(e);
