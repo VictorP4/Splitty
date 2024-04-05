@@ -35,6 +35,10 @@ public class UserConfig {
         }
     }
 
+    /**
+     * Alternative constructor for a thing in the server folder
+     * @param path since it's relative to the path of the class you're calling it in
+     */
     public UserConfig(String path) {
         environment = new StandardEnvironment();
         try (FileInputStream fis = new FileInputStream(path)) {
@@ -90,6 +94,10 @@ public class UserConfig {
         }
     }
 
+    /**
+     * Gets the user's email
+     * @return the email of the user
+     */
     public String getUserEmail() {
         try {
             String email = properties.getProperty("userEmail");
@@ -103,15 +111,24 @@ public class UserConfig {
         }
     }
 
+    /**
+     * Changes the user's email
+     * @param email of the user
+     * @param path of the userconfig file
+     */
     public void setUserEmail(String email, String path) {
         properties.setProperty("userEmail", email);
-        try (OutputStream out = new FileOutputStream(configPath)) {
+        try (OutputStream out = new FileOutputStream(path)) {
             properties.store(out, "new email");
         } catch(IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Gets the user's password
+     * @return the user's password
+     */
     public String getUserPass() {
         try {
             String email = properties.getProperty("userPass");
@@ -125,6 +142,11 @@ public class UserConfig {
         }
     }
 
+    /**
+     * Changes the user's password
+     * @param pass of the user
+     * @param path of the config file
+     */
     public void setUserPass(String pass, String path) {
         properties.setProperty("userPass", pass);
         try (OutputStream out = new FileOutputStream(path)) {
@@ -189,6 +211,9 @@ public class UserConfig {
         }
     }
 
+    /**
+     * It's to fix a bug with the flags, the file needs to be reloaded when the language is changed
+     */
     public void reloadLanguageFile() {
         try {
             FileInputStream fileInputStream = new FileInputStream(configPath);

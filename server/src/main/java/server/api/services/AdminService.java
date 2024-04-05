@@ -16,6 +16,11 @@ public class AdminService implements ApplicationListener<ApplicationStartedEvent
     private static final Logger logger = LoggerFactory.getLogger(AdminService.class);
     @Autowired
     private EmailService serv;
+
+    /**
+     * Sends the password for this session tot he admin
+     * @param event when the program starts
+     */
     @Override
     public void onApplicationEvent(ApplicationStartedEvent event) {
 
@@ -30,11 +35,18 @@ public class AdminService implements ApplicationListener<ApplicationStartedEvent
 
     }
 
+    /**
+     *
+     * @return true or false, inherited from the interface
+     */
     @Override
     public boolean supportsAsyncExecution() {
         return ApplicationListener.super.supportsAsyncExecution();
     }
 
+    /**
+     * Creates a new random session password
+     */
     public void generateSessionPass() {
         String characters =
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!";
@@ -42,6 +54,11 @@ public class AdminService implements ApplicationListener<ApplicationStartedEvent
         sessionPass=generatedString;
     }
 
+    /**
+     * Checks if your password is correct
+     * @param password to be checked
+     * @return true or false
+     */
     public boolean adminLogin(String password){
         return sessionPass.equals(password);
     }

@@ -77,6 +77,12 @@ public class EmailService {
         }
     }
 
+    /**
+     *
+     * @param userName the email of the user
+     * @param pass their application password
+     * @return an ok in any case
+     */
     public HttpStatus submitDetails(String userName, String pass) {
         if(userName == null || pass == null || userName == "" || pass == ""){
             userConfig.setUserEmail("ooppteam58@gmail.com", "client/src/main/resources/user_configs.properties");

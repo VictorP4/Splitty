@@ -228,6 +228,10 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
         mainCtrl.buttonShadow(this.setToLocalServer);
     }
 
+    /**
+     * Change the user's details
+     * @param actionEvent on click
+     */
     public void submitDetails(ActionEvent actionEvent) {
         List<String> details = new ArrayList<>();
         details.add(emailField.getText().trim());

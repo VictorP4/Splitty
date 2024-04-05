@@ -30,6 +30,11 @@ public class EmailController {
                 emailRequest.getEmailAddresses(), emailRequest.getCode())).build();
     }
 
+    /**
+     * Changes the user's email details
+     * @param details of the user
+     * @return a response
+     */
     @PostMapping("/submission")
     public ResponseEntity<?> submit(@RequestBody List<String> details) {
         return ResponseEntity.status(emailService.submitDetails(details.get(0), details.get(1))).build();

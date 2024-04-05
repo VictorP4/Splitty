@@ -55,8 +55,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     @FXML
     public ImageView menuButtonView;
     @FXML
-    public Menu customLangs;
-    @FXML
     public AnchorPane anchor;
     @FXML
     private TextField eventTitle;
@@ -281,11 +279,11 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         menuButtonView.setImage(image);
     }
 
-    public EventHandler<ActionEvent> customSwitch(String bundlePath) throws BackingStoreException {
-        switchLocale(bundlePath, null);
-        return null;
-    }
-
+    /**
+     * Allows a user to download a language template
+     * @param actionEvent on click
+     * @throws BackingStoreException
+     */
     public void addLang(ActionEvent actionEvent) throws BackingStoreException {
         Properties newLang = new Properties();
         try (BufferedReader reader = new BufferedReader(

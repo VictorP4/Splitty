@@ -399,8 +399,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
-     *
-     * @param actionEvent
+     * Allows a user to download a template for a translation
+     * @param actionEvent on click
     */
     public void addLang(ActionEvent actionEvent) throws BackingStoreException {
         Properties newLang = new Properties();
