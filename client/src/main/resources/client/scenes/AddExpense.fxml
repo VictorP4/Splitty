@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane id="overviewButton" fx:id="anchor" prefHeight="421.0" prefWidth="484.0" style="-fx-background-color: EFD6DA; -fx-border-color: 000000; -fx-border-width: 7px; -fx-border-style: solid;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
+<AnchorPane id="overviewButton" fx:id="anchor" prefHeight="421.0" prefWidth="484.0" style="-fx-background-color: EFD6DA; -fx-border-color: 000000; -fx-border-width: 7px; -fx-border-style: solid;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
    <children>
       <Text fx:id="addEditText" layoutX="110.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Edit Expense">
          <font>
@@ -61,10 +52,14 @@
             <Font name="Arial Bold" size="12.0" />
          </font>
       </CheckBox>
-      <VBox fx:id="box" layoutX="87.0" layoutY="244.0" prefHeight="75.0" prefWidth="100.0">
-         <children>
-         </children>
-      </VBox>
+      <ScrollPane layoutX="80.0" layoutY="250.0" prefHeight="62.0" prefWidth="166.0" blendMode="DARKEN" hbarPolicy="NEVER" vbarPolicy="NEVER">
+         <content>
+            <VBox fx:id="box" layoutX="87.0" layoutY="244.0" prefHeight="75.0" prefWidth="100.0">
+               <children>
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
       <Text fx:id="expenseType" layoutX="53.0" layoutY="337.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense Type">
          <font>
             <Font name="System Bold" size="18.0" />
@@ -80,7 +75,6 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Button>
-      <HBox layoutX="-150.0" layoutY="-167.0" prefHeight="100.0" prefWidth="200.0" />
       <HBox layoutX="256.0" layoutY="316.0" prefHeight="27.0" prefWidth="183.0">
          <children>
             <MenuButton fx:id="tagMenu" layoutX="210.0" layoutY="317.0" prefHeight="34.0" prefWidth="145.0" style="-fx-background-color: #485a5c; -fx-background-radius: 4; -fx-border-radius: 4; -fx-border-style: solid; -fx-border-color: 000000;" text="Select Tag" textFill="WHITE">

@@ -101,17 +101,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * initializes the Add Expense Controller
      */
     public void initialize() {
-        anchor.setOnKeyPressed(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.ESCAPE) {
-                mainCtrl.showEventOverview(event);
-            }
-            if (keyEvent.getCode() == KeyCode.ENTER) {
-                ok();
-            }
-            if(keyEvent.isControlDown() && keyEvent.getCode() == KeyCode.U){
-                undo();
-            }
-        });
         webSocket.addExpenseListener((expense -> {
             if (this.expense == null || !Objects.equals(expense.getId(), this.expense.getId()))
                 return;
@@ -131,9 +120,26 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 });
             }
         });
-
+        initializeShortcuts();
         setInstructions();
         hoverSetup();
+    }
+
+    /**
+     * Initializes the keyboard shortcuts for the addExpense page.
+     */
+    private void initializeShortcuts() {
+        anchor.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ESCAPE) {
+                mainCtrl.showEventOverview(event);
+            }
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                ok();
+            }
+            if(keyEvent.isControlDown() && keyEvent.getCode() == KeyCode.U){
+                undo();
+            }
+        });
     }
 
     /**
@@ -228,7 +234,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
         // Checks for any other related errors
         try {
-            userConfig.setCurrencyConfig(currency.getValue());
             if (this.expense != null) {
                 addExp.setId(this.expense.getId());
             }
@@ -557,6 +562,9 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         createParticipantBoxes();
         setAddOrEditButton();
         currency.setValue(userConfig.getCurrencyConfig());
+        setElementVisibility(true);
+        date.setDisable(false);
+        title.setDisable(false);
 
         populateTagMenu();
     }
@@ -588,7 +596,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         addToCurrency();
         refresh(event);
         addEditText.setText(Main.getLocalizedString("EditExpense"));
-        setAddOrEditButton();
         this.title.setText(expense.getTitle());
         this.amount.setText(Double.toString(expense.getAmount()));
         LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -642,11 +649,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         clearFields();
         addToCurrency();
         add.setText(Main.getLocalizedString("transfer"));
-        tagMenu.setVisible(false);
-        addTag.setVisible(false);
-        expenseType.setVisible(false);
-        everybodyIn.setVisible(false);
-        someIn.setVisible(false);
+        setElementVisibility(false);
         howToSplit.setText(Main.getLocalizedString("toWho"));
 
         // set hardcoded date & what for that the user cannot change
@@ -661,6 +664,14 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
         //create new choice box with all the participants
         setTransferBox();
+    }
+
+    private void setElementVisibility(boolean visibility) {
+        tagMenu.setVisible(visibility);
+        addTag.setVisible(visibility);
+        expenseType.setVisible(visibility);
+        everybodyIn.setVisible(visibility);
+        someIn.setVisible(visibility);
     }
 
     /**
