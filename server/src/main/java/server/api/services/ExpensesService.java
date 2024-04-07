@@ -41,9 +41,9 @@ public class ExpensesService {
 
     /**
      * Create a new expense, apply it to the relevant event, add it to the database of expenses
-     * @param id
-     * @param expense
-     * @return
+     * @param id of the event
+     * @param expense to be applied
+     * @return the expense
      */
     public Expense addNew(long id, Expense expense){
         Event event = eventRepo.getReferenceById((id));
@@ -91,10 +91,10 @@ public class ExpensesService {
 
     /**
      * Changes an expense's data
-     * @param id
-     * @param expId
-     * @param expense
-     * @return
+     * @param id of the event
+     * @param expId of the expense
+     * @param expense the expense to be updated
+     * @return the new expense
      */
     public Expense update(long id,long expId, Expense expense){
         if (id < 0 || !eventRepo.existsById(id) || expId < 0 || !expRepo.existsById(expId)) {
@@ -205,8 +205,8 @@ public class ExpensesService {
      * See how much you owe for the event, notably also can tell you you owe a debt to yourself,
      * would need access to the user's profile to add a check which would exclude yourself from
      * what you owe, it's also why I can't currently make the thing to see how much you're owed.
-     * @param id
-     * @return
+     * @param id of the event
+     * @return the map of debts
      */
 
     public Map<String,List<Double>> debt(long id){
@@ -229,8 +229,8 @@ public class ExpensesService {
 
     /**
      * More or less the same thing as above, lists each person and their respective share.
-     * @param id
-     * @return
+     * @param id of the event
+     * @return the map of shares
      */
     public Map<String,List<Double>> share(long id){
         if (id < 0 || !eventRepo.existsById(id)) {
@@ -253,8 +253,8 @@ public class ExpensesService {
 
     /**
      * Returns the total expenses for an event
-     * @param id
-     * @return
+     * @param id of the event
+     * @return the total sum of expenses
      */
     public Double total(long id) {
         if (id < 0 || !eventRepo.existsById(id)) {

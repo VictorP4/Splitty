@@ -16,26 +16,26 @@
             <Font name="System Bold" size="24.0" />
          </font>
       </Text>
-      <Text fx:id="serverUrlText" layoutX="108.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server url:">
+      <Text fx:id="serverUrlText" layoutX="108.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server url:">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Text fx:id="adminPasswordText" layoutX="108.0" layoutY="194.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin password:">
+      <Text fx:id="adminPasswordText" layoutX="108.0" layoutY="283.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin password:">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <TextField fx:id="serverUrl" layoutX="108.0" layoutY="136.0" prefHeight="25.0" prefWidth="263.0" />
-      <Button fx:id="setServer" layoutX="388.0" layoutY="136.0" mnemonicParsing="false" onAction="#setServer" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-radius: 4; -fx-border-style: solid;" text="Set server" textFill="WHITE">
+      <TextField fx:id="serverUrl" layoutX="108.0" layoutY="141.0" prefHeight="25.0" prefWidth="263.0" />
+      <Button fx:id="setServer" layoutX="394.0" layoutY="140.0" mnemonicParsing="false" onAction="#setServer" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-radius: 4; -fx-border-style: solid;" text="Set server" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
-      <Button fx:id="login" layoutX="388.0" layoutY="201.0" mnemonicParsing="false" onAction="#login" style="-fx-background-color: #485a5c; -fx-border-radius: 4; -fx-border-color: black;" text="Login" textFill="WHITE">
+      <Button fx:id="login" layoutX="388.0" layoutY="296.0" mnemonicParsing="false" onAction="#login" style="-fx-background-color: #485a5c; -fx-border-radius: 4; -fx-border-color: black;" text="Login" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
-      <PasswordField fx:id="adminPassword" layoutX="108.0" layoutY="201.0" onAction="#login" prefHeight="25.0" prefWidth="263.0" />
+      <PasswordField fx:id="adminPassword" layoutX="108.0" layoutY="297.0" onAction="#login" prefHeight="25.0" prefWidth="263.0" />
       <Button fx:id="home" layoutX="40.0" layoutY="39.0" mnemonicParsing="false" onAction="#toStartScreen" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-radius: 4; -fx-border-style: solid;" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
@@ -46,14 +46,32 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Text fx:id="localServer" layoutX="108.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Back to locally hosted server:">
+      <Text fx:id="localServer" layoutX="108.0" layoutY="357.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Back to locally hosted server:">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Button fx:id="setToLocalServer" layoutX="388.0" layoutY="249.0" mnemonicParsing="false" onAction="#setToLocalServer" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Local Server" textFill="WHITE">
+      <Button fx:id="setToLocalServer" layoutX="388.0" layoutY="336.0" mnemonicParsing="false" onAction="#setToLocalServer" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Local Server" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
+      <TextField fx:id="passField" layoutX="281.0" layoutY="206.0" prefHeight="26.0" prefWidth="263.0" />
+      <TextField fx:id="emailField" layoutX="108.0" layoutY="207.0" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Text fx:id="email" layoutX="108.0" layoutY="193.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email:" wrappingWidth="91.875">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <Text fx:id="password" layoutX="278.0" layoutY="193.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <Button fx:id="submit" layoutX="485.0" layoutY="248.0" onAction="#submitDetails" mnemonicParsing="false" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-radius: 4; -fx-border-style: solid;" text="Submit" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
