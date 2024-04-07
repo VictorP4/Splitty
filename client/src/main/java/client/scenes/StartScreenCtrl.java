@@ -12,7 +12,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -54,8 +53,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     public MenuButton langButton;
     @FXML
     public ImageView menuButtonView;
-    @FXML
-    public Menu customLangs;
     @FXML
     public AnchorPane anchor;
     @FXML
@@ -281,11 +278,11 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         menuButtonView.setImage(image);
     }
 
-    public EventHandler<ActionEvent> customSwitch(String bundlePath) throws BackingStoreException {
-        switchLocale(bundlePath, null);
-        return null;
-    }
-
+    /**
+     * Allows a user to download a language template
+     * @param actionEvent on click
+     * @throws BackingStoreException
+     */
     public void addLang(ActionEvent actionEvent) throws BackingStoreException {
         Properties newLang = new Properties();
         try (BufferedReader reader = new BufferedReader(

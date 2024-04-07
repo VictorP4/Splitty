@@ -23,10 +23,22 @@ public class AdminController {
         this.adminService = adminService;
     }
 
+    /**
+     * A get to the page is always wrong, it should only take posts
+     * @return a bad request
+     */
     @GetMapping("/login")
     public ResponseEntity<String> badLoginResponse() {
         return new ResponseEntity<>("Incorrect password", HttpStatus.OK);
     }
+
+    /**
+     * MAkes a login request and redirects you appropriately
+     * @param password of the admin
+     * @param request a servlet request
+     * @param redirectAttributes redirect to the event page
+     * @return a response
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestParam String password, HttpServletRequest request,
                                    RedirectAttributes redirectAttributes){

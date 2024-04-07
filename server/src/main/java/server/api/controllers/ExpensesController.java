@@ -40,9 +40,9 @@ public class ExpensesController {
 
     /**
      * Create a new expense, apply it to the relevant event, add it to the database of expenses
-     * @param id
-     * @param expense
-     * @return
+     * @param id of the event
+     * @param expense the expense to be created
+     * @return ok response with the new expense
      */
     @PostMapping(path = {"/{id}/expenses"})
     public ResponseEntity<Expense> addNew(@PathVariable("id") long id, @RequestBody Expense expense){
@@ -55,10 +55,10 @@ public class ExpensesController {
 
     /**
      * Changes an expense's data
-     * @param id
-     * @param expId
-     * @param expense
-     * @return
+     * @param id of the event
+     * @param expId of the expense
+     * @param expense to be updated
+     * @return the updated expense
      */
     @PutMapping(path = "/{id}/expenses/{expId}")
     public ResponseEntity<Expense> update(@PathVariable("id") long id, @PathVariable("expId") long expId,
@@ -86,8 +86,8 @@ public class ExpensesController {
 
     /**
      * Returns the total expenses for an event
-     * @param id
-     * @return
+     * @param id of the event
+     * @return the total sum of the expenses
      */
     @GetMapping(path = "/{id}/expenses/total")
     public ResponseEntity<Double> total(@PathVariable("id") long id){
@@ -100,8 +100,8 @@ public class ExpensesController {
      * See how much you owe for the event, notably also can tell you you owe a debt to yourself,
      * would need access to the user's profile to add a check which would exclude yourself from
      * what you owe, it's also why I can't currently make the thing to see how much you're owed.
-     * @param id
-     * @return
+     * @param id of the event
+     * @return the debts of the participants
      */
     @GetMapping(path = "/{id}/expenses/debts")
     public ResponseEntity<Map<String,List<Double>>> debt(@PathVariable("id") long id){
@@ -112,8 +112,8 @@ public class ExpensesController {
 
     /**
      * More or less the same thing as above, lists each person and their respective share.
-     * @param id
-     * @return
+     * @param id of the event
+     * @return the shares of the participants
      */
     @GetMapping(path = "/{id}/expenses/shares")
     public ResponseEntity<Map<String,List<Double>>> share(@PathVariable("id") long id) {

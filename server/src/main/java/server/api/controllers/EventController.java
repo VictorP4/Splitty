@@ -117,8 +117,8 @@ public class EventController {
     /**
      * Updates an event
      * 
-     * @param id
-     * @param event
+     * @param id of the event
+     * @param event to be updated
      * @return the updated event
      */
     @PutMapping(path = { "/{id}" })
@@ -136,7 +136,7 @@ public class EventController {
     /**
      * Deletes a specified event
      * 
-     * @param id
+     * @param id of the event
      * @return the deleted event
      */
     @DeleteMapping(path = { "/{id}" })
