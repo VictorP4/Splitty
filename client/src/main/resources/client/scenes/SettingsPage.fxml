@@ -55,5 +55,39 @@
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
+      <TextField fx:id="emailField" layoutX="63.0" layoutY="111.0" prefHeight="25.0" prefWidth="193.0">
+         <font>
+            <Font size="11.0" />
+         </font></TextField>
+      <Text fx:id="email" layoutX="63.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email:" wrappingWidth="91.875">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Text>
+      <Text fx:id="password" layoutX="272.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Text>
+      <Button fx:id="submit" layoutX="422.0" layoutY="108.0" mnemonicParsing="false" onAction="#submitDetails" prefHeight="27.0" prefWidth="74.0" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-radius: 4; -fx-border-style: solid;" text="Submit" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <PasswordField fx:id="passField" layoutX="272.0" layoutY="109.0" onAction="#login" prefHeight="25.0" prefWidth="143.0">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </PasswordField>
+      <Text fx:id="customization" fontSmoothingType="LCD" layoutX="66.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customization" underline="true">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Text>
+      <Text fx:id="adminAccess" fontSmoothingType="LCD" layoutX="65.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin Access" underline="true" wrappingWidth="108.421875">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

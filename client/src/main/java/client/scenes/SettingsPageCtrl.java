@@ -9,11 +9,15 @@ import commons.Event;
 import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SettingsPageCtrl implements Main.UpdatableUI {
@@ -25,7 +29,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     @FXML
     public Text serverUrlText;
     @FXML
-    public Text adminPasswordText;
+    public Text adminPass;
     @FXML
     public TextField serverUrl;
     @FXML
@@ -37,13 +41,27 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     @FXML
     public AnchorPane ap;
     @FXML
-    public Button setToLocalServer;
+    public Button resetServer;
     @FXML
     public Text localServer;
     private final WebSocketUtils webSocket;
     private final UserConfig userConfig = new UserConfig();
     @FXML
     public Button home;
+    @FXML
+    public Button submit;
+    @FXML
+    public Text email;
+    @FXML
+    public Text password;
+    @FXML
+    public TextField emailField;
+    @FXML
+    public PasswordField passField;
+    @FXML
+    public Text customization;
+    @FXML
+    public Text adminAccess;
 
     /**
      * Constructs a new instance of StartingPageCtrl.
@@ -135,7 +153,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
      * Sets the server back to the server specified in the config file.
      * This is always "http://localhost:8080"
      */
-    public void setToLocalServer() {
+    public void resetServer() {
         try {
             Response response = server.checkServer(userConfig.getServerURLConfig());
             if (response.getStatus() == 200) {
@@ -178,6 +196,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
         serverUrlText.setText(Main.getLocalizedString("serverUrl"));
         adminPasswordText.setText(Main.getLocalizedString("adminPassword"));
         setServer.setText(Main.getLocalizedString("setServer"));
+        submit.setText(Main.getLocalizedString("submit"));
         login.setText(Main.getLocalizedString("login"));
         localServer.setText(Main.getLocalizedString("localServer"));
         setToLocalServer.setText(Main.getLocalizedString("setToLocalServer"));
@@ -197,6 +216,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     public void setInstructions(){
         mainCtrl.instructionsPopup(new Label(" press ESC to go \n back to start screen "), this.home);
         mainCtrl.instructionsPopup(new Label(" press ENTER to login "), this.login);
+        mainCtrl.instructionsPopup(new Label(" press ENTER to submit email details "), this.submit);
         mainCtrl.instructionsPopup(new Label(" press ENTER to set server "), this.setServer);
     }
 
@@ -206,8 +226,20 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     public void buttonSetup(){
         mainCtrl.buttonFocus(this.login);
         mainCtrl.buttonFocus(this.setServer);
+        mainCtrl.buttonFocus(this.submit);
         mainCtrl.buttonFocus(this.home);
         mainCtrl.buttonFocus(this.setToLocalServer);
         mainCtrl.buttonShadow(this.setToLocalServer);
     }
+
+    /**
+     * Change the user's details
+     */
+    public void submitDetails() {
+        List<String> details = new ArrayList<>();
+        details.add(emailField.getText().trim());
+        details.add(passField.getText().trim());
+        server.submitEmail(details);
+    }
+
 }
