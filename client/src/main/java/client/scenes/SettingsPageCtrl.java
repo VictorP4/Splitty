@@ -7,9 +7,11 @@ import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import jakarta.ws.rs.core.Response;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
@@ -27,7 +29,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     @FXML
     public Text serverUrlText;
     @FXML
-    public Text adminPasswordText;
+    public Text adminPass;
     @FXML
     public TextField serverUrl;
     @FXML
@@ -39,7 +41,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     @FXML
     public AnchorPane ap;
     @FXML
-    public Button setToLocalServer;
+    public Button resetServer;
     @FXML
     public Text localServer;
     private final WebSocketUtils webSocket;
@@ -55,7 +57,11 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     @FXML
     public TextField emailField;
     @FXML
-    public TextField passField;
+    public PasswordField passField;
+    @FXML
+    public Text customization;
+    @FXML
+    public Text adminAccess;
 
     /**
      * Constructs a new instance of StartingPageCtrl.
@@ -113,12 +119,12 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
             }
             else {
                 errorPopup("Server not found. Changing to default: localhost:8080");
-                server.setSERVER(userConfig.getServerURLConfig());
+                resetServer();
             }
         } catch (Exception e) {
             e.printStackTrace();
             errorPopup("Server not found. Changing to default: localhost:8080");
-            server.setSERVER(userConfig.getServerURLConfig());
+            resetServer();
         }
         refresh();
     }
@@ -147,7 +153,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
      * Sets the server back to the server specified in the config file.
      * This is always "http://localhost:8080"
      */
-    public void setToLocalServer() {
+    public void resetServer() {
         try {
             Response response = server.checkServer(userConfig.getServerURLConfig());
             if (response.getStatus() == 200) {
@@ -188,14 +194,16 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     public void updateUI() {
         settings.setText(Main.getLocalizedString("settings"));
         serverUrlText.setText(Main.getLocalizedString("serverUrl"));
-        adminPasswordText.setText(Main.getLocalizedString("adminPassword"));
+        adminPass.setText(Main.getLocalizedString("password"));
         setServer.setText(Main.getLocalizedString("setServer"));
         submit.setText(Main.getLocalizedString("submit"));
         login.setText(Main.getLocalizedString("login"));
         localServer.setText(Main.getLocalizedString("localServer"));
-        setToLocalServer.setText(Main.getLocalizedString("setToLocalServer"));
+        resetServer.setText(Main.getLocalizedString("setToLocalServer"));
         email.setText(Main.getLocalizedString("email"));
         password.setText(Main.getLocalizedString("password"));
+        customization.setText(Main.getLocalizedString("customization"));
+        adminAccess.setText(Main.getLocalizedString("adminAccess"));
     }
 
     /**
@@ -224,15 +232,14 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
         mainCtrl.buttonFocus(this.setServer);
         mainCtrl.buttonFocus(this.submit);
         mainCtrl.buttonFocus(this.home);
-        mainCtrl.buttonFocus(this.setToLocalServer);
-        mainCtrl.buttonShadow(this.setToLocalServer);
+        mainCtrl.buttonFocus(this.resetServer);
+        mainCtrl.buttonShadow(this.resetServer);
     }
 
     /**
      * Change the user's details
-     * @param actionEvent on click
      */
-    public void submitDetails(ActionEvent actionEvent) {
+    public void submitDetails() {
         List<String> details = new ArrayList<>();
         details.add(emailField.getText().trim());
         details.add(passField.getText().trim());
