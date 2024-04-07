@@ -44,8 +44,6 @@ import java.util.*;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-import static client.Main.switchLocale;
-
 /**
  * Controller class for the overview scene.
  */
@@ -144,32 +142,36 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Initializes the controller.
      */
     public void initialize() {
-        expenseTable = new TableView<>();
-
         admin = false;
-        userConfig.reloadLanguageFile();
-        String lp = userConfig.getLanguageConfig();
-        if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
-            Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
-            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/" + lp + "_flag.png");
-            menuButtonView.setImage(image);
-        }
+        expenseTable = new TableView<>();
+        refreshExpenseTable();
 
-        inviteCode.setOnMouseEntered(colorSwitch -> {
-            inviteCode.setFill(Color.rgb(32,178,170));
-        });
-        inviteCode.setOnMouseExited(colorSwitch -> {
-            inviteCode.setFill(Color.BLACK);
-            inviteCode.setEffect(null);
-        });
-        inviteCode.setOnMouseClicked(codeCopyEvent -> {
-            inviteCode.setEffect(new DropShadow(5.0, Color.rgb(32,178,170)));
-            Clipboard clipboard = Clipboard.getSystemClipboard();
-            ClipboardContent content = new ClipboardContent();
-            content.putString(event.getInviteCode());
-            clipboard.setContent(content);
+        webSocket.connect("ws://localhost:8080/websocket");
+        webSocket.addEventListener((event) -> {
+            if (this.event == null || !this.event.getId().equals(event.getId()))
+                return;
+            else {
+                Platform.runLater(() -> {
+                    refresh(event);
+                });
+            }
         });
 
+        loadLanguageConfig();
+        currencyButton.setText(userConfig.getCurrencyConfig());
+
+        setInviteCodeFunctionality();
+        initializeShortcuts();
+        setParticipantsPopup();
+        setParticipantBoxPopup();
+        setInstructions();
+        buttonSetup();
+    }
+
+    /**
+     * Initializes the keyboard shortcuts for the overview page.
+     */
+    private void initializeShortcuts() {
         ap.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 userConfig.reloadLanguageFile();
@@ -191,21 +193,26 @@ public class OverviewCtrl implements Main.UpdatableUI {
                 mainCtrl.showOpenDebts(this.event);
             }
         });
-        webSocket.connect("ws://localhost:8080/websocket");
-        webSocket.addEventListener((event) -> {
-            if (this.event == null || !this.event.getId().equals(event.getId()))
-                return;
-            else {
-                Platform.runLater(() -> {
-                    refresh(event);
-                });
-            }
+    }
+
+    /**
+     * Initializes the functionality of the invite code. This includes a copy on click and visible color changes.
+     */
+    private void setInviteCodeFunctionality() {
+        inviteCode.setOnMouseEntered(colorSwitch -> {
+            inviteCode.setFill(Color.rgb(32,178,170));
         });
-        setParticipantsPopup();
-        setParticipantBoxPopup();
-        setInstructions();
-        buttonSetup();
-        refreshExpenseTable();
+        inviteCode.setOnMouseExited(colorSwitch -> {
+            inviteCode.setFill(Color.BLACK);
+            inviteCode.setEffect(null);
+        });
+        inviteCode.setOnMouseClicked(codeCopyEvent -> {
+            inviteCode.setEffect(new DropShadow(5.0, Color.rgb(32,178,170)));
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            ClipboardContent content = new ClipboardContent();
+            content.putString(event.getInviteCode());
+            clipboard.setContent(content);
+        });
     }
 
     /**
@@ -335,7 +342,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
         inclSelected.setText(Main.getLocalizedString("ovInclSelected"));
         participants.setText(Main.getLocalizedString("ovParticipants"));
         statistics.setText(Main.getLocalizedString("ovStatistics"));
-        currencyButton.setText(Main.getLocalizedString("currency"));
         delete.setText(Main.getLocalizedString("delete"));
         edit.setText(Main.getLocalizedString("edit"));
         cancel.setText(Main.getLocalizedString("cancel"));
@@ -508,11 +514,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void switchToEnglish() throws BackingStoreException {
         userConfig.setLanguageConfig("en");
-        userConfig.reloadLanguageFile();
-        switchLocale("messages", "en");
-        Image image = new Image(
-                Objects.requireNonNull(getClass().getResource("/client/misc/en_flag.png")).toExternalForm());
-        menuButtonView.setImage(image);
+        loadLanguageConfig();
         refresh(event);
     }
 
@@ -521,11 +523,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void switchToDutch() throws BackingStoreException {
         userConfig.setLanguageConfig("nl");
-        userConfig.reloadLanguageFile();
-        switchLocale("messages", "nl");
-        Image image = new Image(
-                Objects.requireNonNull(getClass().getResource("/client/misc/nl_flag.png")).toExternalForm());
-        menuButtonView.setImage(image);
+        loadLanguageConfig();
         refresh(event);
     }
 
@@ -534,11 +532,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void switchToSpanish() throws BackingStoreException {
         userConfig.setLanguageConfig("es");
-        userConfig.reloadLanguageFile();
-        switchLocale("messages", "es");
-        Image image = new Image(
-                Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
-        menuButtonView.setImage(image);
+        loadLanguageConfig();
         refresh(event);
     }
 
@@ -746,14 +740,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         if (this.event == null || !this.event.getId().equals(event.getId()))
             previousExpenses = new HashMap<>();
 
-        userConfig.reloadLanguageFile();
-        String lp = userConfig.getLanguageConfig();
-        if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
-            Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
-            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/" + lp + "_flag.png");
-            menuButtonView.setImage(image);
-        }
-
+        loadLanguageConfig();
         this.event = serverUtils.getEvent(event.getId());
         inviteCode.setText(event.getInviteCode());
         options.setVisible(false);
@@ -762,6 +749,19 @@ public class OverviewCtrl implements Main.UpdatableUI {
         participantsDisplay();
         setUpParticipantBox();
         showAllExpenses();
+    }
+
+    /**
+     * Loads the language configuration of the user and displays a flag when necessary.
+     */
+    private void loadLanguageConfig() {
+        userConfig.reloadLanguageFile();
+        String lp = userConfig.getLanguageConfig();
+        if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
+            Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
+            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/" + lp + "_flag.png");
+            menuButtonView.setImage(image);
+        }
     }
 
     /**
