@@ -119,12 +119,12 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
             }
             else {
                 errorPopup("Server not found. Changing to default: localhost:8080");
-                server.setSERVER(userConfig.getServerURLConfig());
+                resetServer();
             }
         } catch (Exception e) {
             e.printStackTrace();
             errorPopup("Server not found. Changing to default: localhost:8080");
-            server.setSERVER(userConfig.getServerURLConfig());
+            resetServer();
         }
         refresh();
     }
@@ -194,12 +194,16 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     public void updateUI() {
         settings.setText(Main.getLocalizedString("settings"));
         serverUrlText.setText(Main.getLocalizedString("serverUrl"));
-        adminPasswordText.setText(Main.getLocalizedString("adminPassword"));
+        adminPass.setText(Main.getLocalizedString("password"));
         setServer.setText(Main.getLocalizedString("setServer"));
         submit.setText(Main.getLocalizedString("submit"));
         login.setText(Main.getLocalizedString("login"));
         localServer.setText(Main.getLocalizedString("localServer"));
-        setToLocalServer.setText(Main.getLocalizedString("setToLocalServer"));
+        resetServer.setText(Main.getLocalizedString("setToLocalServer"));
+        email.setText(Main.getLocalizedString("email"));
+        password.setText(Main.getLocalizedString("password"));
+        customization.setText(Main.getLocalizedString("customization"));
+        adminAccess.setText(Main.getLocalizedString("adminAccess"));
     }
 
     /**
@@ -228,8 +232,8 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
         mainCtrl.buttonFocus(this.setServer);
         mainCtrl.buttonFocus(this.submit);
         mainCtrl.buttonFocus(this.home);
-        mainCtrl.buttonFocus(this.setToLocalServer);
-        mainCtrl.buttonShadow(this.setToLocalServer);
+        mainCtrl.buttonFocus(this.resetServer);
+        mainCtrl.buttonShadow(this.resetServer);
     }
 
     /**
