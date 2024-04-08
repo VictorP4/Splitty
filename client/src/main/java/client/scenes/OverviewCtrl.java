@@ -256,6 +256,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
         expenseTable.getColumns().addAll(tagsColumn, dateColumn, whoPaidColumn, howMuchColumn, inclParticipantsColumn);
 
+        // sets the sizes of the columns
         expenseTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         dateColumn.setPrefWidth(80);
         inclParticipantsColumn.prefWidthProperty().bind(expenseTable.widthProperty()
