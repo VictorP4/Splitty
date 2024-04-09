@@ -18,49 +18,42 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="534.0" style="-fx-background-color: efd6da; -fx-border-color: black; -fx-border-style: solid; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
+<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="703.0" style="-fx-background-color: efd6da; -fx-border-color: black; -fx-border-style: solid; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
     <children>
-        <TextField fx:id="titleField" layoutX="88.0" layoutY="13.0" prefHeight="51.0" prefWidth="182.0">
+        <TextField fx:id="titleField" layoutX="5.0" layoutY="11.0" prefHeight="51.0" prefWidth="693.0">
             <font>
                 <Font name="System Bold" size="24.0" />
             </font></TextField>
-        <ImageView fx:id="participantImage" fitHeight="21.0" fitWidth="19.0" layoutX="212.0" layoutY="64.0" onMouseClicked="#addParticipant" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="participantImage" fitHeight="21.0" fitWidth="19.0" layoutX="111.0" layoutY="66.0" onMouseClicked="#addParticipant" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@/client/misc/AddParticipant.png" />
             </image>
         </ImageView>
-        <Text fx:id="title" layoutX="88.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
+        <Text fx:id="title" layoutX="5.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title" textAlignment="CENTER" wrappingWidth="693.0">
             <font>
                 <Font name="System Bold" size="24.0" />
             </font>
         </Text>
-        <Button fx:id="addExpense" layoutX="254.0" layoutY="170.0" mnemonicParsing="false" onAction="#toAddExpense" prefHeight="27.0" prefWidth="109.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Add Expense" textFill="WHITE">
-            <graphic>
-                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@/client/misc/plus.png" />
-                    </image>
-                </ImageView>
-            </graphic>
+        <Button fx:id="addExpense" layoutX="285.0" layoutY="184.0" mnemonicParsing="false" onAction="#toAddExpense" prefHeight="27.0" prefWidth="90.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Add Expense" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
-        <Text fx:id="participants" layoutX="80.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
+        <Text fx:id="participants" layoutX="137.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
             <font>
                 <Font name="System Bold" size="16.0" />
             </font>
         </Text>
-        <ChoiceBox fx:id="participantBox" layoutX="76.0" layoutY="171.0" onAction="#selected" prefHeight="26.0" prefWidth="167.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 4;" />
-        <Button fx:id="settleDebts" layoutX="433.0" layoutY="401.0" mnemonicParsing="false" onAction="#settleDebts" style="-fx-background-color: #485A5C; -fx-border-color: black; -fx-border-radius: 4;" text="Settle Debts" textFill="WHITE">
+        <ChoiceBox fx:id="participantBox" layoutX="106.0" layoutY="184.0" onAction="#selected" prefHeight="26.0" prefWidth="167.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 4;" />
+        <Button fx:id="settleDebts" layoutX="544.0" layoutY="118.0" mnemonicParsing="false" onAction="#settleDebts" prefHeight="27.0" prefWidth="90.0" style="-fx-background-color: #485A5C; -fx-border-color: black; -fx-border-radius: 4;" text="Settle Debts" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
-        <Text fx:id="expense" layoutX="88.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense">
+        <Text fx:id="expense" layoutX="106.0" layoutY="177.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expense">
             <font>
                 <Font name="System Bold" size="16.0" />
             </font>
         </Text>
-        <MenuButton fx:id="langButton" layoutX="14.0" layoutY="401.0" mnemonicParsing="false" style="-fx-background-color: #485a5c; -fx-border-radius: 4; -fx-border-style: solid; -fx-border-color: 000000;" text="Language" textFill="WHITE">
+        <MenuButton fx:id="langButton" layoutX="28.0" layoutY="432.0" mnemonicParsing="false" style="-fx-background-color: #485a5c; -fx-border-radius: 4; -fx-border-style: solid; -fx-border-color: 000000;" text="Language" textFill="WHITE">
             <graphic>
                 <ImageView fx:id="menuButtonView" fitHeight="12" fitWidth="16" preserveRatio="true" />
             </graphic>
@@ -93,38 +86,36 @@
             <Font name="System Bold" size="12.0" />
          </font>
         </MenuButton>
-        <TabPane layoutX="87.0" layoutY="206.0" prefHeight="179.0" prefWidth="354.0" style="-fx-border-color: black; -fx-border-radius: 4;" tabClosingPolicy="UNAVAILABLE">
-            <tabs>
-                <Tab fx:id="all" onSelectionChanged="#showAllExpenses" text="All">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                            <children>
-                                <TableView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                            </children>
-                        </AnchorPane>
-                    </content>
-                </Tab>
-                <Tab fx:id="fromSelected" onSelectionChanged="#showFromSelected" text="From Selected">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                            <children>
-                                <TableView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" style="-fx-border-radius: 4;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                            </children>
-                        </AnchorPane>
-                    </content>
-                </Tab>
-                <Tab fx:id="inclSelected" onSelectionChanged="#showIncludingSelected" text="Including Selected">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                            <children>
-                                <TableView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                            </children>
-                        </AnchorPane>
-                    </content>
-                </Tab>
-            </tabs>
+        <TabPane layoutX="106.0" layoutY="223.0" prefHeight="188.0" prefWidth="491.0" style="-fx-border-color: black; -fx-border-radius: 4;" tabClosingPolicy="UNAVAILABLE">
+            <Tab fx:id="all" onSelectionChanged="#showAllExpenses" text="All">
+                <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                            <TableView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        </children>
+                    </AnchorPane>
+                </content>
+            </Tab>
+            <Tab fx:id="fromSelected" onSelectionChanged="#showFromSelected" text="From Selected">
+                <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                            <TableView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" style="-fx-border-radius: 4;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        </children>
+                    </AnchorPane>
+                </content>
+            </Tab>
+            <Tab fx:id="inclSelected" onSelectionChanged="#showIncludingSelected" text="Including Selected">
+                <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                            <TableView layoutX="50.0" layoutY="-19.0" prefHeight="150.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        </children>
+                    </AnchorPane>
+                </content>
+            </Tab>
         </TabPane>
-        <Button fx:id="home" layoutX="14.0" layoutY="21.0" mnemonicParsing="false" onAction="#backToStartScreen" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-style: solid; -fx-border-radius: 4;" textFill="WHITE">
+        <Button fx:id="home" layoutX="28.0" layoutY="20.0" mnemonicParsing="false" onAction="#backToStartScreen" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-style: solid; -fx-border-radius: 4;" text="" textFill="WHITE">
             <graphic>
                 <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -136,18 +127,21 @@
             <Font name="System Bold" size="12.0" />
          </font>
         </Button>
-        <Button fx:id="sendInvites" layoutX="243.0" layoutY="60.0" mnemonicParsing="false" onAction="#showInvites" prefHeight="27.0" prefWidth="85.0" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-style: solid; -fx-border-radius: 4;" text="Send Invites" textFill="WHITE" />
-      <Button fx:id="statistics" layoutX="369.0" layoutY="170.0" mnemonicParsing="false" onAction="#showStatistics" prefHeight="26.0" prefWidth="80.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Statistics" textFill="WHITE">
+        <Button fx:id="sendInvites" layoutX="544.0" layoutY="84.0" mnemonicParsing="false" onAction="#showInvites" prefHeight="27.0" prefWidth="90.0" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-style: solid; -fx-border-radius: 4;" text="Send Invites" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
-        <ScrollPane layoutX="77.0" layoutY="88.0" prefHeight="60.0" prefWidth="372.0" style="-fx-border-color: black; -fx-border-radius: 4;">
+      <Button fx:id="statistics" layoutX="581.0" layoutY="432.0" mnemonicParsing="false" onAction="#showStatistics" prefHeight="27.0" prefWidth="90.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Statistics" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+        <ScrollPane layoutX="106.0" layoutY="88.0" prefHeight="60.0" prefWidth="374.0" style="-fx-border-color: black; -fx-border-radius: 4;">
          <content>
-              <FlowPane fx:id="participantsField" prefWidth="354.0" />
+              <FlowPane fx:id="participantsField" hgap="5" prefWidth="354.0" />
          </content>
       </ScrollPane>
 
-      <MenuButton fx:id="currencyButton" layoutX="216.0" layoutY="401.0" mnemonicParsing="false" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Currency" textFill="WHITE">
+      <MenuButton fx:id="currencyButton" layoutX="473.0" layoutY="432.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="90.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Currency" textFill="WHITE">
          <items>
             <MenuItem mnemonicParsing="false" onAction="#changeCurrencyEUR" text="EUR" />
             <MenuItem mnemonicParsing="false" onAction="#changeCurrencyUSD" text="USD" />
@@ -157,21 +151,26 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </MenuButton>
-        <Pane fx:id="block" opacity="0.37" prefHeight="446.0" prefWidth="534.0" style="-fx-background-color: black;" visible="false" />
-        <Pane fx:id="options" layoutX="120.0" layoutY="250.0" opacity="0.72" prefHeight="116.0" prefWidth="285.0" style="-fx-background-color: white;" visible="false">
+        <Pane fx:id="block" opacity="0.37" prefHeight="486.0" prefWidth="703.0" style="-fx-background-color: black;" visible="false" />
+        <Pane fx:id="options" layoutX="197.0" layoutY="259.0" prefHeight="118.0" prefWidth="295.0" style="-fx-background-color: white;" visible="false">
             <children>
                 <Button fx:id="cancel" layoutX="14.0" layoutY="45.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4" text="Cancel" textFill="WHITE" />
                 <Button fx:id="edit" layoutX="117.0" layoutY="45.0" mnemonicParsing="false" onAction="#edit" prefHeight="26.0" prefWidth="42.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4" text="Edit" textFill="WHITE" />
                 <Button fx:id="delete" layoutX="220.0" layoutY="45.0" mnemonicParsing="false" onAction="#delete" style="-fx-background-color: #9b111e; -fx-border-color: black; -fx-border-radius: 4" text="Delete" textFill="WHITE" />
             </children>
         </Pane>
-      <Text fx:id="inviteCode" layoutX="349.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" underline="true" wrappingWidth="104.0">
+      <Text fx:id="inviteCode" layoutX="382.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" underline="true" wrappingWidth="97.0">
          <font>
-            <Font name="Segoe Print Bold" size="14.0" />
+            <Font name="System Bold" size="14.0" />
          </font>
          <cursor>
             <Cursor fx:constant="CLOSED_HAND" />
          </cursor></Text>
+      <Button fx:id="moneyTransfer" layoutX="386.0" layoutY="184.0" mnemonicParsing="false" onAction="#toMoneyTransfer" prefHeight="27.0" prefWidth="109.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Money Transfer" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
       </children>
     <cursor>
         <Cursor fx:constant="DEFAULT" />

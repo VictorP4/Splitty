@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: EFD6DA; -fx-border-color: 000000; -fx-border-width: 7px; -fx-border-style: solid;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StartScreenCtrl">
+<AnchorPane fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="406.0" prefWidth="600.0" style="-fx-background-color: EFD6DA; -fx-border-color: 000000; -fx-border-width: 7px; -fx-border-style: solid;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StartScreenCtrl">
 
 
    <children>
@@ -22,13 +22,13 @@
          </font>
       </Text>
       <TextField fx:id="eventTitle" layoutX="87.0" layoutY="84.0" prefHeight="25.0" prefWidth="301.0" style="-fx-border-color: black; -fx-border-radius: 4;" />
-      <Text fx:id="joinEvent" layoutX="88.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Join Event">
+      <Text fx:id="joinEvent" layoutX="87.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Join Event">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
       <TextField fx:id="eventCode" layoutX="87.0" layoutY="147.0" prefHeight="25.0" prefWidth="301.0" style="-fx-border-color: 000000; -fx-border-style: solid; -fx-border-width: 1px; -fx-border-radius: 4;" />
-      <Button fx:id="createButton" layoutX="402.0" layoutY="84.0" mnemonicParsing="false" onAction="#createEvent" prefHeight="24.0" prefWidth="63.0" style="-fx-border-color: black; -fx-border-radius: 4; -fx-background-color: #485a5c; -fx-border-width: 1;" text="Create" textFill="WHITE">
+      <Button fx:id="createButton" layoutX="402.0" layoutY="83.0" mnemonicParsing="false" onAction="#createEvent" prefHeight="24.0" prefWidth="63.0" style="-fx-border-color: black; -fx-border-radius: 4; -fx-background-color: #485a5c; -fx-border-width: 1;" text="Create" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
@@ -41,7 +41,7 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Text>
-      <MenuButton fx:id="langButton" layoutX="45.0" layoutY="349.0" mnemonicParsing="false" style="-fx-border-color: black; -fx-border-radius: 4; -fx-background-color: #485a5c;" text="Language" textFill="WHITE">
+      <MenuButton fx:id="langButton" layoutX="33.0" layoutY="355.0" mnemonicParsing="false" style="-fx-border-color: black; -fx-border-radius: 4; -fx-background-color: #485a5c;" text="Language" textFill="WHITE">
          <graphic>
             <ImageView fx:id="menuButtonView" fitHeight="12" fitWidth="16" preserveRatio="true" />
          </graphic>
@@ -76,7 +76,7 @@
       </MenuButton>
       <CheckBox fx:id="alreadyJoined" layoutX="87.0" layoutY="175.0" mnemonicParsing="false" text="Already joined" />
       <ListView fx:id="recentlyAccessed" layoutX="87.0" layoutY="227.0" prefHeight="117.0" prefWidth="301.0" style="-fx-border-color: black; -fx-border-radius: 4; -fx-background-radius: 4;" />
-      <Button fx:id="settingsPage" layoutX="465.0" layoutY="33.0" mnemonicParsing="false" onAction="#toSettings" prefHeight="25.0" prefWidth="77.0" style="-fx-border-color: black; -fx-border-radius: 4; -fx-effect: DropShadow; -fx-background-color: #485a5c;" text="settings" textFill="WHITE">
+      <Button fx:id="settingsPage" layoutX="476.0" layoutY="31.0" mnemonicParsing="false" onAction="#toSettings" prefHeight="25.0" prefWidth="77.0" style="-fx-border-color: black; -fx-border-radius: 4; -fx-effect: DropShadow; -fx-background-color: #485a5c;" text="settings" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>

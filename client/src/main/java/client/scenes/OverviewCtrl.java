@@ -13,8 +13,7 @@ import javafx.application.Platform;
 import jakarta.ws.rs.core.Response;
 
 import commons.Tag;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -43,8 +42,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
-
-import static client.Main.switchLocale;
 
 /**
  * Controller class for the overview scene.
@@ -118,6 +115,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
     @FXML
     private TableColumn<Expense, Tag> tagsColumn;
     @FXML
+    public Button moneyTransfer;
+    @FXML
     public AnchorPane ap;
     private boolean admin;
     private Preferences prefs = Preferences.userNodeForPackage(OverviewCtrl.class);;
@@ -142,30 +141,36 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Initializes the controller.
      */
     public void initialize() {
-        expenseTable = new TableView<>();
-
         admin = false;
-        userConfig.reloadLanguageFile();
-        String lp = userConfig.getLanguageConfig();
-        if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
-            Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
-            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/" + lp + "_flag.png");
-            menuButtonView.setImage(image);
-        }
+        expenseTable = new TableView<>();
+        refreshExpenseTable();
 
-        inviteCode.setOnMouseEntered(colorSwitch -> {
-            inviteCode.setStyle("-fx-text-fill: #de6161;");
-        });
-        inviteCode.setOnMouseExited(colorSwitch -> {
-            inviteCode.setStyle("-fx-text-fill: black;");
-        });
-        inviteCode.setOnMouseClicked(codeCopyEvent -> {
-            Clipboard clipboard = Clipboard.getSystemClipboard();
-            ClipboardContent content = new ClipboardContent();
-            content.putString(event.getInviteCode());
-            clipboard.setContent(content);
+        webSocket.connect("ws://localhost:8080/websocket");
+        webSocket.addEventListener((event) -> {
+            if (this.event == null || !this.event.getId().equals(event.getId()))
+                return;
+            else {
+                Platform.runLater(() -> {
+                    refresh(event);
+                });
+            }
         });
 
+        loadLanguageConfig();
+        currencyButton.setText(userConfig.getCurrencyConfig());
+
+        setInviteCodeFunctionality();
+        initializeShortcuts();
+        setParticipantsPopup();
+        setParticipantBoxPopup();
+        setInstructions();
+        buttonSetup();
+    }
+
+    /**
+     * Initializes the keyboard shortcuts for the overview page.
+     */
+    private void initializeShortcuts() {
         ap.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 userConfig.reloadLanguageFile();
@@ -180,26 +185,33 @@ public class OverviewCtrl implements Main.UpdatableUI {
             if (event.isControlDown() && event.getCode() == KeyCode.A) {
                 toAddExpense();
             }
+            if (event.isControlDown() && event.getCode() == KeyCode.T) {
+                toMoneyTransfer();
+            }
             if (event.isControlDown() && event.getCode() == KeyCode.D) {
                 mainCtrl.showOpenDebts(this.event);
             }
         });
-        webSocket.connect("ws://localhost:8080/websocket");
-        webSocket.addEventListener((event) -> {
-            if (this.event == null || !this.event.getId().equals(event.getId()))
-                return;
-            else {
-                Platform.runLater(() -> {
-                    refresh(event);
-                });
-            }
-            currencyButton.setText(userConfig.getCurrencyConfig());
+    }
+
+    /**
+     * Initializes the functionality of the invite code. This includes a copy on click and visible color changes.
+     */
+    private void setInviteCodeFunctionality() {
+        inviteCode.setOnMouseEntered(colorSwitch -> {
+            inviteCode.setFill(Color.rgb(32,178,170));
         });
-        setParticipantsPopup();
-        setParticipantBoxPopup();
-        setInstructions();
-        buttonSetup();
-        refreshExpenseTable();
+        inviteCode.setOnMouseExited(colorSwitch -> {
+            inviteCode.setFill(Color.BLACK);
+            inviteCode.setEffect(null);
+        });
+        inviteCode.setOnMouseClicked(codeCopyEvent -> {
+            inviteCode.setEffect(new DropShadow(5.0, Color.rgb(32,178,170)));
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            ClipboardContent content = new ClipboardContent();
+            content.putString(event.getInviteCode());
+            clipboard.setContent(content);
+        });
     }
 
     /**
@@ -210,22 +222,23 @@ public class OverviewCtrl implements Main.UpdatableUI {
         expenseTable.getColumns().clear();
 
         dateColumn = new TableColumn<>(Main.getLocalizedString("date"));
-        dateColumn.setCellValueFactory(e -> new SimpleStringProperty(formattedDate(e.getValue().getDate())));
+        dateColumn.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(formattedDate(e.getValue().getDate())));
 
         whoPaidColumn = new TableColumn<>(Main.getLocalizedString("whoPaid"));
-        whoPaidColumn.setCellValueFactory(e -> new SimpleStringProperty(
-                 Currency.getInstance(userConfig.getCurrencyConfig()).getSymbol()
-                         + " " + Double.toString(e.getValue().getAmount())));
+        whoPaidColumn.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(e.getValue().getPaidBy().getName()));
 
         howMuchColumn = new TableColumn<>(Main.getLocalizedString("howMuch"));
-        howMuchColumn.setCellValueFactory(e -> new SimpleStringProperty(Double.toString(e.getValue().getAmount())));
+        howMuchColumn.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(
+                        Currency.getInstance(userConfig.getCurrencyConfig()).getSymbol()
+                                + " " + e.getValue().getAmount()
+        ));
 
         inclParticipantsColumn = new TableColumn<>(Main.getLocalizedString("involvedParticipants"));
-        inclParticipantsColumn.setCellValueFactory(e ->  new SimpleStringProperty(
+        inclParticipantsColumn.setCellValueFactory(e ->  new ReadOnlyObjectWrapper<>(
                 setParticipantsString(e.getValue().getInvolvedParticipants())));
 
         tagsColumn = new TableColumn<>(Main.getLocalizedString("tag"));
-        tagsColumn.setCellValueFactory(e -> new SimpleObjectProperty<>(e.getValue().getTag()));
+        tagsColumn.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(e.getValue().getTag()));
         tagsColumn.setCellFactory(column -> new TableCell<>() {
             {
                 itemProperty().addListener((obs, oldTag, newTag) -> {
@@ -241,6 +254,16 @@ public class OverviewCtrl implements Main.UpdatableUI {
         });
 
         expenseTable.getColumns().addAll(tagsColumn, dateColumn, whoPaidColumn, howMuchColumn, inclParticipantsColumn);
+
+        // sets the sizes of the columns
+        expenseTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+        dateColumn.setPrefWidth(80);
+        inclParticipantsColumn.prefWidthProperty().bind(expenseTable.widthProperty()
+                .subtract(tagsColumn.widthProperty())
+                .subtract(whoPaidColumn.widthProperty())
+                .subtract(howMuchColumn.widthProperty())
+                .subtract(dateColumn.widthProperty())
+        );
     }
 
     /**
@@ -491,11 +514,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void switchToEnglish() throws BackingStoreException {
         userConfig.setLanguageConfig("en");
-        userConfig.reloadLanguageFile();
-        switchLocale("messages", "en");
-        Image image = new Image(
-                Objects.requireNonNull(getClass().getResource("/client/misc/en_flag.png")).toExternalForm());
-        menuButtonView.setImage(image);
+        loadLanguageConfig();
         refresh(event);
     }
 
@@ -504,11 +523,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void switchToDutch() throws BackingStoreException {
         userConfig.setLanguageConfig("nl");
-        userConfig.reloadLanguageFile();
-        switchLocale("messages", "nl");
-        Image image = new Image(
-                Objects.requireNonNull(getClass().getResource("/client/misc/nl_flag.png")).toExternalForm());
-        menuButtonView.setImage(image);
+        loadLanguageConfig();
         refresh(event);
     }
 
@@ -517,11 +532,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void switchToSpanish() throws BackingStoreException {
         userConfig.setLanguageConfig("es");
-        userConfig.reloadLanguageFile();
-        switchLocale("messages", "es");
-        Image image = new Image(
-                Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
-        menuButtonView.setImage(image);
+        loadLanguageConfig();
         refresh(event);
     }
 
@@ -577,6 +588,13 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void toAddExpense() {
         mainCtrl.showAddExpense(event);
+    }
+
+    /**
+     * Directs user towards the money transfer scene
+     */
+    public void toMoneyTransfer() {
+        mainCtrl.showMoneyTransfer(event);
     }
 
     /**
@@ -724,14 +742,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         if (this.event == null || !this.event.getId().equals(event.getId()))
             previousExpenses = new HashMap<>();
 
-        userConfig.reloadLanguageFile();
-        String lp = userConfig.getLanguageConfig();
-        if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
-            Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
-            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/" + lp + "_flag.png");
-            menuButtonView.setImage(image);
-        }
-
+        loadLanguageConfig();
         this.event = serverUtils.getEvent(event.getId());
         inviteCode.setText(event.getInviteCode());
         options.setVisible(false);
@@ -740,6 +751,19 @@ public class OverviewCtrl implements Main.UpdatableUI {
         participantsDisplay();
         setUpParticipantBox();
         showAllExpenses();
+    }
+
+    /**
+     * Loads the language configuration of the user and displays a flag when necessary.
+     */
+    private void loadLanguageConfig() {
+        userConfig.reloadLanguageFile();
+        String lp = userConfig.getLanguageConfig();
+        if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
+            Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
+            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/" + lp + "_flag.png");
+            menuButtonView.setImage(image);
+        }
     }
 
     /**
@@ -915,6 +939,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         mainCtrl.instructionsPopup(new Label(" press CTRL + A to \n go to add expense "), this.addExpense);
         mainCtrl.instructionsPopup(new Label(" press CTRL + D to \n show open debts "), this.settleDebts);
         mainCtrl.instructionsPopup(new Label(" press CTRL + L to \n open language menu "), this.langButton);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + T to \n transfer money"), this.moneyTransfer);
     }
 
     /**

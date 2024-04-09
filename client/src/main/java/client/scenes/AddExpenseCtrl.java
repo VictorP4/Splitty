@@ -78,6 +78,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public AnchorPane ap;
     @FXML
     private Button undo;
+    @FXML
+    public VBox transferBox;
     private Expense expense;
     private WebSocketUtils webSocket;
     private final UserConfig userConfig = new UserConfig();
@@ -99,17 +101,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * initializes the Add Expense Controller
      */
     public void initialize() {
-        anchor.setOnKeyPressed(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.ESCAPE) {
-                mainCtrl.showEventOverview(event);
-            }
-            if (keyEvent.getCode() == KeyCode.ENTER) {
-                ok();
-            }
-            if(keyEvent.isControlDown() && keyEvent.getCode() == KeyCode.U){
-                undo();
-            }
-        });
         webSocket.addExpenseListener((expense -> {
             if (this.expense == null || !Objects.equals(expense.getId(), this.expense.getId()))
                 return;
@@ -129,9 +120,26 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 });
             }
         });
-
+        initializeShortcuts();
         setInstructions();
-        buttonSetup();
+        hoverSetup();
+    }
+
+    /**
+     * Initializes the keyboard shortcuts for the addExpense page.
+     */
+    private void initializeShortcuts() {
+        anchor.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ESCAPE) {
+                mainCtrl.showEventOverview(event);
+            }
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                ok();
+            }
+            if(keyEvent.isControlDown() && keyEvent.getCode() == KeyCode.U){
+                undo();
+            }
+        });
     }
 
     /**
@@ -179,6 +187,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         paidBy.getItems().removeAll(paidBy.getItems());
         currency.getItems().removeAll(currency.getItems());
         box.getChildren().removeAll(box.getChildren());
+        transferBox.getChildren().removeAll(transferBox.getChildren());
         selectedTag = null;
     }
 
@@ -197,7 +206,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         Tag tag = selectedTag;
         String selectedCurrency = currency.getValue();
 
-        return new Expense(title, amount, paidBy, partIn, date, selectedTag, selectedCurrency);
+        return new Expense(title, amount, paidBy, partIn, date, tag, selectedCurrency);
     }
 
     /**
@@ -205,12 +214,15 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * overview scene
      */
     public void ok() {
+        if (add.getText().equals(Main.getLocalizedString("transfer"))) {
+            transfer();
+            return;
+        }
         Expense addExp = null;
 
         // Checks if all mandatory boxes have been filled in
         try {
             addExp = getExpense();
-
         } catch (NumberFormatException e) {
             errorPopup(Main.getLocalizedString("invalidAmount"));
             return;
@@ -218,28 +230,10 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             errorPopup(Main.getLocalizedString("missingDateOrTitle"));
             return;
         }
-        if (addExp.getPaidBy() == null) {
-            errorPopup(Main.getLocalizedString("noPaidBy"));
-            return;
-        }
-        if (addExp.getAmount() < 0) {
-            errorPopup(Main.getLocalizedString("invalidAmount"));
-            return;
-        }
-        if (addExp.getInvolvedParticipants().equals(new ArrayList<>())) {
-            errorPopup(Main.getLocalizedString("noParticipants"));
-            return;
-        }
-        LocalDate currentDate = LocalDate.now();
-        LocalDate selectedDate = addExp.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        if (selectedDate.isAfter(currentDate)) {
-            errorPopup(Main.getLocalizedString("futureDate"));
-            return;
-        }
+        checkExpenseRequirements(addExp);
 
         // Checks for any other related errors
         try {
-            userConfig.setCurrencyConfig(currency.getValue());
             if (this.expense != null) {
                 addExp.setId(this.expense.getId());
             }
@@ -260,10 +254,117 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             errorPopup(e.getMessage());
             return;
         }
-        clearFields();
-        this.expense = null;
-        mainCtrl.showEventOverview(event);
 
+        this.expense = null;
+        backToOverview();
+    }
+
+    /**
+     * Checks if the user has filled in all needed fields for the expense.
+     *
+     * @param checkExp The expense that has to be
+     */
+    private void checkExpenseRequirements(Expense checkExp) {
+        if (checkExp.getPaidBy() == null) {
+            errorPopup(Main.getLocalizedString("noPaidBy"));
+            return;
+        }
+        if (checkExp.getAmount() < 0) {
+            errorPopup(Main.getLocalizedString("invalidAmount"));
+            return;
+        }
+        if (checkExp.getInvolvedParticipants().equals(new ArrayList<>())) {
+            errorPopup(Main.getLocalizedString("noParticipants"));
+            return;
+        }
+        LocalDate currentDate = LocalDate.now();
+        LocalDate selectedDate = checkExp.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        if (selectedDate.isAfter(currentDate)) {
+            errorPopup(Main.getLocalizedString("futureDate"));
+        }
+    }
+
+    /**
+     * Allows for money transfer between users.
+     */
+    private void transfer() {
+        Expense transfer = null;
+
+        try {
+            transfer = getTransfer();
+        } catch (NumberFormatException e) {
+            errorPopup(Main.getLocalizedString("invalidAmount"));
+            return;
+        } catch (Exception e) {
+            errorPopup(Main.getLocalizedString("missingDateOrTitle"));
+            return;
+        }
+        checkTransferRequirements(transfer);
+
+        // Checks for any other related errors
+        try {
+            userConfig.setCurrencyConfig(currency.getValue());
+            if (this.expense != null) {
+                transfer.setId(this.expense.getId());
+            }
+            server.addExpense(transfer, this.event.getId());
+        } catch (WebApplicationException e) {
+            errorPopup(e.getMessage());
+            return;
+        }
+
+        this.expense = null;
+        backToOverview();
+    }
+
+    /**
+     * Gets the transfer the user wants to make.
+     *
+     * @return the transfer the user wants to make
+     */
+    private Expense getTransfer() {
+        String title = this.title.getText();
+        double amount = Double.parseDouble(this.amount.getText());
+        Date date = java.sql.Date.valueOf(this.date.getValue());
+        Participant paidBy = this.paidBy.getSelectionModel().getSelectedItem();
+        String selectedCurrency = currency.getValue();
+        return new Expense(title, amount, paidBy, transferTo(), date, null, selectedCurrency);
+    }
+
+    /**
+     * Get the participant the user wants to transfer money to.
+     *
+     * @return the participant the user wants to tranfer money to.
+     */
+    private List<Participant> transferTo() {
+        List<Participant> transferTo = new ArrayList<>();
+        Node node = transferBox.getChildren().getFirst();
+        Participant toWho = null;
+
+        if (node instanceof ChoiceBox<?>) {
+            ChoiceBox<?> cb = (ChoiceBox<?>) node;
+            toWho = (Participant) cb.getSelectionModel().getSelectedItem();
+        }
+
+        transferTo.add(toWho);
+        return transferTo;
+    }
+
+    /**
+     * Checks if all the transfer requirements are filled in correctly.
+     *
+     * @param transfer the transfer that needs to be checked
+     */
+    private void checkTransferRequirements(Expense transfer){
+        if (transfer.getPaidBy() == null) {
+            errorPopup(Main.getLocalizedString("noPaidBy"));
+        }
+        if (transfer.getAmount() < 0) {
+            errorPopup(Main.getLocalizedString("invalidAmount"));
+        }
+        if (transfer.getInvolvedParticipants().getFirst().equals(transfer.getPaidBy())) {
+            errorPopup(Main.getLocalizedString("invalidTransfer"));
+        }
     }
 
     /**
@@ -277,28 +378,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    /**
-     * Refreshes the AddExpense page corresponding with the new event.
-     */
-    public void refresh(Event event) {
-        this.event = event;
-        addEditText.setText(Main.getLocalizedString("AddExpense"));
-        clearFields();
-        addToCurrency();
-        for (Participant p : this.event.getParticipants()) {
-            if (check(p)) {
-                CheckBox cb = new CheckBox(p.getName());
-                cb.setDisable(true);
-                box.getChildren().add(cb);
-                paidBy.getItems().add(p);
-            }
-        }
-        setAddOrEditButton();
-        currency.setValue(userConfig.getCurrencyConfig());
-
-        populateTagMenu();
     }
 
     /**
@@ -473,6 +552,38 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
+     * Refreshes the AddExpense page corresponding with the new event.
+     */
+    public void refresh(Event event) {
+        this.event = event;
+        addEditText.setText(Main.getLocalizedString("AddExpense"));
+        clearFields();
+        addToCurrency();
+        createParticipantBoxes();
+        setAddOrEditButton();
+        currency.setValue(userConfig.getCurrencyConfig());
+        setElementVisibility(true);
+        date.setDisable(false);
+        title.setDisable(false);
+
+        populateTagMenu();
+    }
+
+    /**
+     * Adds all the participant to the expense page.
+     */
+    private void createParticipantBoxes() {
+        for (Participant p : this.event.getParticipants()) {
+            if (check(p)) {
+                CheckBox cb = new CheckBox(p.getName());
+                cb.setDisable(true);
+                box.getChildren().add(cb);
+                paidBy.getItems().add(p);
+            }
+        }
+    }
+
+    /**
      * Populates the add/edit expense scene with information about the (already
      * existing) selected expense.
      *
@@ -485,15 +596,28 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         addToCurrency();
         refresh(event);
         addEditText.setText(Main.getLocalizedString("EditExpense"));
-        setAddOrEditButton();
         this.title.setText(expense.getTitle());
         this.amount.setText(Double.toString(expense.getAmount()));
         LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         this.date.setValue(localDate);
-        paidBy.getSelectionModel().select(event.getParticipants().stream().filter(x->x.getId().equals(expense.getPaidBy().getId())).findFirst().get());
+        paidBy.getSelectionModel().select(event.getParticipants().stream()
+                        .filter(x->x.getId().equals(expense.getPaidBy().getId())).findFirst().get());
         currency.setValue(this.expense.getCurrency());
-        Set<Long> expenseParList = new HashSet<>(expense.getInvolvedParticipants().stream().map(x->x.getId()).collect(Collectors.toList()));
-        Set<Long> eventParList = new HashSet<>(this.event.getParticipants().stream().map(x->x.getId()).collect(Collectors.toList()));
+        setParticipantBoxes();
+        if (expense.getTag() != null) {
+            this.tagMenu.setText(expense.getTag().getName());
+            this.selectedTag=expense.getTag();
+        }
+    }
+
+    /**
+     * Sets the participant boxes of an already existing expense when loading the edit expense page of an expense.
+     */
+    private void setParticipantBoxes() {
+        Set<Long> expenseParList = new HashSet<>(expense.getInvolvedParticipants().stream()
+                        .map(x->x.getId()).collect(Collectors.toList()));
+        Set<Long> eventParList = new HashSet<>(this.event.getParticipants().stream()
+                        .map(x->x.getId()).collect(Collectors.toList()));
         if (expenseParList.equals(eventParList)) {
             everybodyIn.setSelected(true);
         } else {
@@ -506,16 +630,60 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                     for (Participant p : expense.getInvolvedParticipants()) {
                         participantIDs.add(p.getId());
                     }
-                    if (participantIDs.contains(this.event.getParticipants().stream().filter(x->x.getName().equals(c.getText())).findFirst().get().getId())) {
+                    if (participantIDs.contains(this.event.getParticipants().stream()
+                                    .filter(x->x.getName().equals(c.getText())).findFirst().get().getId())) {
                         c.setSelected(true);
                     }
                 }
             }
         }
-        if (expense.getTag() != null) {
-            this.tagMenu.setText(expense.getTag().getName());
-            this.selectedTag=expense.getTag();
-        }
+    }
+
+    /**
+     * Refreshes the transfer scene to allow transfers between two participants.
+     *
+     * @param event The event for which the transfer takes place.
+     */
+    public void refreshTransfer(Event event) {
+        this.event = event;
+        clearFields();
+        addToCurrency();
+        add.setText(Main.getLocalizedString("transfer"));
+        setElementVisibility(false);
+        howToSplit.setText(Main.getLocalizedString("toWho"));
+
+        // set hardcoded date & what for that the user cannot change
+        date.setDisable(true);
+        date.setValue(LocalDate.now().minusDays(1));
+        title.setText("Debt Repayment");
+        title.setDisable(true);
+
+        //set currency and add all the participants
+        currency.setValue(userConfig.getCurrencyConfig());
+        paidBy.getItems().addAll(event.getParticipants());
+
+        //create new choice box with all the participants
+        setTransferBox();
+    }
+
+    private void setElementVisibility(boolean visibility) {
+        tagMenu.setVisible(visibility);
+        addTag.setVisible(visibility);
+        expenseType.setVisible(visibility);
+        everybodyIn.setVisible(visibility);
+        someIn.setVisible(visibility);
+    }
+
+    /**
+     * Creates and sets up the choice box for the money transfer.
+     */
+    private void setTransferBox() {
+        ChoiceBox<Participant> toWho = new ChoiceBox<>();
+        toWho.setStyle(paidBy.getStyle());
+        toWho.setPrefWidth(paidBy.getPrefWidth());
+        toWho.setPrefHeight(paidBy.getPrefHeight());
+        toWho.getItems().addAll(event.getParticipants());
+        transferBox.getChildren().add(toWho);
     }
 
     /**
@@ -552,7 +720,9 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             final Boolean[] b = {true};
             List<Long> participantsIDs = this.event.getParticipants().stream().map(x->x.getId()).toList();
             expense1.getInvolvedParticipants().forEach((p)-> b[0] = b[0] &&participantsIDs.contains(p.getId()));
-            b[0] = b[0] && participantsIDs.contains(expense1.getPaidBy().getId()) && this.event.getTags().stream().map(x->x.getId()).toList().contains(expense1.getTag().getId());
+            b[0] = b[0] && participantsIDs.contains(expense1.getPaidBy().getId())
+                    && this.event.getTags().stream()
+                                    .map(x->x.getId()).toList().contains(expense1.getTag().getId());
             if(!b[0]){
                 undo();
                 return;
@@ -573,9 +743,9 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Sets the hover over and focus 'look' of the buttons.
+     * Sets the hover over and focus 'look' of the elements.
      */
-    public void buttonSetup(){
+    public void hoverSetup(){
         mainCtrl.buttonShadow(this.addTag);
         mainCtrl.menuButtonFocus(this.tagMenu);
         mainCtrl.buttonFocus(this.add);
@@ -630,7 +800,5 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 this.currency.setEffect(null);
             }
         });
-
-
     }
 }

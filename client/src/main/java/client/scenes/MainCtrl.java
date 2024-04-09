@@ -182,6 +182,11 @@ public class MainCtrl {
         primaryStage.setScene(addExpense);
     }
 
+    public void showMoneyTransfer(Event event) {
+        addExpenseCtrl.refreshTransfer(event);
+        primaryStage.setTitle("AddExpense");
+        primaryStage.setScene(addExpense);
+    }
 
     /**
      * Displays the contact details scene for the given participant in the primary stage.

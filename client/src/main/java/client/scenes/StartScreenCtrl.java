@@ -11,7 +11,6 @@ import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -25,12 +24,9 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Objects;
 import java.util.Properties;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
-
-import static client.Main.switchLocale;
 
 /**
  * Controller class for the start screen scene.
@@ -90,13 +86,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      */
     public void initialize() {
         listViewItems = FXCollections.observableArrayList();
-        userConfig.reloadLanguageFile();
-        String lp = userConfig.getLanguageConfig();
-        if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
-            Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
-            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/"+lp+"_flag.png");
-            menuButtonView.setImage(image);
-        }
+        loadLanguageConfig();
 
         server.setSERVER(userConfig.getServerURLConfig());
         alreadyJoined.setDisable(true);
@@ -125,7 +115,22 @@ public class StartScreenCtrl implements Main.UpdatableUI {
                 toSettings();
             }
         });
+        displayEvents();
+        webSocket.addServerListener(()->{
+            Platform.runLater(()->{
+                mainCtrl.showStartScreen();
+                errorPopup("Server not available");
+            });
+        });
 
+        buttonSetup();
+        setInstructions();
+    }
+
+    /**
+     * Creates a cell factory for the listview displaying the recently accessed events.
+     */
+    private void displayEvents() {
         recentlyAccessed.setCellFactory(lv -> {
             ListCell<Event> lc = new ListCell<>();
             lc.itemProperty().addListener((obs, oldItem, newItem) -> {
@@ -141,15 +146,6 @@ public class StartScreenCtrl implements Main.UpdatableUI {
             });
             return lc;
         });
-        webSocket.addServerListener(()->{
-            Platform.runLater(()->{
-                mainCtrl.showStartScreen();
-                errorPopup("Server not available");
-            });
-        });
-
-        buttonSetup();
-        setInstructions();
     }
 
     /**
@@ -238,52 +234,36 @@ public class StartScreenCtrl implements Main.UpdatableUI {
 
     /**
      * Allows the used to switch to Dutch
-     *
-     * @param actionEvent The event that caused this method to be called
      */
-    public void switchToDutch(ActionEvent actionEvent) throws BackingStoreException {
+    public void switchToDutch() throws BackingStoreException {
         userConfig.setLanguageConfig("nl");
-        switchLocale("messages", "nl");
-        Image image = new Image(
-                Objects.requireNonNull(getClass().getResource( "/client/misc/nl_flag.png")).toExternalForm());
-        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/nl_flag.png");
-        menuButtonView.setImage(image);
+        loadLanguageConfig();
+        refresh();
     }
 
     /**
      * Allows the used to switch to English
-     *
-     * @param actionEvent The event that caused this method to be called
      */
-    public void switchToEnglish(ActionEvent actionEvent) throws BackingStoreException {
+    public void switchToEnglish() throws BackingStoreException {
         userConfig.setLanguageConfig("en");
-        switchLocale("messages", "en");
-        Image image = new Image(
-                Objects.requireNonNull(getClass().getResource("/client/misc/en_flag.png")).toExternalForm());
-        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/en_flag.png");
-        menuButtonView.setImage(image);
+        loadLanguageConfig();
+        refresh();
     }
 
     /**
      * Allows the used to switch to Spanish
-     *
-     * @param actionEvent The event that caused this method to be called
      */
-    public void switchToSpanish(ActionEvent actionEvent) throws BackingStoreException {
+    public void switchToSpanish() throws BackingStoreException {
         userConfig.setLanguageConfig("es");
-        switchLocale("messages", "es");
-        Image image = new Image(
-                Objects.requireNonNull(getClass().getResource("/client/misc/es_flag.png")).toExternalForm());
-        prefs.put(SELECTED_IMAGE_KEY, "/client/misc/es_flag.png");
-        menuButtonView.setImage(image);
+        loadLanguageConfig();
+        refresh();
     }
 
     /**
      * Allows a user to download a language template
-     * @param actionEvent on click
      * @throws BackingStoreException
      */
-    public void addLang(ActionEvent actionEvent) throws BackingStoreException {
+    public void addLang() throws BackingStoreException {
         Properties newLang = new Properties();
         try (BufferedReader reader = new BufferedReader(
                 new FileReader("src/main/resources/client/misc/langTemplate.txt"))) {
@@ -329,13 +309,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
      * Refreshes the startScreen
      */
     public void refresh() {
-        userConfig.reloadLanguageFile();
-        String lp = userConfig.getLanguageConfig();
-        if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
-            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/"+lp+"_flag.png");
-            Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
-            menuButtonView.setImage(image);
-        }
+        loadLanguageConfig();
         eventTitle.clear();
         eventCode.clear();
         alreadyJoined.setDisable(true);
@@ -343,6 +317,19 @@ public class StartScreenCtrl implements Main.UpdatableUI {
         updateAllEvents();
         recentlyAccessed.setItems(listViewItems);
 
+    }
+
+    /**
+     * Loads the language configuration of the user and displays a flag when necessary.
+     */
+    private void loadLanguageConfig() {
+        userConfig.reloadLanguageFile();
+        String lp = userConfig.getLanguageConfig();
+        if (lp.equals("en") || lp.equals("nl") || lp.equals("es")) {
+            Image image = new Image(prefs.get(SELECTED_IMAGE_KEY, null));
+            prefs.put(SELECTED_IMAGE_KEY, "/client/misc/" + lp + "_flag.png");
+            menuButtonView.setImage(image);
+        }
     }
 
     /**
