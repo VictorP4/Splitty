@@ -292,7 +292,8 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         int amn =  (int)(serverUtils.convertCurrency(debt.getAmount(),"EUR",
                 mainCtrl.getCurrency(), LocalDate.now().minusDays(1))*100);
         double amount = mainCtrl.getCurrency().equals("EUR") ? debt.getAmount() : (double)amn/100;
-        text.setText(debt.getPersonInDebt().getName()+" "+Main.getLocalizedString("gives")+" "+ amount +" "+ Currency.getInstance(mainCtrl.getCurrency()).getSymbol()+" "+Main.getLocalizedString("to")+" "+ debt.getPersonOwed().getName());
+        text.setText(debt.getPersonInDebt().getName()+" "+Main.getLocalizedString("gives")+" "+ amount +" "+ Currency.getInstance(mainCtrl.getCurrency()).getSymbol()+" "+
+                Main.getLocalizedString("to")+" "+ debt.getPersonOwed().getName());
         text.setWrappingWidth(275);
         text.setStrokeType(StrokeType.OUTSIDE);
         text.setStrokeWidth(0.0);
