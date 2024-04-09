@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="534.0" style="-fx-background-color: efd6da; -fx-border-color: black; -fx-border-style: solid; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
+<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="534.0" style="-fx-background-color: efd6da; -fx-border-color: black; -fx-border-style: solid; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
     <children>
         <TextField fx:id="titleField" layoutX="88.0" layoutY="13.0" prefHeight="51.0" prefWidth="182.0">
             <font>
@@ -22,7 +34,14 @@
                 <Font name="System Bold" size="24.0" />
             </font>
         </Text>
-        <Button fx:id="addExpense" layoutX="258.0" layoutY="170.0" mnemonicParsing="false" onAction="#toAddExpense" prefHeight="27.0" prefWidth="90.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Add Expense" textFill="WHITE">
+        <Button fx:id="addExpense" layoutX="254.0" layoutY="170.0" mnemonicParsing="false" onAction="#toAddExpense" prefHeight="27.0" prefWidth="109.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Add Expense" textFill="WHITE">
+            <graphic>
+                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@/client/misc/plus.png" />
+                    </image>
+                </ImageView>
+            </graphic>
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
@@ -31,7 +50,7 @@
                 <Font name="System Bold" size="16.0" />
             </font>
         </Text>
-        <ChoiceBox fx:id="participantBox" layoutX="86.0" layoutY="171.0" onAction="#selected" prefHeight="26.0" prefWidth="167.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 4;" />
+        <ChoiceBox fx:id="participantBox" layoutX="76.0" layoutY="171.0" onAction="#selected" prefHeight="26.0" prefWidth="167.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 4;" />
         <Button fx:id="settleDebts" layoutX="433.0" layoutY="401.0" mnemonicParsing="false" onAction="#settleDebts" style="-fx-background-color: #485A5C; -fx-border-color: black; -fx-border-radius: 4;" text="Settle Debts" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
@@ -105,7 +124,7 @@
                 </Tab>
             </tabs>
         </TabPane>
-        <Button fx:id="home" layoutX="14.0" layoutY="21.0" mnemonicParsing="false" onAction="#backToStartScreen" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-style: solid; -fx-border-radius: 4;" text="" textFill="WHITE">
+        <Button fx:id="home" layoutX="14.0" layoutY="21.0" mnemonicParsing="false" onAction="#backToStartScreen" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-style: solid; -fx-border-radius: 4;" textFill="WHITE">
             <graphic>
                 <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -118,7 +137,7 @@
          </font>
         </Button>
         <Button fx:id="sendInvites" layoutX="243.0" layoutY="60.0" mnemonicParsing="false" onAction="#showInvites" prefHeight="27.0" prefWidth="85.0" style="-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-style: solid; -fx-border-radius: 4;" text="Send Invites" textFill="WHITE" />
-      <Button fx:id="statistics" layoutX="361.0" layoutY="171.0" mnemonicParsing="false" onAction="#showStatistics" prefHeight="26.0" prefWidth="80.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Statistics" textFill="WHITE">
+      <Button fx:id="statistics" layoutX="369.0" layoutY="170.0" mnemonicParsing="false" onAction="#showStatistics" prefHeight="26.0" prefWidth="80.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Statistics" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
@@ -141,9 +160,9 @@
         <Pane fx:id="block" opacity="0.37" prefHeight="446.0" prefWidth="534.0" style="-fx-background-color: black;" visible="false" />
         <Pane fx:id="options" layoutX="120.0" layoutY="250.0" opacity="0.72" prefHeight="116.0" prefWidth="285.0" style="-fx-background-color: white;" visible="false">
             <children>
-                <Button fx:id="cancel" layoutX="14.0" layoutY="45.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
-                <Button fx:id="edit" layoutX="117.0" layoutY="45.0" mnemonicParsing="false" onAction="#edit" prefHeight="26.0" prefWidth="42.0" text="Edit" />
-                <Button fx:id="delete" layoutX="220.0" layoutY="45.0" mnemonicParsing="false" onAction="#delete" text="Delete" />
+                <Button fx:id="cancel" layoutX="14.0" layoutY="45.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4" text="Cancel" textFill="WHITE" />
+                <Button fx:id="edit" layoutX="117.0" layoutY="45.0" mnemonicParsing="false" onAction="#edit" prefHeight="26.0" prefWidth="42.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4" text="Edit" textFill="WHITE" />
+                <Button fx:id="delete" layoutX="220.0" layoutY="45.0" mnemonicParsing="false" onAction="#delete" style="-fx-background-color: #9b111e; -fx-border-color: black; -fx-border-radius: 4" text="Delete" textFill="WHITE" />
             </children>
         </Pane>
       <Text fx:id="inviteCode" layoutX="349.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" underline="true" wrappingWidth="104.0">

@@ -193,6 +193,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
                     refresh(event);
                 });
             }
+            currencyButton.setText(userConfig.getCurrencyConfig());
         });
         setParticipantsPopup();
         setParticipantBoxPopup();
@@ -318,7 +319,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
         inclSelected.setText(Main.getLocalizedString("ovInclSelected"));
         participants.setText(Main.getLocalizedString("ovParticipants"));
         statistics.setText(Main.getLocalizedString("ovStatistics"));
-        currencyButton.setText(Main.getLocalizedString("currency"));
         delete.setText(Main.getLocalizedString("delete"));
         edit.setText(Main.getLocalizedString("edit"));
         cancel.setText(Main.getLocalizedString("cancel"));
@@ -654,11 +654,13 @@ public class OverviewCtrl implements Main.UpdatableUI {
         refreshExpenseTable();
         original = FXCollections.observableArrayList();
 
-        for (Expense e : event.getExpenses()) {
-            if (e.getTitle().equalsIgnoreCase("debt repayment")) {
-                continue;
+        if(event != null){
+            for (Expense e : event.getExpenses()) {
+                if (e.getTitle().equalsIgnoreCase("debt repayment")) {
+                    continue;
+                }
+                original.add(e);
             }
-            original.add(e);
         }
         original = (ObservableList<Expense>) convertCurrency(original);
         expenseTable.setItems(original);
