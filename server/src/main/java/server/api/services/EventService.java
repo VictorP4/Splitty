@@ -75,8 +75,22 @@ public class EventService {
         if (event == null || event.getTitle() == null) {
             return null;
         }
-
+        List<Participant> list = event.getParticipants();
         try{
+            for(Expense expense : event.getExpenses()){
+                for(int i=0;i< expense.getInvolvedParticipants().size();i++){
+                    int k = i;
+                    Participant p = list.stream().filter(x->x.getId().equals(expense.getInvolvedParticipants().get(k).getId())).findFirst().get();
+                    expense.getInvolvedParticipants().remove(i);
+                    expense.getInvolvedParticipants().add(i,p);
+                }
+                Participant p = list.stream().filter(x->x.getId().equals(expense.getPaidBy().getId())).findFirst().get();
+                expense.setPaidBy(p);
+                if(expense.getTag()!=null){
+                    Tag tag = event.getTags().stream().filter(x->x.getId().equals(expense.getTag().getId())).findFirst().get();
+                    expense.setTag(tag);
+                }
+            }
             participantRepository.saveAll(event.getParticipants());
             tagRepository.saveAll(event.getTags());
             expensesRepository.saveAll(event.getExpenses());
