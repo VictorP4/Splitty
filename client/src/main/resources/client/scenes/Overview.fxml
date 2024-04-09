@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="703.0" style="-fx-background-color: efd6da; -fx-border-color: black; -fx-border-style: solid; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
+<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="703.0" style="-fx-background-color: efd6da; -fx-border-color: black; -fx-border-style: solid; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
     <children>
         <TextField fx:id="titleField" layoutX="5.0" layoutY="11.0" prefHeight="51.0" prefWidth="693.0">
             <font>
@@ -22,7 +34,14 @@
                 <Font name="System Bold" size="24.0" />
             </font>
         </Text>
-        <Button fx:id="addExpense" layoutX="285.0" layoutY="184.0" mnemonicParsing="false" onAction="#toAddExpense" prefHeight="27.0" prefWidth="90.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Add Expense" textFill="WHITE">
+        <Button fx:id="addExpense" layoutX="285.0" layoutY="184.0" mnemonicParsing="false" onAction="#toAddExpense" prefHeight="27.0" prefWidth="110.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Add Expense" textFill="WHITE">
+            <graphic>
+                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@/client/misc/plus.png" />
+                    </image>
+                </ImageView>
+            </graphic>
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
@@ -70,9 +89,9 @@
                 <MenuItem mnemonicParsing="false" onAction="#addLang" text="Add Language">
                 </MenuItem>
             </items>
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
         </MenuButton>
         <TabPane layoutX="106.0" layoutY="223.0" prefHeight="188.0" prefWidth="491.0" style="-fx-border-color: black; -fx-border-radius: 4;" tabClosingPolicy="UNAVAILABLE">
             <Tab fx:id="all" onSelectionChanged="#showAllExpenses" text="All">
@@ -139,22 +158,22 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </MenuButton>
-        <Pane fx:id="block" opacity="0.37" prefHeight="446.0" prefWidth="534.0" style="-fx-background-color: black;" visible="false" />
-        <Pane fx:id="options" layoutX="120.0" layoutY="250.0" opacity="0.72" prefHeight="116.0" prefWidth="285.0" style="-fx-background-color: white;" visible="false">
+        <Pane fx:id="block" opacity="0.37" prefHeight="486.0" prefWidth="703.0" style="-fx-background-color: black;" visible="false" />
+        <Pane fx:id="options" layoutX="197.0" layoutY="259.0" prefHeight="118.0" prefWidth="295.0" style="-fx-background-color: white;" visible="false">
             <children>
-                <Button fx:id="cancel" layoutX="14.0" layoutY="45.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
-                <Button fx:id="edit" layoutX="117.0" layoutY="45.0" mnemonicParsing="false" onAction="#edit" prefHeight="26.0" prefWidth="42.0" text="Edit" />
-                <Button fx:id="delete" layoutX="220.0" layoutY="45.0" mnemonicParsing="false" onAction="#delete" text="Delete" />
+                <Button fx:id="cancel" layoutX="14.0" layoutY="45.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4" text="Cancel" textFill="WHITE" />
+                <Button fx:id="edit" layoutX="117.0" layoutY="45.0" mnemonicParsing="false" onAction="#edit" prefHeight="26.0" prefWidth="42.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4" text="Edit" textFill="WHITE" />
+                <Button fx:id="delete" layoutX="220.0" layoutY="45.0" mnemonicParsing="false" onAction="#delete" style="-fx-background-color: #9b111e; -fx-border-color: black; -fx-border-radius: 4" text="Delete" textFill="WHITE" />
             </children>
         </Pane>
       <Text fx:id="inviteCode" layoutX="382.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" underline="true" wrappingWidth="97.0">
          <font>
-            <Font name="Segoe Print Bold" size="14.0" />
+            <Font name="System Bold" size="14.0" />
          </font>
          <cursor>
             <Cursor fx:constant="CLOSED_HAND" />
          </cursor></Text>
-      <Button fx:id="moneyTransfer" layoutX="386.0" layoutY="184.0" mnemonicParsing="false" onAction="#toMoneyTransfer" prefHeight="27.0" prefWidth="109.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Money Transfer" textFill="WHITE">
+      <Button fx:id="moneyTransfer" layoutX="407.0" layoutY="184.0" mnemonicParsing="false" onAction="#toMoneyTransfer" prefHeight="27.0" prefWidth="109.0" style="-fx-background-color: #485a5c; -fx-border-color: black; -fx-border-radius: 4;" text="Money Transfer" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>

@@ -13,8 +13,7 @@ import javafx.application.Platform;
 import jakarta.ws.rs.core.Response;
 
 import commons.Tag;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -223,23 +222,23 @@ public class OverviewCtrl implements Main.UpdatableUI {
         expenseTable.getColumns().clear();
 
         dateColumn = new TableColumn<>(Main.getLocalizedString("date"));
-        dateColumn.setCellValueFactory(e -> new SimpleStringProperty(formattedDate(e.getValue().getDate())));
+        dateColumn.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(formattedDate(e.getValue().getDate())));
 
         whoPaidColumn = new TableColumn<>(Main.getLocalizedString("whoPaid"));
-        whoPaidColumn.setCellValueFactory(e -> new SimpleStringProperty(e.getValue().getPaidBy().getName()));
+        whoPaidColumn.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(e.getValue().getPaidBy().getName()));
 
         howMuchColumn = new TableColumn<>(Main.getLocalizedString("howMuch"));
-        howMuchColumn.setCellValueFactory(e -> new SimpleStringProperty(
+        howMuchColumn.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(
                         Currency.getInstance(userConfig.getCurrencyConfig()).getSymbol()
                                 + " " + e.getValue().getAmount()
         ));
 
         inclParticipantsColumn = new TableColumn<>(Main.getLocalizedString("involvedParticipants"));
-        inclParticipantsColumn.setCellValueFactory(e ->  new SimpleStringProperty(
+        inclParticipantsColumn.setCellValueFactory(e ->  new ReadOnlyObjectWrapper<>(
                 setParticipantsString(e.getValue().getInvolvedParticipants())));
 
         tagsColumn = new TableColumn<>(Main.getLocalizedString("tag"));
-        tagsColumn.setCellValueFactory(e -> new SimpleObjectProperty<>(e.getValue().getTag()));
+        tagsColumn.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(e.getValue().getTag()));
         tagsColumn.setCellFactory(column -> new TableCell<>() {
             {
                 itemProperty().addListener((obs, oldTag, newTag) -> {
@@ -256,6 +255,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
         expenseTable.getColumns().addAll(tagsColumn, dateColumn, whoPaidColumn, howMuchColumn, inclParticipantsColumn);
 
+        // sets the sizes of the columns
         expenseTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         dateColumn.setPrefWidth(80);
         inclParticipantsColumn.prefWidthProperty().bind(expenseTable.widthProperty()
@@ -671,12 +671,13 @@ public class OverviewCtrl implements Main.UpdatableUI {
         expenseTable = new TableView<>();
         refreshExpenseTable();
         original = FXCollections.observableArrayList();
-        if(event==null) return;
-        for (Expense e : event.getExpenses()) {
-            if (e.getTitle().equalsIgnoreCase("Debt Repayment")) {
-                continue;
+        if(event != null){
+            for (Expense e : event.getExpenses()) {
+                if (e.getTitle().equalsIgnoreCase("debt repayment")) {
+                    continue;
+                }
+                original.add(e);
             }
-            original.add(e);
         }
         original = (ObservableList<Expense>) convertCurrency(original);
         expenseTable.setItems(original);

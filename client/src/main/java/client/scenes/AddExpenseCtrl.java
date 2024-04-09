@@ -565,7 +565,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         setElementVisibility(true);
         date.setDisable(false);
         title.setDisable(false);
-
         populateTagMenu();
     }
 
@@ -648,6 +647,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         this.event = event;
         clearFields();
         addToCurrency();
+        addEditText.setText(Main.getLocalizedString("transfer"));
         add.setText(Main.getLocalizedString("transfer"));
         setElementVisibility(false);
         howToSplit.setText(Main.getLocalizedString("toWho"));
@@ -672,6 +672,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         expenseType.setVisible(visibility);
         everybodyIn.setVisible(visibility);
         someIn.setVisible(visibility);
+        undo.setVisible(visibility);
     }
 
     /**
