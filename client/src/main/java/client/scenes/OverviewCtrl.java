@@ -672,11 +672,13 @@ public class OverviewCtrl implements Main.UpdatableUI {
         refreshExpenseTable();
         original = FXCollections.observableArrayList();
 
-        for (Expense e : event.getExpenses()) {
-            if (e.getTitle().equalsIgnoreCase("Debt Repayment")) {
-                continue;
+        if(event != null){
+            for (Expense e : event.getExpenses()) {
+                if (e.getTitle().equalsIgnoreCase("debt repayment")) {
+                    continue;
+                }
+                original.add(e);
             }
-            original.add(e);
         }
         original = (ObservableList<Expense>) convertCurrency(original);
         expenseTable.setItems(original);
