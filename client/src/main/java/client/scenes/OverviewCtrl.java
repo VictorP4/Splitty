@@ -2,6 +2,8 @@ package client.scenes;
 
 import client.Main;
 import client.UserConfig;
+import client.services.OverviewService;
+import client.services.TagService;
 import client.utils.ServerUtils;
 import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
@@ -10,14 +12,10 @@ import commons.Participant;
 
 import javafx.application.Platform;
 
-import jakarta.ws.rs.core.Response;
-
 import commons.Tag;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.collections.FXCollections;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
@@ -37,8 +35,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -51,6 +47,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private static final String SELECTED_IMAGE_KEY = "selectedImage";
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
+    private final OverviewService overviewService;
+    private final TagService tagService;
+    private final UserConfig userConfig;
     @FXML
     public Button addExpense;
     @FXML
@@ -90,7 +89,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private FlowPane participantsField;
     @FXML
     private Button statistics;
-    private WebSocketUtils webSocket;
+    private final WebSocketUtils webSocket;
     @FXML
     private Pane options;
     @FXML
@@ -105,22 +104,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
     @FXML
     private TableView<Expense> expenseTable;
     @FXML
-    private TableColumn<Expense, String> dateColumn;
-    @FXML
-    private TableColumn<Expense, String> whoPaidColumn;
-    @FXML
-    private TableColumn<Expense, String> howMuchColumn;
-    @FXML
-    private TableColumn<Expense, String> inclParticipantsColumn;
-    @FXML
-    private TableColumn<Expense, Tag> tagsColumn;
-    @FXML
     public Button moneyTransfer;
     @FXML
     public AnchorPane ap;
     private boolean admin;
-    private Preferences prefs = Preferences.userNodeForPackage(OverviewCtrl.class);;
-    private final UserConfig userConfig = new UserConfig();
+    private final Preferences prefs = Preferences.userNodeForPackage(OverviewCtrl.class);
     private Map<Long, List<Expense>> previousExpenses;
 
     /**
@@ -128,12 +116,20 @@ public class OverviewCtrl implements Main.UpdatableUI {
      *
      * @param serverUtils The utility class for server interaction.
      * @param mainCtrl    The main controller of the application.
+     * @param webSocket The websocket.
+     * @param overviewService the OverviewService to be injected.
+     * @param tagService the TagService to be injected.
+     * @param userConfig the user configuration for persisted data.
      */
     @Inject
-    public OverviewCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, WebSocketUtils webSocket) {
+    public OverviewCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, WebSocketUtils webSocket,
+                        OverviewService overviewService, TagService tagService, UserConfig userConfig) {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
         this.webSocket = webSocket;
+        this.overviewService = overviewService;
+        this.tagService = tagService;
+        this.userConfig = userConfig;
         MenuItem item = new MenuItem("Text");
     }
 
@@ -147,17 +143,13 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
         webSocket.connect("ws://localhost:8080/websocket");
         webSocket.addEventListener((event) -> {
-            if (this.event == null || !this.event.getId().equals(event.getId()))
-                return;
-            else {
-                Platform.runLater(() -> {
-                    refresh(event);
-                });
+            if (this.event != null && this.event.getId().equals(event.getId())) {
+                Platform.runLater(() -> refresh(event));
             }
         });
 
         loadLanguageConfig();
-        currencyButton.setText(userConfig.getCurrencyConfig());
+        currencyButton.setText(getCurrency());
 
         setInviteCodeFunctionality();
         initializeShortcuts();
@@ -198,9 +190,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Initializes the functionality of the invite code. This includes a copy on click and visible color changes.
      */
     private void setInviteCodeFunctionality() {
-        inviteCode.setOnMouseEntered(colorSwitch -> {
-            inviteCode.setFill(Color.rgb(32,178,170));
-        });
+        inviteCode.setOnMouseEntered(colorSwitch -> inviteCode.setFill(Color.rgb(32,178,170)));
         inviteCode.setOnMouseExited(colorSwitch -> {
             inviteCode.setFill(Color.BLACK);
             inviteCode.setEffect(null);
@@ -221,23 +211,23 @@ public class OverviewCtrl implements Main.UpdatableUI {
         expenseTable.getItems().clear();
         expenseTable.getColumns().clear();
 
-        dateColumn = new TableColumn<>(Main.getLocalizedString("date"));
-        dateColumn.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(formattedDate(e.getValue().getDate())));
+        TableColumn<Expense, String> dateColumn = new TableColumn<>(Main.getLocalizedString("date"));
+        dateColumn.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(overviewService.formattedDate(e.getValue().getDate())));
 
-        whoPaidColumn = new TableColumn<>(Main.getLocalizedString("whoPaid"));
+        TableColumn<Expense, String> whoPaidColumn = new TableColumn<>(Main.getLocalizedString("whoPaid"));
         whoPaidColumn.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(e.getValue().getPaidBy().getName()));
 
-        howMuchColumn = new TableColumn<>(Main.getLocalizedString("howMuch"));
+        TableColumn<Expense, String> howMuchColumn = new TableColumn<>(Main.getLocalizedString("howMuch"));
         howMuchColumn.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(
-                        Currency.getInstance(userConfig.getCurrencyConfig()).getSymbol()
+                        Currency.getInstance(getCurrency()).getSymbol()
                                 + " " + e.getValue().getAmount()
         ));
 
-        inclParticipantsColumn = new TableColumn<>(Main.getLocalizedString("involvedParticipants"));
+        TableColumn<Expense, String> inclParticipantsColumn = new TableColumn<>(Main.getLocalizedString("involvedParticipants"));
         inclParticipantsColumn.setCellValueFactory(e ->  new ReadOnlyObjectWrapper<>(
-                setParticipantsString(e.getValue().getInvolvedParticipants())));
+                overviewService.setParticipantsString(e.getValue().getInvolvedParticipants())));
 
-        tagsColumn = new TableColumn<>(Main.getLocalizedString("tag"));
+        TableColumn<Expense, Tag> tagsColumn = new TableColumn<>(Main.getLocalizedString("tag"));
         tagsColumn.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(e.getValue().getTag()));
         tagsColumn.setCellFactory(column -> new TableCell<>() {
             {
@@ -247,7 +237,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
                         setStyle(null);
                     } else {
                         setText(newTag.getName());
-                        setCellColor(this, newTag);
+                        this.setStyle(tagService.getCellColor(newTag));
+                        this.setTextFill(Color.web(tagService.getCellColor(newTag)));
                     }
                 });
             }
@@ -267,51 +258,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Formats the date and returns a string version of it.
-     *
-     * @param date The date to be formatted.
-     * @return the string of the formatted date.
-     */
-    private String formattedDate(java.util.Date date) {
-        Date sqldate = new Date(date.getTime());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d, yyyy");
-        return dateFormat.format(sqldate);
-    }
-
-    /**
-     * Creates and returns a string of the involvedParticipants list.
-     *
-     * @return a string of the involvedParticipants list.
-     */
-    private String setParticipantsString(List<Participant> involvedParticipants) {
-        StringBuilder participantString = new StringBuilder();
-        for (int i = 0; i < involvedParticipants.size(); i++) {
-            participantString.append(involvedParticipants.get(i).getName());
-            if (i < involvedParticipants.size() - 1) {
-                participantString.append(", ");
-            }
-        }
-        return participantString.toString();
-    }
-
-    /**
-     * Sets the color of a cell to the color of the tag added.
-     *
-     * @param cell The cell of which the color should be set.
-     * @param tag The tag of which we will set the cell color to.
-     */
-    private void setCellColor(TableCell<Expense, Tag> cell, Tag tag) {
-        String colorStyle = String.format("-fx-background-color: rgba(%d, %d, %d, 1);", tag.getRed(),
-                tag.getGreen(), tag.getBlue());
-        cell.setStyle(colorStyle);
-
-        double brightness = (tag.getRed() * 0.299 + tag.getGreen() * 0.587
-                + tag.getBlue() * 0.114) / 255;
-        String textColor = brightness < 0.5 ? "white" : "black";
-        cell.setTextFill(Color.web(textColor));
-    }
-
-    /**
      * Creates the participant pop-up and sets the styling for it.
      */
     private void setParticipantsPopup() {
@@ -320,9 +266,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
         pop.setMinSize(100, 50);
         Popup popup = new Popup();
         popup.getContent().add(pop);
-        participants.setOnMouseEntered(event -> {
-            popup.show(mainCtrl.getPrimaryStage(), event.getScreenX(), event.getScreenY() + 5);
-        });
+        participants.setOnMouseEntered(event ->
+                popup.show(mainCtrl.getPrimaryStage(), event.getScreenX(), event.getScreenY() + 5));
         participants.setOnMouseExited(event -> {
             popup.hide();
         });
@@ -440,28 +385,10 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * @param contact the participant to be removed from the event and expenses
      */
     private void removeParticipantFromEvent(Participant contact) {
-        event.removeParticipant(contact);
-        serverUtils.updateEvent(event);
-        List<Expense> toDelete = new ArrayList<>();
-        for (Expense expense : event.getExpenses()) {
-            if (expense.getPaidBy().equals(contact))
-                toDelete.add(expense);
-            else if (expense.getInvolvedParticipants().contains(contact)) {
-                if (expense.getInvolvedParticipants().size() == 1)
-                    toDelete.add(expense);
-                else {
-                    expense.getInvolvedParticipants().remove(contact);
-                    serverUtils.updateExpense(event.getId(), expense);
-                }
-            }
-        }
-        for (Expense expense1 : toDelete) {
-            serverUtils.deleteExpense(event.getId(), expense1);
-        }
-        serverUtils.deleteParticipant(contact);
-        this.event.setParticipants(serverUtils.getEvent(event.getId()).getParticipants());
-        this.event = serverUtils.updateEvent(this.event);
+        overviewService.removeParticipantFromEvent(this.event, contact);
+        event = serverUtils.getEvent(this.event.getId());
         participantsDisplay();
+        mainCtrl.showEventOverview(event);
     }
 
     /**
@@ -471,23 +398,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * @param participant The participant to be updated.
      */
     public void updateParticipant(Participant participant) {
-        boolean participantExists = false;
-        int index = -1;
-        for (Participant p : event.getParticipants()) {
-            if (Objects.equals(p.getId(), participant.getId())) {
-                index = event.getParticipants().indexOf(p);
-                participantExists = true;
-                break;
-            }
-        }
-        if (!participantExists) {
-            Participant newPart = serverUtils.addParticipant(participant);
-            this.event.getParticipants().add(newPart);
-        } else {
-            serverUtils.updateParticipant(participant);
-            this.event.getParticipants().set(index, participant);
-        }
-        this.event = serverUtils.updateEvent(event);
+        overviewService.updateParticipant(this.event, participant);
+        this.event = serverUtils.getEvent(this.event.getId());
         participantsDisplay();
         mainCtrl.showEventOverview(event);
     }
@@ -542,7 +454,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     /**
      * Creates a new messages.properties file and downloads it to a users Downloads directory.
      */
-    public void addLang() throws BackingStoreException {
+    public void addLang() {
         Properties newLang = new Properties();
         try (BufferedReader reader = new BufferedReader(
                 new FileReader("src/main/resources/client/misc/langTemplate.txt"))) {
@@ -579,7 +491,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
         if (admin) {
             mainCtrl.showAdminEventOverview();
         }
-
         else {
             userConfig.reloadLanguageFile();
             mainCtrl.showStartScreen();
@@ -607,25 +518,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
     @FXML
     public void addParticipant() {
         mainCtrl.showContactDetails(new Participant(), event);
-    }
-
-    /**
-     * Converts the currency of all the expenses.
-     *
-     * @param a The list with expenses to be converted.
-     * @return a new list of expenses with the converted currencies.
-     */
-    public List<Expense> convertCurrency(List<Expense> a) {
-        String c = userConfig.getCurrencyConfig();
-        for (Expense b : a) {
-            if (!b.getCurrency().equals(c)) {
-                int amn = (int) (serverUtils.convertCurrency(b.getAmount(), b.getCurrency(),
-                        c, new Date(b.getDate().getTime()).toLocalDate()) * 100);
-                b.setAmount((double) amn / 100);
-                b.setCurrency(c);
-            }
-        }
-        return a;
     }
 
     /**
@@ -668,21 +560,22 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
+     * Get the currency
+     *
+     * @return the currency
+     */
+    public String getCurrency() {
+        return userConfig.getCurrencyConfig();
+    }
+
+    /**
      * Shows all expenses of the event
      */
     public void showAllExpenses() {
         expenseTable = new TableView<>();
         refreshExpenseTable();
-        original = FXCollections.observableArrayList();
-        if(event != null){
-            for (Expense e : event.getExpenses()) {
-                if (e.getTitle().equalsIgnoreCase("debt repayment")) {
-                    continue;
-                }
-                original.add(e);
-            }
-        }
-        original = (ObservableList<Expense>) convertCurrency(original);
+        original = overviewService.getAllExpenses(this.event);
+        original = (ObservableList<Expense>) overviewService.convertCurrency(original, getCurrency());
         expenseTable.setItems(original);
         all.setContent(expenseTable);
         selectExpense();
@@ -695,17 +588,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public void showFromSelected() {
         expenseTable = new TableView<>();
         refreshExpenseTable();
-        original = FXCollections.observableArrayList();
-
-        for (Expense e : event.getExpenses()) {
-            if (e.getTitle().equalsIgnoreCase("debt repayment")) {
-                continue;
-            }
-            if (e.getPaidBy().equals(participantBox.getSelectionModel().getSelectedItem())) {
-                original.add(e);
-            }
-        }
-        original = (ObservableList<Expense>) convertCurrency(original);
+        Participant p = participantBox.getSelectionModel().getSelectedItem();
+        original = overviewService.getFromSelected(this.event, p);
+        original = (ObservableList<Expense>) overviewService.convertCurrency(original, getCurrency());
         expenseTable.setItems(original);
         fromSelected.setContent(expenseTable);
         selectExpense();
@@ -718,18 +603,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public void showIncludingSelected() {
         expenseTable = new TableView<>();
         refreshExpenseTable();
-        original = FXCollections.observableArrayList();
-
-        for (Expense e : event.getExpenses()) {
-            if (e.getTitle().equalsIgnoreCase("debt repayment")) {
-                continue;
-            }
-            if (e.getPaidBy().equals(participantBox.getSelectionModel().getSelectedItem()) ||
-                    e.getInvolvedParticipants().contains(participantBox.getSelectionModel().getSelectedItem())) {
-                original.add(e);
-            }
-        }
-        original = (ObservableList<Expense>) convertCurrency(original);
+        Participant p = participantBox.getSelectionModel().getSelectedItem();
+        original = overviewService.getIncludingSelected(this.event, p);
+        original = (ObservableList<Expense>) overviewService.convertCurrency(original, getCurrency());
         expenseTable.setItems(original);
         inclSelected.setContent(expenseTable);
         selectExpense();
@@ -770,10 +646,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
     /**
      * switches to the Open Debt scene
-     * 
-     * @param actionEvent event that calls the method, click on the button
      */
-    public void settleDebts(ActionEvent actionEvent) {
+    public void settleDebts() {
         mainCtrl.showOpenDebts(event);
     }
 
@@ -826,18 +700,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Deletes the selected expense
+     * Deletes the selected expense and refreshes the overview
      */
     public void delete() {
         try {
-            Response response = serverUtils.deleteExpense(this.event.getId(),
-                    expenseTable.getSelectionModel().getSelectedItem());
-            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-                System.out.println("OK! good job " + response.getStatus());
-                deletePrevExp(expenseTable.getSelectionModel().getSelectedItem());
-            } else {
-                System.out.println("Status code: " + response.getStatus());
-            }
+            overviewService.deleteExpense(this.event, expenseTable.getSelectionModel().getSelectedItem());
             this.event = serverUtils.getEvent(this.event.getId());
         } finally {
             options.setVisible(false);
@@ -861,58 +728,39 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
     /**
      * marks if an admin is accessing the event overview (true), or not (false)
-     * 
+     *
      * @param b the boolean that describes whether the admin is accessing an event overview.
      */
     public void setAdmin(boolean b) {
-        this.admin = b;
+        overviewService.setAdmin(this.admin, b);
     }
 
     /**
      * deletes the expense from the cached ones
-     * 
+     *
      * @param expense the expense to be deleted from the cache
      */
     public void deletePrevExp(Expense expense) {
-        if (previousExpenses.get(expense.getId()) != null) {
-            previousExpenses.get(expense.getId()).removeLast();
-            if (previousExpenses.get(expense.getId()).isEmpty())
-                previousExpenses.remove(expense.getId());
-        }
+        overviewService.deletePrevExp(previousExpenses, expense);
     }
 
     /**
      * add an expense to the cache
-     * 
+     *
      * @param expense the expense to be added
      */
     public void addPrevExp(Expense expense) {
-        if (previousExpenses.get(expense.getId()) == null) {
-            previousExpenses.put(expense.getId(), new ArrayList<>());
-            previousExpenses.get(expense.getId()).add(expense);
-        } else
-            previousExpenses.get(expense.getId()).add(expense);
+        overviewService.addPrevExp(previousExpenses, expense);
     }
 
     /**
      * Returning the previous version of the expense stored in the cache
-     * 
+     *
      * @param id the id of the expense
      * @return the previous version of the expense
      */
     public Expense getPrevExp(Long id) {
-        if (previousExpenses.get(id) == null)
-            return null;
-        return previousExpenses.get(id).getLast();
-    }
-
-    /**
-     * Get the currency
-     * 
-     * @return the currency
-     */
-    public String getCurrency() {
-        return userConfig.getCurrencyConfig();
+        return overviewService.getPrevExp(previousExpenses, id);
     }
 
     /**
@@ -927,9 +775,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         participantBox.setOnMouseEntered(mouseEvent -> {
             popup.show(mainCtrl.getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY() + 5);
         });
-        participantBox.setOnMouseExited(mouseEvent -> {
-            popup.hide();
-        });
+        participantBox.setOnMouseExited(mouseEvent -> popup.hide());
     }
 
     /**
@@ -977,12 +823,10 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
         this.currencyButton.setOnMouseEntered(mouseEvent -> {
             this.currencyButton.setEffect(new InnerShadow());
-
         });
         this.currencyButton.setOnMouseExited(mouseEvent -> {
             this.currencyButton.setEffect(null);
         });
-
     }
 
 }

@@ -13,7 +13,7 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Button>
-      <Text fx:id="title" layoutX="242.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title" textAlignment="CENTER">
+      <Text fx:id="title" layoutX="13.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title" textAlignment="CENTER" wrappingWidth="539.3341979980469">
          <font>
             <Font name="System Bold" size="30.0" />
          </font>

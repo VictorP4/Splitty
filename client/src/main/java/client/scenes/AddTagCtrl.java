@@ -122,21 +122,11 @@ public class AddTagCtrl implements Main.UpdatableUI {
     public void add() {
         String name = nameTextField.getText().trim();
         if (name.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(Main.getLocalizedString("Error"));
-            alert.setHeaderText(Main.getLocalizedString("Error"));
-            alert.setContentText(Main.getLocalizedString("NameCannotBeEmpty"));
-            alert.showAndWait();
-            return;
+            tagNameError("NameCannotBeEmpty");
         }
 
         if (doesTagNameExist(name)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(Main.getLocalizedString("Error"));
-            alert.setHeaderText(Main.getLocalizedString("Error"));
-            alert.setContentText(Main.getLocalizedString("TagNameExists"));
-            alert.showAndWait();
-            return;
+            tagNameError("tagNameExist");
         }
 
         Color color = colorPicker.getValue();
@@ -159,12 +149,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
     public void edit() {
         String name = nameTextField.getText().trim();
         if (name.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(Main.getLocalizedString("Error"));
-            alert.setHeaderText(Main.getLocalizedString("Error"));
-            alert.setContentText(Main.getLocalizedString("NameCannotBeEmpty"));
-            alert.showAndWait();
-            return;
+            tagNameError("NameCannotBeEmpty");
         }
 
         Color color = colorPicker.getValue();
@@ -181,6 +166,17 @@ public class AddTagCtrl implements Main.UpdatableUI {
 
         clearFields();
         mainCtrl.showAddExpenseFromTag(event);
+    }
+
+    /**
+     * Shows an error popup when a user tried to create/edit a tag with no name.
+     */
+    private void tagNameError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(Main.getLocalizedString("Error"));
+        alert.setHeaderText(Main.getLocalizedString("Error"));
+        alert.setContentText(Main.getLocalizedString(message));
+        alert.showAndWait();
     }
 
     /**

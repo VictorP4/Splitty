@@ -16,12 +16,12 @@
             <Font name="System Bold" size="24.0" />
          </font>
       </Text>
-      <Text fx:id="serverUrlText" layoutX="65.0" layoutY="155.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server:">
+      <Text fx:id="serverUrlText" layoutX="65.0" layoutY="155.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server:" wrappingWidth="193.5999999999999">
          <font>
             <Font size="15.0" />
          </font>
       </Text>
-      <Text fx:id="adminPass" layoutX="63.0" layoutY="277.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:">
+      <Text fx:id="adminPass" layoutX="63.0" layoutY="277.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" wrappingWidth="193.5999999999999">
          <font>
             <Font size="15.0" />
          </font>
@@ -52,7 +52,7 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Text fx:id="localServer" layoutX="65.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reset Server:">
+      <Text fx:id="localServer" layoutX="65.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reset Server:" wrappingWidth="193.5999999999999">
          <font>
             <Font size="16.0" />
          </font>
@@ -65,12 +65,12 @@
          <font>
             <Font size="11.0" />
          </font></TextField>
-      <Text fx:id="email" layoutX="63.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email:" wrappingWidth="91.875">
+      <Text fx:id="email" layoutX="63.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email:" wrappingWidth="193.5999999999999">
          <font>
             <Font size="15.0" />
          </font>
       </Text>
-      <Text fx:id="password" layoutX="272.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:">
+      <Text fx:id="password" layoutX="272.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" wrappingWidth="143.19999999999982">
          <font>
             <Font size="15.0" />
          </font>
@@ -85,12 +85,12 @@
             <Font size="11.0" />
          </font>
       </PasswordField>
-      <Text fx:id="customization" fontSmoothingType="LCD" layoutX="66.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customization" underline="true">
+      <Text fx:id="customization" fontSmoothingType="LCD" layoutX="66.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customization" underline="true" wrappingWidth="193.5999999999999">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
       </Text>
-      <Text fx:id="adminAccess" fontSmoothingType="LCD" layoutX="65.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin Access" underline="true" wrappingWidth="108.421875">
+      <Text fx:id="adminAccess" fontSmoothingType="LCD" layoutX="65.0" layoutY="255.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin Access" underline="true" wrappingWidth="193.5999999999999">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>

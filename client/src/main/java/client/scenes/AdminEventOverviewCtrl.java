@@ -76,7 +76,7 @@ public class AdminEventOverviewCtrl implements Main.UpdatableUI {
             }
         });
         server.registerForUpdates(event -> {
-            if(events.stream().map(x -> x.getId()).anyMatch(x -> x.equals(event.getId()))){
+            if(events.stream().map(Event::getId).anyMatch(x -> x.equals(event.getId()))){
                 events.removeIf(x -> x.getId().equals(event.getId()));
                 events.add(event);
             }

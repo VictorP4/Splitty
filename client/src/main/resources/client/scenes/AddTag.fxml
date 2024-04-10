@@ -11,7 +11,7 @@
 <AnchorPane fx:id="anchor" prefHeight="320.0" prefWidth="413.0" style="-fx-background-color: EFD6DA; -fx-border-color: black; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddTagCtrl">
 
     <children>
-        <Text fx:id="addEditText" layoutX="121.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Edit Tag">
+        <Text fx:id="addEditText" layoutX="8.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Edit Tag" textAlignment="CENTER" wrappingWidth="397.484375">
             <font>
                 <Font name="System Bold" size="24.0" />
             </font>
