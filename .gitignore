@@ -4,7 +4,6 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-client/src/main/resources/user_configs.properties
 /rates
 
 **/*.mv.db
