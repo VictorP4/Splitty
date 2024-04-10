@@ -1,6 +1,5 @@
 package client.services;
 
-import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
@@ -15,18 +14,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class AddExpenseService {
 
     private final ServerUtils serverUtils;
-    private final MainCtrl mainCtrl;
 
     /**
      * Creates a new OverviewService.
      *
      * @param utils The utility class for server interaction.
-     * @param mainCtrl The main controller of the application.
      */
     @Inject
-    public AddExpenseService(ServerUtils utils, MainCtrl mainCtrl) {
+    public AddExpenseService(ServerUtils utils) {
         this.serverUtils = utils;
-        this.mainCtrl = mainCtrl;
     }
 
     /**
@@ -62,28 +58,16 @@ public class AddExpenseService {
     }
 
     /**
-     * adds an expense to the event.
+     * Returns a list of all the expenses in the event.
      *
-     * @param event the event the expense has to be added to
-     * @param globalExpense the global expense in the AddExpenseCtrl (this.expense)
-     * @param expense the expense to be added
+     * @param event the event of which we want to return all the expenses.
      */
-    public void addExpense(Event event, Expense globalExpense ,Expense expense) {
-        if (globalExpense != null) {
-            expense.setId(globalExpense.getId());
-        }
+    public List<Long> getAllExpenses(Event event) {
         List<Long> ids = new ArrayList<>();
         for (Expense e : event.getExpenses()) {
             ids.add(e.getId());
         }
-        if (ids.contains(expense.getId())) {
-            updateExp(event, expense);
-            Expense newExp = serverUtils.updateExpense(event.getId(), expense);
-            mainCtrl.addPrevExp(newExp);
-        } else {
-            Expense newExp = serverUtils.addExpense(expense, event.getId());
-            mainCtrl.addPrevExp(newExp);
-        }
+        return ids;
     }
 
     /**
@@ -93,11 +77,11 @@ public class AddExpenseService {
      *
      *
      * @param event the event that contains the expense
-     * @param expense the expense we want to reset
+     * @param expense the current values of the expense
+     * @param prevExpense the previous values of the expense
      * @return a boolean that states whether every participant in the old expense is still a participant in the event
      */
-    public Boolean checkExpense(Event event, Expense expense) {
-        Expense prevExpense = mainCtrl.getPrevExp(expense.getId());
+    public Boolean checkExpenseParticipants(Event event, Expense expense, Expense prevExpense) {
         final AtomicBoolean b = new AtomicBoolean(true);
         List<Long> participantsIDs =
                 event.getParticipants().stream()

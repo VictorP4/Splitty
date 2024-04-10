@@ -238,7 +238,19 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
         // Checks for any other related errors
         try {
-            addExpenseService.addExpense(this.event, this.expense, addExp);
+            if (this.expense != null) {
+                expense.setId(this.expense.getId());
+            }
+            List<Long> ids = addExpenseService.getAllExpenses(this.event, this.expense, addExp);
+            if (ids.contains(expense.getId())) {
+                addExpenseService.updateExp(event, expense);
+                Expense newExp = server.updateExpense(event.getId(), expense);
+                mainCtrl.addPrevExp(newExp);
+            } else {
+                Expense newExp = server.addExpense(expense, event.getId());
+                mainCtrl.addPrevExp(newExp);
+            }
+
             event = server.getEvent(event.getId());
         } catch (WebApplicationException e) {
             errorPopup(e.getMessage());
@@ -673,7 +685,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 errorPopup("Undo unavailable");
                 return;
             }
-            Boolean participantsMatchEvent = addExpenseService.checkExpense(this.event, this.expense);
+            Expense prevExpense = mainCtrl.getPrevExp(expense.getId());
+            Boolean participantsMatchEvent = addExpenseService.checkExpenseParticipants(this.event, this.expense, prevExpense);
             if(!participantsMatchEvent){
                 undo();
                 return;
