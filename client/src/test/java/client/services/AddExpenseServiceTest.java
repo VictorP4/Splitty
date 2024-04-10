@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AddExpenseServiceTests {
+public class AddExpenseServiceTest {
 
     @InjectMocks
     private AddExpenseService expenseService;
