@@ -238,6 +238,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     public void switchToDutch() throws BackingStoreException {
         userConfig.setLanguageConfig("nl");
         loadLanguageConfig();
+        Main.switchLocale("messages","nl");
         refresh();
     }
 
@@ -247,6 +248,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     public void switchToEnglish() throws BackingStoreException {
         userConfig.setLanguageConfig("en");
         loadLanguageConfig();
+        Main.switchLocale("messages","en");
         refresh();
     }
 
@@ -256,6 +258,7 @@ public class StartScreenCtrl implements Main.UpdatableUI {
     public void switchToSpanish() throws BackingStoreException {
         userConfig.setLanguageConfig("es");
         loadLanguageConfig();
+        Main.switchLocale("messages","es");
         refresh();
     }
 

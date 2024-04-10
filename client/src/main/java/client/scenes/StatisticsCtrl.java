@@ -18,6 +18,7 @@ import commons.Event;
 import commons.Expense;
 import commons.Tag;
 
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -95,7 +96,7 @@ public class StatisticsCtrl implements Main.UpdatableUI {
     public void getTotal() {
         double totalCost = event.getExpenses().stream()
                 .mapToDouble(Expense::getAmount).sum();
-        total.setText(String.format("%.2f \u20AC", totalCost));
+        total.setText(String.format("%.2f %s", totalCost, Currency.getInstance(mainCtrl.getCurrency()).getSymbol()));
     }
 
     /**
@@ -126,7 +127,7 @@ public class StatisticsCtrl implements Main.UpdatableUI {
             String tagName = entry.getKey();
             double amount = entry.getValue();
             double relativeValue = amount / totalExpense;
-            PieChart.Data data = new PieChart.Data(tagName + String.format("\n%.2f \u20AC (%.2f%%)", amount, relativeValue * 100), amount);
+            PieChart.Data data = new PieChart.Data(tagName + String.format("\n%.2f %s (%.2f%%)", amount, Currency.getInstance(mainCtrl.getCurrency()).getSymbol(), relativeValue * 100), amount);
             pieChartData.add(data);
         }
         pieChart.setData(pieChartData);

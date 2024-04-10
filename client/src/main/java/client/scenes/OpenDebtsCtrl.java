@@ -34,11 +34,11 @@ import javafx.scene.text.Text;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 
 public class OpenDebtsCtrl implements Main.UpdatableUI {
-    private final ServerUtils server;
     private final MainCtrl mainCtrl;
     @FXML
     public AnchorPane anchor;
@@ -56,13 +56,12 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
     /**
      * Constructs a new instance of an OpenDebtCtrl
      *
-     * @param server The utility class for server-related operations.
+     *
      * @param mainCtrl The main controller of the application.
      */
     @Inject
-    public OpenDebtsCtrl(ServerUtils server, MainCtrl mainCtrl, WebSocketUtils webSocket, ServerUtils serverUtils) {
+    public OpenDebtsCtrl(MainCtrl mainCtrl, WebSocketUtils webSocket, ServerUtils serverUtils) {
         this.mainCtrl = mainCtrl;
-        this.server = server;
         this.webSocket= webSocket;
         this.serverUtils = serverUtils;
     }
@@ -251,7 +250,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
                     message.add(debt.getPersonOwed().getName());
                     message.add(debt.getPersonOwed().getIban());
                     message.add(debt.getPersonOwed().getBic());
-                    Response response = server.sendReminder(new EmailRequestBody(message, String.valueOf(debt.getAmount())));
+                    Response response = serverUtils.sendReminder(new EmailRequestBody(message, String.valueOf(debt.getAmount())));
                     if (response.getStatus() == 200) {
                         System.out.println("Reminder sent successfully.");
                     } else {
@@ -263,7 +262,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
                     list.add(1, img);
                 }
             });
-            if(debt.getPersonOwed().getEmail().isEmpty()) emailB.setDisable(true);
+            if(debt.getPersonOwed().getEmail()==null || debt.getPersonOwed().getEmail().isEmpty()) emailB.setDisable(true);
             emailB.setLayoutX(124);
             emailB.setLayoutY(91);
             emailB.setMnemonicParsing(false);
@@ -293,11 +292,8 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         int amn =  (int)(serverUtils.convertCurrency(debt.getAmount(),"EUR",
                 mainCtrl.getCurrency(), LocalDate.now().minusDays(1))*100);
         double amount = mainCtrl.getCurrency().equals("EUR") ? debt.getAmount() : (double)amn/100;
-        String currency;
-        if(mainCtrl.getCurrency().equals("CHF")) currency = "swiss francs";
-        else if(mainCtrl.getCurrency().equals("EUR")) currency = "euros";
-        else currency = "dollars";
-        text.setText(debt.getPersonInDebt().getName()+" "+Main.getLocalizedString("gives")+" "+ amount +" "+currency+" "+Main.getLocalizedString("to")+" "+ debt.getPersonOwed().getName());
+        text.setText(debt.getPersonInDebt().getName()+" "+Main.getLocalizedString("gives")+" "+ amount +" "+ Currency.getInstance(mainCtrl.getCurrency()).getSymbol()+" "+
+                Main.getLocalizedString("to")+" "+ debt.getPersonOwed().getName());
         text.setWrappingWidth(275);
         text.setStrokeType(StrokeType.OUTSIDE);
         text.setStrokeWidth(0.0);
@@ -329,7 +325,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
                 expense.setInvolvedParticipants(new ArrayList<>(List.of(debt.getPersonOwed())));
                 expense.setAmount(debt.getAmount());
                 expense.setTitle("Debt repayment");
-                server.addExpense(expense, event1.getId());
+                serverUtils.addExpense(expense, event1.getId());
                 list.remove(2);
                 ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/client/misc/HomeActive.png")));
                 img.setFitHeight(16);

@@ -16,6 +16,7 @@ import server.database.ExpensesRepository;
 import server.database.ParticipantRepository;
 import server.database.TagRepository;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -91,11 +92,13 @@ public class EventServiceTest {
         event.setTitle("Test");
         Participant participant1 = new Participant();
         participant1.setName("Test1");
+        participant1.setId(1L);
         Participant participant2 = new Participant();
         participant2.setName("Test2");
+        participant2.setId(2L);
         event.getParticipants().add(participant1);
         event.getParticipants().add(participant2);
-        Expense expense = new Expense("test",1,participant1, List.of(participant2),new Date(),event.getTags().get(0), "EUR");
+        Expense expense = new Expense("test",1,participant1, new ArrayList<>(List.of(participant2)),new Date(),null, "EUR");
         event.getExpenses().add(expense);
         when(eventRepository.save(event)).thenReturn(event);
         Event e = eventService.importJSON(event);

@@ -126,9 +126,6 @@ public class EventController {
         Event finalEv = evServ.put(id, event);
         if (finalEv == null)
             return ResponseEntity.badRequest().build();
-        listeners.forEach((k,l) -> {
-            l.accept(finalEv);
-        });
         smt.convertAndSend("/topic/events", finalEv);
         return ResponseEntity.ok(finalEv);
     }

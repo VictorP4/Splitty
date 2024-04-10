@@ -515,6 +515,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public void switchToEnglish() throws BackingStoreException {
         userConfig.setLanguageConfig("en");
         loadLanguageConfig();
+        Main.switchLocale("messages","en");
         refresh(event);
     }
 
@@ -524,6 +525,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public void switchToDutch() throws BackingStoreException {
         userConfig.setLanguageConfig("nl");
         loadLanguageConfig();
+        Main.switchLocale("messages","nl");
         refresh(event);
     }
 
@@ -533,6 +535,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     public void switchToSpanish() throws BackingStoreException {
         userConfig.setLanguageConfig("es");
         loadLanguageConfig();
+        Main.switchLocale("messages","es");
         refresh(event);
     }
 
@@ -671,7 +674,6 @@ public class OverviewCtrl implements Main.UpdatableUI {
         expenseTable = new TableView<>();
         refreshExpenseTable();
         original = FXCollections.observableArrayList();
-
         if(event != null){
             for (Expense e : event.getExpenses()) {
                 if (e.getTitle().equalsIgnoreCase("debt repayment")) {
