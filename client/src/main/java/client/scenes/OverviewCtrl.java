@@ -3,6 +3,7 @@ package client.scenes;
 import client.Main;
 import client.UserConfig;
 import client.services.OverviewService;
+import client.services.TagService;
 import client.utils.ServerUtils;
 import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
@@ -13,7 +14,6 @@ import javafx.application.Platform;
 
 import commons.Tag;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
@@ -48,6 +48,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
     private final OverviewService overviewService;
+    private final TagService tagService;
     private final UserConfig userConfig;
     @FXML
     public Button addExpense;
@@ -88,7 +89,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     private FlowPane participantsField;
     @FXML
     private Button statistics;
-    private WebSocketUtils webSocket;
+    private final WebSocketUtils webSocket;
     @FXML
     private Pane options;
     @FXML
@@ -103,21 +104,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
     @FXML
     private TableView<Expense> expenseTable;
     @FXML
-    private TableColumn<Expense, String> dateColumn;
-    @FXML
-    private TableColumn<Expense, String> whoPaidColumn;
-    @FXML
-    private TableColumn<Expense, String> howMuchColumn;
-    @FXML
-    private TableColumn<Expense, String> inclParticipantsColumn;
-    @FXML
-    private TableColumn<Expense, Tag> tagsColumn;
-    @FXML
     public Button moneyTransfer;
     @FXML
     public AnchorPane ap;
     private boolean admin;
-    private Preferences prefs = Preferences.userNodeForPackage(OverviewCtrl.class);;
+    private final Preferences prefs = Preferences.userNodeForPackage(OverviewCtrl.class);
     private Map<Long, List<Expense>> previousExpenses;
 
     /**
@@ -127,15 +118,17 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * @param mainCtrl    The main controller of the application.
      * @param webSocket The websocket.
      * @param overviewService the OverviewService to be injected.
+     * @param tagService the TagService to be injected.
      * @param userConfig the user configuration for persisted data.
      */
     @Inject
     public OverviewCtrl(ServerUtils serverUtils, MainCtrl mainCtrl, WebSocketUtils webSocket,
-                        OverviewService overviewService, UserConfig userConfig) {
+                        OverviewService overviewService, TagService tagService, UserConfig userConfig) {
         this.serverUtils = serverUtils;
         this.mainCtrl = mainCtrl;
         this.webSocket = webSocket;
         this.overviewService = overviewService;
+        this.tagService = tagService;
         this.userConfig = userConfig;
         MenuItem item = new MenuItem("Text");
     }
@@ -150,12 +143,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
         webSocket.connect("ws://localhost:8080/websocket");
         webSocket.addEventListener((event) -> {
-            if (this.event == null || !this.event.getId().equals(event.getId()))
-                return;
-            else {
-                Platform.runLater(() -> {
-                    refresh(event);
-                });
+            if (this.event != null && this.event.getId().equals(event.getId())) {
+                Platform.runLater(() -> refresh(event));
             }
         });
 
@@ -201,9 +190,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * Initializes the functionality of the invite code. This includes a copy on click and visible color changes.
      */
     private void setInviteCodeFunctionality() {
-        inviteCode.setOnMouseEntered(colorSwitch -> {
-            inviteCode.setFill(Color.rgb(32,178,170));
-        });
+        inviteCode.setOnMouseEntered(colorSwitch -> inviteCode.setFill(Color.rgb(32,178,170)));
         inviteCode.setOnMouseExited(colorSwitch -> {
             inviteCode.setFill(Color.BLACK);
             inviteCode.setEffect(null);
@@ -224,23 +211,23 @@ public class OverviewCtrl implements Main.UpdatableUI {
         expenseTable.getItems().clear();
         expenseTable.getColumns().clear();
 
-        dateColumn = new TableColumn<>(Main.getLocalizedString("date"));
+        TableColumn<Expense, String> dateColumn = new TableColumn<>(Main.getLocalizedString("date"));
         dateColumn.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(overviewService.formattedDate(e.getValue().getDate())));
 
-        whoPaidColumn = new TableColumn<>(Main.getLocalizedString("whoPaid"));
+        TableColumn<Expense, String> whoPaidColumn = new TableColumn<>(Main.getLocalizedString("whoPaid"));
         whoPaidColumn.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(e.getValue().getPaidBy().getName()));
 
-        howMuchColumn = new TableColumn<>(Main.getLocalizedString("howMuch"));
+        TableColumn<Expense, String> howMuchColumn = new TableColumn<>(Main.getLocalizedString("howMuch"));
         howMuchColumn.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(
                         Currency.getInstance(userConfig.getCurrencyConfig()).getSymbol()
                                 + " " + e.getValue().getAmount()
         ));
 
-        inclParticipantsColumn = new TableColumn<>(Main.getLocalizedString("involvedParticipants"));
+        TableColumn<Expense, String> inclParticipantsColumn = new TableColumn<>(Main.getLocalizedString("involvedParticipants"));
         inclParticipantsColumn.setCellValueFactory(e ->  new ReadOnlyObjectWrapper<>(
                 overviewService.setParticipantsString(e.getValue().getInvolvedParticipants())));
 
-        tagsColumn = new TableColumn<>(Main.getLocalizedString("tag"));
+        TableColumn<Expense, Tag> tagsColumn = new TableColumn<>(Main.getLocalizedString("tag"));
         tagsColumn.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(e.getValue().getTag()));
         tagsColumn.setCellFactory(column -> new TableCell<>() {
             {
@@ -250,8 +237,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
                         setStyle(null);
                     } else {
                         setText(newTag.getName());
-                        this.setStyle(overviewService.getCellColor(newTag));
-                        this.setTextFill(overviewService.getCellBrightness(newTag));
+                        this.setStyle(tagService.getCellColor(newTag));
+                        this.setTextFill(Color.web(tagService.getCellColor(newTag)));
                     }
                 });
             }
@@ -279,9 +266,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
         pop.setMinSize(100, 50);
         Popup popup = new Popup();
         popup.getContent().add(pop);
-        participants.setOnMouseEntered(event -> {
-            popup.show(mainCtrl.getPrimaryStage(), event.getScreenX(), event.getScreenY() + 5);
-        });
+        participants.setOnMouseEntered(event ->
+                popup.show(mainCtrl.getPrimaryStage(), event.getScreenX(), event.getScreenY() + 5));
         participants.setOnMouseExited(event -> {
             popup.hide();
         });
@@ -468,7 +454,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
     /**
      * Creates a new messages.properties file and downloads it to a users Downloads directory.
      */
-    public void addLang() throws BackingStoreException {
+    public void addLang() {
         Properties newLang = new Properties();
         try (BufferedReader reader = new BufferedReader(
                 new FileReader("src/main/resources/client/misc/langTemplate.txt"))) {
@@ -660,10 +646,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
     /**
      * switches to the Open Debt scene
-     * 
-     * @param actionEvent event that calls the method, click on the button
      */
-    public void settleDebts(ActionEvent actionEvent) {
+    public void settleDebts() {
         mainCtrl.showOpenDebts(event);
     }
 
@@ -791,9 +775,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         participantBox.setOnMouseEntered(mouseEvent -> {
             popup.show(mainCtrl.getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY() + 5);
         });
-        participantBox.setOnMouseExited(mouseEvent -> {
-            popup.hide();
-        });
+        participantBox.setOnMouseExited(mouseEvent -> popup.hide());
     }
 
     /**
@@ -841,12 +823,10 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
         this.currencyButton.setOnMouseEntered(mouseEvent -> {
             this.currencyButton.setEffect(new InnerShadow());
-
         });
         this.currencyButton.setOnMouseExited(mouseEvent -> {
             this.currencyButton.setEffect(null);
         });
-
     }
 
 }

@@ -5,11 +5,9 @@ import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
-import commons.Tag;
 import jakarta.ws.rs.core.Response;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.paint.Color;
 
 import javax.inject.Inject;
 import java.sql.Date;
@@ -125,28 +123,6 @@ public class OverviewService {
             }
         }
         return participantString.toString();
-    }
-
-    /**
-     * Returns the color of a cell to the color of the tag added.
-     *
-     * @param tag The tag of which we will set the cell color to.
-     */
-    public String getCellColor(Tag tag) {
-        return String.format("-fx-background-color: rgba(%d, %d, %d, 1);", tag.getRed(),
-                tag.getGreen(), tag.getBlue());
-    }
-
-    /**
-     * Returns the brightness the color of a cell should have.
-     *
-     * @param tag The tag of which we will set the cell color to.
-     */
-    public Color getCellBrightness(Tag tag) {
-        double brightness = (tag.getRed() * 0.299 + tag.getGreen() * 0.587
-                + tag.getBlue() * 0.114) / 255;
-        String textColor = brightness < 0.5 ? "white" : "black";
-        return Color.web(textColor);
     }
 
     /**

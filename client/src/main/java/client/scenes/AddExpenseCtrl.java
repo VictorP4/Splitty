@@ -2,6 +2,8 @@ package client.scenes;
 
 import client.Main;
 import client.UserConfig;
+import client.services.AddExpenseService;
+import client.services.TagService;
 import client.utils.ServerUtils;
 import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
@@ -32,6 +34,8 @@ import java.util.stream.Collectors;
 public class AddExpenseCtrl implements Main.UpdatableUI {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final AddExpenseService addExpenseService;
+    private final TagService tagService;
     @FXML
     public AnchorPane anchor;
     @FXML
@@ -81,7 +85,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     @FXML
     public VBox transferBox;
     private Expense expense;
-    private WebSocketUtils webSocket;
+    private final WebSocketUtils webSocket;
     private final UserConfig userConfig = new UserConfig();
 
     /**
@@ -89,11 +93,15 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      *
      * @param server   The utility class for server-related operations.
      * @param mainCtrl The main controller of the application.
+     * @param addExpenseService the TagService to be injected.
+     * @param tagService the TagService to be injected.
      */
     @Inject
-    public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl, WebSocketUtils webSocket) {
+    public AddExpenseCtrl(ServerUtils server, MainCtrl mainCtrl, AddExpenseService addExpenseService, TagService tagService, WebSocketUtils webSocket) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.addExpenseService = addExpenseService;
+        this.tagService = tagService;
         this.webSocket = webSocket;
     }
 
@@ -102,9 +110,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     public void initialize() {
         webSocket.addExpenseListener((expense -> {
-            if (this.expense == null || !Objects.equals(expense.getId(), this.expense.getId()))
-                return;
-            else {
+            if (this.expense != null && Objects.equals(expense.getId(), this.expense.getId())) {
                 Platform.runLater(() -> {
                     cancel();
                     errorPopup("The expense was deleted by another user.");
@@ -112,9 +118,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             }
         }));
         webSocket.addEventListener((event) -> {
-            if (this.event == null || !Objects.equals(this.event.getId(), event.getId()))
-                return;
-            else {
+            if (this.event != null && Objects.equals(this.event.getId(), event.getId())) {
                 Platform.runLater(() -> {
                     refresh(event);
                 });
@@ -178,7 +182,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void clearFields() {
         amount.clear();
         title.clear();
-        date.setValue(null); // TODO: make it give a default
+        date.setValue(null);
         paidBy.getSelectionModel().clearSelection();
         tagMenu.setText("Select Tag");
 
@@ -218,7 +222,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             transfer();
             return;
         }
-        Expense addExp = null;
+        Expense addExp;
 
         // Checks if all mandatory boxes have been filled in
         try {
@@ -234,21 +238,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
         // Checks for any other related errors
         try {
-            if (this.expense != null) {
-                addExp.setId(this.expense.getId());
-            }
-            List<Long> ids = new ArrayList<>();
-            for (Expense e : event.getExpenses()) {
-                ids.add(e.getId());
-            }
-            if (ids.contains(addExp.getId())) {
-                updateExp(addExp);
-                Expense newExp = server.updateExpense(event.getId(), addExp);
-                mainCtrl.addPrevExp(newExp);
-            } else {
-                Expense newExp = server.addExpense(addExp, event.getId());
-                mainCtrl.addPrevExp(newExp);
-            }
+            addExpenseService.addExpense(this.event, this.expense, addExp);
             event = server.getEvent(event.getId());
         } catch (WebApplicationException e) {
             errorPopup(e.getMessage());
@@ -288,7 +278,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * Allows for money transfer between users.
      */
     private void transfer() {
-        Expense transfer = null;
+        Expense transfer;
 
         try {
             transfer = getTransfer();
@@ -303,11 +293,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
         // Checks for any other related errors
         try {
-            userConfig.setCurrencyConfig(currency.getValue());
-            if (this.expense != null) {
-                transfer.setId(this.expense.getId());
-            }
-            server.addExpense(transfer, this.event.getId());
+            addExpenseService.addTransfer(this.event, this.expense, transfer);
         } catch (WebApplicationException e) {
             errorPopup(e.getMessage());
             return;
@@ -341,8 +327,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         Node node = transferBox.getChildren().getFirst();
         Participant toWho = null;
 
-        if (node instanceof ChoiceBox<?>) {
-            ChoiceBox<?> cb = (ChoiceBox<?>) node;
+        if (node instanceof ChoiceBox<?> cb) {
             toWho = (Participant) cb.getSelectionModel().getSelectedItem();
         }
 
@@ -467,8 +452,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     private void listOf(List<CheckBox> checkBoxes) {
         for (Node node : box.getChildren()) {
-            if (node instanceof CheckBox) {
-                CheckBox checkBox = (CheckBox) node;
+            if (node instanceof CheckBox checkBox) {
                 checkBoxes.add(checkBox);
             }
         }
@@ -504,11 +488,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         List<CheckBox> checks = new ArrayList<>();
         listOf(checks);
         for (CheckBox c : checks) {
-            if (c.isDisable()) {
-                c.setDisable(false);
-            } else {
-                c.setDisable(true);
-            }
+            c.setDisable(!c.isDisable());
         }
     }
 
@@ -521,14 +501,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         for (Tag tag : tags) {
             MenuItem menuItem = new MenuItem(tag.getName());
             menuItem.setOnAction(e -> handleTagSelection(tag));
-
-            String colorStyle = String.format("-fx-background-color: rgba(%d, %d, %d, 1);", tag.getRed(),
-                    tag.getGreen(), tag.getBlue());
-
-            double brightness = (tag.getRed() * 0.299 + tag.getGreen() * 0.587 + tag.getBlue() * 0.114) / 255;
-            String textColor = brightness < 0.5 ? "white" : "black";
-            colorStyle += String.format("-fx-text-fill: %s;", textColor);
-
+            String colorStyle = tagService.getCellColor(tag) +
+                    String.format("-fx-text-fill: %s;", tagService.getCellBrightness(tag));
             menuItem.setStyle(colorStyle);
             tagMenu.getItems().add(menuItem);
         }
@@ -613,10 +587,10 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * Sets the participant boxes of an already existing expense when loading the edit expense page of an expense.
      */
     private void setParticipantBoxes() {
-        Set<Long> expenseParList = new HashSet<>(expense.getInvolvedParticipants().stream()
-                        .map(x->x.getId()).collect(Collectors.toList()));
-        Set<Long> eventParList = new HashSet<>(this.event.getParticipants().stream()
-                        .map(x->x.getId()).collect(Collectors.toList()));
+        Set<Long> expenseParList = expense.getInvolvedParticipants().stream()
+                .map(Participant::getId).collect(Collectors.toSet());
+        Set<Long> eventParList = this.event.getParticipants().stream()
+                .map(Participant::getId).collect(Collectors.toSet());
         if (expenseParList.equals(eventParList)) {
             everybodyIn.setSelected(true);
         } else {
@@ -688,24 +662,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * updates the expanse in the event
-     *
-     * @param expense the updated expense
-     */
-    public void updateExp(Expense expense) {
-        int index = 0;
-        for (Expense e : this.event.getExpenses()) {
-            if (e.getId().equals(expense.getId())) {
-                this.event.getExpenses().set(index, expense);
-                System.out.println(event.getExpenses()); // TODO
-                return;
-            } else {
-                index++;
-            }
-        }
-    }
-
-    /**
      * Sets the scene according to the previous version of the same expense
      */
     @FXML
@@ -717,14 +673,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 errorPopup("Undo unavailable");
                 return;
             }
-            Expense  expense1 = mainCtrl.getPrevExp(expense.getId());
-            final Boolean[] b = {true};
-            List<Long> participantsIDs = this.event.getParticipants().stream().map(x->x.getId()).toList();
-            expense1.getInvolvedParticipants().forEach((p)-> b[0] = b[0] &&participantsIDs.contains(p.getId()));
-            b[0] = b[0] && participantsIDs.contains(expense1.getPaidBy().getId())
-                    && this.event.getTags().stream()
-                                    .map(x->x.getId()).toList().contains(expense1.getTag().getId());
-            if(!b[0]){
+            Boolean participantsMatchEvent = addExpenseService.checkExpense(this.event, this.expense);
+            if(!participantsMatchEvent){
                 undo();
                 return;
             }
