@@ -10,19 +10,16 @@ public class TagService {
 
     private final ServerUtils serverUtils;
     private final UserConfig userConfig;
-    private final MainCtrl mainCtrl;
 
     /**
      * Creates a new OverviewService.
      *
      * @param utils The utility class for server interaction.
-     * @param mainCtrl The main controller of the application.
      * @param userConfig the user configuration for persisted data.
      */
     @Inject
-    public TagService(ServerUtils utils, MainCtrl mainCtrl, UserConfig userConfig) {
+    public TagService(ServerUtils utils, UserConfig userConfig) {
         this.serverUtils = utils;
-        this.mainCtrl = mainCtrl;
         this.userConfig = userConfig;
     }
 
