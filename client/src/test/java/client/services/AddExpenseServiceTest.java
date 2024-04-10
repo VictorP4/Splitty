@@ -142,7 +142,7 @@ public class AddExpenseServiceTest {
      * tests the checkParticipants method in AddExpenseService
      */
     @Test
-    public void False() {
+    public void testCheckParticipantsFalse() {
         Event event = new Event();
         Expense prev = new Expense();
         prev.setId(1L);
