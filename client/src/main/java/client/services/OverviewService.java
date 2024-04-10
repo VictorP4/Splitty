@@ -1,6 +1,5 @@
 package client.services;
 
-import client.UserConfig;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;

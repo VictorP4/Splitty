@@ -1,27 +1,16 @@
 package client.services;
 
-import client.UserConfig;
-import client.scenes.MainCtrl;
-import client.utils.ServerUtils;
 import commons.Tag;
 import javax.inject.Inject;
 
 public class TagService {
 
-    private final ServerUtils serverUtils;
-    private final UserConfig userConfig;
 
     /**
      * Creates a new OverviewService.
-     *
-     * @param utils The utility class for server interaction.
-     * @param userConfig the user configuration for persisted data.
      */
     @Inject
-    public TagService(ServerUtils utils, UserConfig userConfig) {
-        this.serverUtils = utils;
-        this.userConfig = userConfig;
-    }
+    public TagService() {}
 
     /**
      * Returns the color of a cell to the color of the tag added.
