@@ -241,7 +241,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             if (this.expense != null) {
                 expense.setId(this.expense.getId());
             }
-            List<Long> ids = addExpenseService.getAllExpenses(this.event, this.expense, addExp);
+            List<Long> ids = addExpenseService.getAllExpenses(this.event);
             if (ids.contains(expense.getId())) {
                 addExpenseService.updateExp(event, expense);
                 Expense newExp = server.updateExpense(event.getId(), expense);

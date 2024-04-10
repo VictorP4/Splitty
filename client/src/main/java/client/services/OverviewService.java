@@ -20,7 +20,6 @@ import java.util.Objects;
 public class OverviewService {
 
     private final ServerUtils serverUtils;
-    private final UserConfig userConfig;
     private Map<Long, List<Expense>> previousExpenses;
 
 
@@ -28,12 +27,10 @@ public class OverviewService {
      * Creates a new OverviewService.
      *
      * @param utils The utility class for server interaction.
-     * @param userConfig the user configuration for persisted data.
      */
     @Inject
-    public OverviewService(ServerUtils utils, UserConfig userConfig) {
+    public OverviewService(ServerUtils utils) {
         this.serverUtils = utils;
-        this.userConfig = userConfig;
     }
 
     /**
@@ -131,14 +128,13 @@ public class OverviewService {
      * @param a The list with expenses to be converted.
      * @return a new list of expenses with the converted currencies.
      */
-    public List<Expense> convertCurrency(List<Expense> a) {
-        String c = userConfig.getCurrencyConfig();
+    public List<Expense> convertCurrency(List<Expense> a, String currency) {
         for (Expense b : a) {
-            if (!b.getCurrency().equals(c)) {
+            if (!b.getCurrency().equals(currency)) {
                 int amn = (int) (serverUtils.convertCurrency(b.getAmount(), b.getCurrency(),
-                        c, new Date(b.getDate().getTime()).toLocalDate()) * 100);
+                        currency, new Date(b.getDate().getTime()).toLocalDate()) * 100);
                 b.setAmount((double) amn / 100);
-                b.setCurrency(c);
+                b.setCurrency(currency);
             }
         }
         return a;
@@ -191,15 +187,6 @@ public class OverviewService {
         if (previousExpenses.get(id) == null)
             return null;
         return previousExpenses.get(id).getLast();
-    }
-
-    /**
-     * Get the currency
-     *
-     * @return the currency
-     */
-    public String getCurrency() {
-        return userConfig.getCurrencyConfig();
     }
 
     /**

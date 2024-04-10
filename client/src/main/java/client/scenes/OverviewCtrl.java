@@ -149,7 +149,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         });
 
         loadLanguageConfig();
-        currencyButton.setText(userConfig.getCurrencyConfig());
+        currencyButton.setText(getCurrency());
 
         setInviteCodeFunctionality();
         initializeShortcuts();
@@ -219,7 +219,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
         TableColumn<Expense, String> howMuchColumn = new TableColumn<>(Main.getLocalizedString("howMuch"));
         howMuchColumn.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(
-                        Currency.getInstance(userConfig.getCurrencyConfig()).getSymbol()
+                        Currency.getInstance(getCurrency()).getSymbol()
                                 + " " + e.getValue().getAmount()
         ));
 
@@ -565,7 +565,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * @return the currency
      */
     public String getCurrency() {
-        return overviewService.getCurrency();
+        return userConfig.getCurrencyConfig();
     }
 
     /**
@@ -575,7 +575,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         expenseTable = new TableView<>();
         refreshExpenseTable();
         original = overviewService.getAllExpenses(this.event);
-        original = (ObservableList<Expense>) overviewService.convertCurrency(original);
+        original = (ObservableList<Expense>) overviewService.convertCurrency(original, getCurrency());
         expenseTable.setItems(original);
         all.setContent(expenseTable);
         selectExpense();
@@ -590,7 +590,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         refreshExpenseTable();
         Participant p = participantBox.getSelectionModel().getSelectedItem();
         original = overviewService.getFromSelected(this.event, p);
-        original = (ObservableList<Expense>) overviewService.convertCurrency(original);
+        original = (ObservableList<Expense>) overviewService.convertCurrency(original, getCurrency());
         expenseTable.setItems(original);
         fromSelected.setContent(expenseTable);
         selectExpense();
@@ -605,7 +605,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
         refreshExpenseTable();
         Participant p = participantBox.getSelectionModel().getSelectedItem();
         original = overviewService.getIncludingSelected(this.event, p);
-        original = (ObservableList<Expense>) overviewService.convertCurrency(original);
+        original = (ObservableList<Expense>) overviewService.convertCurrency(original, getCurrency());
         expenseTable.setItems(original);
         inclSelected.setContent(expenseTable);
         selectExpense();
