@@ -27,7 +27,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.TilePane;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 
@@ -48,10 +47,10 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
     private Event event;
     @FXML
     private Text openDebt;
-    private WebSocketUtils webSocket;
+    private final WebSocketUtils webSocket;
     @FXML
     private Button back;
-    private ServerUtils serverUtils;
+    private final ServerUtils serverUtils;
 
     /**
      * Constructs a new instance of an OpenDebtCtrl
@@ -78,11 +77,8 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         });
 
         webSocket.addEventListener((event)->{
-            if(this.event==null||!this.event.getId().equals(event.getId())) return;
-            else{
-                Platform.runLater(()->{
-                    refresh(event);
-                });
+            if(this.event != null && this.event.getId().equals(event.getId())) {
+                Platform.runLater(()-> refresh(event));
             }
         });
 
@@ -112,9 +108,8 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         this.event=event;
         var tempDebts = getDebts(event);
         debts = FXCollections.observableList(tempDebts);
-        List<TilePane> titlePanes= new ArrayList<>();
-        while(debtsOverview.getPanes().size()>0){
-            debtsOverview.getPanes().remove(0);
+        while(!debtsOverview.getPanes().isEmpty()){
+            debtsOverview.getPanes().removeFirst();
         }
         for(Debt debt : debts){
             //setting the graphic of pane
@@ -200,7 +195,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
 
         tempAP.setStyle("-fx-background-color: efd6da; -fx-border-style: solid; -fx-border-radius: 4;-fx-border-color: black");
 
-        Text text1 = null;
+        Text text1;
         if(debt.getPersonOwed().getIban()!=null&&debt.getPersonOwed().getBic()!=null&&!debt.getPersonOwed().getIban().isEmpty()) {
             text1 = new Text(Main.getLocalizedString("transferTo"));
             text1.setLayoutX(14.0);

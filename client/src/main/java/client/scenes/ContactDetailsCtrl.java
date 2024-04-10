@@ -85,8 +85,7 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
             }
         });
         webSocket.addParticipantListener((participant)->{
-            if(this.participant==null||!Objects.equals(participant.getId(),this.participant.getId())) return;
-            else{
+            if (this.participant != null && Objects.equals(participant.getId(),this.participant.getId())) {
                 Platform.runLater(()->{
                     back();
                     var alert = new Alert(Alert.AlertType.INFORMATION);

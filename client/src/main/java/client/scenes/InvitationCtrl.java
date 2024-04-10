@@ -79,7 +79,6 @@ public class InvitationCtrl implements Main.UpdatableUI {
      * Sets the invite code in the UI.
      */
     public void setInviteCode() {
-        //TODO change to getInviteCode after proper backend is available
         inviteCode = String.valueOf(event.getInviteCode());
         inviteCodeText.setText(inviteCode);
     }
