@@ -305,7 +305,10 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
 
         // Checks for any other related errors
         try {
-            addExpenseService.addTransfer(this.event, this.expense, transfer);
+            if (this.expense != null) {
+                transfer.setId(this.expense.getId());
+            }
+            server.addExpense(transfer, event.getId());
         } catch (WebApplicationException e) {
             errorPopup(e.getMessage());
             return;
@@ -686,7 +689,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
                 return;
             }
             Expense prevExpense = mainCtrl.getPrevExp(expense.getId());
-            Boolean participantsMatchEvent = addExpenseService.checkExpenseParticipants(this.event, this.expense, prevExpense);
+            Boolean participantsMatchEvent = addExpenseService.checkExpenseParticipants(this.event, prevExpense);
             if(!participantsMatchEvent){
                 undo();
                 return;
