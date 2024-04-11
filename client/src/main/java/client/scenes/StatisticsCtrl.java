@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.Main;
+import client.services.StatisticsService;
 import client.utils.ServerUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,8 +16,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import commons.Event;
-import commons.Expense;
-import commons.Tag;
 
 import java.util.Currency;
 import java.util.HashMap;
@@ -25,6 +24,7 @@ import java.util.Map;
 public class StatisticsCtrl implements Main.UpdatableUI {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final StatisticsService statisticsService;
     @FXML
     public AnchorPane anchor;
     private Event event;
@@ -48,9 +48,10 @@ public class StatisticsCtrl implements Main.UpdatableUI {
      * @param mainCtrl The main controller of the application.
      */
     @Inject
-    public StatisticsCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public StatisticsCtrl(ServerUtils server, MainCtrl mainCtrl, StatisticsService statisticsService) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.statisticsService = statisticsService;
     }
 
     /**
@@ -94,31 +95,26 @@ public class StatisticsCtrl implements Main.UpdatableUI {
      * Calculates and displays the total cost of all expenses in the event.
      */
     public void getTotal() {
-        double totalCost = event.getExpenses().stream()
-                .mapToDouble(Expense::getAmount).sum();
-        total.setText(String.format("%.2f %s", totalCost, Currency.getInstance(mainCtrl.getCurrency()).getSymbol()));
+        String cost = StatisticsService.getTotalNumber(event);
+        String symbol = getTotalSymbol();
+        total.setText(cost + symbol);
+    }
+
+    /**
+     * Returns the symbol of the currency used in the event.
+     *
+     * @return The symbol of the currency used in the event.
+     */
+    public String getTotalSymbol(){
+        return Currency.getInstance(mainCtrl.getCurrency()).getSymbol();
     }
 
     /**
      * Populates the pie chart with expenses per tag.
      */
     private void populatePieChart() {
-        expensesPerTag = new HashMap<>();
-        tagColors = new HashMap<>();
-
-        for (Expense expense : event.getExpenses()) {
-            Tag tag = expense.getTag();
-            String tagName;
-            if (tag != null) {
-                tagName = tag.getName();
-            } else {
-                tagName = "Other";
-                tag = new Tag("Other", 255, 255, 255);
-            }
-            double amount = expense.getAmount();
-            expensesPerTag.put(tagName, expensesPerTag.getOrDefault(tagName, 0.0) + amount);
-            tagColors.putIfAbsent(tagName, Color.rgb(tag.getRed(), tag.getGreen(), tag.getBlue()));
-        }
+        expensesPerTag = StatisticsService.populateExpensesPerTag(event);
+        tagColors = StatisticsService.populateTagColors(event);
 
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         double totalExpense = expensesPerTag.values().stream().mapToDouble(Double::doubleValue).sum();
@@ -127,7 +123,10 @@ public class StatisticsCtrl implements Main.UpdatableUI {
             String tagName = entry.getKey();
             double amount = entry.getValue();
             double relativeValue = amount / totalExpense;
-            PieChart.Data data = new PieChart.Data(tagName + String.format("\n%.2f %s (%.2f%%)", amount, Currency.getInstance(mainCtrl.getCurrency()).getSymbol(), relativeValue * 100), amount);
+            String dataAmount = StatisticsService.getDataAmount(tagName, amount);
+            String dataRelative = StatisticsService.getDataRelative(relativeValue);
+            String dataString = dataAmount + Currency.getInstance(mainCtrl.getCurrency()).getSymbol() + dataRelative;
+            PieChart.Data data = new PieChart.Data(dataString, amount);
             pieChartData.add(data);
         }
         pieChart.setData(pieChartData);
