@@ -513,6 +513,11 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void populateTagMenu() {
         List<Tag> tags = event.getTags();
         tagMenu.getItems().clear();
+
+        MenuItem addNewTagItem = new MenuItem("+ ADD NEW");
+        addNewTagItem.setOnAction(e -> handleAddNewTag());
+        tagMenu.getItems().add(addNewTagItem);
+
         for (Tag tag : tags) {
             MenuItem menuItem = new MenuItem(tag.getName());
             menuItem.setOnAction(e -> handleTagSelection(tag));
@@ -533,11 +538,24 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         this.selectedTag = selected;
     }
 
+    private void handleAddNewTag() {
+        mainCtrl.showAddTag(event, null);
+    }
+
     /**
      * Initializes the scene for adding or editing tags.
      */
     public void goToAddTags() {
-        mainCtrl.showAddTag(event, selectedTag);
+        if (selectedTag != null) {
+            mainCtrl.showAddTag(event, selectedTag);
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(Main.getLocalizedString("Error"));
+            alert.setHeaderText(Main.getLocalizedString("Error"));
+            alert.setContentText(Main.getLocalizedString("noTagSelected"));
+            alert.showAndWait();
+        }
     }
 
     /**
