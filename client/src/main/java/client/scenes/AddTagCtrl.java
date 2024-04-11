@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.Main;
+import client.services.TagService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -13,8 +14,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-
-
 
 /**
  * Controller class for the Add Tag scene.
@@ -77,7 +76,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
                 back();
             }
             if(event.isControlDown() && event.isAltDown() && event.getCode() == KeyCode.C){
-                abort(); //TODO
+                abort();
             }
         });
 
@@ -125,17 +124,12 @@ public class AddTagCtrl implements Main.UpdatableUI {
             tagNameError("NameCannotBeEmpty");
         }
 
-        if (doesTagNameExist(name)) {
+        if (TagService.doesTagNameExist(event, name)) {
             tagNameError("tagNameExist");
         }
 
         Color color = colorPicker.getValue();
-        int red = (int) (color.getRed() * 255);
-        int green = (int) (color.getGreen() * 255);
-        int blue = (int) (color.getBlue() * 255);
-
-        Tag tag = new Tag(name, red, green, blue);
-        Tag saved = server.addTag(tag);
+        Tag saved = server.addTag(TagService.createNewTag(name, color));
         event.getTags().add(saved);
         this.event = server.updateEvent(event);
 
@@ -153,14 +147,14 @@ public class AddTagCtrl implements Main.UpdatableUI {
         }
 
         Color color = colorPicker.getValue();
-        int red = (int) (color.getRed() * 255);
-        int green = (int) (color.getGreen() * 255);
-        int blue = (int) (color.getBlue() * 255);
 
-        selectedTag.setName(name);
-        selectedTag.setRed(red);
-        selectedTag.setGreen(green);
-        selectedTag.setBlue(blue);
+        Tag temp = TagService.createNewTag(name, color);
+
+        selectedTag.setName(temp.getName());
+        selectedTag.setRed(temp.getRed());
+        selectedTag.setGreen(temp.getGreen());
+        selectedTag.setBlue(temp.getBlue());
+
         server.updateTag(selectedTag);
         this.event = server.updateEvent(event);
 
@@ -180,32 +174,11 @@ public class AddTagCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Checks if the tag name already exists.
-     *
-     * @param tagName The name of the tag to check.
-     * @return True if the tag name already exists, false otherwise.
-     */
-    private boolean doesTagNameExist(String tagName) {
-        for (Tag tag : event.getTags()) {
-            if (tag.getName().equals(tagName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Removes the tag.
      */
     public void remove() {
         String name = nameTextField.getText();
-        Tag tag1=null;
-        for(Tag tag : event.getTags()){
-            if(name.equals(tag.getName())){
-
-                tag1=tag;
-            }
-        }
+        Tag tag1 = TagService.removeTag(event, name);
         event.getTags().remove(tag1);
         this.event = server.updateEvent(event);
         for(Expense expense: event.getExpenses()){
