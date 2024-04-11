@@ -16,6 +16,9 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Unit tests for the StatisticsService class.
+ */
 public class StatisticsServiceTest {
 
     @Mock
@@ -26,6 +29,9 @@ public class StatisticsServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    /**
+     * Tests the getTotalNumber method of StatisticsService.
+     */
     @Test
     void testGetTotalNumber() {
         List<Expense> expenses = new ArrayList<>();
@@ -42,6 +48,9 @@ public class StatisticsServiceTest {
         assertEquals(expected, actual);
     }
 
+    /**
+     * Tests the populateExpensesPerTag method of StatisticsService.
+     */
     @Test
     void testPopulateExpensesPerTag() {
         List<Expense> expenses = new ArrayList<>();
@@ -63,6 +72,9 @@ public class StatisticsServiceTest {
         assertEquals(expected, actual);
     }
 
+    /**
+     * Tests the populateTagColors method of StatisticsService.
+     */
     @Test
     void testPopulateTagColors() {
         List<Expense> expenses = new ArrayList<>();
