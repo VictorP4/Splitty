@@ -95,7 +95,7 @@ public class StatisticsCtrl implements Main.UpdatableUI {
      * Calculates and displays the total cost of all expenses in the event.
      */
     public void getTotal() {
-        String cost = StatisticsService.getTotalNumber(event);
+        String cost = statisticsService.getTotalNumber(event);
         String symbol = getTotalSymbol();
         total.setText(cost + symbol);
     }
@@ -113,8 +113,8 @@ public class StatisticsCtrl implements Main.UpdatableUI {
      * Populates the pie chart with expenses per tag.
      */
     private void populatePieChart() {
-        expensesPerTag = StatisticsService.populateExpensesPerTag(event);
-        tagColors = StatisticsService.populateTagColors(event);
+        expensesPerTag = statisticsService.populateExpensesPerTag(event);
+        tagColors = statisticsService.populateTagColors(event);
 
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         double totalExpense = expensesPerTag.values().stream().mapToDouble(Double::doubleValue).sum();
@@ -123,8 +123,8 @@ public class StatisticsCtrl implements Main.UpdatableUI {
             String tagName = entry.getKey();
             double amount = entry.getValue();
             double relativeValue = amount / totalExpense;
-            String dataAmount = StatisticsService.getDataAmount(tagName, amount);
-            String dataRelative = StatisticsService.getDataRelative(relativeValue);
+            String dataAmount = statisticsService.getDataAmount(tagName, amount);
+            String dataRelative = statisticsService.getDataRelative(relativeValue);
             String dataString = dataAmount + Currency.getInstance(mainCtrl.getCurrency()).getSymbol() + dataRelative;
             PieChart.Data data = new PieChart.Data(dataString, amount);
             pieChartData.add(data);

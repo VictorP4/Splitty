@@ -45,7 +45,7 @@ public class TagService {
      * @param name The name of the tag.
      * @param color The color of the tag.
      */
-    public static Tag createNewTag(String name, Color color) {
+    public Tag createNewTag(String name, Color color) {
         int red = (int) (color.getRed() * 255);
         int green = (int) (color.getGreen() * 255);
         int blue = (int) (color.getBlue() * 255);
@@ -59,7 +59,7 @@ public class TagService {
      * @param event The event to which we will add the tag.
      * @param tagName The name of the tag.
      */
-    public static boolean doesTagNameExist(Event event, String tagName) {
+    public boolean doesTagNameExist(Event event, String tagName) {
         for (Tag tag : event.getTags()) {
             if (tag.getName().equals(tagName)) {
                 return true;
@@ -74,7 +74,7 @@ public class TagService {
      * @param event The event from which we will remove the tag.
      * @param name The name of the tag.
      */
-    public static Tag removeTag(Event event, String name) {
+    public Tag removeTag(Event event, String name) {
         Tag tag1 = null;
         for(Tag tag : event.getTags()){
             if(name.equals(tag.getName())){

@@ -7,6 +7,7 @@ import commons.Tag;
 import javafx.scene.paint.Color;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -21,12 +22,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class StatisticsServiceTest {
 
-    @Mock
-    private ServerUtils serverUtils;
+    @InjectMocks
+    private StatisticsService statisticsService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        statisticsService = new StatisticsService();
     }
 
     /**
@@ -43,7 +45,7 @@ public class StatisticsServiceTest {
         }
 
         String expected = "150.00";
-        String actual = StatisticsService.getTotalNumber(event);
+        String actual = statisticsService.getTotalNumber(event);
 
         assertEquals(expected, actual);
     }
@@ -67,7 +69,7 @@ public class StatisticsServiceTest {
         }
 
         Map<String, Double> expected = Map.of("Food", 200.0, "Drink", 30.0, "Other", 20.0);
-        Map<String, Double> actual = StatisticsService.populateExpensesPerTag(event1);
+        Map<String, Double> actual = statisticsService.populateExpensesPerTag(event1);
 
         assertEquals(expected, actual);
     }
@@ -87,7 +89,7 @@ public class StatisticsServiceTest {
         }
 
         Map<String, Color> expected = Map.of("Food", Color.rgb(255, 0, 0), "Travel", Color.rgb(0, 255, 0));
-        Map<String, Color> actual = StatisticsService.populateTagColors(event1);
+        Map<String, Color> actual = statisticsService.populateTagColors(event1);
 
         assertEquals(expected, actual);
     }
