@@ -7,22 +7,16 @@ import commons.Tag;
 import javafx.scene.paint.Color;
 
 import javax.inject.Inject;
-import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 
 public class StatisticsService {
-    private final ServerUtils serverUtils;
 
     /**
-     * Creates a new OverviewService.
-     *
-     * @param utils The utility class for server interaction.
+     * Creates a new StatisticsService.
      */
     @Inject
-    public StatisticsService(ServerUtils utils) {
-        this.serverUtils = utils;
-    }
+    public StatisticsService() {}
 
     /**
      * Calculates and displays the total cost of all expenses in the event.

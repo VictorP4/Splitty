@@ -16,8 +16,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import commons.Event;
-import commons.Expense;
-import commons.Tag;
 
 import java.util.Currency;
 import java.util.HashMap;
