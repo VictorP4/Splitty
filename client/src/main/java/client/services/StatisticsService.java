@@ -30,9 +30,12 @@ public class StatisticsService {
     public static String getTotalNumber(Event event) {
         double totalCost = event.getExpenses().stream()
                 .mapToDouble(Expense::getAmount).sum();
-        return String.format("%.2f ", totalCost);
+        return String.format("%.2f", totalCost);
     }
 
+    /**
+     * Calculates and displays the total cost of all expenses in the event.
+     */
     public static Map<String, Double> populateExpensesPerTag(Event event) {
         Map<String, Double> expensesPerTag = new HashMap<>();
 
@@ -50,6 +53,9 @@ public class StatisticsService {
         return expensesPerTag;
     }
 
+    /**
+     * Calculates and displays the total cost of all expenses in the event.
+     */
     public static Map<String, Color> populateTagColors(Event event) {
         Map<String, Color> tagColors = new HashMap<>();
 
@@ -65,5 +71,23 @@ public class StatisticsService {
             tagColors.putIfAbsent(tagName, Color.rgb(tag.getRed(), tag.getGreen(), tag.getBlue()));
         }
         return tagColors;
+    }
+
+    /**
+     * Returns the symbol of the currency used in the event.
+     *
+     * @return The symbol of the currency used in the event.
+     */
+    public static String getDataAmount(String tagName, double amount) {
+        return tagName + String.format("\n%.2f ", amount);
+    }
+
+    /**
+     * Returns the symbol of the currency used in the event.
+     *
+     * @return The symbol of the currency used in the event.
+     */
+    public static String getDataRelative(double relativeValue) {
+        return  String.format("(%.2f%%)", relativeValue * 100);
     }
 }

@@ -125,7 +125,10 @@ public class StatisticsCtrl implements Main.UpdatableUI {
             String tagName = entry.getKey();
             double amount = entry.getValue();
             double relativeValue = amount / totalExpense;
-            PieChart.Data data = new PieChart.Data(tagName + String.format("\n%.2f %s (%.2f%%)", amount, Currency.getInstance(mainCtrl.getCurrency()).getSymbol(), relativeValue * 100), amount);
+            String dataAmount = StatisticsService.getDataAmount(tagName, amount);
+            String dataRelative = StatisticsService.getDataRelative(relativeValue);
+            String dataString = dataAmount + Currency.getInstance(mainCtrl.getCurrency()).getSymbol() + dataRelative;
+            PieChart.Data data = new PieChart.Data(dataString, amount);
             pieChartData.add(data);
         }
         pieChart.setData(pieChartData);
