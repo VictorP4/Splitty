@@ -50,13 +50,14 @@ public class StatisticsServiceTest {
         expenses.add(new Expense("Expense 1", 100.0, null, null, null, food, "USD"));
         expenses.add(new Expense("Expense 2", 30.0, null, null, null, drink, "EUR"));
         expenses.add(new Expense("Expense 3", 100.0, null, null, null, food, "USD"));
+        expenses.add(new Expense("Expense 3", 20.0, null, null, null, null, "USD"));
         Event event1 = new Event();
 
         for (Expense e: expenses) {
             event1.getExpenses().add(e);
         }
 
-        Map<String, Double> expected = Map.of("Food", 200.0, "Drink", 30.0);
+        Map<String, Double> expected = Map.of("Food", 200.0, "Drink", 30.0, "Other", 20.0);
         Map<String, Double> actual = StatisticsService.populateExpensesPerTag(event1);
 
         assertEquals(expected, actual);
