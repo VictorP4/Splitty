@@ -2,13 +2,13 @@ package client.scenes;
 
 import client.Main;
 import client.models.Debt;
+import client.services.OpenDebtService;
 import client.utils.ServerUtils;
 import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
 import commons.EmailRequestBody;
 import commons.Event;
 import commons.Expense;
-import commons.Participant;
 import jakarta.ws.rs.core.Response;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -51,18 +51,20 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
     @FXML
     private Button back;
     private final ServerUtils serverUtils;
+    private final OpenDebtService openDebtService;
 
     /**
      * Constructs a new instance of an OpenDebtCtrl
      *
-     *
-     * @param mainCtrl The main controller of the application.
+     * @param mainCtrl        The main controller of the application.
+     * @param openDebtService
      */
     @Inject
-    public OpenDebtsCtrl(MainCtrl mainCtrl, WebSocketUtils webSocket, ServerUtils serverUtils) {
+    public OpenDebtsCtrl(MainCtrl mainCtrl, WebSocketUtils webSocket, ServerUtils serverUtils, OpenDebtService openDebtService) {
         this.mainCtrl = mainCtrl;
         this.webSocket= webSocket;
         this.serverUtils = serverUtils;
+        this.openDebtService = openDebtService;
     }
 
     /**
@@ -106,7 +108,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
      */
     public void refresh(Event event){
         this.event=event;
-        var tempDebts = getDebts(event);
+        var tempDebts = openDebtService.getDebts(event);
         debts = FXCollections.observableList(tempDebts);
         while(!debtsOverview.getPanes().isEmpty()){
             debtsOverview.getPanes().removeFirst();
@@ -128,60 +130,6 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Creates a list of transactions to settle the open debt within the group
-     *
-     * @param event the corresponding event
-     * @return list of maximum n-1 transactions to settle debt
-     */
-    public List<Debt> getDebts(Event event){
-        List<Participant> list = new ArrayList<>(event.getParticipants());
-        double[] debts = new double[list.size()];
-
-        List<Debt> result = new ArrayList<>();
-        list.sort((x,y)->{
-            if(x.getDebt()<y.getDebt()) return -1;
-            else if(x.getDebt()>y.getDebt()) return 1;
-            else return 0;
-        });
-        for(int k=0;k<debts.length;k++){
-            debts[k]=list.get(k).getDebt();
-        }
-        int i=0;
-        int j=list.size()-1;
-        while(i<j){
-            if(Math.abs(list.get(i).getDebt())<0.01){
-                i++;
-
-            }
-            else if(Math.abs(list.get(j).getDebt())<0.01){
-                j--;
-
-            }
-            else if(Math.abs(debts[i]+debts[j])<0.01){
-                result.add(new Debt(debts[j],list.get(j),list.get(i)));
-                debts[i]=0;
-                debts[j]=0;
-                i++;
-                j--;
-            }
-            else if(Math.abs(debts[i])<debts[j]){
-                result.add(new Debt(Math.abs(debts[i]),list.get(j),list.get(i)));
-                debts[j]+=debts[i];
-                debts[i]=0;
-                i++;
-
-            }
-            else{
-                result.add(new Debt(debts[j],list.get(j),list.get(i)));
-                debts[i]+=debts[j];
-                debts[j]=0;
-                j--;
-            }
-        }
-        return result;
-    }
-
-    /**
      * Gives the content of the respective pane for the accordion
      *
      * @param debt     the debt which will be in the content
@@ -197,35 +145,15 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
 
         Text text1;
         if(debt.getPersonOwed().getIban()!=null&&debt.getPersonOwed().getBic()!=null&&!debt.getPersonOwed().getIban().isEmpty()) {
-            text1 = new Text(Main.getLocalizedString("transferTo"));
-            text1.setLayoutX(14.0);
-            text1.setLayoutY(27.0);
-            text1.setStrokeType(StrokeType.OUTSIDE);
-            text1.setStrokeWidth(0.0);
+            text1 = setTextBox(Main.getLocalizedString("transferTo"),14,27);
 
-            Text text2 = new Text(Main.getLocalizedString("accHolder")+" "+ debt.getPersonOwed().getName());
-            text2.setLayoutX(14.0);
-            text2.setLayoutY(44.0);
-            text2.setStrokeType(StrokeType.OUTSIDE);
-            text2.setStrokeWidth(0.0);
+            Text text2 = setTextBox(Main.getLocalizedString("accHolder")+" "+ debt.getPersonOwed().getName(),14,44);
 
-            Text text3 = new Text("IBAN: " + debt.getPersonOwed().getIban());
-            text3.setLayoutX(14.0);
-            text3.setLayoutY(60.0);
-            text3.setStrokeType(StrokeType.OUTSIDE);
-            text3.setStrokeWidth(0.0);
+            Text text3 = setTextBox("IBAN: " + debt.getPersonOwed().getIban(),14,60);
 
-            Text text4 = new Text("BIC: " + debt.getPersonOwed().getBic());
-            text4.setLayoutX(14.0);
-            text4.setLayoutY(77.0);
-            text4.setStrokeType(StrokeType.OUTSIDE);
-            text4.setStrokeWidth(0.0);
+            Text text4 = setTextBox("BIC: " + debt.getPersonOwed().getBic(),14,77);
 
-            Text text5 = new Text(Main.getLocalizedString("emailHolder"));
-            text5.setLayoutX(14.0);
-            text5.setLayoutY(108.0);
-            text5.setStrokeType(StrokeType.OUTSIDE);
-            text5.setStrokeWidth(0.0);
+            Text text5 = setTextBox(Main.getLocalizedString("emailHolder"),14,108);
 
             Button emailB = new Button(Main.getLocalizedString("reminder"));
             emailB.setStyle("-fx-background-color: #485a5c; -fx-border-color: 000000; -fx-border-radius: 4; " +
@@ -264,11 +192,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
             tempAP.getChildren().addAll(text1, text2, text3, text4, text5, emailB);
         }
         else{
-            text1 = new Text(Main.getLocalizedString("infoNotAvailable"));
-            text1.setLayoutX(14.0);
-            text1.setLayoutY(27.0);
-            text1.setStrokeType(StrokeType.OUTSIDE);
-            text1.setStrokeWidth(0.0);
+            text1 = setTextBox(Main.getLocalizedString("infoNotAvailable"),14,27);
             tempAP.getChildren().addAll(text1);
         }
     }
@@ -338,5 +262,22 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
      */
     public void setInstructions(){
         mainCtrl.instructionsPopup(new Label(" press ESC to go back "), this.back);
+    }
+
+    /**
+     * Setting the text boxes for each pane in the accordion
+     * @param string the content
+     * @param x the x layout
+     * @param y the y layout
+     * @return the created Text with the given properties
+     */
+    public Text setTextBox(String string, int x, int y ){
+        Text text1;
+        text1 = new Text(string);
+        text1.setLayoutX(x);
+        text1.setLayoutY(y);
+        text1.setStrokeType(StrokeType.OUTSIDE);
+        text1.setStrokeWidth(0.0);
+        return  text1;
     }
 }
