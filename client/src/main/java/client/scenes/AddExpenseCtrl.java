@@ -239,15 +239,15 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         // Checks for any other related errors
         try {
             if (this.expense != null) {
-                expense.setId(this.expense.getId());
+                addExp.setId(this.expense.getId());
             }
             List<Long> ids = addExpenseService.getAllExpenses(this.event);
-            if (ids.contains(expense.getId())) {
+            if (ids.contains(addExp.getId())) {
                 addExpenseService.updateExp(event, expense);
-                Expense newExp = server.updateExpense(event.getId(), expense);
+                Expense newExp = server.updateExpense(event.getId(), addExp);
                 mainCtrl.addPrevExp(newExp);
             } else {
-                Expense newExp = server.addExpense(expense, event.getId());
+                Expense newExp = server.addExpense(addExp, event.getId());
                 mainCtrl.addPrevExp(newExp);
             }
 
