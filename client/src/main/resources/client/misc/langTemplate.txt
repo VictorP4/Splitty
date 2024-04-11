@@ -87,3 +87,4 @@ toWho= To whom?
 invalidTransfer=Can't transfer money to yourself.
 customization= Customisation
 adminAccess= Admin access
+noTagSelected= No tag selected
