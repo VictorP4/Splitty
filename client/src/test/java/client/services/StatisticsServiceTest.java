@@ -1,6 +1,5 @@
 package client.services;
 
-import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
 import commons.Tag;
@@ -8,7 +7,6 @@ import javafx.scene.paint.Color;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
