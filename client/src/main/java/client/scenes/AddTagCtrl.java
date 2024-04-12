@@ -46,6 +46,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
     @FXML
     private Button removeButton;
     private Tag selectedTag;
+    private Expense expense;
 
     /**
      * Constructs a new instance of AddTagCtrl.
@@ -99,6 +100,15 @@ public class AddTagCtrl implements Main.UpdatableUI {
     }
 
     /**
+     * Sets the expense.
+     *
+     * @param expense The expense to set.
+     */
+    public void setExpense(Expense expense){
+        this.expense = expense;
+    }
+
+    /**
      * Changes the mode of the scene between edit and add.
      */
     public void modeChanger() {
@@ -136,7 +146,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
         this.event = server.updateEvent(event);
 
         clearFields();
-        mainCtrl.showAddExpenseFromTag(event);
+        mainCtrl.showAddExpenseFromTag(event, expense);
     }
 
     /**
@@ -161,7 +171,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
         this.event = server.updateEvent(event);
 
         clearFields();
-        mainCtrl.showAddExpenseFromTag(event);
+        mainCtrl.showAddExpenseFromTag(event, expense);
     }
 
     /**
@@ -191,7 +201,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
         }
         server.removeTag(tag1);
         clearFields();
-        mainCtrl.showAddExpenseFromTag(event);
+        mainCtrl.showAddExpenseFromTag(event, expense);
     }
 
     /**
@@ -215,7 +225,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
      */
     public void back() {
         clearFields();
-        mainCtrl.showAddExpenseFromTag(event);
+        mainCtrl.showAddExpenseFromTag(event, expense);
     }
 
     /**

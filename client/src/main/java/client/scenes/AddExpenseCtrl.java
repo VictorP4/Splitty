@@ -541,7 +541,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     private void handleAddNewTag() {
-        mainCtrl.showAddTag(event, null);
+        mainCtrl.showAddTag(event, null, getExpense());
     }
 
     /**
@@ -549,7 +549,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     public void goToAddTags() {
         if (selectedTag != null) {
-            mainCtrl.showAddTag(event, selectedTag);
+            mainCtrl.showAddTag(event, selectedTag, getExpense());
         }
         else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -602,7 +602,6 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         this.event = event;
         this.expense = expense;
         addToCurrency();
-        refresh(event);
         addEditText.setText(Main.getLocalizedString("EditExpense"));
         this.title.setText(expense.getTitle());
         this.amount.setText(Double.toString(expense.getAmount()));
