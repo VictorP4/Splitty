@@ -180,7 +180,7 @@ public class MainCtrl {
      */
     public void showAddExpenseFromTag(Event event, Expense expense) {
         addExpenseCtrl.populateTagMenu();
-        //addExpenseCtrl.refreshExp(event, expense);
+        addExpenseCtrl.refreshExp(event, expense);
         primaryStage.setTitle("AddExpense");
         primaryStage.setScene(addExpense);
     }

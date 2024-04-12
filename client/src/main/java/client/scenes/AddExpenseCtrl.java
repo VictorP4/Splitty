@@ -118,6 +118,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             }
         }));
         webSocket.addEventListener((event) -> {
+            if(!this.event.getTags().equals(event.getTags())) return;
             if (this.event != null && Objects.equals(this.event.getId(), event.getId())) {
                 Platform.runLater(() -> {
                     refresh(event);
@@ -202,9 +203,21 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     public Expense getExpense() {
         String title = this.title.getText();
-        double amount = Double.parseDouble(this.amount.getText());
+        double amount;
+        if (this.amount.getText().equals("")) {
+            amount = 0.0;
+        }
+        else {
+            amount = Double.parseDouble(this.amount.getText());
+        }
         LocalDate localdate = this.date.getValue();
-        Date date = Date.from(localdate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date date;
+        if (localdate != null) {
+            date = Date.from(localdate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        }
+        else {
+            date = null;
+        }
         Participant paidBy = this.paidBy.getSelectionModel().getSelectedItem();
         List<Participant> partIn = add();
         Tag tag = selectedTag;
@@ -601,20 +614,20 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void refreshExp(Event event, Expense expense) {
         this.event = event;
         this.expense = expense;
-        addToCurrency();
+//        addToCurrency();
         addEditText.setText(Main.getLocalizedString("EditExpense"));
         this.title.setText(expense.getTitle());
-        this.amount.setText(Double.toString(expense.getAmount()));
-        LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        this.date.setValue(localDate);
-        paidBy.getSelectionModel().select(event.getParticipants().stream()
-                        .filter(x->x.getId().equals(expense.getPaidBy().getId())).findFirst().get());
-        currency.setValue(this.expense.getCurrency());
-        setParticipantBoxes();
-        if (expense.getTag() != null) {
-            this.tagMenu.setText(expense.getTag().getName());
-            this.selectedTag=expense.getTag();
-        }
+//        this.amount.setText(Double.toString(expense.getAmount()));
+//        LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        this.date.setValue(localDate);
+//        paidBy.getSelectionModel().select(event.getParticipants().stream()
+//                        .filter(x->x.getId().equals(expense.getPaidBy().getId())).findFirst().get());
+//        currency.setValue(this.expense.getCurrency());
+//        setParticipantBoxes();
+//        if (expense.getTag() != null) {
+//            this.tagMenu.setText(expense.getTag().getName());
+//            this.selectedTag=expense.getTag();
+//        }
     }
 
     /**
