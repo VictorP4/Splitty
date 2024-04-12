@@ -197,6 +197,9 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
         if(userConfig.getUserEmail().isBlank()||userConfig.getUserPass().isBlank()){
             confirmation.setDisable(true);
         }
+        else{
+            confirmation.setDisable(false);
+        }
     }
 
     /**
@@ -238,7 +241,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Sets the focus and hover over look for the buttons.
+     * Sets the focus and hover overlook for the buttons.
      */
     public void buttonSetup(){
         mainCtrl.buttonFocus(this.login);
@@ -259,7 +262,9 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
 
         userConfig1.setUserEmail(emailField.getText().trim());
         userConfig1.setUserPass(passField.getText().trim());
-
+        emailField.clear();
+        passField.clear();
+        refresh();
     }
 
     /**
