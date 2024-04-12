@@ -146,6 +146,9 @@ public class InvitationCtrl implements Main.UpdatableUI {
         if(userConfig.getUserEmail().isBlank()||userConfig.getUserPass().isBlank()){
             sendInv.setDisable(true);
         }
+        else{
+            sendInv.setDisable(false);
+        }
     }
 
     /**
