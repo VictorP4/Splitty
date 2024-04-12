@@ -234,8 +234,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             errorPopup(Main.getLocalizedString("missingDateOrTitle"));
             return;
         }
-        checkExpenseRequirements(addExp);
-
+        boolean check = checkExpenseRequirements(addExp);
+        if(check) return;
         // Checks for any other related errors
         try {
             if (this.expense != null) {
@@ -266,24 +266,26 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      *
      * @param checkExp The expense that has to be
      */
-    private void checkExpenseRequirements(Expense checkExp) {
+    private boolean checkExpenseRequirements(Expense checkExp) {
         if (checkExp.getPaidBy() == null) {
             errorPopup(Main.getLocalizedString("noPaidBy"));
-            return;
+            return true;
         }
         if (checkExp.getAmount() < 0) {
             errorPopup(Main.getLocalizedString("invalidAmount"));
-            return;
+            return true;
         }
         if (checkExp.getInvolvedParticipants().equals(new ArrayList<>())) {
             errorPopup(Main.getLocalizedString("noParticipants"));
-            return;
+            return true;
         }
         LocalDate currentDate = LocalDate.now();
         LocalDate selectedDate = checkExp.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         if (selectedDate.isAfter(currentDate)) {
             errorPopup(Main.getLocalizedString("futureDate"));
+            return true;
         }
+        return false;
     }
 
     /**
