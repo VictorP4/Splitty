@@ -42,7 +42,7 @@ Users can press money transfer to partially settle a debt.
 User can click the pencil and add/edit tags. If a known tag's name is written, it will be in edit mode, otherwise in adding mode.
 
 ## Websockets, Long-polling, HCI, Email and other
-To use your own gmail in the app, you will need an app password. You can get one by going to this link: https://myaccount.google.com/apppasswords (make sure 2FA is activated).
+To use your own gmail in the app, you will need an app password. You can get one by going to this link: https://myaccount.google.com/apppasswords (make sure 2FA is activated). To get a confirmation for the email go to settings and press the Send Confirmation button.
 
 Websockets are used in the OverviewCtrl, AddExpenseCtrl and OpenDebtCtrl to synchronize the data of an event.
 The client side implementation ca be found in `client/src/main/java/client/utils/WebSocketUtils.java`, while the server-side implementation can be seen in 

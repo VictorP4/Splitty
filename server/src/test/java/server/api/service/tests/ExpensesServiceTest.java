@@ -3,179 +3,195 @@ package server.api.service.tests;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import server.api.controllers.EventController;
-import server.api.controllers.ExpensesController;
-import server.api.repository.tests.TestEventRepository;
-import server.api.repository.tests.TestExpenseRepository;
 import server.api.services.CurrencyService;
-import server.api.services.EventService;
 import server.api.services.ExpensesService;
+import server.database.EventRepository;
+import server.database.ExpensesRepository;
 import server.database.ParticipantRepository;
-import server.database.TagRepository;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 public class ExpensesServiceTest {
     @Mock
     private CurrencyService currencyService;
     @Mock
-    private TestEventRepository evRepo;
+    private EventRepository evRepo;
     @Mock
     private ParticipantRepository partRepo;
     @Mock
-    private TagRepository tagRepo;
-    @Mock
-    private TestExpenseRepository repo;
-    private EventService evServ;
-    private EventController evCont;
+    private ExpensesRepository repo;
     @InjectMocks
     private ExpensesService servMock;
-    private ExpensesController cont;
+    private static Expense exp;
+    private static Event event;
+    private static Participant p;
     @BeforeEach
     public void setUp()  {
         MockitoAnnotations.openMocks(this);
-        cont = new ExpensesController(servMock,null);
-        repo = new TestExpenseRepository();
-        evRepo = new TestEventRepository();
-        servMock = new ExpensesService(repo,evRepo,partRepo,currencyService);
-        cont = new ExpensesController(servMock,null);
-        evServ  = new EventService(evRepo,partRepo, repo,tagRepo);
-        evCont = new EventController(evServ,null);
+        p = new Participant("robin", "test");
+        p.setId(3L);
+        List<Participant> participants = new ArrayList<>();
+        when(partRepo.save(p)).thenReturn(p);
+        when(partRepo.getById(p.getId())).thenReturn(p);
+        participants.add(p);
+
+        // used expense for every test & repo methods
+        exp = new Expense("please", 600.0, p, participants, new Date(), new Tag(), "EUR");
+        exp.setId(1L);
+        when(repo.existsById(1L)).thenReturn(true);
+        when(repo.findById(exp.getId())).thenReturn(Optional.of(exp));
+        when(repo.save(exp)).thenReturn(exp);
+
+        // used event for every test & repo methods
+        event = new Event();
+        event.setId(1L);
+        event.setTitle("test");
+        when(evRepo.save(event)).thenReturn(event);
+        when(evRepo.existsById(1L)).thenReturn(true);
+        when(evRepo.getReferenceById(1L)).thenReturn(event);
+        when(evRepo.findById(1L)).thenReturn(Optional.of(event));
     }
 
     @Test
     void getAll() {
-        Event event = new Event();
-        event.setTitle("test");
-        evRepo.save(event);
-        evCont.add(event);
-        Expense exp = new Expense();
-        repo.save(exp);
         event.addExpense(exp);
-        evCont.add(event);
-        List<Expense> expenses = new ArrayList<>(repo.findAll());
-        assertFalse(expenses.isEmpty());
+        evRepo.save(event);
+
+        assertEquals(servMock.getAll(1L).size(), 1);
+        assertEquals(servMock.getAll(1L).getFirst(), exp);
+    }
+
+    @Test
+    void addNewNull() {
+        evRepo.save(event);
+
+        Expense exp = servMock.addNew(event.getId(), new Expense());
+        assertNull(exp);
     }
 
     @Test
     void addNew() {
-        Event event = new Event();
-        event.setId(1L);
-        event.setTitle("test");
         evRepo.save(event);
-        evCont.add(event);
-       Expense exp = new Expense();
-       assertNotNull(exp);
+        Expense expRes = servMock.addNew(event.getId(), exp);
+        assertEquals(exp, expRes);
     }
 
     @Test
     void update() {
-        Event event = new Event();
-        event.setTitle("test");
+        partRepo.save(p);
+        List<Participant> participants = new ArrayList<>();
+        participants.add(p);
+        event.setParticipants(participants);
+
+        repo.save(exp);
         evRepo.save(event);
-        Expense exp = new Expense();
-        repo.save(exp);
-        exp.setAmount(4);
-        repo.save(exp);
-        assertTrue(repo.getById(exp.getId()).getAmount() == 4);
+
+        Expense updExp = new Expense("new", 666.0, p, participants, new Date(), null, "EUR");
+        updExp.setId(exp.getId());
+
+        Expense updated = servMock.update(event.getId(), exp.getId(), updExp);
+        assertEquals(updExp, updated);
     }
 
     @Test
     void delete() {
-        Event event = new Event();
-        event.setTitle("test");
-        Event res = evRepo.save(event);
-        Participant p1 = new Participant();
-        List<Participant> ps = new ArrayList<>();
-        p1.setId(1L);
-        ps.add(p1);
-        Expense exp = new Expense();
-        exp.setInvolvedParticipants(ps);
-        exp.setPaidBy(p1);
-        exp.setCurrency("EUR");
-        repo.save(exp);
-        Expense exp2 = servMock.delete(res.getId(), exp.getId());
-        assertEquals(exp,exp2);
+        event.addExpense(exp);
+        evRepo.save(event);
+        Expense exp3 = servMock.delete(event.getId(), exp.getId());
+        assertEquals(exp,exp3);
     }
 
     @Test
     void debt() {
-        Event event = new Event();
-        Expense exp = new Expense();
-        Participant p1 = new Participant();
-        p1.setName("dude");
-        List<Participant> ps = new ArrayList<>();
-        p1.setId(1L);
-        ps.add(p1);
-        exp.setInvolvedParticipants(ps);
-        exp.setPaidBy(p1);
-        exp.setAmount(5);
-        event.setTitle("test");
-        List<Expense> exps = new ArrayList<>();
-        exps.add(exp);
-        event.setExpenses(exps);
-        Event res = evRepo.save(event);
+        Participant p2 = new Participant("test", "test");
+        p2.setId(2L);
+
+        List<Participant> participants = new ArrayList<>();
+        participants.add(p);
+        participants.add(p2);
+        event.setParticipants(participants);
+
+        Expense exp2 = new Expense("new", 666.0, p2, participants, new Date(), null, "EUR");
+        event.addExpense(exp);
+        event.addExpense(exp2);
+
+        Map<String, List<Double>> expected = new HashMap<>();
+        List<Double> pAmounts = new ArrayList<>();
+        pAmounts.add(600.0);
+        expected.put(p.getName(), pAmounts);
+
+        List<Double> p2Amounts = new ArrayList<>();
+        p2Amounts.add(333.0);
+        expected.put(p2.getName(), p2Amounts);
 
         repo.save(exp);
-        Map<String,List<Double>> map = servMock.debt(res.getId());
-        List<Double> res1 = new ArrayList<>();
-        res1.add(5.0);
-        assertEquals(map.get("dude"),res1);
+        evRepo.save(event);
+
+        Map<String,List<Double>> map = servMock.debt(event.getId());
+        assertEquals(expected, map);
     }
 
     @Test
     void share() {
-        Event event = new Event();
-        Expense exp = new Expense();
-        Participant p1 = new Participant();
-        p1.setName("dude");
-        List<Participant> ps = new ArrayList<>();
-        p1.setId(1L);
-        ps.add(p1);
-        exp.setInvolvedParticipants(ps);
-        exp.setPaidBy(p1);
-        exp.setAmount(5);
-        event.setTitle("test");
-        List<Expense> exps = new ArrayList<>();
-        exps.add(exp);
-        event.setExpenses(exps);
-        Event res = evRepo.save(event);
+        Participant p2 = new Participant("test", "test");
+        p2.setId(2L);
+
+        List<Participant> participants = new ArrayList<>();
+        participants.add(p);
+        participants.add(p2);
+        event.setParticipants(participants);
+
+        Expense exp2 = new Expense("new", 666.0, p2, participants, new Date(), null, "EUR");
+        event.addExpense(exp);
+        event.addExpense(exp2);
+
+        Map<String, List<Double>> expected = new HashMap<>();
+        List<Double> pAmounts = new ArrayList<>();
+        pAmounts.add(600.0);
+        pAmounts.add(333.0);
+        expected.put(p.getName(), pAmounts);
+
+        List<Double> p2Amounts = new ArrayList<>();
+        p2Amounts.add(333.0);
+        expected.put(p2.getName(), p2Amounts);
 
         repo.save(exp);
-        Map<String,List<Double>> map = servMock.share(res.getId());
-        List<Double> res1 = new ArrayList<>();
-        res1.add(5.0);
-        assertEquals(map.get("dude"),res1);
+        evRepo.save(event);
+
+        Map<String,List<Double>> map = servMock.share(event.getId());
+        assertEquals(expected, map);
     }
 
     @Test
     void total() {
-        Event event = new Event();
-        event.setTitle("test");
-        Expense exp = new Expense();
-        exp.setAmount(5);
-        repo.save(exp);
+        Expense exp2 = new Expense("new", 666.0, null, null, new Date(), null, "EUR");
         List<Expense> exps = new ArrayList<>();
         exps.add(exp);
-        event.setExpenses(exps);
-        Event res = evRepo.save(event);
-        assertEquals(servMock.total(res.getId()), 5);
+        exps.add(exp2);
+        int sum = 0;
+        for (Expense exp : exps) {
+            sum += exp.getAmount();
+        }
+
+        event.addExpense(exp);
+        event.addExpense(exp2);
+        evRepo.save(event);
+
+        assertEquals(sum, servMock.total(event.getId()));
     }
 
     @Test
     void getEvent() {
-        Event event = new Event();
-        event.setTitle("test");
-        Event res = evRepo.save(event);
-        Event res2 = servMock.getEvent(res.getId());
-        assertEquals(res,res2);
+        evRepo.save(event);
+        assertEquals(event, servMock.getEvent(event.getId()));
     }
 }
