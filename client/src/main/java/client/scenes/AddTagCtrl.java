@@ -21,6 +21,7 @@ import javafx.scene.text.Text;
 public class AddTagCtrl implements Main.UpdatableUI {
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
+    private final TagService tagService;
     @FXML
     public AnchorPane anchor;
     private Event event;
@@ -53,9 +54,10 @@ public class AddTagCtrl implements Main.UpdatableUI {
      * @param mainCtrl The main controller of the application.
      */
     @Inject
-    public AddTagCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public AddTagCtrl(ServerUtils server, MainCtrl mainCtrl, TagService tagService) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.tagService = tagService;
     }
 
     /**
@@ -124,12 +126,12 @@ public class AddTagCtrl implements Main.UpdatableUI {
             tagNameError("NameCannotBeEmpty");
         }
 
-        if (TagService.doesTagNameExist(event, name)) {
+        if (tagService.doesTagNameExist(event, name)) {
             tagNameError("tagNameExist");
         }
 
         Color color = colorPicker.getValue();
-        Tag saved = server.addTag(TagService.createNewTag(name, color));
+        Tag saved = server.addTag(tagService.createNewTag(name, color));
         event.getTags().add(saved);
         this.event = server.updateEvent(event);
 
@@ -148,7 +150,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
 
         Color color = colorPicker.getValue();
 
-        Tag temp = TagService.createNewTag(name, color);
+        Tag temp = tagService.createNewTag(name, color);
 
         selectedTag.setName(temp.getName());
         selectedTag.setRed(temp.getRed());
@@ -178,7 +180,7 @@ public class AddTagCtrl implements Main.UpdatableUI {
      */
     public void remove() {
         String name = nameTextField.getText();
-        Tag tag1 = TagService.removeTag(event, name);
+        Tag tag1 = tagService.removeTag(event, name);
         event.getTags().remove(tag1);
         this.event = server.updateEvent(event);
         for(Expense expense: event.getExpenses()){

@@ -1,13 +1,12 @@
 package client.services;
 
-import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
 import commons.Tag;
 import javafx.scene.paint.Color;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
@@ -21,12 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class StatisticsServiceTest {
 
-    @Mock
-    private ServerUtils serverUtils;
+    @InjectMocks
+    private StatisticsService statisticsService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        statisticsService = new StatisticsService();
     }
 
     /**
@@ -43,7 +43,7 @@ public class StatisticsServiceTest {
         }
 
         String expected = "150.00";
-        String actual = StatisticsService.getTotalNumber(event);
+        String actual = statisticsService.getTotalNumber(event);
 
         assertEquals(expected, actual);
     }
@@ -67,7 +67,7 @@ public class StatisticsServiceTest {
         }
 
         Map<String, Double> expected = Map.of("Food", 200.0, "Drink", 30.0, "Other", 20.0);
-        Map<String, Double> actual = StatisticsService.populateExpensesPerTag(event1);
+        Map<String, Double> actual = statisticsService.populateExpensesPerTag(event1);
 
         assertEquals(expected, actual);
     }
@@ -79,16 +79,37 @@ public class StatisticsServiceTest {
     void testPopulateTagColors() {
         List<Expense> expenses = new ArrayList<>();
         expenses.add(new Expense("Expense 1", 100.0, null, null, null, new Tag("Food", 255, 0, 0), "USD"));
-        expenses.add(new Expense("Expense 2", 50.0, null, null, null, new Tag("Travel", 0, 255, 0), "USD"));
+        expenses.add(new Expense("Expense 2", 50.0, null, null, null, null, "USD"));
         Event event1 = new Event();
 
         for (Expense e: expenses) {
             event1.getExpenses().add(e);
         }
 
-        Map<String, Color> expected = Map.of("Food", Color.rgb(255, 0, 0), "Travel", Color.rgb(0, 255, 0));
-        Map<String, Color> actual = StatisticsService.populateTagColors(event1);
+        Map<String, Color> expected = Map.of("Food", Color.rgb(255, 0, 0), "Other", Color.rgb(255, 255, 255));
+        Map<String, Color> actual = statisticsService.populateTagColors(event1);
 
         assertEquals(expected, actual);
+    }
+
+    /**
+     * Tests the formatting of the getDataAmount
+     */
+    @Test
+    void testGetDataAmount() {
+        String tagName = "test";
+        double amount = 150.0;
+        String expected = "test\n150.00 ";
+        assertEquals(expected, statisticsService.getDataAmount(tagName, amount));
+    }
+
+    /**
+     * Tests the formatting of the getDataRelative
+     */
+    @Test
+    void testGetDataRelative() {
+        double relativeValue = 150.00;
+        String expected = "(15000.00%)";
+        assertEquals(expected, statisticsService.getDataRelative(relativeValue));
     }
 }

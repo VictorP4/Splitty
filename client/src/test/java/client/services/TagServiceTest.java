@@ -1,9 +1,14 @@
 package client.services;
 
+import client.utils.ServerUtils;
 import commons.Event;
 import commons.Tag;
 import javafx.scene.paint.Color;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,6 +16,18 @@ import static org.junit.jupiter.api.Assertions.*;
  * Unit tests for the TagService class.
  */
 public class TagServiceTest {
+
+    @InjectMocks
+    private TagService tagService;
+    @Mock
+    private ServerUtils serverUtils;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        serverUtils = new ServerUtils();
+        tagService = new TagService(serverUtils);
+    }
 
     /**
      * Tests the getCellColor method of TagService.
@@ -44,7 +61,7 @@ public class TagServiceTest {
     @Test
     void testCreateNewTag() {
         Color color = Color.rgb(100, 150, 200);
-        Tag newTag = TagService.createNewTag("TestTag", color);
+        Tag newTag = tagService.createNewTag("TestTag", color);
         assertNotNull(newTag);
         assertEquals("TestTag", newTag.getName());
         assertEquals(100, newTag.getRed());
@@ -60,9 +77,9 @@ public class TagServiceTest {
         Event event = new Event();
         event.addTag(new Tag("Tag1", 100, 150, 200));
         event.addTag(new Tag("Tag2", 200, 100, 50));
-        assertTrue(TagService.doesTagNameExist(event, "Tag1"));
-        assertTrue(TagService.doesTagNameExist(event, "Tag2"));
-        assertFalse(TagService.doesTagNameExist(event, "Tag3"));
+        assertTrue(tagService.doesTagNameExist(event, "Tag1"));
+        assertTrue(tagService.doesTagNameExist(event, "Tag2"));
+        assertFalse(tagService.doesTagNameExist(event, "Tag3"));
     }
 
     /**
@@ -75,7 +92,7 @@ public class TagServiceTest {
         Tag tag2 = new Tag("Tag2", 200, 100, 50);
         event.addTag(tag1);
         event.addTag(tag2);
-        Tag removedTag = TagService.removeTag(event, "Tag1");
+        Tag removedTag = tagService.removeTag(event, "Tag1");
         assertEquals(tag1, removedTag);
     }
 }
