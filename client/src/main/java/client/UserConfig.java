@@ -99,26 +99,20 @@ public class UserConfig {
      * @return the email of the user
      */
     public String getUserEmail() {
-        try {
-            String email = properties.getProperty("userEmail");
-            if (email == null || email.isBlank()) {
-                throw new Error();
-            }
-            return email;
-        } catch (Error e) {
-            System.out.println("Something went wrong. Email changed to the default");
-            return "ooppteam58@gmail.com";
-        }
+
+        String email = properties.getProperty("userEmail");
+
+        return email;
+
     }
 
     /**
      * Changes the user's email
      * @param email of the user
-     * @param path of the userconfig file
      */
-    public void setUserEmail(String email, String path) {
+    public void setUserEmail(String email) {
         properties.setProperty("userEmail", email);
-        try (OutputStream out = new FileOutputStream(path)) {
+        try (OutputStream out = new FileOutputStream(configPath)) {
             properties.store(out, "new email");
         } catch(IOException e) {
             e.printStackTrace();
@@ -130,26 +124,17 @@ public class UserConfig {
      * @return the user's password
      */
     public String getUserPass() {
-        try {
-            String email = properties.getProperty("userPass");
-            if (email == null || email.isBlank()) {
-                throw new Error();
-            }
-            return email;
-        } catch (Error e) {
-            System.out.println("Something went wrong. Password changed to the default");
-            return "npxruthvatcivuqz";
-        }
+        String email = properties.getProperty("userPass");
+        return email;
     }
 
     /**
      * Changes the user's password
      * @param pass of the user
-     * @param path of the config file
      */
-    public void setUserPass(String pass, String path) {
+    public void setUserPass(String pass) {
         properties.setProperty("userPass", pass);
-        try (OutputStream out = new FileOutputStream(path)) {
+        try (OutputStream out = new FileOutputStream(configPath)) {
             properties.store(out, "new password");
         } catch(IOException e) {
             e.printStackTrace();
