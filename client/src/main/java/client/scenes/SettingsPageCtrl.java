@@ -262,7 +262,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
         String email = emailField.getText().trim();
         String pass = passField.getText().trim();
         if(email.isBlank()||pass.isBlank()){
-            errorPopup("Invalid credentials");
+            errorPopup(Main.getLocalizedString("invalidCredentials"));
             emailField.clear();
             passField.clear();
             return;
