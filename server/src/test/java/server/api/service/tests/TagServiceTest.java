@@ -9,7 +9,6 @@ import server.api.services.TagService;
 import server.database.TagRepository;
 import commons.Tag;
 
-import javax.swing.text.html.Option;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;

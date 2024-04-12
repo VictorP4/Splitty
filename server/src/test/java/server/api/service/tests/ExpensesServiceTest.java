@@ -9,17 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import server.api.controllers.EventController;
-import server.api.controllers.ExpensesController;
-import server.api.repository.tests.TestEventRepository;
-import server.api.repository.tests.TestExpenseRepository;
 import server.api.services.CurrencyService;
-import server.api.services.EventService;
 import server.api.services.ExpensesService;
 import server.database.EventRepository;
 import server.database.ExpensesRepository;
 import server.database.ParticipantRepository;
-import server.database.TagRepository;
 
 import java.util.*;
 
