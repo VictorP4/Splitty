@@ -1,13 +1,14 @@
 package client.scenes;
 
 import client.Main;
+import client.UserConfig;
+import client.utils.EmailUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.EmailRequestBody;
 import commons.Event;
 import java.util.ArrayList;
 
-import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -47,9 +48,9 @@ public class InvitationCtrl implements Main.UpdatableUI {
     /**
      * Constructs a new instance of InvitationCtrl.
      *
-     * @param server   The utility class for server-related operations.
-     * @param mainCtrl The main controller of the application.
-     * @param e        The event for which invitations are being sent.
+     * @param server     The utility class for server-related operations.
+     * @param mainCtrl   The main controller of the application.
+     * @param e          The event for which invitations are being sent.
      */
     @Inject
     public InvitationCtrl(ServerUtils server, MainCtrl mainCtrl, Event e) {
@@ -73,6 +74,7 @@ public class InvitationCtrl implements Main.UpdatableUI {
         setInviteCode();
         setInstructions();
         buttonSetup();
+
     }
 
     /**
@@ -107,12 +109,9 @@ public class InvitationCtrl implements Main.UpdatableUI {
     public void sendInvites() {
         ArrayList<String> emails = getEmails();
         EmailRequestBody requestBody = new EmailRequestBody(emails, inviteCode);
-        Response response = server.sendInvites(requestBody);
-        if (response.getStatus() == 200) {
-            System.out.println("Invites sent successfully.");
-        } else {
-            System.out.println("Failed to send invites. Status code: " + response.getStatus());
-        }
+        EmailUtils emailUtils = new EmailUtils();
+        emailUtils.sendInvites(requestBody.getEmailAddresses(), requestBody.getCode(), mainCtrl.getUserConfig().getUserEmail(),
+                mainCtrl.getUserConfig().getUserPass(), mainCtrl.getUserConfig().getServerURLConfig());
         emailTextArea.clear();
         mainCtrl.showEventOverview(event);
     }
@@ -143,6 +142,13 @@ public class InvitationCtrl implements Main.UpdatableUI {
         this.event=event;
         title.setText(this.event.getTitle());
         setInviteCode();
+        UserConfig userConfig = mainCtrl.getUserConfig();
+        if(userConfig.getUserEmail().isBlank()||userConfig.getUserPass().isBlank()){
+            sendInv.setDisable(true);
+        }
+        else{
+            sendInv.setDisable(false);
+        }
     }
 
     /**

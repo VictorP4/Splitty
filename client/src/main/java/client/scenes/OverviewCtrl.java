@@ -828,5 +828,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
             this.currencyButton.setEffect(null);
         });
     }
+    public UserConfig getUserConfig(){
+        return this.userConfig;
+    }
 
 }

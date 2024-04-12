@@ -1,7 +1,9 @@
 package client.scenes;
 
 import client.Main;
+import client.UserConfig;
 import client.models.Debt;
+import client.utils.EmailUtils;
 import client.services.OpenDebtService;
 import client.utils.ServerUtils;
 import client.utils.WebSocketUtils;
@@ -9,7 +11,6 @@ import com.google.inject.Inject;
 import commons.EmailRequestBody;
 import commons.Event;
 import commons.Expense;
-import jakarta.ws.rs.core.Response;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -173,12 +174,9 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
                     message.add(debt.getPersonOwed().getName());
                     message.add(debt.getPersonOwed().getIban());
                     message.add(debt.getPersonOwed().getBic());
-                    Response response = serverUtils.sendReminder(new EmailRequestBody(message, String.valueOf(debt.getAmount())));
-                    if (response.getStatus() == 200) {
-                        System.out.println("Reminder sent successfully.");
-                    } else {
-                        System.out.println("Failed to send reminder. Status code: " + response.getStatus());
-                    }
+                    EmailUtils emailUtils = new EmailUtils();
+                    emailUtils.sendReminder(new EmailRequestBody(message, String.valueOf(debt.getAmount())),mainCtrl.getUserConfig().getUserEmail(),mainCtrl.getUserConfig().getUserPass());
+
                     ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/client/misc/MailActive.png")));
                     img.setFitWidth(16);
                     img.setFitHeight(16);
@@ -186,6 +184,10 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
                 }
             });
             if(debt.getPersonOwed().getEmail()==null || debt.getPersonOwed().getEmail().isEmpty()) emailB.setDisable(true);
+            UserConfig userConfig = mainCtrl.getUserConfig();
+            if(userConfig.getUserEmail().isBlank()||userConfig.getUserPass().isBlank()){
+                emailB.setDisable(true);
+            }
             emailB.setLayoutX(124);
             emailB.setLayoutY(91);
             emailB.setMnemonicParsing(false);

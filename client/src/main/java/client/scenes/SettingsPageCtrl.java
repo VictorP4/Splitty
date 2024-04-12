@@ -2,11 +2,13 @@ package client.scenes;
 
 import client.Main;
 import client.UserConfig;
+import client.utils.EmailUtils;
 import client.utils.ServerUtils;
 import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import jakarta.ws.rs.core.Response;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -17,7 +19,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class SettingsPageCtrl implements Main.UpdatableUI {
@@ -62,6 +64,8 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     public Text customization;
     @FXML
     public Text adminAccess;
+    @FXML
+    private Button confirmation;
 
     /**
      * Constructs a new instance of StartingPageCtrl.
@@ -113,6 +117,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
             }
             else if (!userInput.isBlank() && server.checkServer(url).getStatus() == 200) {
                 server.setSERVER(url);
+                userConfig.setServerUrlConfig(url);
                 webSocket.disconnect();
                 webSocket.connect("ws://" + userInput + "/websocket");
                 errorPopup("Succesfully connected to the new server!");
@@ -155,9 +160,12 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
      */
     public void resetServer() {
         try {
-            Response response = server.checkServer(userConfig.getServerURLConfig());
+            Response response = server.checkServer("http://localhost:8080");
             if (response.getStatus() == 200) {
-                server.setSERVER(userConfig.getServerURLConfig());
+                server.setSERVER("http://localhost:8080");
+                userConfig.setServerUrlConfig("http://localhost:8080");
+                webSocket.disconnect();
+                webSocket.connect("ws://" + "localhost:8080" + "/websocket");
                 errorPopup("Server succesfully changed to default");
             }
         } catch (Exception e) {
@@ -185,6 +193,13 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     public void refresh() {
         serverUrl.clear();
         adminPassword.clear();
+        UserConfig userConfig = mainCtrl.getUserConfig();
+        if(userConfig.getUserEmail().isBlank()||userConfig.getUserPass().isBlank()){
+            confirmation.setDisable(true);
+        }
+        else{
+            confirmation.setDisable(false);
+        }
     }
 
     /**
@@ -204,6 +219,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
         password.setText(Main.getLocalizedString("password"));
         customization.setText(Main.getLocalizedString("customization"));
         adminAccess.setText(Main.getLocalizedString("adminAccess"));
+        confirmation.setText(Main.getLocalizedString("confirmation"));
     }
 
     /**
@@ -225,7 +241,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Sets the focus and hover over look for the buttons.
+     * Sets the focus and hover overlook for the buttons.
      */
     public void buttonSetup(){
         mainCtrl.buttonFocus(this.login);
@@ -234,16 +250,36 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
         mainCtrl.buttonFocus(this.home);
         mainCtrl.buttonFocus(this.resetServer);
         mainCtrl.buttonShadow(this.resetServer);
+        mainCtrl.buttonFocus(this.confirmation);
+        mainCtrl.buttonShadow(this.confirmation);
     }
 
     /**
      * Change the user's details
      */
     public void submitDetails() {
-        List<String> details = new ArrayList<>();
-        details.add(emailField.getText().trim());
-        details.add(passField.getText().trim());
-        server.submitEmail(details);
+        UserConfig userConfig1 = mainCtrl.getUserConfig();
+        String email = emailField.getText().trim();
+        String pass = passField.getText().trim();
+        if(email.isBlank()||pass.isBlank()){
+            errorPopup(Main.getLocalizedString("invalidCredentials"));
+            emailField.clear();
+            passField.clear();
+            return;
+        }
+        userConfig1.setUserEmail(email);
+        userConfig1.setUserPass(pass);
+        emailField.clear();
+        passField.clear();
+        refresh();
     }
 
+    /**
+     * Send email confirmation
+     */
+    public void sendConfirmation() {
+        UserConfig userConfig1 = mainCtrl.getUserConfig();
+        EmailUtils emailUtils = new EmailUtils();
+        emailUtils.sendConfirmation(userConfig1.getUserEmail(),userConfig1.getUserPass());
+    }
 }

@@ -16,6 +16,7 @@
 
 package client.scenes;
 
+import client.UserConfig;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
@@ -406,5 +407,8 @@ public class MainCtrl {
                 m.setEffect(null);
             }
         });
+    }
+    public UserConfig getUserConfig(){
+        return eventOverviewCtrl.getUserConfig();
     }
 }

@@ -89,3 +89,5 @@ customization= Customisation
 adminAccess= Admin access
 noTagSelected= No tag selected
 submit= submit
+confirmation = Send Confirmation
+invalidCredentials = Invalid credentials
