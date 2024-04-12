@@ -9,6 +9,7 @@ import server.api.services.TagService;
 import server.database.TagRepository;
 import commons.Tag;
 
+import javax.swing.text.html.Option;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -99,5 +100,61 @@ public class TagServiceTest {
         Optional<Tag> result = tagService.getTagById(1L);
 
         assertTrue(result.isEmpty());
+    }
+
+    /**
+     * Tests the updateTag method in tagService
+     */
+    @Test
+    public void testUpdateTagPresent() {
+        Tag tag = new Tag("Test", 100, 150, 200);
+        tag.setId(1L);
+        when(tagRepository.findById(1L)).thenReturn(Optional.of(tag));
+        when(tagRepository.save(tag)).thenReturn(tag);
+        tagRepository.save(tag);
+
+        Tag updated = new Tag("update", 2, 3,4);
+        updated.setId(1L);
+
+        assertEquals(updated, tagService.updateTag(1L, "update", 2, 3, 4));
+    }
+
+    /**
+     * Tests the deleteTag method in the tag service when tag does not exist
+     */
+    @Test
+    public void testUpdateTag() {
+        assertFalse(tagService.getTagById(1L).isPresent());
+        assertEquals(Optional.empty(), tagService.getTagById(1L));
+
+        assertNull(tagService.updateTag(1L, "sure", 1, 2, 3));
+    }
+
+    /**
+     * Tests the deleteTag method in the tag service when the tag exists
+     */
+    @Test
+    public void testDeleteTagPresent() {
+        Tag tag = new Tag("Test", 100, 150, 200);
+        tag.setId(1L);
+        when(tagRepository.findById(1L)).thenReturn(Optional.of(tag));
+        when(tagRepository.save(tag)).thenReturn(tag);
+
+        tagRepository.save(tag);
+        assertTrue(tagService.getTagById(1L).isPresent());
+        assertEquals(tag, tagService.getTagById(1L).get());
+
+        assertTrue(tagService.deleteTag(1L));
+    }
+
+    /**
+     * Tests the deleteTag method in the tag service when tag does not exist
+     */
+    @Test
+    public void testDeleteTag() {
+        assertFalse(tagService.getTagById(1L).isPresent());
+        assertEquals(Optional.empty(), tagService.getTagById(1L));
+
+        assertFalse(tagService.deleteTag(1L));
     }
 }
