@@ -259,9 +259,16 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
      */
     public void submitDetails() {
         UserConfig userConfig1 = mainCtrl.getUserConfig();
-
-        userConfig1.setUserEmail(emailField.getText().trim());
-        userConfig1.setUserPass(passField.getText().trim());
+        String email = emailField.getText().trim();
+        String pass = passField.getText().trim();
+        if(email.isBlank()||pass.isBlank()){
+            errorPopup("Invalid credentials");
+            emailField.clear();
+            passField.clear();
+            return;
+        }
+        userConfig1.setUserEmail(email);
+        userConfig1.setUserPass(pass);
         emailField.clear();
         passField.clear();
         refresh();
