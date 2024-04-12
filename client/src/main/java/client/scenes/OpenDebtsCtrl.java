@@ -11,7 +11,6 @@ import commons.EmailRequestBody;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
-import jakarta.ws.rs.core.Response;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

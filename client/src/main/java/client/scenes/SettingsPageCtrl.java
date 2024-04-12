@@ -8,7 +8,7 @@ import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import jakarta.ws.rs.core.Response;
-import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -19,7 +19,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class SettingsPageCtrl implements Main.UpdatableUI {

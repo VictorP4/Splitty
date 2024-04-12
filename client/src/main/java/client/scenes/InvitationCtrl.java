@@ -9,7 +9,6 @@ import commons.EmailRequestBody;
 import commons.Event;
 import java.util.ArrayList;
 
-import jakarta.ws.rs.core.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -108,12 +107,11 @@ public class InvitationCtrl implements Main.UpdatableUI {
      */
     @FXML
     public void sendInvites() {
-        UserConfig userConfig = mainCtrl.getUserConfig();
-
         ArrayList<String> emails = getEmails();
         EmailRequestBody requestBody = new EmailRequestBody(emails, inviteCode);
         EmailUtils emailUtils = new EmailUtils();
-        emailUtils.sendInvites(requestBody.getEmailAddresses(), requestBody.getCode(), mainCtrl.getUserConfig().getUserEmail(), mainCtrl.getUserConfig().getUserPass(), mainCtrl.getUserConfig().getServerURLConfig());
+        emailUtils.sendInvites(requestBody.getEmailAddresses(), requestBody.getCode(), mainCtrl.getUserConfig().getUserEmail(),
+                mainCtrl.getUserConfig().getUserPass(), mainCtrl.getUserConfig().getServerURLConfig());
         emailTextArea.clear();
         mainCtrl.showEventOverview(event);
     }

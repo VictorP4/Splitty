@@ -57,20 +57,6 @@ public class ServerUtils {
 	}
 
 	/**
-	 * Sends invites via email.
-	 *
-	 * @param requestBody The request body containing email information.
-	 * @return The response from the server.
-	 */
-	public Response sendInvites(EmailRequestBody requestBody) {
-		return ClientBuilder.newClient()
-				.target(server).path("api/email/invites")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.post(Entity.entity(requestBody, APPLICATION_JSON));
-	}
-
-	/**
 	 * Adds an event.
 	 *
 	 * @param event The event to add.
@@ -170,21 +156,6 @@ public class ServerUtils {
 	}
 
 	/**
-	 * Sends reminders via email.
-	 *
-	 * @param emailRequestBody The request body containing email information for
-	 *                         reminders.
-	 * @return The response from the server.
-	 */
-	public Response sendReminder(EmailRequestBody emailRequestBody) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(server).path("api/email/reminders")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.post(Entity.entity(emailRequestBody, APPLICATION_JSON));
-	}
-
-	/**
 	 * Adds an expense to an event.
 	 *
 	 * @param expense The expense to add.
@@ -281,14 +252,6 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.delete();
-	}
-
-	public Response submitEmail(List<String> details){
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(server).path("api/email/submission")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.post(Entity.entity(details, APPLICATION_JSON));
 	}
 
 	/**
