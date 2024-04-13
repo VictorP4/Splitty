@@ -732,7 +732,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      * @param b the boolean that describes whether the admin is accessing an event overview.
      */
     public void setAdmin(boolean b) {
-        overviewService.setAdmin(this.admin, b);
+        admin = b;
     }
 
     /**
