@@ -205,21 +205,9 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     public Expense getExpense() {
         String title = this.title.getText();
-        double amount;
-        if (this.amount.getText().equals("")) {
-            amount = 0.0;
-        }
-        else {
-            amount = Double.parseDouble(this.amount.getText());
-        }
+        double amount = Double.parseDouble(this.amount.getText());
         LocalDate localdate = this.date.getValue();
-        Date date;
-        if (localdate != null) {
-            date = Date.from(localdate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        }
-        else {
-            date = null;
-        }
+        Date date = Date.from(localdate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         Participant paidBy = this.paidBy.getSelectionModel().getSelectedItem();
         List<Participant> partIn = add();
         Tag tag = selectedTag;
@@ -554,31 +542,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             menuItem.setStyle(colorStyle);
             tagMenu.getItems().add(menuItem);
         }
-        //checkSelectedTagValidity();
         tagCount = event.getTags().size();
-    }
-
-    /**
-     * Checks if the selected tag is still valid.
-     */
-    private void checkSelectedTagValidity() {
-        if (selectedTag != null) {
-            String selectedTagName = selectedTag.getName();
-            boolean found = false;
-            for (MenuItem menuItem : tagMenu.getItems()) {
-                if (menuItem instanceof MenuItem) {
-                    if (menuItem.getText().equals(selectedTagName)) {
-                        found = true;
-                        break;
-                    }
-                }
-            }
-            if (!found) {
-                selectedTag = null;
-                tagMenu.setText("Select Tag");
-            }
-        }
-
     }
 
     /**
@@ -653,6 +617,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
         this.event = event;
         this.expense = expense;
         addToCurrency();
+        refresh(event);
         addEditText.setText(Main.getLocalizedString("EditExpense"));
         this.title.setText(expense.getTitle());
         this.amount.setText(Double.toString(expense.getAmount()));
