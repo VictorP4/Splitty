@@ -83,6 +83,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
     /**
      * Initialized the start screen and the listview
      */
+
     public void initialize() {
         serverUrl.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -180,7 +181,7 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
      *
      * @param message The message passed in.
      */
-    private void errorPopup(String message) {
+    public void errorPopup(String message) {
         var alert = new Alert(Alert.AlertType.ERROR);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setContentText(message);
