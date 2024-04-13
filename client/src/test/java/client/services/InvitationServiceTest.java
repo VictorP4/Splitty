@@ -33,7 +33,6 @@ public class InvitationServiceTest {
 
     @Test
     void sendInvitesWithNoValidEmailsDoesNotCallEmailUtilsSendInvites() {
-        // Arrange
         InvitationService service = new InvitationService();
         String[] lines = {"", "  ", "\t"};
         String inviteCode = "12345";
@@ -51,7 +50,6 @@ public class InvitationServiceTest {
 
     @Test
     void sendInvitesWithEmptyLinesDoesNotCallEmailUtilsSendInvites() {
-        // Arrange
         InvitationService service = new InvitationService();
         String[] lines = {"", "  ", "\t"};
         String inviteCode = "12345";

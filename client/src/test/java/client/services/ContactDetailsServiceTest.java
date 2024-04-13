@@ -26,7 +26,6 @@ public class ContactDetailsServiceTest {
 
     @Test
     void saveParticipantWithValidDataReturnsSameParticipantInstance() {
-        // Arrange
         ContactDetailsService service = new ContactDetailsService();
         Participant participant = new Participant();
         String name = "John Doe";
@@ -37,6 +36,33 @@ public class ContactDetailsServiceTest {
         Participant savedParticipant = service.saveParticipant(participant, name, email, bic, iban);
 
         assertSame(participant, savedParticipant);
+    }
+    @Test
+    void saveParticipantWithEmptyEmailReturnsParticipantWithEmailSetToEmptyString() {
+        ContactDetailsService service = new ContactDetailsService();
+        Participant participant = new Participant();
+        String name = "John Doe";
+        String email = ""; // Empty email
+        String bic = "ABCD1234";
+        String iban = "DE89370400440532013000";
+
+        Participant savedParticipant = service.saveParticipant(participant, name, email, bic, iban);
+
+        assertEquals("", savedParticipant.getEmail());
+    }
+
+    @Test
+    void saveParticipantWithNullBICReturnsParticipantWithNullBIC() {
+        ContactDetailsService service = new ContactDetailsService();
+        Participant participant = new Participant();
+        String name = "John Doe";
+        String email = "john@example.com";
+        String bic = null; // Null BIC
+        String iban = "DE89370400440532013000";
+
+        Participant savedParticipant = service.saveParticipant(participant, name, email, bic, iban);
+
+        assertNull(savedParticipant.getBic());
     }
 }
 
