@@ -140,15 +140,6 @@ public class OverviewService {
     }
 
     /**
-     * marks if an admin is accessing the event overview (true), or not (false)
-     *
-     * @param b the boolean that describes whether the admin is accessing an event overview.
-     */
-    public void setAdmin(boolean admin, boolean b) {
-        admin = b;
-    }
-
-    /**
      * Deletes the expense from the cached ones
      *
      * @param previousExpenses the map of cached expenses.
