@@ -3,11 +3,12 @@ package server.api.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 @RequestMapping("api/connection")
 public class ServerConnectionController {
 
@@ -22,14 +23,5 @@ public class ServerConnectionController {
     public ResponseEntity checkServer(){
         return ResponseEntity.ok().build();
     }
-
-    @GetMapping(path = {"getServer"})
-    public ResponseEntity<String> returnServer()
-    {
-        Integer check = serverProperties.getPort();
-        ResponseEntity<String> rep= ResponseEntity.ok(Integer.toString(check));
-        return rep;
-    }
-
 
 }
