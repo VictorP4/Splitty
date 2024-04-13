@@ -118,10 +118,10 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             }
         }));
         webSocket.addEventListener((event) -> {
-            if(!this.event.getTags().equals(event.getTags())) return;
             if (this.event != null && Objects.equals(this.event.getId(), event.getId())) {
                 Platform.runLater(() -> {
-                    refresh(event);
+                    //refresh(event);
+                    this.event = event;
                 });
             }
         });
@@ -541,6 +541,30 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             menuItem.setStyle(colorStyle);
             tagMenu.getItems().add(menuItem);
         }
+        checkSelectedTagValidity();
+    }
+
+    /**
+     * Checks if the selected tag is still valid.
+     */
+    private void checkSelectedTagValidity() {
+        if (selectedTag != null) {
+            String selectedTagName = selectedTag.getName();
+            boolean found = false;
+            for (MenuItem menuItem : tagMenu.getItems()) {
+                if (menuItem instanceof MenuItem) {
+                    if (menuItem.getText().equals(selectedTagName)) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            if (!found) {
+                selectedTag = null;
+                tagMenu.setText("Select Tag");
+            }
+        }
+
     }
 
     /**
@@ -554,7 +578,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     }
 
     private void handleAddNewTag() {
-        mainCtrl.showAddTag(event, null, getExpense());
+        mainCtrl.showAddTag(event, null);
     }
 
     /**
@@ -562,7 +586,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      */
     public void goToAddTags() {
         if (selectedTag != null) {
-            mainCtrl.showAddTag(event, selectedTag, getExpense());
+            mainCtrl.showAddTag(event, selectedTag);
         }
         else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -614,20 +638,20 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     public void refreshExp(Event event, Expense expense) {
         this.event = event;
         this.expense = expense;
-//        addToCurrency();
+        addToCurrency();
         addEditText.setText(Main.getLocalizedString("EditExpense"));
         this.title.setText(expense.getTitle());
-//        this.amount.setText(Double.toString(expense.getAmount()));
-//        LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//        this.date.setValue(localDate);
-//        paidBy.getSelectionModel().select(event.getParticipants().stream()
-//                        .filter(x->x.getId().equals(expense.getPaidBy().getId())).findFirst().get());
-//        currency.setValue(this.expense.getCurrency());
-//        setParticipantBoxes();
-//        if (expense.getTag() != null) {
-//            this.tagMenu.setText(expense.getTag().getName());
-//            this.selectedTag=expense.getTag();
-//        }
+        this.amount.setText(Double.toString(expense.getAmount()));
+        LocalDate localDate = expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        this.date.setValue(localDate);
+        paidBy.getSelectionModel().select(event.getParticipants().stream()
+                        .filter(x->x.getId().equals(expense.getPaidBy().getId())).findFirst().get());
+        currency.setValue(this.expense.getCurrency());
+        setParticipantBoxes();
+        if (expense.getTag() != null) {
+            this.tagMenu.setText(expense.getTag().getName());
+            this.selectedTag=expense.getTag();
+        }
     }
 
     /**

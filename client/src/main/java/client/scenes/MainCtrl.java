@@ -178,9 +178,8 @@ public class MainCtrl {
      *
      *  @param event The event for which the add expenses are to be displayed.
      */
-    public void showAddExpenseFromTag(Event event, Expense expense) {
+    public void showAddExpenseFromTag(Event event) {
         addExpenseCtrl.populateTagMenu();
-        addExpenseCtrl.refreshExp(event, expense);
         primaryStage.setTitle("AddExpense");
         primaryStage.setScene(addExpense);
     }
@@ -248,10 +247,9 @@ public class MainCtrl {
      * @param event       The event for which the add tag page has to be displayed.
      * @param selectedTag
      */
-    public void showAddTag(Event event, Tag selectedTag, Expense expense) {
+    public void showAddTag(Event event, Tag selectedTag) {
         addTagCtrl.refresh(event);
         addTagCtrl.setSelectedTag(selectedTag);
-        addTagCtrl.setExpense(expense);
         primaryStage.setTitle("AddTag");
         primaryStage.setScene(addTag);
     }
