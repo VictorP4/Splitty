@@ -85,6 +85,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
     @FXML
     public VBox transferBox;
     private Expense expense;
+    private int tagCount = -1;
     private final WebSocketUtils webSocket;
     private final UserConfig userConfig = new UserConfig();
 
@@ -118,10 +119,11 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             }
         }));
         webSocket.addEventListener((event) -> {
+            if(this.event.equals(event)||!this.event.getTags().equals(event.getTags())) return;
+            if(mainCtrl.getSceneTitle().equals("AddTag")) return;
             if (this.event != null && Objects.equals(this.event.getId(), event.getId())) {
                 Platform.runLater(() -> {
-                    //refresh(event);
-                    this.event = event;
+                    refresh(event);
                 });
             }
         });
@@ -526,6 +528,17 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
      * Populates the tag menu with the tags from the server.
      */
     public void populateTagMenu() {
+        if (tagCount == -1) {
+            tagCount = event.getTags().size();
+        }
+        if (tagCount < event.getTags().size()) {
+            selectedTag = event.getTags().getLast();
+            tagMenu.setText(selectedTag.getName());
+        }
+        if (tagCount > event.getTags().size()) {
+            selectedTag = null;
+            tagMenu.setText("Select Tag");
+        }
         List<Tag> tags = event.getTags();
         tagMenu.getItems().clear();
 
@@ -541,7 +554,8 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             menuItem.setStyle(colorStyle);
             tagMenu.getItems().add(menuItem);
         }
-        checkSelectedTagValidity();
+        //checkSelectedTagValidity();
+        tagCount = event.getTags().size();
     }
 
     /**
