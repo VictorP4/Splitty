@@ -5,7 +5,6 @@ import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
-import jakarta.ws.rs.core.Response;
 import javafx.collections.ObservableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
@@ -13,7 +12,6 @@ import org.mockito.MockitoAnnotations;
 
 import javafx.collections.FXCollections;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
 import java.util.*;
