@@ -240,59 +240,12 @@ class OverviewServiceTest {
 
     @Test
     void deleteExpense() {
+
     }
 
-//    @Test
-//    void removeParticipantFromEvent() {
-//
-//        Participant toDelete = new Participant();
-//        toDelete.setId(1L);
-//        Participant p2 = new Participant();
-//        p2.setId(2L);
-//        List<Participant> participants = new ArrayList<>();
-//        participants.add(p2);
-//        participants.add(toDelete);
-//
-////        Event event = mock(Event.class);
-////        when(event.getId()).thenReturn(6L);
-////        when(event.getParticipants()).thenReturn(participants);
-//
-//        Event event = new Event();
-//        event.setParticipants(participants);
-//        event.setId(1L);
-//
-//        Expense e1 = new Expense();
-//        e1.setId(3L);
-//        e1.setPaidBy(toDelete);
-//        e1.setInvolvedParticipants(participants);
-//
-//        Expense e2 = new Expense();
-//        e2.setId(4L);
-//        e2.setPaidBy(p2);
-//        participants.add(toDelete);
-//        e2.setInvolvedParticipants(participants);
-//
-//        List<Expense> expenses = new ArrayList<>();
-//        expenses.add(e1);
-//        expenses.add(e2);
-//
-//        //when(event.getExpenses()).thenReturn(expenses);
-//        event.setExpenses(expenses);
-//
-//        when(serverUtils.getEvent(anyLong())).thenReturn(event);
-//        when(serverUtils.deleteParticipant(toDelete)).thenReturn(mock(Response.class));
-//        when(serverUtils.deleteExpense(6L, e1)).thenReturn(mock(Response.class));
-//        when(serverUtils.updateExpense(6L, e2)).thenReturn(eq(e2));
-//
-//        overviewService.removeParticipantFromEvent(event, toDelete);
-//
-//        verify(serverUtils).deleteParticipant(eq(toDelete));
-//        verify(serverUtils).deleteExpense(6L, e1);
-//        verify(serverUtils).updateExpense(6L, e2);
-//
-//        assertFalse(event.getParticipants().contains(toDelete));
-//
-//    }
+    @Test
+    void removeParticipantFromEvent() {
+    }
 
     /**
      * tests UpdateParticipant, case when being called with a new participant
