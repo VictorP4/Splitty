@@ -103,6 +103,13 @@ Server-side implementation can be found in the getUpdates method in `server/src/
 
 Keyboard-shortcuts for each button can be seen when hovering other them with the mouse.
 
+Multi-modal visualization is achieved by having red delete buttons, home icons for buttons leading back to start screen, and a plus icon on the add expense button.
+
 The Undo functionality is implemented for expenses can be used by pressing the undo button when editing an expense.
 
 Admin access is found in the settings page(click the settings button on the start screen). When creating a backup, the file will be located in the client folder of the project. 
+
+### HCI: User feedback messages
+User gets an error message when trying an action that can't be done, like creating an event without a title.
+User (Admin) gets informative feedback when completing an action like creating a backup of an event.
+User (Admin) is asked for conformation before key actions like deleting events.
