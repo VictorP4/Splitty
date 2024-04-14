@@ -143,8 +143,10 @@ public class OverviewCtrl implements Main.UpdatableUI {
 
         webSocket.connect("ws://localhost:8080/websocket");
         webSocket.addEventListener((event) -> {
-            if (this.event != null && this.event.getId().equals(event.getId())) {
-                Platform.runLater(() -> refresh(event));
+            if (this.event != null && Objects.equals(this.event.getId(), event.getId())) {
+                Platform.runLater(() -> {
+                    refresh(event);
+                });
             }
         });
 
