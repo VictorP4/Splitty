@@ -2,8 +2,6 @@ package client.services;
 
 import commons.Participant;
 
-import javax.inject.Inject;
-
 public class ContactDetailsService {
 
     /**
