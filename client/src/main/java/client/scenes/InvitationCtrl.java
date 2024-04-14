@@ -7,6 +7,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 
+import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,6 +15,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+
+import java.util.List;
 
 /**
  * Controller class for the invitation scene.
@@ -89,6 +92,10 @@ public class InvitationCtrl implements Main.UpdatableUI {
      */
     @FXML
     public void sendInvites() {
+        List<String> emails = invitationService.getEmails(emailTextArea.getText().split("\n"));
+        for(String p : emails){
+            mainCtrl.updateParticipant(new Participant(p,p));
+        }
         invitationService.sendInvites(emailTextArea.getText().split("\n"), inviteCode, mainCtrl.getUserConfig().getUserEmail(),
                 mainCtrl.getUserConfig().getUserPass(), mainCtrl.getUserConfig().getServerURLConfig());
         emailTextArea.clear();
