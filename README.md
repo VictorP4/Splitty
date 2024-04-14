@@ -55,7 +55,7 @@ When the application is run, a start screen is visible. Here, a user can create 
 
 By hovering over button and text, you can find that there are some shortcuts you can use to make the navigation easier.
 
-After creating an event with a name, contact details of the user is asked, after filling and submitting, the overview of an event is shown. the participants in the event can be seen and added (hover over the Participants text box for further instructions). Participants are added by pressing the icon.
+After creating an event with a name, contact details of the user is asked, after filling and submitting, the overview of an event is shown. The participants in the event can be seen and added (hover over the Participants text box for edit/remove instructions). Participants are added by pressing the icon.
 
 ### Detailed Expenses and Settling Debts
 
@@ -107,7 +107,8 @@ Multi-modal visualization is achieved by having red delete buttons, home icons f
 
 The Undo functionality is implemented for expenses can be used by pressing the undo button when editing an expense.
 
-Admin access is found in the settings page(click the settings button on the start screen). When creating a backup, the file will be located in the client folder of the project. 
+Admin access is found in the settings page(click the settings button on the start screen). When creating a backup, the file will be located in the client folder of the project. You can also change the server in the settings page.
+
 
 ### HCI: User feedback messages
 User gets an error message when trying an action that can't be done, like creating an event without a title.
