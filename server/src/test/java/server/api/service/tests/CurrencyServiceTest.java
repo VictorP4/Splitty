@@ -1,5 +1,6 @@
 package server.api.service.tests;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import server.api.services.CurrencyService;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -123,5 +125,9 @@ class CurrencyServiceTest {
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, result.getStatusCode());
         assertNull(result.getBody());
     }
-
+    @AfterAll
+    public static void clean(){
+        File file = new File("rates/"+LocalDate.now()+".txt");
+        file.delete();
+    }
 }

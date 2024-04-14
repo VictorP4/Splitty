@@ -33,15 +33,19 @@ public class EmailUtils {
      * @return HttpStatus indicating the success or failure of the email sending operation.
      */
     public void sendInvites(List<String> recipients, String code, String username, String password, String server) {
-        try {
-            for (String recipient : recipients) {
-                sendEmail(recipient, "You have been invited to join a new Splitty event!",
-                        "\nServer URL: "+ server + "\nHere's the invite code: " + code, username, password);
-            }
+        exec.submit(()->{
+            try {
 
-        } catch (MailException | jakarta.mail.MessagingException e) {
-            System.out.println("Error while sending invites");
-        }
+                for (String recipient : recipients) {
+                    sendEmail(recipient, "You have been invited to join a new Splitty event!",
+                            "\nServer URL: "+ server + "\nHere's the invite code: " + code, username, password);
+                }
+
+            } catch (MailException | jakarta.mail.MessagingException e) {
+                System.out.println("Error while sending invites");
+            }
+        });
+        exec.shutdown();
     }
 
 
@@ -54,31 +58,28 @@ public class EmailUtils {
      * @throws MessagingException If an error occurs during the creation or sending of the email message.
      */
     public void sendEmail(String to, String subject, String content, String username, String password) throws jakarta.mail.MessagingException {
-        exec.submit(()-> {
-            try {
-                javaMailSender.setHost("smtp.gmail.com");
-                javaMailSender.setPort(587);
-                javaMailSender.setUsername(username);
-                javaMailSender.setPassword(password);
-                MimeMessage message = javaMailSender.createMimeMessage();
-                MimeMessageHelper helper = new MimeMessageHelper(message, true);
-                Properties props = javaMailSender.getJavaMailProperties();
-                props.put("mail.transport.protocol", "smtp");
-                props.put("mail.smtp.auth", "true");
-                props.put("mail.smtp.starttls.enable", "true");
-                props.put("mail.debug", "true");
-                helper.setTo(to);
-                helper.setCc(username);
-                helper.setSubject(subject);
-                helper.setText(content);
+        try {
+            javaMailSender.setHost("smtp.gmail.com");
+            javaMailSender.setPort(587);
+            javaMailSender.setUsername(username);
+            javaMailSender.setPassword(password);
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            Properties props = javaMailSender.getJavaMailProperties();
+            props.put("mail.transport.protocol", "smtp");
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.debug", "true");
+            helper.setTo(to);
+            helper.setCc(username);
+            helper.setSubject(subject);
+            helper.setText(content);
 
-                javaMailSender.send(message);
-            } catch (MailException | jakarta.mail.MessagingException e) {
-                System.out.println("Error while sending emails");
+            javaMailSender.send(message);
+        } catch (MailException | jakarta.mail.MessagingException e) {
+            System.out.println("Error while sending emails");
 
-            }
-        });
-        exec.shutdown();
+        }
     }
 
     /**
@@ -88,18 +89,22 @@ public class EmailUtils {
      * @return http status
      */
     public void sendReminder(EmailRequestBody emailRequest, String username, String password) {
-        try{
+        exec.submit(()->{
+            try{
 
-            sendEmail(emailRequest.getEmailAddresses().get(1),"Debt Reminder","Hello "+
-                    emailRequest.getEmailAddresses().get(0)+"\n The debt you owe to "+
-                    emailRequest.getEmailAddresses().get(2)+" is "+emailRequest.getCode()+" euros\nBank details:\n"+
-                    "IBAN: "+emailRequest.getEmailAddresses().get(3)+", BIC: "+emailRequest.getEmailAddresses().get(4),username,password);
+                sendEmail(emailRequest.getEmailAddresses().get(1),"Debt Reminder","Hello "+
+                        emailRequest.getEmailAddresses().get(0)+"\n The debt you owe to "+
+                        emailRequest.getEmailAddresses().get(2)+" is "+emailRequest.getCode()+" euros\nBank details:\n"+
+                        "IBAN: "+emailRequest.getEmailAddresses().get(3)+", BIC: "+emailRequest.getEmailAddresses().get(4),username,password);
 
-        }
-        catch (MailException | jakarta.mail.MessagingException e){
-            System.out.println("Error while sending reminder");
+            }
+            catch (MailException | jakarta.mail.MessagingException e){
+                System.out.println("Error while sending reminder");
 
-        }
+            }
+        });
+        exec.shutdown();
+
     }
 
     /**
@@ -108,12 +113,15 @@ public class EmailUtils {
      * @param password the password for the email
      */
     public void sendConfirmation(String username, String password){
-        try{
-            sendEmail(username,"Email Confirmation","This is the email confirmation for the splitty app",username,password);
-        }
-        catch (MailException | jakarta.mail.MessagingException e){
-            System.out.println("Error while sending the confirmation");
+        exec.submit(()->{
+            try{
+                sendEmail(username,"Email Confirmation","This is the email confirmation for the splitty app",username,password);
+            }
+            catch (MailException | jakarta.mail.MessagingException e){
+                System.out.println("Error while sending the confirmation");
 
-        }
+            }
+        });
+        exec.shutdown();
     }
 }
