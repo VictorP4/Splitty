@@ -76,8 +76,6 @@ public class UserConfig {
         }
     }
 
-
-
     /**
      * Changes the configuration of the server url.
      *
