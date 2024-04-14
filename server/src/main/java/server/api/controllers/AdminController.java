@@ -19,6 +19,11 @@ public class AdminController {
     @Autowired
     private final AdminService adminService;
 
+    /**
+     * Creates a new AdminController instance
+     *
+     * @param adminService the adminService used for the controller
+     */
     public AdminController(AdminService adminService) {
         this.adminService = adminService;
     }
@@ -33,7 +38,7 @@ public class AdminController {
     }
 
     /**
-     * MAkes a login request and redirects you appropriately
+     * Makes a login request and redirects you appropriately
      * @param password of the admin
      * @param request a servlet request
      * @param redirectAttributes redirect to the event page

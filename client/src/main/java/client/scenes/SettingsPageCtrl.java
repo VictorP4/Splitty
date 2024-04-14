@@ -267,6 +267,12 @@ public class SettingsPageCtrl implements Main.UpdatableUI {
             passField.clear();
             return;
         }
+
+        var alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setContentText(Main.getLocalizedString("emailSet"));
+        alert.showAndWait();
+
         userConfig1.setUserEmail(email);
         userConfig1.setUserPass(pass);
         emailField.clear();

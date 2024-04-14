@@ -186,6 +186,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
             if (event.isControlDown() && event.getCode() == KeyCode.D) {
                 mainCtrl.showOpenDebts(this.event);
             }
+            if (event.isControlDown() && event.getCode() == KeyCode.I) {
+                mainCtrl.showInvitation(this.event);
+            }
         });
     }
 
@@ -214,6 +217,9 @@ public class OverviewCtrl implements Main.UpdatableUI {
         expenseTable.getItems().clear();
         expenseTable.getColumns().clear();
 
+        TableColumn<Expense, String> titleCol = new TableColumn<>(Main.getLocalizedString("title"));
+        titleCol.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(e.getValue().getTitle()));
+
         TableColumn<Expense, String> dateColumn = new TableColumn<>(Main.getLocalizedString("date"));
         dateColumn.setCellValueFactory(e -> new ReadOnlyObjectWrapper<>(overviewService.formattedDate(e.getValue().getDate())));
 
@@ -241,13 +247,13 @@ public class OverviewCtrl implements Main.UpdatableUI {
                     } else {
                         setText(newTag.getName());
                         this.setStyle(tagService.getCellColor(newTag));
-                        this.setTextFill(Color.web(tagService.getCellColor(newTag)));
+                        this.setTextFill(Color.web(tagService.getCellBrightness(newTag)));
                     }
                 });
             }
         });
 
-        expenseTable.getColumns().addAll(tagsColumn, dateColumn, whoPaidColumn, howMuchColumn, inclParticipantsColumn);
+        expenseTable.getColumns().addAll(tagsColumn, titleCol, dateColumn, whoPaidColumn, howMuchColumn, inclParticipantsColumn);
 
         // sets the sizes of the columns
         expenseTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
@@ -257,6 +263,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
                 .subtract(whoPaidColumn.widthProperty())
                 .subtract(howMuchColumn.widthProperty())
                 .subtract(dateColumn.widthProperty())
+                .subtract(titleCol.widthProperty())
         );
     }
 
@@ -707,7 +714,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void delete() {
         try {
-            overviewService.deleteExpense(this.event, expenseTable.getSelectionModel().getSelectedItem());
+            overviewService.deleteExpense(this.event, expenseTable.getSelectionModel().getSelectedItem(), previousExpenses);
             this.event = serverUtils.getEvent(this.event.getId());
         } finally {
             options.setVisible(false);
@@ -790,7 +797,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
         mainCtrl.instructionsPopup(new Label(" press CTRL + A to \n go to add expense "), this.addExpense);
         mainCtrl.instructionsPopup(new Label(" press CTRL + D to \n show open debts "), this.settleDebts);
         mainCtrl.instructionsPopup(new Label(" press CTRL + L to \n open language menu "), this.langButton);
-        mainCtrl.instructionsPopup(new Label(" press CTRL + T to \n transfer money"), this.moneyTransfer);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + T to \n open money transfer"), this.moneyTransfer);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + I to \n open invite page "), this.sendInvites);
     }
 
     /**
@@ -831,6 +839,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
             this.currencyButton.setEffect(null);
         });
     }
+
+    /**
+     * returns the user configurations
+     * @return the userconfig
+     */
     public UserConfig getUserConfig(){
         return this.userConfig;
     }

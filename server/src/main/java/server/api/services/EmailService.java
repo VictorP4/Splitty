@@ -26,10 +26,6 @@ public class EmailService {
 
     private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
-
-
-
-
     /**
      * Sends an email to the specified recipient.
      *

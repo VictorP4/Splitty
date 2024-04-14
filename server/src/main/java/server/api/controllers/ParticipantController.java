@@ -15,9 +15,9 @@ public class ParticipantController {
     private final SimpMessagingTemplate smt;
 
     /**
-     * Constructor for controller
-     * @param participantService
-     * @param smt
+     * Creates a new ParticipantController instance
+     * @param participantService the participantService instance used
+     * @param smt the mesaging template used
      */
     public ParticipantController(ParticipantService participantService, SimpMessagingTemplate smt) {
         this.participantService = participantService;
@@ -26,7 +26,7 @@ public class ParticipantController {
 
     /**
      * Creates new participant
-     * @param participant
+     * @param participant the participant to be added
      * @return saved participant
      */
     @PostMapping(path = {"","/"})
@@ -37,7 +37,7 @@ public class ParticipantController {
     }
 
     /**
-     *
+     * Updates a new participant
      * @param id id of participant to modify
      * @param participant participant to change
      * @return updated participant
@@ -50,7 +50,7 @@ public class ParticipantController {
     }
 
     /**
-     *
+     * Deletes a participant
      * @param id participant to delete
      * @return the deleted participant
      */

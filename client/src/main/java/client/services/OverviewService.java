@@ -11,16 +11,11 @@ import javafx.collections.ObservableList;
 import javax.inject.Inject;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class OverviewService {
 
     private final ServerUtils serverUtils;
-    private Map<Long, List<Expense>> previousExpenses;
-
 
     /**
      * Creates a new OverviewService.
@@ -185,7 +180,7 @@ public class OverviewService {
      * @param event the event the expense is in
      * @param expense the expense to be deleted
      */
-    public void deleteExpense(Event event, Expense expense) {
+    public void deleteExpense(Event event, Expense expense, Map<Long, List<Expense>> previousExpenses) {
         try {
             Response response = serverUtils.deleteExpense(event.getId(),
                     expense);

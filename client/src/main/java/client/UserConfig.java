@@ -49,7 +49,6 @@ public class UserConfig {
         }
     }
 
-
     /**
      * Gets the properties of the UserConfig.
      *
@@ -76,8 +75,6 @@ public class UserConfig {
             return "http://localhost:8080";
         }
     }
-
-
 
     /**
      * Changes the configuration of the server url.
@@ -171,7 +168,6 @@ public class UserConfig {
             properties.store(out, "new currency");
         } catch(IOException e) {
             e.printStackTrace();
-//            log.log(Level.WARNING, e.getMessage(), e);
         }
     }
 

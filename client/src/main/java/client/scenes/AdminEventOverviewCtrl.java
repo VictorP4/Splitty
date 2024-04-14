@@ -223,7 +223,6 @@ public class AdminEventOverviewCtrl implements Main.UpdatableUI {
      *  (a json version of an event), imports the event
      */
     public void importJSON(){
-
         ObjectMapper map = new ObjectMapper();
         map.registerModule(new JavaTimeModule());
 

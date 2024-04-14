@@ -21,6 +21,7 @@ import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import commons.Tag;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -271,7 +272,7 @@ public class MainCtrl {
 
     /**
      * Display the event overview when an admin accesses it
-     * @param selectedEvent
+     * @param selectedEvent the event the user had selected
      */
     public void showEventOverviewFromAdmin(Event selectedEvent) {
         eventOverviewCtrl.refresh(selectedEvent);
@@ -307,7 +308,7 @@ public class MainCtrl {
 
     /**
      * Get the primary stage
-     * @return
+     * @return the primary stage
      */
     public Stage getPrimaryStage(){
         return primaryStage;
@@ -315,18 +316,19 @@ public class MainCtrl {
 
     /**
      * Get the currency
-     * @return
+     * @return the currency preference of the user.
      */
     public String getCurrency() {
         return eventOverviewCtrl.getCurrency();
     }
+
     /**
      * Creates a popup for a button.
      *
      * @param info text for display
      * @param button button to show the popup on
      */
-    public void instructionsPopup(Label info, Button button){
+    public void instructionsPopup(Label info, Node button){
         info.setStyle("-fx-background-color: white; -fx-border-color: black"); //lightPink
         info.setMinSize(50, 25);
         Popup infoPop = new Popup();
@@ -334,28 +336,6 @@ public class MainCtrl {
         button.setOnMouseEntered(mouseEvent -> {
             infoPop.show(getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY() + 5);
             button.setEffect(new InnerShadow());
-        });
-        button.setOnMouseExited(mouseEvent -> {
-            button.setEffect(null);
-            infoPop.hide();
-        });
-    }
-
-    /**
-     * Creates a popup for a menu button.
-     *
-     * @param info text for display
-     * @param button button to show the popup on
-     */
-    public void instructionsPopup(Label info, MenuButton button){
-        info.setStyle("-fx-background-color: white; -fx-border-color: black"); //lightPink
-        info.setMinSize(50, 25);
-        Popup infoPop = new Popup();
-        infoPop.getContent().add(info);
-        button.setOnMouseEntered(mouseEvent -> {
-            infoPop.show(getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY() + 5);
-            button.setEffect(new InnerShadow());
-
         });
         button.setOnMouseExited(mouseEvent -> {
             button.setEffect(null);
@@ -380,7 +360,7 @@ public class MainCtrl {
     }
 
     /**
-     *  Adds a shadow to a button when the mouse hovers over it
+     * Adds a shadow to a button when the mouse hovers over it
      * @param button to apply the shadow to
      */
     public void buttonShadow(Button button){
@@ -408,6 +388,12 @@ public class MainCtrl {
             }
         });
     }
+
+    /**
+     * Returns the configurations for the user.
+     *
+     * @return the user configurations
+     */
     public UserConfig getUserConfig(){
         return eventOverviewCtrl.getUserConfig();
     }
