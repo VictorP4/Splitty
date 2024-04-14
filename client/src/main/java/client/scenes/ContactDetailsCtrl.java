@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.Main;
+import client.services.ContactDetailsService;
 import client.utils.ServerUtils;
 import client.utils.WebSocketUtils;
 import com.google.inject.Inject;
@@ -27,6 +28,7 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final ContactDetailsService contactDetailsService;
     @FXML
     public Text aeParticipant;
     @FXML
@@ -65,10 +67,12 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
      * @param mainCtrl The main controller of the application.
      */
     @Inject
-    public ContactDetailsCtrl(ServerUtils server, MainCtrl mainCtrl, WebSocketUtils webSocket) {
+    public ContactDetailsCtrl(ServerUtils server, MainCtrl mainCtrl, WebSocketUtils webSocket,
+                              ContactDetailsService contactDetailsService) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.webSocket=webSocket;
+        this.contactDetailsService = contactDetailsService;
     }
 
     /**
@@ -140,11 +144,8 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
             errorPopup("Invalid name");
             return;
         }
-        participant.setName(nameField.getText());
-        participant.setEmail(emailField.getText());
-        participant.setBIC(bicField.getText());
-        participant.setIBAN(ibanField.getText());
-        mainCtrl.updateParticipant(participant);
+        mainCtrl.updateParticipant(contactDetailsService.saveParticipant(participant,nameField.getText(),
+                emailField.getText(),bicField.getText(),ibanField.getText()));
         this.participant=null;
     }
 
@@ -185,60 +186,3 @@ public class ContactDetailsCtrl implements Main.UpdatableUI {
     }
 
 }
-
-/**
- * imma save this leftover from the previous addParticipant implementation for later on,
- * when we'll add more UI features for bad input notifying and stuff
- * /**
- *      * Validates email format.
- *      * This method checks whether the provided email address is valid.
- *      *
- *      * @param email The email address to validate.
- *      * @return True if the email is valid, false otherwise.
- *
- * public static boolean isValidEmail(String email) {
- *         // Basic email validation: ensure it contains one '@' character
- *         if (!email.contains("@")) {
- *             return false;
- *         }
- *
- *         // Split the email by '@' to separate the local part and domain part
- *         String[] parts = email.split("@");
- *         if (parts.length != 2) {
- *             return false;
- *         }
- *
- *         String localPart = parts[0];
- *         String domainPart = parts[1];
- *
- *         // Check if localPart contains any invalid characters
- *         for (char c : localPart.toCharArray()) {
- *             if (!Character.isLetter(c) && !Character.isDigit(c) && c != '.' && c != '_') {
- *                 return false;
- *             }
- *         }
- *
- *         // Check if domainPart contains at least one dot
- *         if (!domainPart.contains(".")) {
- *             return false;
- *         }
- *
- *         // Split the domain part by '.' to get the segments
- *         String[] segments = domainPart.split("\\.");
- *         if (segments.length < 2) {
- *             return false;
- *         }
- *
- *         // Check if each segment contains only letters or digits
- *         for (String segment : segments) {
- *             for (char c : segment.toCharArray()) {
- *                 if (!Character.isLetter(c) && !Character.isDigit(c)) {
- *                     return false;
- *                 }
- *             }
- *         }
- *
- *         return true;
- *     }
- */
-

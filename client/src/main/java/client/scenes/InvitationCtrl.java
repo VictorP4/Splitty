@@ -2,12 +2,10 @@ package client.scenes;
 
 import client.Main;
 import client.UserConfig;
-import client.utils.EmailUtils;
+import client.services.InvitationService;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.EmailRequestBody;
 import commons.Event;
-import java.util.ArrayList;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -23,6 +21,7 @@ import javafx.scene.text.Text;
 public class InvitationCtrl implements Main.UpdatableUI {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final InvitationService invitationService;
     @FXML
     private TextArea inviteEmails;
 
@@ -53,10 +52,11 @@ public class InvitationCtrl implements Main.UpdatableUI {
      * @param e          The event for which invitations are being sent.
      */
     @Inject
-    public InvitationCtrl(ServerUtils server, MainCtrl mainCtrl, Event e) {
+    public InvitationCtrl(ServerUtils server, MainCtrl mainCtrl, Event e, InvitationService invitationService) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.event = e;
+        this.invitationService=invitationService;
     }
 
     /**
@@ -74,7 +74,6 @@ public class InvitationCtrl implements Main.UpdatableUI {
         setInviteCode();
         setInstructions();
         buttonSetup();
-
     }
 
     /**
@@ -86,31 +85,11 @@ public class InvitationCtrl implements Main.UpdatableUI {
     }
 
     /**
-     * Extracts email addresses from the email text area.
-     *
-     * @return List of email addresses.
-     */
-    public ArrayList<String> getEmails() {
-        ArrayList<String> emails = new ArrayList<>();
-        String[] lines = emailTextArea.getText().split("\n");
-        for (String line : lines) {
-            String email = line.trim();
-            if (!email.isEmpty()) {
-                emails.add(email);
-            }
-        }
-        return emails;
-    }
-
-    /**
      * Sends invitations to the email addresses specified in the UI.
      */
     @FXML
     public void sendInvites() {
-        ArrayList<String> emails = getEmails();
-        EmailRequestBody requestBody = new EmailRequestBody(emails, inviteCode);
-        EmailUtils emailUtils = new EmailUtils();
-        emailUtils.sendInvites(requestBody.getEmailAddresses(), requestBody.getCode(), mainCtrl.getUserConfig().getUserEmail(),
+        invitationService.sendInvites(emailTextArea.getText().split("\n"), inviteCode, mainCtrl.getUserConfig().getUserEmail(),
                 mainCtrl.getUserConfig().getUserPass(), mainCtrl.getUserConfig().getServerURLConfig());
         emailTextArea.clear();
         mainCtrl.showEventOverview(event);
