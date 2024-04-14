@@ -144,7 +144,7 @@ public class CurrencyControllerTest {
     }
     @AfterAll
     public static void clean(){
-        File file = new File("rates/");
+        File file = new File("rates/"+LocalDate.now()+".txt");
         file.delete();
     }
 }
