@@ -714,7 +714,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
      */
     public void delete() {
         try {
-            overviewService.deleteExpense(this.event, expenseTable.getSelectionModel().getSelectedItem());
+            overviewService.deleteExpense(this.event, expenseTable.getSelectionModel().getSelectedItem(), previousExpenses);
             this.event = serverUtils.getEvent(this.event.getId());
         } finally {
             options.setVisible(false);

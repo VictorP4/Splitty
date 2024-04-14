@@ -168,7 +168,6 @@ public class UserConfig {
             properties.store(out, "new currency");
         } catch(IOException e) {
             e.printStackTrace();
-//            log.log(Level.WARNING, e.getMessage(), e);
         }
     }
 
