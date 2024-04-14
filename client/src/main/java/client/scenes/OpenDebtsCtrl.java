@@ -32,6 +32,8 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Currency;
@@ -176,8 +178,13 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
                     message.add(debt.getPersonOwed().getBic());
                     EmailUtils emailUtils = new EmailUtils();
                     emailUtils.sendReminder(new EmailRequestBody(message, String.valueOf(debt.getAmount())),mainCtrl.getUserConfig().getUserEmail(),mainCtrl.getUserConfig().getUserPass());
-
-                    ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/client/misc/MailActive.png")));
+                    InputStream is = getClass().getResourceAsStream("/client/misc/MailActive.png");
+                    ImageView img = new ImageView(new Image(is));
+                    try {
+                        is.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     img.setFitWidth(16);
                     img.setFitHeight(16);
                     list.add(1, img);
@@ -218,11 +225,23 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         text.setWrappingWidth(275);
         text.setStrokeType(StrokeType.OUTSIDE);
         text.setStrokeWidth(0.0);
-        ImageView imgMail = new ImageView( new Image(getClass().getResourceAsStream("/client/misc/MailInactive.png")));
+        InputStream is = getClass().getResourceAsStream("/client/misc/MailInactive.png");
+        ImageView imgMail = new ImageView( new Image(is));
         imgMail.setId("mail");
         imgMail.setFitHeight(16);
         imgMail.setFitWidth(16);
-        ImageView imgBank = new ImageView(new Image(getClass().getResourceAsStream("/client/misc/HomeInactive.png")));
+        try {
+            is.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        InputStream is1 = getClass().getResourceAsStream("/client/misc/HomeInactive.png");
+        ImageView imgBank = new ImageView(new Image(is1));
+        try {
+            is1.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         imgBank.setId("bank");
         imgBank.setFitHeight(16);
         imgBank.setFitWidth(16);
@@ -248,7 +267,13 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
                 expense.setTitle("Debt repayment");
                 serverUtils.addExpense(expense, event1.getId());
                 list.remove(2);
-                ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/client/misc/HomeActive.png")));
+                InputStream is = getClass().getResourceAsStream("/client/misc/HomeActive.png");
+                ImageView img = new ImageView(new Image(is));
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 img.setFitHeight(16);
                 img.setFitWidth(16);
                 list.add(2,img);
