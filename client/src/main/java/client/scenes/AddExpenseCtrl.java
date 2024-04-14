@@ -119,7 +119,7 @@ public class AddExpenseCtrl implements Main.UpdatableUI {
             }
         }));
         webSocket.addEventListener((event) -> {
-            if(this.event.equals(event)||!this.event.getTags().equals(event.getTags())) return;
+            if(this.event==null || this.event.equals(event)||!this.event.getTags().equals(event.getTags())) return;
             if(mainCtrl.getSceneTitle().equals("AddTag")) return;
             if (this.event != null && Objects.equals(this.event.getId(), event.getId())) {
                 Platform.runLater(() -> {

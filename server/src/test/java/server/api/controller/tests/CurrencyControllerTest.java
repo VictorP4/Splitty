@@ -1,4 +1,5 @@
 package server.api.controller.tests;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -8,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import server.api.controllers.CurrencyController;
 import server.api.services.CurrencyService;
+
+import java.io.File;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -138,5 +141,10 @@ public class CurrencyControllerTest {
         when(currencyService.convertCurrency(100.0, "USD", "EUR", LocalDate.now())).thenReturn(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
         ResponseEntity<Double> responseEntity = currencyController.convertCurrency(100.0, "USD", "EUR", LocalDate.now());
         assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
+    }
+    @AfterAll
+    public static void clean(){
+        File file = new File("rates/"+LocalDate.now()+".txt");
+        file.delete();
     }
 }

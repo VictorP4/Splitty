@@ -140,11 +140,14 @@ public class OverviewCtrl implements Main.UpdatableUI {
         admin = false;
         expenseTable = new TableView<>();
         refreshExpenseTable();
-
-        webSocket.connect("ws://localhost:8080/websocket");
+        String url = userConfig.getServerURLConfig();
+        url = "ws://"+ url.substring(7)+"/websocket";
+        webSocket.connect(url);
         webSocket.addEventListener((event) -> {
-            if (this.event != null && this.event.getId().equals(event.getId())) {
-                Platform.runLater(() -> refresh(event));
+            if (this.event != null && Objects.equals(this.event.getId(), event.getId())) {
+                Platform.runLater(() -> {
+                    refresh(event);
+                });
             }
         });
 
