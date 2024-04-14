@@ -478,7 +478,7 @@ public class OverviewCtrl implements Main.UpdatableUI {
             newLang.store(output, "Add the name of your new language to the first line of this file as a comment\n" +
                     "Send the final translation version to ooppteam58@gmail.com");
 
-            newLangPath = "client/src/main/resources/client/misc/messages.properties";
+            newLangPath = "src/main/resources/client/misc/messages.properties";
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
