@@ -39,7 +39,7 @@ Users can choose the currency they want to operate with for expense creation.
 
 Users can press money transfer to partially settle a debt.
 
-User can click the pencil and add/edit tags. If a known tag's name is written, it will be in edit mode, otherwise in adding mode.
+To add a tag, go the addexpense, press select tag and from the drop down menu click ADD TAG. To edit/remove a tag select it from the dropdown menu and click the pencil to the right.
 
 ## Websockets, Long-polling, HCI, Email and other
 To use your own gmail in the app, you will need an app password. You can get one by going to this link: https://myaccount.google.com/apppasswords (make sure 2FA is activated). To get a confirmation for the email go to settings and press the Send Confirmation button.
@@ -55,4 +55,4 @@ Keyboard-shortcuts for each button can be seen when hovering other them with the
 
 The Undo functionality is implemented for expenses can be used by pressing the undo button when editing an expense.
 
-Admin access is found in the settings page(click the settings button on the start screen).
+Admin access is found in the settings page(click the settings button on the start screen). When creating a backup, the file will be located in the client folder of the project.
