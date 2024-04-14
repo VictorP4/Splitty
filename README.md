@@ -78,7 +78,7 @@ We currently have 3 available languages you can use: English, Dutch and Spanish.
 
 You can change the language in the overview of an event and start screen using the language button. This button will be featuring a flag whcih corresponds to the current language configuration. Changing the language is live so restarting the app will not be necessary. Also, the language choice is persisted, so you will not have to change the language back to your preferred one on restarts.
 
-If you would like to add your own language to this project, there is a language template that you can download as an option in the language button. You can then fill the template in your own lanuage and send it to us. We will then add it to the project.
+If you would like to add your own language to this project, there is a language template that you can download as an option in the language button. The template will be located in the Downloads folder. You can then fill the template in your own lanuage and send it to us. We will then add it to the project.
 
 ### Foreign Currency
 
