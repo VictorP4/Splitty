@@ -16,6 +16,9 @@ Make sure to change the module-path to your local javafx library.
 
 Now that the configurations are set up you can start running the app. First start the server and wait for it be completely started(The admin code will be in the server console if needed).
 Now you can start the client and using the app.
+
+Or alternatively use ./gradlew bootRun for the server and ./gradlew run for the client(./gradlew.bat for windows) while in the project folder.
+
 ## How to Use the Application
 
 When the application is run, a start screen is visible. There, a user can create a new event with a name, or join an event with the code, provided by the email shared by an event creator. Also the recently joined events are visible here.
