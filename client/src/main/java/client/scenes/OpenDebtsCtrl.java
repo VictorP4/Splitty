@@ -147,7 +147,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
         tempAP.setStyle("-fx-background-color: efd6da; -fx-border-style: solid; -fx-border-radius: 4;-fx-border-color: black");
 
         Text text1;
-        if(debt.getPersonOwed().getIban()!=null&&debt.getPersonOwed().getBic()!=null&&!debt.getPersonOwed().getIban().isEmpty()) {
+        if(debt.getPersonOwed().getIban()!=null&&debt.getPersonOwed().getBic()!=null&&!debt.getPersonOwed().getIban().isBlank()&&!debt.getPersonOwed().getBic().isBlank()) {
             text1 = setTextBox(Main.getLocalizedString("transferTo"),14,27);
 
             Text text2 = setTextBox(Main.getLocalizedString("accHolder")+" "+ debt.getPersonOwed().getName(),14,44);
@@ -190,7 +190,7 @@ public class OpenDebtsCtrl implements Main.UpdatableUI {
                     list.add(1, img);
                 }
             });
-            if(debt.getPersonOwed().getEmail()==null || debt.getPersonOwed().getEmail().isEmpty()) emailB.setDisable(true);
+            if(debt.getPersonInDebt().getEmail()==null || debt.getPersonInDebt().getEmail().isEmpty()) emailB.setDisable(true);
             UserConfig userConfig = mainCtrl.getUserConfig();
             if(userConfig.getUserEmail().isBlank()||userConfig.getUserPass().isBlank()){
                 emailB.setDisable(true);
