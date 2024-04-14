@@ -14,13 +14,20 @@ public class ServerConnectionController {
     @Autowired
     private ServerProperties serverProperties;
 
+    /**
+     * Creates a new ServerConnectionController
+     * @param serverProperties the ServerProperties
+     */
     public ServerConnectionController(ServerProperties serverProperties)
     {
         this.serverProperties = serverProperties;
     }
+
+    /**
+     * Checks the server connection
+     */
     @GetMapping(path = {"", "/"})
     public ResponseEntity checkServer(){
         return ResponseEntity.ok().build();
     }
-
 }

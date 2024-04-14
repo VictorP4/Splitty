@@ -790,7 +790,8 @@ public class OverviewCtrl implements Main.UpdatableUI {
         mainCtrl.instructionsPopup(new Label(" press CTRL + A to \n go to add expense "), this.addExpense);
         mainCtrl.instructionsPopup(new Label(" press CTRL + D to \n show open debts "), this.settleDebts);
         mainCtrl.instructionsPopup(new Label(" press CTRL + L to \n open language menu "), this.langButton);
-        mainCtrl.instructionsPopup(new Label(" press CTRL + T to \n transfer money"), this.moneyTransfer);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + T to \n open money transfer"), this.moneyTransfer);
+        mainCtrl.instructionsPopup(new Label(" press CTRL + I to \n open invite page "), this.sendInvites);
     }
 
     /**
@@ -831,6 +832,11 @@ public class OverviewCtrl implements Main.UpdatableUI {
             this.currencyButton.setEffect(null);
         });
     }
+
+    /**
+     * returns the user configurations
+     * @return the userconfig
+     */
     public UserConfig getUserConfig(){
         return this.userConfig;
     }

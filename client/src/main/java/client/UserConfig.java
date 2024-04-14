@@ -49,7 +49,6 @@ public class UserConfig {
         }
     }
 
-
     /**
      * Gets the properties of the UserConfig.
      *

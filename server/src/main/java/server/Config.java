@@ -33,5 +33,4 @@ public class Config {
         return new RestTemplate();
     }
 
-
 }

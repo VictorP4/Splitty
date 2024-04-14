@@ -25,8 +25,9 @@ public class EventController {
     private final SimpMessagingTemplate smt;
 
     /**
+     * Creates a new EventController instance
      * @param evServ event service
-     * @param smt
+     * @param smt the messaging template
      */
     public EventController(EventService evServ, SimpMessagingTemplate smt) {
         this.evServ = evServ;

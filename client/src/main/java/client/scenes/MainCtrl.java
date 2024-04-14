@@ -271,7 +271,7 @@ public class MainCtrl {
 
     /**
      * Display the event overview when an admin accesses it
-     * @param selectedEvent
+     * @param selectedEvent the event the user had selected
      */
     public void showEventOverviewFromAdmin(Event selectedEvent) {
         eventOverviewCtrl.refresh(selectedEvent);
@@ -307,7 +307,7 @@ public class MainCtrl {
 
     /**
      * Get the primary stage
-     * @return
+     * @return the primary stage
      */
     public Stage getPrimaryStage(){
         return primaryStage;
@@ -315,11 +315,12 @@ public class MainCtrl {
 
     /**
      * Get the currency
-     * @return
+     * @return the currency preference of the user.
      */
     public String getCurrency() {
         return eventOverviewCtrl.getCurrency();
     }
+
     /**
      * Creates a popup for a button.
      *
@@ -380,7 +381,7 @@ public class MainCtrl {
     }
 
     /**
-     *  Adds a shadow to a button when the mouse hovers over it
+     * Adds a shadow to a button when the mouse hovers over it
      * @param button to apply the shadow to
      */
     public void buttonShadow(Button button){
@@ -408,6 +409,12 @@ public class MainCtrl {
             }
         });
     }
+
+    /**
+     * Returns the configurations for the user.
+     *
+     * @return the user configurations
+     */
     public UserConfig getUserConfig(){
         return eventOverviewCtrl.getUserConfig();
     }

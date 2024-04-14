@@ -22,15 +22,21 @@ import java.util.List;
 
 @Service
 public class EventService {
-    private EventRepository repo;
 
+    private EventRepository repo;
     private ParticipantRepository participantRepository;
     private ExpensesRepository expensesRepository;
     private TagRepository tagRepository;
-
     private ObjectMapper map = new ObjectMapper();
 
-
+    /**
+     * Creates a new EmailService instance
+     *
+     * @param repo the eventRepository
+     * @param participantRepository the participantRepository
+     * @param expensesRepository the expenseRepository
+     * @param tagRepository the tagRepository
+     */
     public EventService(EventRepository repo, ParticipantRepository participantRepository, ExpensesRepository expensesRepository, TagRepository tagRepository) {
         this.repo = repo;
         this.participantRepository = participantRepository;
@@ -183,7 +189,7 @@ public class EventService {
 
     /**
      * find all events
-     * @return
+     * @return a list of all the events
      */
     public List<Event> findAll() {
         return repo.findAll();
